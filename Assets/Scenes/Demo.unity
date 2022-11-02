@@ -296,10 +296,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626ebd925ebf54f4c8690eb73261098f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkSpeed: 3
+  sprintSpeed: 5
   camTarget: {fileID: 2136512939}
-  speed: 5
   sensitivity: 2
   clamp: 90
+  walkFov: 50
+  sprintFov: 60
+  fovChangeSpeed: 10
+  vcam: {fileID: 409238788}
 --- !u!143 &840553853
 CharacterController:
   m_ObjectHideFlags: 0
