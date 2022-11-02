@@ -16,3 +16,5 @@ EditorBuildSettings:
       type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 21ae4dab960d3c448b8135cac77cc622,
       type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 7ca5c683dd18d4c44aec25b7b6f4dce2,
+      type: 2}
