@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.5, z: 0.3}
+  Damping: {x: 0, y: 0, z: 0}
   ShoulderOffset: {x: 0, y: 0, z: 0}
   VerticalArmLength: 0
   CameraSide: 0
@@ -298,13 +298,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 3
   sprintSpeed: 5
+  jumpForce: 5
+  gravity: 9
+  lowJumpMultiplier: 2
   camTarget: {fileID: 2136512939}
   sensitivity: 2
   clamp: 90
+  vcam: {fileID: 409238788}
   walkFov: 50
   sprintFov: 60
   fovChangeSpeed: 10
-  vcam: {fileID: 409238788}
 --- !u!143 &840553853
 CharacterController:
   m_ObjectHideFlags: 0

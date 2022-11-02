@@ -8,23 +8,43 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float walkSpeed;
     [SerializeField] float sprintSpeed;
 
+    [Header("Jumping")]
+    [SerializeField] float jumpForce;
+    [SerializeField] float gravity;
+    [SerializeField] float lowJumpMultiplier;
+
     [Header("Looking")]
     [SerializeField] Transform camTarget;
     [SerializeField] float sensitivity;
     [SerializeField] float clamp;
+
+    [Header("FOV")]
+    [SerializeField] CinemachineVirtualCamera vcam;
     [SerializeField] float walkFov;
     [SerializeField] float sprintFov;
     [SerializeField] float fovChangeSpeed;
-    [SerializeField] CinemachineVirtualCamera vcam;
 
     CharacterController controller;
     Controls.PlayerActions playerControls;
 
     Vector2 camRot;
     float fov;
+    float yVelocity;
 
     void Update()
     {
+        // Jumping & Gravity
+
+        yVelocity -= gravity * Time.deltaTime;
+
+        if (yVelocity > 0 && !playerControls.Jump.IsPressed())
+            yVelocity -= gravity * lowJumpMultiplier * Time.deltaTime;
+
+        var jump = controller.isGrounded && playerControls.Jump.WasPressedThisFrame();
+
+        if (jump)
+            yVelocity = jumpForce;
+
         // Movement
 
         var move = playerControls.Move.ReadValue<Vector2>();
@@ -34,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
         var speed = isSprinting ? sprintSpeed : walkSpeed;
 
-        controller.Move(transform.TransformDirection(move.x, 0, move.y) * speed * Time.deltaTime);
+        controller.Move(transform.TransformDirection(move.x, 0, move.y) * speed * Time.deltaTime + yVelocity * Time.deltaTime * Vector3.up);
 
         // FOV change
 
