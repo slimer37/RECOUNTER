@@ -54,7 +54,9 @@ public class PlayerController : MonoBehaviour
 
         var speed = isSprinting ? sprintSpeed : walkSpeed;
 
-        controller.Move(transform.TransformDirection(move.x, 0, move.y) * speed * Time.deltaTime + yVelocity * Time.deltaTime * Vector3.up);
+        var velocity = transform.TransformDirection(move.x, 0, move.y) * speed + Vector3.up * yVelocity;
+
+        controller.Move(velocity * Time.deltaTime);
 
         // FOV change
 
