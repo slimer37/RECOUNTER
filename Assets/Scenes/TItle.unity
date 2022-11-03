@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 289268228}
   - component: {fileID: 289268227}
   - component: {fileID: 289268226}
+  - component: {fileID: 289268229}
   m_Layer: 5
   m_Name: play
   m_TagString: Untagged
@@ -284,7 +285,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 289268227}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 289268229}
+        m_TargetAssemblyTypeName: SceneLoading.SceneLoadRelay, SceneLoading
+        m_MethodName: Load
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &289268227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +336,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 289268224}
   m_CullTransparentMesh: 1
+--- !u!114 &289268229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289268224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a279ea701ff36a34a97d15652c861af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenes:
+  - m_AssetGUID: 0e5c2dbe150dd484aabcf94c858f9eee
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
 namespace SceneLoading
@@ -22,15 +23,15 @@ namespace SceneLoading
 
         public IEnumerator WaitToShow() => Show(true);
 
-        public void Activate(AsyncOperation[] ops) => StartCoroutine(DisplayProgress(ops));
+        public void Activate(AsyncOperationHandle[] ops) => StartCoroutine(DisplayProgress(ops));
 
-        IEnumerator DisplayProgress(AsyncOperation[] operations)
+        IEnumerator DisplayProgress(AsyncOperationHandle[] operations)
         {
-            var total = operations.Length * 0.9f;
+            var total = operations.Length;
             
-            while (operations.Any(op => !op.isDone))
+            while (operations.Any(op => !op.IsDone))
             {
-                var progress = operations.Sum(op => op.progress) / total;
+                var progress = operations.Sum(op => op.PercentComplete) / total;
                 SetProgress(progress);
                 yield return null;
             }

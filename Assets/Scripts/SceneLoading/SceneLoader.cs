@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace SceneLoading
 {
@@ -14,27 +17,25 @@ namespace SceneLoading
         [RuntimeInitializeOnLoadMethod]
         static void Init()
         {
-            var instance = Instantiate(Resources.Load<GameObject>("SceneLoader"));
+            var prefab = Addressables.LoadAssetAsync<GameObject>("SceneLoader").WaitForCompletion();
+            var instance = Instantiate(prefab);
             DontDestroyOnLoad(instance);
             Current = instance.GetComponent<SceneLoader>();
         }
 
-        public void Load(params Scene[] scenes) =>
-            Load(Array.ConvertAll(scenes, s => s.buildIndex));
-
-        public void Load(params int[] scenes) =>
+        public void Load(params AssetReference[] scenes) =>
             StartCoroutine(LoadScenes(scenes));
 
-        IEnumerator LoadScenes(params int[] scenes)
+        IEnumerator LoadScenes(params AssetReference[] scenes)
         {
             // Wait for loading screen to show.
             yield return loadingScreen.WaitToShow();
             
-            var operations = new AsyncOperation[scenes.Length];
+            var operations = new AsyncOperationHandle[scenes.Length];
             for (var i = 0; i < scenes.Length; i++)
             {
                 operations[i] =
-                    SceneManager.LoadSceneAsync(scenes[i], i > 0 ? LoadSceneMode.Additive : LoadSceneMode.Single);
+                    scenes[i].LoadSceneAsync(i > 0 ? LoadSceneMode.Additive : LoadSceneMode.Single);
             }
 
             loadingScreen.Activate(operations);

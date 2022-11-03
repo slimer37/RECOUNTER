@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace SceneLoading
 {
     public class SceneLoadRelay : MonoBehaviour
     {
-        [SerializeField] int[] scenes;
+        [SerializeField] AssetReference[] scenes;
 
         public void Load()
         {
