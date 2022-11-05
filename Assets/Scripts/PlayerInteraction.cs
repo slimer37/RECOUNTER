@@ -52,11 +52,11 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (hovered?.transform == currentHover) return;
 
-        if (currentHover == null)
-            hovered = null;
-        else
-            { currentHover.TryGetComponent(out hovered); print("GETCOMPONENT"); }
+        if (!currentHover) hovered.OnHover(false);
 
+        hovered = currentHover?.GetComponent<Interactable>();
         text.text = hovered?.GetText() ?? "";
+
+        if (currentHover) hovered.OnHover(true);
     }
 }
