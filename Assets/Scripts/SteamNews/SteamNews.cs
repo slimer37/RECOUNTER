@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
@@ -26,22 +25,25 @@ public class SteamNews : MonoBehaviour
 
     IEnumerator Start()
     {
+        content.text = "Loading...";
+
         var request = UnityWebRequest.Get(SteamNewsData.GetApiCall(appId, limit));
 
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
         {
+            content.text = $"<color=red>{request.error}</color>";
             throw new Exception(request.error);
         }
 
         var json = request.downloadHandler.text;
         var data = JsonUtility.FromJson<SteamNewsData>(json);
 
-        PopulateUI(data.appnews.newsitems);
+        yield return PopulateUI(data.appnews.newsitems);
     }
 
-    void PopulateUI(SteamNewsData.SteamPost[] posts)
+    IEnumerator PopulateUI(SteamNewsData.SteamPost[] posts)
     {
         var formattedPosts = new string[posts.Length];
 
@@ -54,6 +56,8 @@ public class SteamNews : MonoBehaviour
                 p.title,
                 p.GetDateTime().ToString("g"),
                 p.GetReformattedContents());
+
+            yield return null;
         }
 
         content.text = string.Join(unescPostSeparator, formattedPosts);
