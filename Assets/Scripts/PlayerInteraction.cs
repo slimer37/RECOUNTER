@@ -5,11 +5,9 @@ using UnityEngine.InputSystem;
 public class PlayerInteraction : MonoBehaviour
 {
     [SerializeField] float range;
-    [SerializeField] Camera cam;
+    [SerializeField] Transform cam;
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] LayerMask interactableLayer;
-
-    static readonly Vector3 ViewportCenter = new(0.5f, 0.5f);
 
     Interactable hovered;
 
@@ -43,11 +41,14 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
-        var ray = cam.ViewportPointToRay(ViewportCenter);
+        if (hovered)
+        {
+            text.text = hovered.GetText();
+        }
 
         Transform currentHover = null;
 
-        if (Physics.Raycast(ray, out var hit, range, interactableLayer))
+        if (Physics.Raycast(cam.position, cam.forward, out var hit, range, interactableLayer))
         {
             currentHover = hit.transform;
         }
@@ -59,11 +60,16 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (hovered?.transform == currentHover) return;
 
-        if (!currentHover) hovered.OnHover(false);
-
-        hovered = currentHover?.GetComponent<Interactable>();
-        text.text = hovered?.GetText() ?? "";
-
-        if (currentHover) hovered.OnHover(true);
+        if (currentHover)
+        {
+            hovered = currentHover.GetComponent<Interactable>();
+            hovered.OnHover(true);
+        }
+        else
+        {
+            hovered.OnHover(false);
+            text.text = "";
+            hovered = null;
+        }
     }
 }
