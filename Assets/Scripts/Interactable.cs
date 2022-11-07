@@ -10,5 +10,6 @@ public abstract class Interactable : MonoBehaviour
 
     public virtual string GetText() => "Interact";
     public virtual void Interact() => Debug.Log("interact");
+    public virtual bool CanInteract() => true;
     public virtual void OnHover(bool hover) => Debug.Log("hover " + hover);
 }
