@@ -7,7 +7,6 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] float range;
     [SerializeField] Transform cam;
     [SerializeField] TextMeshProUGUI text;
-    [SerializeField] LayerMask interactableLayer;
 
     Interactable hovered;
 
@@ -48,7 +47,7 @@ public class PlayerInteraction : MonoBehaviour
 
         Transform currentHover = null;
 
-        if (Physics.Raycast(cam.position, cam.forward, out var hit, range, interactableLayer))
+        if (Physics.Raycast(cam.position, cam.forward, out var hit, range))
         {
             currentHover = hit.transform;
         }
