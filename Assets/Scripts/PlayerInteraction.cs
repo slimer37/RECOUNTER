@@ -59,14 +59,13 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (hovered?.transform == currentHover) return;
 
-        if (currentHover)
+        if (currentHover && currentHover.TryGetComponent(out hovered))
         {
-            hovered = currentHover.GetComponent<Interactable>();
-            hovered.OnHover(true);
+            hovered?.OnHover(true);
         }
         else
         {
-            hovered.OnHover(false);
+            hovered?.OnHover(false);
             text.text = "";
             hovered = null;
         }
