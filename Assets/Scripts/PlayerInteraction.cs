@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,12 +10,16 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] Transform cam;
     [SerializeField] TextMeshProUGUI text;
 
+    [Header("Animation")]
+    [SerializeField] float punchAmount;
+    [SerializeField] float punchDuration;
+
     [Header("Icons")]
     [SerializeField] Image iconImage;
     [SerializeField] Sprite[] icons;
 
     Interactable hovered;
-
+    Tween punch;
     Controls.PlayerActions playerControls;
 
     void Awake()
@@ -25,6 +30,9 @@ public class PlayerInteraction : MonoBehaviour
         playerControls = new Controls().Player;
         playerControls.Interact.performed += OnInteract;
         text.text = "";
+
+        punch = iconImage.rectTransform.DOPunchScale(Vector3.one * punchAmount, punchDuration)
+            .Pause().SetAutoKill(false);
     }
 
     void OnEnable() => playerControls.Enable();
@@ -63,6 +71,7 @@ public class PlayerInteraction : MonoBehaviour
         if (currentHover && currentHover.TryGetComponent(out hovered))
         {
             hovered?.OnHover(true);
+            punch.Restart();
         }
         else
         {
