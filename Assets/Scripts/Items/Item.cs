@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Collider), typeof(Renderer))]
 public class Item : Interactable
 {
     [SerializeField] Renderer rend;
@@ -10,6 +11,17 @@ public class Item : Interactable
     [SerializeField] Rigidbody rb;
 
     public bool IsHeld { get; private set; }
+
+    void Reset()
+    {
+        TryGetComponent(out col);
+
+        if (col is CapsuleCollider or SphereCollider)
+            isCylindrical = true;
+
+        TryGetComponent(out rend);
+        TryGetComponent(out rb);
+    }
 
     public float SizeAlong(Vector3 direction)
     {
