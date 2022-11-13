@@ -25,6 +25,11 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
+    public void RemoveItem(Item item)
+    {
+        items.Remove(item);
+    }
+
     void SetActiveItem(Item item)
     {
         placer.SetItem(item);
