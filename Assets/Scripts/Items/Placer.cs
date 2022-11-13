@@ -44,7 +44,7 @@ public class Placer : MonoBehaviour
         active.transform.localPosition = holdPosition;
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (!active) return;
 
