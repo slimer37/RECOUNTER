@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class Item : Interactable
 {
-    [SerializeField] Collider col;
     [SerializeField] Renderer rend;
+    [SerializeField] Collider col;
+    [SerializeField] bool isCylindrical;
+
+    [Header("Optional")]
     [SerializeField] Rigidbody rb;
 
     public bool IsHeld { get; private set; }
@@ -11,7 +14,18 @@ public class Item : Interactable
     public float SizeAlong(Vector3 direction)
     {
         direction = transform.InverseTransformDirection(direction);
-        return Vector3.Dot(new Vector3(Mathf.Abs(direction.x), Mathf.Abs(direction.y), Mathf.Abs(direction.z)), Vector3.Scale(transform.localScale, rend.localBounds.extents));
+        var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
+
+        if (isCylindrical)
+        {
+            var radialComponent = new Vector2(direction.x, direction.z).magnitude;
+            return scaledExtents.x * radialComponent + scaledExtents.y * direction.y;
+        }
+        else
+        {
+            var absDirection = new Vector3(Mathf.Abs(direction.x), Mathf.Abs(direction.y), Mathf.Abs(direction.z));
+            return Vector3.Dot(absDirection, scaledExtents);
+        }
     }
 
     public override string GetText() => IsHeld ? "" : "Pick up";
