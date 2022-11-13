@@ -31,7 +31,7 @@ public class Item : Interactable
         if (isCylindrical)
         {
             var radialComponent = new Vector2(direction.x, direction.z).magnitude;
-            return scaledExtents.x * radialComponent + scaledExtents.y * direction.y;
+            return Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * direction.y;
         }
         else
         {
