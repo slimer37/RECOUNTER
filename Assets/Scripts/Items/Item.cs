@@ -12,6 +12,13 @@ public class Item : Interactable
 
     public bool IsHeld { get; private set; }
 
+
+    int inTrigger;
+    public bool IsIntersecting => inTrigger > 0;
+
+    void OnTriggerEnter(Collider other) => inTrigger++;
+    void OnTriggerExit(Collider other) => inTrigger--;
+
     void Reset()
     {
         TryGetComponent(out col);
@@ -50,7 +57,8 @@ public class Item : Interactable
         if (!Inventory.Instance.TryAddItem(this)) return;
 
         IsHeld = true;
-        col.enabled = false;
+        inTrigger = 0;
+        col.isTrigger = true;
 
         if (rb)
             rb.isKinematic = true;
@@ -59,7 +67,7 @@ public class Item : Interactable
     public void Release()
     {
         IsHeld = false;
-        col.enabled = true;
+        col.isTrigger = false;
 
         if (rb)
             rb.isKinematic = false;

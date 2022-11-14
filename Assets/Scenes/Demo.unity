@@ -695,6 +695,7 @@ MonoBehaviour:
   cam: {fileID: 1065023559}
   range: 5
   rotateSpeed: 90
+  surfaceSeparation: 0.001
   placementMask:
     serializedVersion: 2
     m_Bits: 1

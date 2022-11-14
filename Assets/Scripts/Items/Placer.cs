@@ -8,6 +8,7 @@ public class Placer : MonoBehaviour
     [SerializeField] Transform cam;
     [SerializeField] float range;
     [SerializeField] float rotateSpeed;
+    [SerializeField] float surfaceSeparation;
     [SerializeField] LayerMask placementMask;
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerInteraction playerInteraction;
@@ -73,7 +74,9 @@ public class Placer : MonoBehaviour
                     icon.sprite = rotateIcon;
                 }
 
-                active.transform.position = hit.point + hit.normal * active.SizeAlong(hit.normal);
+                active.transform.position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(hit.normal));
+                if (active.IsIntersecting)
+                    print("intersect");
                 playerInteraction.enabled = false;
             }
             else if (placing)
