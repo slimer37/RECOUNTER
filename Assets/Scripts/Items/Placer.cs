@@ -73,6 +73,7 @@ public class Placer : MonoBehaviour
                 else
                 {
                     playerController.enabled = true;
+                    icon.sprite = placeIcon;
                 }
 
                 active.transform.position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(hit.normal));
