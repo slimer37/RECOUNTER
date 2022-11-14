@@ -48,7 +48,10 @@ public class Item : Interactable
     public override void Interact()
     {
         if (!Inventory.Instance.TryAddItem(this)) return;
+
         IsHeld = true;
+        col.enabled = false;
+
         if (rb)
             rb.isKinematic = true;
     }
@@ -56,6 +59,8 @@ public class Item : Interactable
     public void Release()
     {
         IsHeld = false;
+        col.enabled = true;
+
         if (rb)
             rb.isKinematic = false;
     }
