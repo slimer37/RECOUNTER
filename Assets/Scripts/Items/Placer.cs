@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System;
 
 public class Placer : MonoBehaviour
 {
@@ -48,9 +49,7 @@ public class Placer : MonoBehaviour
         layer = item.gameObject.layer;
         item.gameObject.layer = ignoreLayer;
 
-        active.transform.localRotation = Quaternion.identity;
-        active.transform.parent = transform;
-        active.transform.localPosition = holdPosition;
+        MoveActiveToHand();
     }
 
     void Update()
@@ -61,45 +60,79 @@ public class Placer : MonoBehaviour
         {
             if (Mouse.current.rightButton.isPressed)
             {
-                icon.sprite = placeIcon;
-                playerController.enabled = true;
-                placing = true;
-                active.transform.parent = null;
+                StartPlace();
 
                 if (Mouse.current.leftButton.isPressed)
                 {
-                    var x = Mouse.current.delta.ReadValue().x;
-                    active.transform.Rotate(Vector3.up, x * rotateSpeed * Time.deltaTime);
                     playerController.enabled = false;
                     icon.sprite = rotateIcon;
+
+                    var mouseX = Mouse.current.delta.ReadValue().x;
+                    active.transform.Rotate(Vector3.up, mouseX * rotateSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    playerController.enabled = true;
                 }
 
                 active.transform.position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(hit.normal));
+
                 if (active.IsIntersecting)
                     print("intersect");
-                playerInteraction.enabled = false;
             }
             else if (placing)
             {
-                playerInteraction.enabled = true;
-                playerController.enabled = true;
-                placing = false;
-                active.Release();
-                active.gameObject.layer = layer;
-
-                Inventory.Instance.RemoveItem(active);
-                active = null;
+                DropItem();
             }
         }
         else
         {
-            icon.sprite = defaultIcon;
-            playerInteraction.enabled = true;
-            playerController.enabled = true;
-            placing = false;
-            active.transform.localRotation = Quaternion.identity;
-            active.transform.parent = transform;
-            active.transform.localPosition = holdPosition;
+            EndPlace();
+            MoveActiveToHand();
         }
+    }
+
+    void StartPlace()
+    {
+        if (placing) return;
+
+        playerInteraction.enabled = false;
+        placing = true;
+
+        active.transform.parent = null;
+
+        icon.sprite = placeIcon;
+    }
+
+    void EndPlace()
+    {
+        if (!placing) return;
+
+        playerInteraction.enabled = true;
+        placing = false;
+
+        icon.sprite = defaultIcon;
+    }
+
+    void DropItem()
+    {
+        if (!placing) return;
+
+        if (!active) throw new InvalidOperationException("No active item to drop.");
+
+        EndPlace();
+
+        active.Release();
+        active.gameObject.layer = layer;
+
+        Inventory.Instance.RemoveItem(active);
+        active = null;
+    }
+
+    void MoveActiveToHand()
+    {
+        active.transform.localRotation = Quaternion.identity;
+        active.transform.parent = transform;
+        active.transform.localPosition = holdPosition;
     }
 }
