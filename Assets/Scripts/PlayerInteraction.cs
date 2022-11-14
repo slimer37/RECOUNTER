@@ -61,7 +61,7 @@ public class PlayerInteraction : MonoBehaviour
         hovered.Interact();
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (hovered)
         {
