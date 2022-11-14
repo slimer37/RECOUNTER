@@ -13,11 +13,21 @@ public class Item : Interactable
     public bool IsHeld { get; private set; }
 
 
-    int inTrigger;
-    public bool IsIntersecting => inTrigger > 0;
-
-    void OnTriggerEnter(Collider other) => inTrigger++;
-    void OnTriggerExit(Collider other) => inTrigger--;
+    public bool IsIntersecting(LayerMask mask)
+    {
+        var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
+        var pos = transform.position;
+        if (isCylindrical)
+        {
+            var radius = Mathf.Max(scaledExtents.x, scaledExtents.z);
+            scaledExtents.y -= radius;
+            return Physics.CheckCapsule(pos - Vector3.up * scaledExtents.y, pos + Vector3.up * scaledExtents.y, radius, mask);
+        }
+        else
+        {
+            return Physics.CheckBox(pos, scaledExtents, transform.rotation, mask);
+        }
+    }
 
     void Reset()
     {
@@ -57,8 +67,7 @@ public class Item : Interactable
         if (!Inventory.Instance.TryAddItem(this)) return;
 
         IsHeld = true;
-        inTrigger = 0;
-        col.isTrigger = true;
+        col.enabled = false;
 
         if (rb)
             rb.isKinematic = true;
@@ -67,7 +76,7 @@ public class Item : Interactable
     public void Release()
     {
         IsHeld = false;
-        col.isTrigger = false;
+        col.enabled = true;
 
         if (rb)
             rb.isKinematic = false;

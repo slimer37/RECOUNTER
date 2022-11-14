@@ -11,6 +11,7 @@ public class Placer : MonoBehaviour
     [SerializeField] float rotateSpeed;
     [SerializeField] float surfaceSeparation;
     [SerializeField] LayerMask placementMask;
+    [SerializeField] LayerMask obstacleMask;
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerInteraction playerInteraction;
 
@@ -78,7 +79,7 @@ public class Placer : MonoBehaviour
 
                 active.transform.position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(hit.normal));
 
-                if (active.IsIntersecting)
+                if (active.IsIntersecting(obstacleMask))
                     print("intersect");
             }
             else if (placing)
