@@ -29,14 +29,28 @@ public class PlayerInteraction : MonoBehaviour
 
         playerControls = new Controls().Player;
         playerControls.Interact.performed += OnInteract;
-        text.text = "";
 
         punch = iconImage.rectTransform.DOPunchScale(Vector3.one * punchAmount, punchDuration)
             .Pause().SetAutoKill(false);
     }
 
-    void OnEnable() => playerControls.Enable();
-    void OnDisable() => playerControls.Disable();
+    void ResetUI()
+    {
+        text.text = "";
+        iconImage.sprite = icons[0];
+    }
+
+    void OnEnable()
+    {
+        ResetUI();
+        playerControls.Enable();
+    }
+
+    void OnDisable()
+    {
+        HandleInteraction(null);
+        playerControls.Disable();
+    }
 
     void OnInteract(InputAction.CallbackContext context)
     {
@@ -78,8 +92,7 @@ public class PlayerInteraction : MonoBehaviour
             hovered?.OnHover(false);
             hovered = null;
 
-            text.text = "";
-            iconImage.sprite = icons[0];
+            ResetUI();
         }
     }
 

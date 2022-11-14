@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class Placer : MonoBehaviour
@@ -9,6 +10,13 @@ public class Placer : MonoBehaviour
     [SerializeField] float rotateSpeed;
     [SerializeField] LayerMask placementMask;
     [SerializeField] PlayerController playerController;
+    [SerializeField] PlayerInteraction playerInteraction;
+
+    [Header("UI")]
+    [SerializeField] Sprite defaultIcon;
+    [SerializeField] Sprite placeIcon;
+    [SerializeField] Sprite rotateIcon;
+    [SerializeField] Image icon;
 
     Item active;
     bool placing;
@@ -52,6 +60,7 @@ public class Placer : MonoBehaviour
         {
             if (Mouse.current.rightButton.isPressed)
             {
+                icon.sprite = placeIcon;
                 playerController.enabled = true;
                 placing = true;
                 active.transform.parent = null;
@@ -61,23 +70,29 @@ public class Placer : MonoBehaviour
                     var x = Mouse.current.delta.ReadValue().x;
                     active.transform.Rotate(Vector3.up, -x * rotateSpeed * Time.deltaTime);
                     playerController.enabled = false;
+                    icon.sprite = rotateIcon;
                 }
 
                 active.transform.position = hit.point + hit.normal * active.SizeAlong(hit.normal);
+                playerInteraction.enabled = false;
             }
             else if (placing)
             {
+                playerInteraction.enabled = true;
+                playerController.enabled = true;
                 placing = false;
                 active.Release();
                 active.gameObject.layer = layer;
 
                 Inventory.Instance.RemoveItem(active);
                 active = null;
-                playerController.enabled = true;
             }
         }
         else
         {
+            icon.sprite = defaultIcon;
+            playerInteraction.enabled = true;
+            playerController.enabled = true;
             placing = false;
             active.transform.localRotation = Quaternion.identity;
             active.transform.parent = transform;
