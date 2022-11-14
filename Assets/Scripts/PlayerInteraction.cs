@@ -48,8 +48,9 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnDisable()
     {
-        HandleInteraction(null);
         playerControls.Disable();
+        if (!hovered) return;
+        HandleInteraction(null);
     }
 
     void OnInteract(InputAction.CallbackContext context)
