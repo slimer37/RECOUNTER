@@ -68,7 +68,7 @@ public class Placer : MonoBehaviour
                 if (Mouse.current.leftButton.isPressed)
                 {
                     var x = Mouse.current.delta.ReadValue().x;
-                    active.transform.Rotate(Vector3.up, -x * rotateSpeed * Time.deltaTime);
+                    active.transform.Rotate(Vector3.up, x * rotateSpeed * Time.deltaTime);
                     playerController.enabled = false;
                     icon.sprite = rotateIcon;
                 }
