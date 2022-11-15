@@ -5,17 +5,22 @@ using System;
 
 public class Placer : MonoBehaviour
 {
-    [SerializeField] Vector3 holdPosition;
-    [SerializeField] Transform cam;
+    [Header("Placement Settings")]
     [SerializeField] float range;
     [SerializeField] float rotateSpeed;
     [SerializeField] float surfaceSeparation;
     [SerializeField] LayerMask placementMask;
     [SerializeField] LayerMask obstacleMask;
+
+    [Header("Viewmodel Settings")]
+    [SerializeField, Layer] int heldItemLayer;
+    [SerializeField] Vector3 holdPosition;
+
+    [Header("Components")]
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerInteraction playerInteraction;
+    [SerializeField] Transform cam;
     [SerializeField] Ghost ghost;
-    [SerializeField, Layer] int heldItemLayer;
 
     [Header("UI")]
     [SerializeField] Sprite defaultIcon;
