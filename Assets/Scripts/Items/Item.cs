@@ -38,19 +38,18 @@ public class Item : Interactable
         TryGetComponent(out rb);
     }
 
-    public float SizeAlong(Vector3 direction)
+    public float SizeAlong(Vector3 localdirection)
     {
-        direction = transform.InverseTransformDirection(direction);
         var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
 
         if (isCylindrical)
         {
-            var radialComponent = new Vector2(direction.x, direction.z).magnitude;
-            return Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * direction.y;
+            var radialComponent = new Vector2(localdirection.x, localdirection.z).magnitude;
+            return Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * localdirection.y;
         }
         else
         {
-            var absDirection = new Vector3(Mathf.Abs(direction.x), Mathf.Abs(direction.y), Mathf.Abs(direction.z));
+            var absDirection = new Vector3(Mathf.Abs(localdirection.x), Mathf.Abs(localdirection.y), Mathf.Abs(localdirection.z));
             return Vector3.Dot(absDirection, scaledExtents);
         }
     }

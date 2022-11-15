@@ -76,8 +76,8 @@ public class Placer : MonoBehaviour
                     icon.sprite = placeIcon;
                 }
 
-                var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(hit.normal));
                 var rotation = Quaternion.Euler(Vector3.up * itemRotation);
+                var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
 
                 if (active.WouldIntersectAt(position, rotation, obstacleMask))
                 {
