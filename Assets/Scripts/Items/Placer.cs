@@ -59,6 +59,8 @@ public class Placer : MonoBehaviour
 
     void Update()
     {
+        if (Pause.IsPaused) return;
+
         if (!active) return;
 
         if (Physics.Raycast(cam.position, cam.forward, out var hit, range, placementMask))

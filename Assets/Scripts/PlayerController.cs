@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Pause.IsPaused) return;
+
         // Jumping & Gravity
 
         yVelocity -= gravity * Time.deltaTime;

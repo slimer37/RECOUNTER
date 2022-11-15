@@ -64,6 +64,8 @@ public class PlayerInteraction : MonoBehaviour
 
     void LateUpdate()
     {
+        if (Pause.IsPaused) return;
+
         if (hovered)
         {
             UpdateUI();
