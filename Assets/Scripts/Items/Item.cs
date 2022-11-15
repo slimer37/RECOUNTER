@@ -12,20 +12,18 @@ public class Item : Interactable
 
     public bool IsHeld { get; private set; }
 
-
-    public bool IsIntersecting(LayerMask mask)
+    public bool WouldIntersectAt(Vector3 position, Quaternion rotation, LayerMask mask)
     {
         var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
-        var pos = transform.position;
         if (isCylindrical)
         {
             var radius = Mathf.Max(scaledExtents.x, scaledExtents.z);
             scaledExtents.y -= radius;
-            return Physics.CheckCapsule(pos - Vector3.up * scaledExtents.y, pos + Vector3.up * scaledExtents.y, radius, mask);
+            return Physics.CheckCapsule(position - Vector3.up * scaledExtents.y, position + Vector3.up * scaledExtents.y, radius, mask);
         }
         else
         {
-            return Physics.CheckBox(pos, scaledExtents, transform.rotation, mask);
+            return Physics.CheckBox(position, scaledExtents, rotation, mask);
         }
     }
 

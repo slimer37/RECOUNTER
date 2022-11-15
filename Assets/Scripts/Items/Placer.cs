@@ -14,6 +14,7 @@ public class Placer : MonoBehaviour
     [SerializeField] LayerMask obstacleMask;
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerInteraction playerInteraction;
+    [SerializeField] Ghost ghost;
 
     [Header("UI")]
     [SerializeField] Sprite defaultIcon;
@@ -22,6 +23,8 @@ public class Placer : MonoBehaviour
     [SerializeField] Image icon;
 
     Item active;
+    float itemRotation;
+
     bool placing;
     int layer;
 
@@ -50,6 +53,8 @@ public class Placer : MonoBehaviour
         layer = item.gameObject.layer;
         item.gameObject.layer = ignoreLayer;
 
+        ghost.CopyMesh(item);
+
         MoveActiveToHand();
     }
 
@@ -69,7 +74,7 @@ public class Placer : MonoBehaviour
                     icon.sprite = rotateIcon;
 
                     var mouseX = Mouse.current.delta.ReadValue().x;
-                    active.transform.Rotate(Vector3.up, mouseX * rotateSpeed * Time.deltaTime);
+                    itemRotation += mouseX * rotateSpeed * Time.deltaTime;
                 }
                 else
                 {
@@ -77,10 +82,19 @@ public class Placer : MonoBehaviour
                     icon.sprite = placeIcon;
                 }
 
-                active.transform.position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(hit.normal));
+                var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(hit.normal));
+                var rotation = Quaternion.Euler(Vector3.up * itemRotation);
 
-                if (active.IsIntersecting(obstacleMask))
-                    print("intersect");
+                if (active.WouldIntersectAt(position, rotation, obstacleMask))
+                {
+                    ghost.ShowAt(position, rotation);
+                    MoveActiveToHand();
+                }
+                else
+                {
+                    active.transform.SetPositionAndRotation(position, rotation);
+                    ghost.Hide();
+                }
             }
             else if (placing)
             {
@@ -113,7 +127,11 @@ public class Placer : MonoBehaviour
         playerInteraction.enabled = true;
         placing = false;
 
+        active.transform.parent = null;
+
         icon.sprite = defaultIcon;
+
+        ghost.Hide();
     }
 
     void DropItem()
