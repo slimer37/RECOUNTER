@@ -15,6 +15,7 @@ public class Placer : MonoBehaviour
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerInteraction playerInteraction;
     [SerializeField] Ghost ghost;
+    [SerializeField, Layer] int heldItemLayer;
 
     [Header("UI")]
     [SerializeField] Sprite defaultIcon;
@@ -26,20 +27,13 @@ public class Placer : MonoBehaviour
     float itemRotation;
 
     bool placing;
-    int layer;
-
-    int ignoreLayer;
+    int originalLayer;
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.matrix = transform.localToWorldMatrix;
         Gizmos.DrawCube(holdPosition, Vector3.one * 0.4f);
-    }
-
-    void Awake()
-    {
-        ignoreLayer = LayerMask.NameToLayer("Ignore Raycast");
     }
 
     public void SetItem(Item item)
@@ -50,8 +44,8 @@ public class Placer : MonoBehaviour
 
         item.gameObject.SetActive(true);
 
-        layer = item.gameObject.layer;
-        item.gameObject.layer = ignoreLayer;
+        originalLayer = item.gameObject.layer;
+        item.gameObject.layer = heldItemLayer;
 
         ghost.CopyMesh(item);
 
@@ -118,6 +112,8 @@ public class Placer : MonoBehaviour
         active.transform.parent = null;
 
         icon.sprite = placeIcon;
+
+        active.gameObject.layer = originalLayer;
     }
 
     void EndPlace()
@@ -132,6 +128,8 @@ public class Placer : MonoBehaviour
         icon.sprite = defaultIcon;
 
         ghost.Hide();
+
+        active.gameObject.layer = heldItemLayer;
     }
 
     void DropItem()
@@ -143,7 +141,7 @@ public class Placer : MonoBehaviour
         EndPlace();
 
         active.Release();
-        active.gameObject.layer = layer;
+        active.gameObject.layer = originalLayer;
 
         Inventory.Instance.RemoveItem(active);
         active = null;
