@@ -87,11 +87,13 @@ public class Placer : MonoBehaviour
                 if (active.WouldIntersectAt(position, rotation, obstacleMask))
                 {
                     ghost.ShowAt(position, rotation);
+                    active.gameObject.layer = heldItemLayer;
                     MoveActiveToHand();
                 }
                 else
                 {
                     active.transform.SetPositionAndRotation(position, rotation);
+                    active.gameObject.layer = originalLayer;
                     ghost.Hide();
                 }
             }
@@ -117,8 +119,6 @@ public class Placer : MonoBehaviour
         active.transform.parent = null;
 
         icon.sprite = placeIcon;
-
-        active.gameObject.layer = originalLayer;
     }
 
     void EndPlace()
@@ -133,8 +133,6 @@ public class Placer : MonoBehaviour
         icon.sprite = defaultIcon;
 
         ghost.Hide();
-
-        active.gameObject.layer = heldItemLayer;
     }
 
     void DropItem()
