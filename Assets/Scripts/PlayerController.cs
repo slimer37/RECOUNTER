@@ -37,15 +37,19 @@ public class PlayerController : MonoBehaviour
 
         // Jumping & Gravity
 
-        yVelocity -= gravity * Time.deltaTime;
-
-        if (yVelocity > 0 && !playerControls.Jump.IsPressed())
+        if (controller.isGrounded)
+        {
+            if (playerControls.Jump.WasPressedThisFrame())
+                yVelocity = jumpForce;
+        }
+        else if (yVelocity > 0 && !playerControls.Jump.IsPressed())
+        {
             yVelocity -= gravity * lowJumpMultiplier * Time.deltaTime;
-
-        var jump = controller.isGrounded && playerControls.Jump.WasPressedThisFrame();
-
-        if (jump)
-            yVelocity = jumpForce;
+        }
+        else
+        {
+            yVelocity -= gravity * Time.deltaTime;
+        }
 
         // Movement
 
