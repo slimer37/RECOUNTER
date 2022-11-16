@@ -118,6 +118,7 @@ public class Placer : MonoBehaviour
     {
         playerInteraction.enabled = false;
         placing = true;
+
         icon.sprite = placeIcon;
     }
 
@@ -126,6 +127,7 @@ public class Placer : MonoBehaviour
         if (!placing) return;
 
         playerInteraction.enabled = true;
+        playerController.enabled = true;
         placing = false;
 
         icon.sprite = defaultIcon;
