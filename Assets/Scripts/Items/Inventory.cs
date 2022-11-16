@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,7 +14,7 @@ public class Inventory : MonoBehaviour
 
     readonly List<Item> items = new();
 
-    InventorySlot activeSlot;
+    int activeIndex;
 
     public static Inventory Instance { get; private set; }
 
@@ -32,13 +33,26 @@ public class Inventory : MonoBehaviour
         slotPrefab.gameObject.SetActive(false);
 
         SetActiveSlot(0);
+    }
 
-        Keyboard.current.onTextInput += OnSwitchSlot;
+    void OnEnable() => Keyboard.current.onTextInput += OnSwitchSlot;
+    void OnDisable() => Keyboard.current.onTextInput -= OnSwitchSlot;
+
+    void Update()
+    {
+        var scroll = Mouse.current.scroll.ReadValue().y;
+
+        if (scroll != 0)
+        {
+            var newIndex = activeIndex + (scroll > 0 ? 1 : -1);
+            newIndex = Mathf.Clamp(newIndex, 0, capacity - 1);
+            SetActiveSlot(newIndex);
+        }
     }
 
     private void OnSwitchSlot(char input)
     {
-        if (!int.TryParse(input.ToString(), out var slotNum)) return;
+        if (!int.TryParse(input.ToString(), out var slotNum) || slotNum > capacity) return;
 
         SetActiveSlot(slotNum - 1);
     }
@@ -46,7 +60,7 @@ public class Inventory : MonoBehaviour
     public bool TryAddItem(Item item)
     {
         if (!item)
-            throw new System.NullReferenceException();
+            throw new NullReferenceException();
 
         if (items.Count == capacity) return false;
 
@@ -62,10 +76,10 @@ public class Inventory : MonoBehaviour
     public void RemoveItem(Item item)
     {
         if (!item)
-            throw new System.NullReferenceException();
+            throw new NullReferenceException();
 
         if (!items.Remove(item))
-            throw new System.Exception($"Cannot remove '{item}' because it's not in the inventory.");
+            throw new Exception($"Cannot remove '{item}' because it's not in the inventory.");
 
         slots[items.Count].Clear();
 
@@ -77,10 +91,11 @@ public class Inventory : MonoBehaviour
     {
         placer.StopHoldingItem();
 
-        activeSlot?.SetSlotActive(false);
+        slots[activeIndex].SetSlotActive(false);
 
         slots[index].SetSlotActive(true);
-        activeSlot = slots[index];
+
+        activeIndex = index;
 
         var item = slots[index].Item;
 
