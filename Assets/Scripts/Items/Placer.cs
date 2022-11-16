@@ -34,6 +34,8 @@ public class Placer : MonoBehaviour
     bool placing;
     int originalLayer;
 
+    public Item Active => active;
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
@@ -54,6 +56,15 @@ public class Placer : MonoBehaviour
         active.transform.parent = transform;
 
         MoveActiveToHand();
+    }
+
+    public void StopHoldingItem()
+    {
+        if (!active) return;
+
+        active.gameObject.SetActive(false);
+
+        active = null;
     }
 
     void Update()
@@ -147,9 +158,9 @@ public class Placer : MonoBehaviour
         active.transform.parent = null;
 
         active.Release();
+        active = null;
 
         Inventory.Instance.RemoveItem(active);
-        active = null;
     }
 
     void MoveActiveToHand()
