@@ -19,7 +19,8 @@ public class Pause : MonoBehaviour
         controls.Menu.Exit.performed += _ => SetPaused(!IsPaused);
         controls.Enable();
 
-        SetPaused(false);
+        group.alpha = 0;
+        group.blocksRaycasts = false;
     }
 
     void OnDestroy()
@@ -37,6 +38,8 @@ public class Pause : MonoBehaviour
 
     public void SetPaused(bool pause)
     {
+        if (!IsPaused == pause) return;
+
         IsPaused = pause;
 
         Time.timeScale = pause ? 0 : 1;
