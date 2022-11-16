@@ -1,12 +1,13 @@
 using Cinemachine;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Moving")]
     [SerializeField] float walkSpeed;
     [SerializeField] float sprintSpeed;
+    [SerializeField] Transform body;
+    [SerializeField] CharacterController controller;
 
     [Header("Jumping")]
     [SerializeField] float jumpForce;
@@ -24,7 +25,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float sprintFov;
     [SerializeField] float fovChangeSpeed;
 
-    CharacterController controller;
     Controls.PlayerActions playerControls;
 
     Vector2 camRot;
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
 
         var speed = isSprinting ? sprintSpeed : walkSpeed;
 
-        var velocity = transform.TransformDirection(move.x, 0, move.y) * speed + Vector3.up * yVelocity;
+        var velocity = body.TransformDirection(move.x, 0, move.y) * speed + Vector3.up * yVelocity;
 
         controller.Move(velocity * Time.deltaTime);
 
@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
         camRot.x -= look.y;
         camRot.x = Mathf.Clamp(camRot.x, -clamp, clamp);
 
-        transform.eulerAngles = camRot.y * Vector3.up;
+        body.eulerAngles = camRot.y * Vector3.up;
         camTarget.localEulerAngles = camRot.x * Vector3.right;
     }
 
@@ -89,10 +89,9 @@ public class PlayerController : MonoBehaviour
 
         fov = walkFov;
 
-        camRot.x = transform.localEulerAngles.y;
+        camRot.x = body.localEulerAngles.y;
         camRot.y = camTarget.localEulerAngles.x;
 
-        controller = GetComponent<CharacterController>();
         playerControls = new Controls().Player;
     }
 
