@@ -61,7 +61,7 @@ public class Item : Interactable
 
     public override void Interact()
     {
-        if (!Inventory.Instance.TryAddItem(this)) return;
+        if (!Hotbar.Instance.TryAddItem(this)) return;
 
         IsHeld = true;
         col.enabled = false;
@@ -72,7 +72,7 @@ public class Item : Interactable
 
     public void Release()
     {
-        Inventory.Instance.RemoveItem(this);
+        Hotbar.Instance.RemoveItem(this);
 
         IsHeld = false;
         col.enabled = true;

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour
+public class HotbarSlot : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] Image activeImage;

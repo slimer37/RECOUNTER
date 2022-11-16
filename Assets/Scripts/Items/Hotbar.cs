@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Inventory : MonoBehaviour
+public class Hotbar : MonoBehaviour
 {
     [SerializeField] int capacity;
     [SerializeField] Placer placer;
-    [SerializeField] InventorySlot slotPrefab;
+    [SerializeField] HotbarSlot slotPrefab;
     [SerializeField] Transform slotParent;
 
-    readonly List<InventorySlot> slots = new();
+    readonly List<HotbarSlot> slots = new();
 
     readonly List<Item> items = new();
 
     int activeIndex;
 
-    public static Inventory Instance { get; private set; }
+    public static Hotbar Instance { get; private set; }
 
     void Awake()
     {
