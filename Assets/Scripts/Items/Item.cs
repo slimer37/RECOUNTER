@@ -72,6 +72,8 @@ public class Item : Interactable
 
     public void Release()
     {
+        Inventory.Instance.RemoveItem(this);
+
         IsHeld = false;
         col.enabled = true;
 

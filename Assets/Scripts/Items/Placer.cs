@@ -157,10 +157,11 @@ public class Placer : MonoBehaviour
         active.gameObject.layer = originalLayer;
         active.transform.parent = null;
 
-        active.Release();
+        var temp = active;
+
         active = null;
 
-        Inventory.Instance.RemoveItem(active);
+        temp.Release();
     }
 
     void MoveActiveToHand()
