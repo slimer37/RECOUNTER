@@ -16,12 +16,8 @@ public class Hotbar : MonoBehaviour
 
     int activeIndex;
 
-    public static Hotbar Instance { get; private set; }
-
     void Awake()
     {
-        Instance = this;
-
         slotPrefab.gameObject.SetActive(true);
 
         for (int i = 0; i < capacity; i++)

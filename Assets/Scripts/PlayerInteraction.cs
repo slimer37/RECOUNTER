@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerInteraction : MonoBehaviour
 {
+    [SerializeField] Employee employee;
+
     [SerializeField] float range;
     [SerializeField] Transform cam;
     [SerializeField] TextMeshProUGUI text;
@@ -59,7 +61,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (!hovered.CanInteract()) return;
 
-        hovered.Interact();
+        hovered.Interact(employee);
     }
 
     void LateUpdate()

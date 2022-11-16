@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 222449575}
   - component: {fileID: 222449576}
   m_Layer: 5
-  m_Name: inventory
+  m_Name: hotbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -902,6 +902,7 @@ GameObject:
   - component: {fileID: 840553852}
   - component: {fileID: 840553858}
   - component: {fileID: 840553859}
+  - component: {fileID: 840553860}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1045,6 +1046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59a382e3e6ff27e4b8f58995c6c87dff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  employee: {fileID: 840553860}
   range: 2
   cam: {fileID: 1065023559}
   text: {fileID: 1925832153}
@@ -1092,6 +1094,21 @@ MonoBehaviour:
   placeIcon: {fileID: 21300000, guid: f823c910bebc79e48b0eb659bd45b954, type: 3}
   rotateIcon: {fileID: 21300000, guid: 141f55b40da731746a84d2dc184a5952, type: 3}
   icon: {fileID: 1200812864}
+--- !u!114 &840553860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840553850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56c51350bae7ece4ca4918f32b839c9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ItemHotbar>k__BackingField: {fileID: 222449576}
+  <Controller>k__BackingField: {fileID: 840553852}
+  <Interaction>k__BackingField: {fileID: 840553858}
 --- !u!1 &841520586
 GameObject:
   m_ObjectHideFlags: 0

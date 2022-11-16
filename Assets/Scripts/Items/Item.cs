@@ -10,7 +10,9 @@ public class Item : Interactable
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
 
-    public bool IsHeld { get; private set; }
+    Hotbar containerHotbar;
+
+    public bool IsHeld => containerHotbar;
 
     public bool WouldIntersectAt(Vector3 position, Quaternion rotation, LayerMask mask)
     {
@@ -59,11 +61,11 @@ public class Item : Interactable
 
     public override bool CanInteract() => !IsHeld;
 
-    public override void Interact()
+    public override void Interact(Employee e)
     {
-        if (!Hotbar.Instance.TryAddItem(this)) return;
+        if (!e.ItemHotbar.TryAddItem(this)) return;
 
-        IsHeld = true;
+        containerHotbar = e.ItemHotbar;
         col.enabled = false;
 
         if (rb)
@@ -72,9 +74,9 @@ public class Item : Interactable
 
     public void Release()
     {
-        Hotbar.Instance.RemoveItem(this);
+        containerHotbar.RemoveItem(this);
 
-        IsHeld = false;
+        containerHotbar = null;
         col.enabled = true;
 
         if (rb)
