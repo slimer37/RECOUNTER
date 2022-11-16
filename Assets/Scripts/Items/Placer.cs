@@ -45,14 +45,13 @@ public class Placer : MonoBehaviour
     {
         active = item;
 
-        item.transform.localPosition = holdPosition;
-
-        item.gameObject.SetActive(true);
+        active.gameObject.SetActive(true);
 
         originalLayer = item.gameObject.layer;
-        item.gameObject.layer = heldItemLayer;
 
         ghost.CopyMesh(item);
+
+        active.transform.parent = transform;
 
         MoveActiveToHand();
     }
@@ -69,33 +68,21 @@ public class Placer : MonoBehaviour
             {
                 StartPlace();
 
-                if (Mouse.current.leftButton.isPressed)
-                {
-                    playerController.enabled = false;
-                    icon.sprite = rotateIcon;
+                HandleRotation(out var rotation);
 
-                    var mouseX = Mouse.current.delta.ReadValue().x;
-                    itemRotation += mouseX * rotateSpeed * Time.deltaTime;
-                }
-                else
-                {
-                    playerController.enabled = true;
-                    icon.sprite = placeIcon;
-                }
-
-                var rotation = Quaternion.Euler(Vector3.up * itemRotation);
                 var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
 
                 if (active.WouldIntersectAt(position, rotation, obstacleMask))
                 {
                     ghost.ShowAt(position, rotation);
-                    active.gameObject.layer = heldItemLayer;
+
                     MoveActiveToHand();
                 }
                 else
                 {
-                    active.transform.SetPositionAndRotation(position, rotation);
                     active.gameObject.layer = originalLayer;
+                    active.transform.SetPositionAndRotation(position, rotation);
+
                     ghost.Hide();
                 }
             }
@@ -111,15 +98,26 @@ public class Placer : MonoBehaviour
         }
     }
 
+    void HandleRotation(out Quaternion rotation)
+    {
+        var rotating = Mouse.current.leftButton.isPressed;
+
+        playerController.enabled = !rotating;
+
+        if (rotating)
+        {
+            var mouseX = Mouse.current.delta.ReadValue().x;
+            itemRotation += mouseX * rotateSpeed * Time.deltaTime;
+            icon.sprite = rotateIcon;
+        }
+
+        rotation = Quaternion.Euler(Vector3.up * itemRotation);
+    }
+
     void StartPlace()
     {
-        if (placing) return;
-
         playerInteraction.enabled = false;
         placing = true;
-
-        active.transform.parent = null;
-
         icon.sprite = placeIcon;
     }
 
@@ -129,8 +127,6 @@ public class Placer : MonoBehaviour
 
         playerInteraction.enabled = true;
         placing = false;
-
-        active.transform.parent = null;
 
         icon.sprite = defaultIcon;
 
@@ -145,8 +141,10 @@ public class Placer : MonoBehaviour
 
         EndPlace();
 
-        active.Release();
         active.gameObject.layer = originalLayer;
+        active.transform.parent = null;
+
+        active.Release();
 
         Inventory.Instance.RemoveItem(active);
         active = null;
@@ -154,8 +152,8 @@ public class Placer : MonoBehaviour
 
     void MoveActiveToHand()
     {
+        active.gameObject.layer = heldItemLayer;
         active.transform.localRotation = Quaternion.identity;
-        active.transform.parent = transform;
         active.transform.localPosition = holdPosition;
     }
 }
