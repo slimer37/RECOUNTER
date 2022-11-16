@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Inventory : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Inventory : MonoBehaviour
     readonly List<InventorySlot> slots = new();
 
     readonly List<Item> items = new();
+
+    InventorySlot activeSlot;
 
     public static Inventory Instance { get; private set; }
 
@@ -27,6 +30,17 @@ public class Inventory : MonoBehaviour
         }
 
         slotPrefab.gameObject.SetActive(false);
+
+        SetActiveSlot(0);
+
+        Keyboard.current.onTextInput += OnSwitchSlot;
+    }
+
+    private void OnSwitchSlot(char input)
+    {
+        if (!int.TryParse(input.ToString(), out var slotNum)) return;
+
+        SetActiveSlot(slotNum - 1);
     }
 
     public bool TryAddItem(Item item)
@@ -36,10 +50,11 @@ public class Inventory : MonoBehaviour
 
         if (items.Count == capacity) return false;
 
-        slots[items.Count].AssignItem(item);
+        var index = items.Count;
+        slots[index].AssignItem(item);
         items.Add(item);
 
-        SetActiveItem(item);
+        SetActiveSlot(index);
 
         return true;
     }
@@ -58,9 +73,18 @@ public class Inventory : MonoBehaviour
             placer.StopHoldingItem();
     }
 
-    void SetActiveItem(Item item)
+    void SetActiveSlot(int index)
     {
         placer.StopHoldingItem();
-        placer.SetItem(item);
+
+        activeSlot?.SetSlotActive(false);
+
+        slots[index].SetSlotActive(true);
+        activeSlot = slots[index];
+
+        var item = slots[index].Item;
+
+        if (item)
+            placer.SetItem(item);
     }
 }

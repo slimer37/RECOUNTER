@@ -62,6 +62,8 @@ public class Placer : MonoBehaviour
     {
         if (!active) return;
 
+        EndPlace();
+
         active.gameObject.SetActive(false);
 
         active = null;
