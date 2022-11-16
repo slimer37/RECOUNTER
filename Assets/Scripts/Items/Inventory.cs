@@ -52,7 +52,9 @@ public class Inventory : MonoBehaviour
 
     private void OnSwitchSlot(char input)
     {
-        if (!int.TryParse(input.ToString(), out var slotNum) || slotNum > capacity) return;
+        if (!int.TryParse(input.ToString(), out var slotNum)) return;
+
+        if (slotNum == 0 || slotNum > capacity) return;
 
         SetActiveSlot(slotNum - 1);
     }
