@@ -16,6 +16,8 @@ public class Hotbar : MonoBehaviour
 
     int activeIndex;
 
+    HotbarSlot ActiveSlot => slots[activeIndex];
+
     void Awake()
     {
         slotPrefab.gameObject.SetActive(true);
@@ -60,13 +62,13 @@ public class Hotbar : MonoBehaviour
         if (!item)
             throw new NullReferenceException();
 
-        if (items.Count == capacity) return false;
+        if (ActiveSlot.Item || items.Count == capacity) return false;
 
-        var index = items.Count;
-        slots[index].AssignItem(item);
+        slots[activeIndex].AssignItem(item);
+
         items.Add(item);
 
-        SetActiveSlot(index);
+        SetActiveSlot(activeIndex);
 
         return true;
     }
