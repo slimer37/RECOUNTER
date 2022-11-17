@@ -40,7 +40,7 @@ public class Hotbar : MonoBehaviour
 
         if (scroll != 0)
         {
-            var newIndex = activeIndex + (scroll > 0 ? 1 : -1);
+            var newIndex = activeIndex + (scroll > 0 ? -1 : 1);
             newIndex = Mathf.Clamp(newIndex, 0, capacity - 1);
             SetActiveSlot(newIndex);
         }
