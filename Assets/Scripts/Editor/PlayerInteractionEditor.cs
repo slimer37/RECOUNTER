@@ -4,17 +4,26 @@ using UnityEngine;
 [CustomEditor(typeof(PlayerInteraction))]
 public class PlayerInteractionEditor : Editor
 {
-    [DrawGizmo(GizmoType.Active | GizmoType.Selected)]
-    static void OnDrawGizmos(PlayerInteraction playerInteraction, GizmoType type)
+    void OnSceneGUI()
     {
-        var so = new SerializedObject(playerInteraction);
-        var cam = so.FindProperty("cam").objectReferenceValue;
+        var cam = serializedObject.FindProperty("cam").objectReferenceValue;
 
         if (!cam) return;
-        Gizmos.color = Color.yellow;
 
-        var range = so.FindProperty("range").floatValue;
-        Gizmos.DrawWireSphere(((Transform)cam).position, range);
+        Handles.color = Color.cyan;
+
+        var range = serializedObject.FindProperty("range").floatValue;
+        var camTransform = (Transform)cam;
+
+        var arrowSize = Mathf.Min(0.5f, range);
+
+        var start = camTransform.position;
+        var dir = camTransform.forward;
+        var end = start + dir * (range - arrowSize);
+
+        Handles.DrawDottedLine(start, end, 5);
+
+        Handles.ArrowHandleCap(0, end, camTransform.rotation, arrowSize, EventType.Repaint);
     }
 
     public override void OnInspectorGUI()

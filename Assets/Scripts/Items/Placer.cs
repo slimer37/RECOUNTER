@@ -39,8 +39,7 @@ public class Placer : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.matrix = transform.localToWorldMatrix;
-        Gizmos.DrawCube(holdPosition, Vector3.one * 0.4f);
+        Gizmos.DrawWireSphere(cam.position, range);
     }
 
     public void SetItem(Item item)
