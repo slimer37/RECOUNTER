@@ -18,6 +18,8 @@ public class Hotbar : MonoBehaviour
 
     HotbarSlot ActiveSlot => slots[activeIndex];
 
+    public bool IsActiveSlotFull => ActiveSlot.Item;
+
     void Awake()
     {
         slotPrefab.gameObject.SetActive(true);

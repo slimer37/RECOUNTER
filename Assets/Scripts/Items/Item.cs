@@ -56,10 +56,9 @@ public class Item : Interactable
         }
     }
 
-    public override string GetText() => IsHeld ? "" : "Pick up";
-    public override Icon GetIcon() => IsHeld ? default : Icon.Pickup;
+    public override HudInfo GetHudInfo(Employee e) => CanInteract(e) ? new HudInfo { icon = Icon.Pickup, text = "Pick up" } : BlankHud;
 
-    public override bool CanInteract() => !IsHeld;
+    public override bool CanInteract(Employee e) => !IsHeld && !e.ItemHotbar.IsActiveSlotFull;
 
     public override void Interact(Employee e)
     {

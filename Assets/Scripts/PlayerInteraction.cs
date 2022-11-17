@@ -59,7 +59,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (!hovered) return;
 
-        if (!hovered.CanInteract()) return;
+        if (!hovered.CanInteract(employee)) return;
 
         hovered.Interact(employee);
     }
@@ -103,7 +103,10 @@ public class PlayerInteraction : MonoBehaviour
 
     void UpdateUI()
     {
-        text.text = hovered.GetText();
-        iconImage.sprite = icons[(int)hovered.GetIcon()];
+        var info = hovered.GetHudInfo(employee);
+        var icon = icons[(int)info.icon];
+
+        text.text = info.text;
+        iconImage.sprite = icon;
     }
 }

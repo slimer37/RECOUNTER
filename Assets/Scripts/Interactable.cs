@@ -15,9 +15,18 @@ public abstract class Interactable : MonoBehaviour
         Push
     }
 
-    public virtual Icon GetIcon() => Icon.Access;
-    public virtual string GetText() => "Interact";
-    public virtual bool CanInteract() => true;
+    public struct HudInfo
+    {
+        public Icon icon;
+        public string text;
+    }
+
+    public static readonly HudInfo DefaultInteractHud = new() { icon = Icon.Access, text = "Interact" };
+    public static readonly HudInfo BlankHud = new() { icon = Icon.None };
+
+    public virtual HudInfo GetHudInfo(Employee e) => CanInteract(e) ? DefaultInteractHud : BlankHud;
+
+    public virtual bool CanInteract(Employee e) => true;
 
     public abstract void Interact(Employee e);
     public virtual void OnHover(bool hover) { }
