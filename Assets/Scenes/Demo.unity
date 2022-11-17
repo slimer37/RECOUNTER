@@ -335,7 +335,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   employee: {fileID: 840553860}
-  range: 2
+  range: 2.5
   cam: {fileID: 1065023559}
   text: {fileID: 1925832153}
   punchAmount: 0.1
@@ -363,7 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c670981602911984083354f808c814f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 5
+  range: 2
   rotateSpeed: 90
   surfaceSeparation: 0.001
   placementMask:
