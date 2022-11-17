@@ -90,6 +90,9 @@ public class PlayerInteraction : MonoBehaviour
         if (currentHover && currentHover.TryGetComponent(out hovered))
         {
             hovered?.OnHover(true);
+
+            if (!hovered.CanInteract(employee)) return;
+
             punch.Restart();
         }
         else
@@ -105,6 +108,10 @@ public class PlayerInteraction : MonoBehaviour
     {
         var info = hovered.GetHudInfo(employee);
         var icon = icons[(int)info.icon];
+
+        // Punch when icon changes (except if it's the blank pointer).
+        if (info.icon != Interactable.Icon.None && iconImage.sprite != icon)
+            punch.Restart();
 
         text.text = info.text;
         iconImage.sprite = icon;
