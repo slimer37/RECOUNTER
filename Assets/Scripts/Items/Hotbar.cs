@@ -79,7 +79,9 @@ public class Hotbar : MonoBehaviour
         if (!items.Remove(item))
             throw new Exception($"Cannot remove '{item}' because it's not in the inventory.");
 
-        slots[items.Count].Clear();
+        var index = slots.FindIndex(s => s.Item == item);
+
+        slots[index].Clear();
 
         if (placer.Active == item)
             placer.StopHoldingItem();
