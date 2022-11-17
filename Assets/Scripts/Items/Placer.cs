@@ -64,6 +64,7 @@ public class Placer : MonoBehaviour
 
         EndPlace();
 
+        active.gameObject.layer = originalLayer;
         active.gameObject.SetActive(false);
 
         active = null;
@@ -150,8 +151,6 @@ public class Placer : MonoBehaviour
 
     void DropItem()
     {
-        if (!placing) return;
-
         if (!active) throw new InvalidOperationException("No active item to drop.");
 
         EndPlace();
