@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Slosh : MonoBehaviour
 {
-    public float MaxWobble = 6f;
-    public float WobbleSpeed = 1f;
-    public float Recovery = 1f;
+    public float MaxWobble = 0.15f;
+    public float WobbleSpeed = 3f;
+    public float Recovery = 5f;
 
     float pulse;
     float time = 0.5f;
