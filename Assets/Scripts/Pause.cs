@@ -38,7 +38,7 @@ public class Pause : MonoBehaviour
 
     public void SetPaused(bool pause)
     {
-        if (!IsPaused == pause) return;
+        if (IsPaused == pause) return;
 
         IsPaused = pause;
 
