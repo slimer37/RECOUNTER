@@ -23,8 +23,13 @@ public class Slosh : MonoBehaviour
         rend = GetComponent<Renderer>();
     }
 
-    private void Update()
+    void Update()
     {
+        if (float.IsNaN(wobbleAmountToAdd.x))
+        {
+            wobbleAmountToAdd = Vector3.zero;
+        }
+
         time += Time.deltaTime;
 
         // decrease wobble over time
