@@ -3497,6 +3497,7 @@ GameObject:
   - component: {fileID: 8040567922078275106}
   - component: {fileID: 8040567922078275105}
   - component: {fileID: 8040567922078275108}
+  - component: {fileID: 8040567922078275107}
   m_Layer: 0
   m_Name: jarate jar
   m_TagString: Untagged
@@ -3742,6 +3743,19 @@ MonoBehaviour:
   col: {fileID: 8040567922078275108}
   isCylindrical: 1
   rb: {fileID: 8040567922078275105}
+--- !u!65 &8040567922078275107
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156228555074732265}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.11580372, y: 0.44261533, z: 0.1158037}
+  m_Center: {x: 0, y: 0.036628425, z: 0}
 --- !u!136 &8040567922078275108
 CapsuleCollider:
   m_ObjectHideFlags: 0

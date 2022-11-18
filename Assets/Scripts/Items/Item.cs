@@ -1,15 +1,15 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider), typeof(Renderer))]
+[RequireComponent(typeof(Renderer))]
 public class Item : Interactable
 {
     [SerializeField] Renderer rend;
-    [SerializeField] Collider col;
     [SerializeField] bool isCylindrical;
 
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
 
+    Collider[] colliders;
     Hotbar containerHotbar;
 
     public bool IsHeld => containerHotbar;
@@ -31,11 +31,6 @@ public class Item : Interactable
 
     void Reset()
     {
-        TryGetComponent(out col);
-
-        if (col is CapsuleCollider or SphereCollider)
-            isCylindrical = true;
-
         TryGetComponent(out rend);
         TryGetComponent(out rb);
     }
@@ -65,10 +60,15 @@ public class Item : Interactable
         if (!e.ItemHotbar.TryAddItem(this)) return;
 
         containerHotbar = e.ItemHotbar;
-        col.enabled = false;
+        EnableColliders(false);
 
         if (rb)
             rb.isKinematic = true;
+    }
+
+    void Awake()
+    {
+        colliders = GetComponentsInChildren<Collider>();
     }
 
     public void Release()
@@ -76,9 +76,17 @@ public class Item : Interactable
         containerHotbar.RemoveItem(this);
 
         containerHotbar = null;
-        col.enabled = true;
+        EnableColliders(true);
 
         if (rb)
             rb.isKinematic = false;
+    }
+
+    void EnableColliders(bool enable)
+    {
+        foreach (var col in colliders)
+        {
+            col.enabled = enable;
+        }
     }
 }

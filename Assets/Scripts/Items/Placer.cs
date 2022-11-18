@@ -14,6 +14,7 @@ public class Placer : MonoBehaviour
 
     [Header("Viewmodel Settings")]
     [SerializeField, Layer] int heldItemLayer;
+    [SerializeField, Layer] int defaultLayer;
     [SerializeField] Vector3 holdPosition;
 
     [Header("Components")]
@@ -32,7 +33,6 @@ public class Placer : MonoBehaviour
     float itemRotation;
 
     bool placing;
-    int originalLayer;
 
     public Item Active => active;
 
@@ -48,8 +48,6 @@ public class Placer : MonoBehaviour
 
         active.gameObject.SetActive(true);
 
-        originalLayer = item.gameObject.layer;
-
         ghost.CopyMesh(item);
 
         active.transform.parent = transform;
@@ -63,7 +61,7 @@ public class Placer : MonoBehaviour
 
         EndPlace();
 
-        active.gameObject.layer = originalLayer;
+        SetLayer(false);
         active.gameObject.SetActive(false);
 
         active = null;
@@ -93,7 +91,7 @@ public class Placer : MonoBehaviour
                 }
                 else
                 {
-                    active.gameObject.layer = originalLayer;
+                    SetLayer(false);
                     active.transform.SetPositionAndRotation(position, rotation);
 
                     ghost.Hide();
@@ -154,7 +152,7 @@ public class Placer : MonoBehaviour
 
         EndPlace();
 
-        active.gameObject.layer = originalLayer;
+        SetLayer(false);
         active.transform.parent = null;
 
         var temp = active;
@@ -166,8 +164,19 @@ public class Placer : MonoBehaviour
 
     void MoveActiveToHand()
     {
-        active.gameObject.layer = heldItemLayer;
+        SetLayer(true);
         active.transform.localRotation = Quaternion.identity;
         active.transform.localPosition = holdPosition;
+    }
+
+    void SetLayer(bool heldLayer)
+    {
+        var layer = heldLayer ? heldItemLayer : defaultLayer;
+        active.gameObject.layer = layer;
+
+        foreach (Transform child in active.transform)
+        {
+            child.gameObject.layer = layer;
+        }
     }
 }
