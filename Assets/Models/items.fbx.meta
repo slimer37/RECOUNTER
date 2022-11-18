@@ -12,6 +12,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: water_bottle_liquid
+    second: {fileID: 2100000, guid: e95755f2a35d4394aa5d00ae57441ddd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: water_bottle_solid
     second: {fileID: 2100000, guid: 6507af3e23575304181cb3c32af9624a, type: 2}
   materials:
