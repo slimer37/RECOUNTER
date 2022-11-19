@@ -398,6 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c670981602911984083354f808c814f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sensitivity: 5
   range: 2
   rotateSpeed: 90
   surfaceSeparation: 0.001

@@ -6,6 +6,7 @@ using System;
 public class Placer : MonoBehaviour
 {
     [Header("Placement Settings")]
+    [SerializeField] float sensitivity;
     [SerializeField] float range;
     [SerializeField] float rotateSpeed;
     [SerializeField] float surfaceSeparation;
@@ -45,16 +46,7 @@ public class Placer : MonoBehaviour
         Gizmos.DrawWireSphere(cam.transform.position, range);
     }
 
-    void Awake()
-    {
-        playerControls = new Controls().Player;
-        playerControls.Look.performed += OnMoveMouse;
-    }
-
-    void OnMoveMouse(InputAction.CallbackContext obj)
-    {
-        mousePosition += obj.ReadValue<Vector2>();
-    }
+    void Awake() => playerControls = new Controls().Player;
 
     void OnEnable() => playerControls.Enable();
     void OnDisable() => playerControls.Disable();
@@ -93,36 +85,41 @@ public class Placer : MonoBehaviour
         if (Mouse.current.rightButton.wasPressedThisFrame)
             mousePosition = new Vector2(Screen.width, Screen.height) / 2;
 
-        var ray = cam.ScreenPointToRay(mousePosition);
-
-        if (Physics.Raycast(ray, out var hit, range, placementMask))
+        if (Mouse.current.rightButton.isPressed)
         {
-            if (Mouse.current.rightButton.isPressed)
+            var ray = cam.ScreenPointToRay(mousePosition);
+            if (!Physics.Raycast(ray, out var hit, range, placementMask))
             {
-                StartPlace();
-
-                HandleRotation(out var rotation);
-
-                var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
-
-                if (active.WouldIntersectAt(position, rotation, obstacleMask))
-                {
-                    ghost.ShowAt(position, rotation);
-
-                    MoveActiveToHand();
-                }
-                else
-                {
-                    SetLayer(false);
-                    active.transform.SetPositionAndRotation(position, rotation);
-
-                    ghost.Hide();
-                }
+                hit.point = ray.GetPoint(range);
             }
-            else if (placing)
+
+            mousePosition += playerControls.Look.ReadValue<Vector2>() * sensitivity;
+            mousePosition.x = Mathf.Clamp(mousePosition.x, 0, Screen.width);
+            mousePosition.y = Mathf.Clamp(mousePosition.y, 0, Screen.height);
+
+            StartPlace();
+
+            HandleRotation(out var rotation);
+
+            var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
+
+            if (active.WouldIntersectAt(position, rotation, obstacleMask))
             {
-                DropItem();
+                ghost.ShowAt(position, rotation);
+
+                MoveActiveToHand();
             }
+            else
+            {
+                SetLayer(false);
+                active.transform.SetPositionAndRotation(position, rotation);
+
+                ghost.Hide();
+            }
+        }
+        else if (placing)
+        {
+            DropItem();
         }
         else
         {
