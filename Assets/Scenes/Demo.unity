@@ -3560,9 +3560,10 @@ GameObject:
   - component: {fileID: 749097177061512319}
   - component: {fileID: 6388072172700720959}
   - component: {fileID: 1694746379359014693}
-  - component: {fileID: 6388072172700720961}
   - component: {fileID: 6388072172700720960}
   - component: {fileID: 6388072172700720962}
+  - component: {fileID: 6388072172700720961}
+  - component: {fileID: 6388072172700720963}
   m_Layer: 0
   m_Name: water bottle bare
   m_TagString: Untagged
@@ -3698,7 +3699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rend: {fileID: 1694746379359014693}
-  isCylindrical: 0
+  isCylindrical: 1
   rb: {fileID: 6388072172700720962}
 --- !u!65 &6388072172700720961
 BoxCollider:
@@ -3711,8 +3712,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.14208338, y: 0.44349408, z: 0.14208338}
-  m_Center: {x: 0, y: -0.015626468, z: 0}
+  m_Size: {x: 0.10046812, y: 0.46410537, z: 0.10046812}
+  m_Center: {x: 0, y: -0.009471059, z: 0}
 --- !u!54 &6388072172700720962
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3729,6 +3730,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &6388072172700720963
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3744907051521479683}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.07104169
+  m_Height: 0.4593699
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.007688567, z: 0}
 --- !u!1 &6571963639189692529
 GameObject:
   m_ObjectHideFlags: 0
@@ -3821,7 +3836,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.11580372, y: 0.44261533, z: 0.1158037}
+  m_Size: {x: 0.1742023, y: 0.44261533, z: 0.1742023}
   m_Center: {x: 0, y: 0.036628425, z: 0}
 --- !u!136 &8040567922078275108
 CapsuleCollider:
