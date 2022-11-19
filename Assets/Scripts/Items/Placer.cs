@@ -20,7 +20,7 @@ public class Placer : MonoBehaviour
     [Header("Components")]
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerInteraction playerInteraction;
-    [SerializeField] Transform cam;
+    [SerializeField] Camera cam;
     [SerializeField] Ghost ghost;
 
     [Header("UI")]
@@ -31,16 +31,33 @@ public class Placer : MonoBehaviour
 
     Item active;
     float itemRotation;
+    Vector2 mousePosition;
 
     bool placing;
+
+    Controls.PlayerActions playerControls;
 
     public Item Active => active;
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(cam.position, range);
+        Gizmos.DrawWireSphere(cam.transform.position, range);
     }
+
+    void Awake()
+    {
+        playerControls = new Controls().Player;
+        playerControls.Look.performed += OnMoveMouse;
+    }
+
+    void OnMoveMouse(InputAction.CallbackContext obj)
+    {
+        mousePosition += obj.ReadValue<Vector2>();
+    }
+
+    void OnEnable() => playerControls.Enable();
+    void OnDisable() => playerControls.Disable();
 
     public void SetItem(Item item)
     {
@@ -73,7 +90,12 @@ public class Placer : MonoBehaviour
 
         if (!active) return;
 
-        if (Physics.Raycast(cam.position, cam.forward, out var hit, range, placementMask))
+        if (Mouse.current.rightButton.wasPressedThisFrame)
+            mousePosition = new Vector2(Screen.width, Screen.height) / 2;
+
+        var ray = cam.ScreenPointToRay(mousePosition);
+
+        if (Physics.Raycast(ray, out var hit, range, placementMask))
         {
             if (Mouse.current.rightButton.isPressed)
             {
@@ -113,8 +135,6 @@ public class Placer : MonoBehaviour
     {
         var rotating = Mouse.current.leftButton.isPressed;
 
-        playerController.enabled = !rotating;
-
         if (rotating)
         {
             var mouseX = Mouse.current.delta.ReadValue().x;
@@ -128,6 +148,7 @@ public class Placer : MonoBehaviour
     void StartPlace()
     {
         playerInteraction.enabled = false;
+        playerController.enabled = false;
         placing = true;
 
         icon.sprite = placeIcon;
@@ -135,8 +156,6 @@ public class Placer : MonoBehaviour
 
     void EndPlace()
     {
-        if (!placing) return;
-
         playerInteraction.enabled = true;
         playerController.enabled = true;
         placing = false;
