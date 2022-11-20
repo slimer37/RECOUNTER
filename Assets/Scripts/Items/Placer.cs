@@ -10,6 +10,8 @@ public class Placer : MonoBehaviour
     [SerializeField] float range;
     [SerializeField] float rotateSpeed;
     [SerializeField] float surfaceSeparation;
+    [SerializeField] float tiltEffect;
+    [SerializeField] float clampTiltX;
     [SerializeField] LayerMask placementMask;
     [SerializeField] LayerMask obstacleMask;
 
@@ -22,6 +24,8 @@ public class Placer : MonoBehaviour
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerInteraction playerInteraction;
     [SerializeField] Camera cam;
+    [SerializeField] Transform camTarget;
+    [SerializeField] Transform body;
     [SerializeField] Ghost ghost;
 
     [Header("UI")]
@@ -33,6 +37,8 @@ public class Placer : MonoBehaviour
     Item active;
     float itemRotation;
     Vector2 mousePosition;
+
+    Vector3 playerRotation;
 
     bool placing;
 
@@ -83,7 +89,10 @@ public class Placer : MonoBehaviour
         if (!active) return;
 
         if (Mouse.current.rightButton.wasPressedThisFrame)
+        {
             mousePosition = new Vector2(Screen.width, Screen.height) / 2;
+            playerRotation = new Vector3(camTarget.localEulerAngles.x, body.localEulerAngles.y, 0);
+        }
 
         if (Mouse.current.rightButton.isPressed)
         {
@@ -98,6 +107,8 @@ public class Placer : MonoBehaviour
             mousePosition.y = Mathf.Clamp(mousePosition.y, 0, Screen.height);
 
             StartPlace();
+
+            TiltCamera();
 
             HandleRotation(out var rotation);
 
@@ -126,6 +137,19 @@ public class Placer : MonoBehaviour
             EndPlace();
             MoveActiveToHand();
         }
+    }
+
+    void TiltCamera()
+    {
+        var normalizedMouse = 2 * mousePosition / new Vector2(Screen.width, Screen.height) - Vector2.one;
+        var tilt = new Vector3(-normalizedMouse.y, normalizedMouse.x, 0) * tiltEffect;
+        var angles = playerRotation + tilt;
+        angles.x = Mathf.Clamp(angles.x, -clampTiltX, clampTiltX);
+
+        print($"pos: {normalizedMouse} | curr: {playerRotation} | tilt: {tilt} | result: {angles}");
+
+        body.eulerAngles = angles.y * Vector3.up;
+        camTarget.localEulerAngles = angles.x * Vector3.right;
     }
 
     void HandleRotation(out Quaternion rotation)

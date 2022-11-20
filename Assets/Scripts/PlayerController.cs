@@ -89,12 +89,21 @@ public class PlayerController : MonoBehaviour
 
         fov = walkFov;
 
-        camRot.x = body.localEulerAngles.y;
-        camRot.y = camTarget.localEulerAngles.x;
-
         playerControls = new Controls().Player;
     }
 
-    void OnEnable() => playerControls.Enable();
+    void OnEnable()
+    {
+        playerControls.Enable();
+
+        camRot.y = body.eulerAngles.y;
+        camRot.x = camTarget.localEulerAngles.x;
+
+        if (camRot.x > 90)
+            camRot.x -= 360;
+        else if (camRot.x < -90)
+            camRot.x += 360;
+    }
+
     void OnDisable() => playerControls.Disable();
 }
