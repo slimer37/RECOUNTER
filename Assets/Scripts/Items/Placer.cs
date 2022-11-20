@@ -87,13 +87,6 @@ public class Placer : MonoBehaviour
     {
         if (Pause.IsPaused) return;
 
-        icon.sprite = placing switch
-        {
-            true when rotating => rotateIcon,
-            true => placeIcon,
-            _ => defaultIcon
-        };
-
         if (!active) return;
 
         if (Mouse.current.rightButton.wasPressedThisFrame)
@@ -120,6 +113,8 @@ public class Placer : MonoBehaviour
             }
 
             StartPlace();
+
+            icon.sprite = rotating ? rotateIcon : placeIcon;
 
             var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
 
@@ -195,6 +190,8 @@ public class Placer : MonoBehaviour
         placing = false;
 
         icon.transform.position = new Vector2(Screen.width, Screen.height) / 2;
+
+        icon.sprite = defaultIcon;
 
         ghost.Hide();
     }
