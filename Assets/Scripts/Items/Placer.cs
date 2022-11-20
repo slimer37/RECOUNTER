@@ -105,6 +105,7 @@ public class Placer : MonoBehaviour
         if (Mouse.current.rightButton.isPressed)
         {
             var ray = cam.ScreenPointToRay(mousePosition);
+
             if (!Physics.Raycast(ray, out var hit, range, placementMask))
             {
                 hit.point = ray.GetPoint(range);
@@ -114,14 +115,11 @@ public class Placer : MonoBehaviour
 
             if (!rotating)
             {
-                mousePosition += playerControls.Look.ReadValue<Vector2>() * sensitivity;
-                mousePosition.x = Mathf.Clamp(mousePosition.x, 0, Screen.width);
-                mousePosition.y = Mathf.Clamp(mousePosition.y, 0, Screen.height);
+                TrackMouseLook();
+                TiltCamera();
             }
 
             StartPlace();
-
-            TiltCamera();
 
             var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
 
@@ -148,6 +146,13 @@ public class Placer : MonoBehaviour
             EndPlace();
             MoveActiveToHand();
         }
+    }
+
+    void TrackMouseLook()
+    {
+        mousePosition += playerControls.Look.ReadValue<Vector2>() * sensitivity;
+        mousePosition.x = Mathf.Clamp(mousePosition.x, 0, Screen.width);
+        mousePosition.y = Mathf.Clamp(mousePosition.y, 0, Screen.height);
     }
 
     void TiltCamera()
