@@ -41,6 +41,7 @@ public class Placer : MonoBehaviour
     Vector3 playerRotation;
 
     bool placing;
+    bool rotating;
 
     Controls.PlayerActions playerControls;
 
@@ -86,6 +87,13 @@ public class Placer : MonoBehaviour
     {
         if (Pause.IsPaused) return;
 
+        icon.sprite = placing switch
+        {
+            true when rotating => rotateIcon,
+            true => placeIcon,
+            _ => defaultIcon
+        };
+
         if (!active) return;
 
         if (Mouse.current.rightButton.wasPressedThisFrame)
@@ -102,15 +110,18 @@ public class Placer : MonoBehaviour
                 hit.point = ray.GetPoint(range);
             }
 
-            mousePosition += playerControls.Look.ReadValue<Vector2>() * sensitivity;
-            mousePosition.x = Mathf.Clamp(mousePosition.x, 0, Screen.width);
-            mousePosition.y = Mathf.Clamp(mousePosition.y, 0, Screen.height);
+            HandleRotation(out var rotation);
+
+            if (!rotating)
+            {
+                mousePosition += playerControls.Look.ReadValue<Vector2>() * sensitivity;
+                mousePosition.x = Mathf.Clamp(mousePosition.x, 0, Screen.width);
+                mousePosition.y = Mathf.Clamp(mousePosition.y, 0, Screen.height);
+            }
 
             StartPlace();
 
             TiltCamera();
-
-            HandleRotation(out var rotation);
 
             var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
 
@@ -146,21 +157,18 @@ public class Placer : MonoBehaviour
         var angles = playerRotation + tilt;
         angles.x = Mathf.Clamp(angles.x, -clampTiltX, clampTiltX);
 
-        print($"pos: {normalizedMouse} | curr: {playerRotation} | tilt: {tilt} | result: {angles}");
-
         body.eulerAngles = angles.y * Vector3.up;
         camTarget.localEulerAngles = angles.x * Vector3.right;
     }
 
     void HandleRotation(out Quaternion rotation)
     {
-        var rotating = Mouse.current.leftButton.isPressed;
+        rotating = Mouse.current.leftButton.isPressed;
 
         if (rotating)
         {
             var mouseX = Mouse.current.delta.ReadValue().x;
             itemRotation += mouseX * rotateSpeed * Time.deltaTime;
-            icon.sprite = rotateIcon;
         }
 
         rotation = Quaternion.Euler(Vector3.up * itemRotation);
@@ -172,8 +180,6 @@ public class Placer : MonoBehaviour
         playerController.enabled = false;
         placing = true;
 
-        icon.sprite = placeIcon;
-
         icon.transform.position = mousePosition;
     }
 
@@ -182,8 +188,6 @@ public class Placer : MonoBehaviour
         playerInteraction.enabled = true;
         playerController.enabled = true;
         placing = false;
-
-        icon.sprite = defaultIcon;
 
         icon.transform.position = new Vector2(Screen.width, Screen.height) / 2;
 
