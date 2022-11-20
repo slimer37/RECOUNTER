@@ -173,6 +173,8 @@ public class Placer : MonoBehaviour
         placing = true;
 
         icon.sprite = placeIcon;
+
+        icon.transform.position = mousePosition;
     }
 
     void EndPlace()
@@ -182,6 +184,8 @@ public class Placer : MonoBehaviour
         placing = false;
 
         icon.sprite = defaultIcon;
+
+        icon.transform.position = new Vector2(Screen.width, Screen.height) / 2;
 
         ghost.Hide();
     }
