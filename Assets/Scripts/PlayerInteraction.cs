@@ -9,7 +9,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] Employee employee;
 
     [SerializeField] float range;
-    [SerializeField] Transform cam;
+    [SerializeField] Camera cam;
     [SerializeField] TextMeshProUGUI text;
 
     [Header("Animation")]
@@ -75,7 +75,7 @@ public class PlayerInteraction : MonoBehaviour
 
         Transform currentHover = null;
 
-        if (Physics.Raycast(cam.position, cam.forward, out var hit, range))
+        if (Physics.Raycast(cam.ViewportPointToRay(Vector2.one / 2), out var hit, range))
         {
             currentHover = hit.transform;
         }

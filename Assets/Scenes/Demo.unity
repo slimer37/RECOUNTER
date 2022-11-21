@@ -371,7 +371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   employee: {fileID: 840553860}
   range: 2.5
-  cam: {fileID: 1065023559}
+  cam: {fileID: 1065023558}
   text: {fileID: 1925832153}
   punchAmount: 0.1
   punchDuration: 0.15
@@ -1987,7 +1987,7 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
+  m_UpdateMethod: 1
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
