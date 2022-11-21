@@ -93,14 +93,13 @@ public class Placer : MonoBehaviour
 
         if (!active) return;
 
-        if (Mouse.current.rightButton.wasPressedThisFrame)
-        {
-            mousePosition = new Vector2(Screen.width, Screen.height) / 2;
-            playerRotation = new Vector3(camTarget.localEulerAngles.x, body.localEulerAngles.y, 0);
-        }
-
         if (Mouse.current.rightButton.isPressed)
         {
+            if (!placing)
+            {
+                InitializePlace();
+            }
+
             var ray = cam.ScreenPointToRay(mousePosition);
 
             if (!Physics.Raycast(ray, out var hit, range, placementMask))
@@ -189,6 +188,12 @@ public class Placer : MonoBehaviour
         }
 
         rotation = Quaternion.Euler(Vector3.up * itemRotation);
+    }
+
+    void InitializePlace()
+    {
+        mousePosition = new Vector2(Screen.width, Screen.height) / 2;
+        playerRotation = new Vector3(camTarget.localEulerAngles.x, body.localEulerAngles.y, 0);
     }
 
     void StartPlace()
