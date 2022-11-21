@@ -29,8 +29,7 @@ internal class Ghost : MonoBehaviour
     public void ShowAt(Vector3 position, Quaternion rotation)
     {
         gameObject.SetActive(true);
-        transform.position = position;
-        transform.rotation = rotation;
+        transform.SetPositionAndRotation(position, rotation);
     }
 
     public void Hide() => gameObject.SetActive(false);
