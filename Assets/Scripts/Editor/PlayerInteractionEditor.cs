@@ -13,7 +13,7 @@ public class PlayerInteractionEditor : Editor
         Handles.color = Color.cyan;
 
         var range = serializedObject.FindProperty("range").floatValue;
-        var camTransform = (Transform)cam;
+        var camTransform = ((Camera)cam).transform;
 
         var arrowSize = Mathf.Min(0.5f, range);
 
