@@ -32,7 +32,7 @@ public class Hotbar : MonoBehaviour
 
         slotPrefab.gameObject.SetActive(false);
 
-        SetActiveSlot(0);
+        SetActiveSlot(0, force: true);
     }
 
     void OnEnable() => Keyboard.current.onTextInput += OnSwitchSlot;
