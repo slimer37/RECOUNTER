@@ -199,7 +199,7 @@ public class Placer : MonoBehaviour
     void StartPlace()
     {
         playerInteraction.enabled = false;
-        playerController.enabled = false;
+        playerController.Suspend(true);
         placing = true;
 
         icon.transform.position = mousePosition;
@@ -208,7 +208,7 @@ public class Placer : MonoBehaviour
     void EndPlace()
     {
         playerInteraction.enabled = true;
-        playerController.enabled = true;
+        playerController.Suspend(false);
         placing = false;
 
         icon.transform.position = new Vector2(Screen.width, Screen.height) / 2;

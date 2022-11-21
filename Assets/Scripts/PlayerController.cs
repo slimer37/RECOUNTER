@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
     float fov;
     float yVelocity;
 
+    bool isSuspended;
+
     void Update()
     {
         if (Pause.IsPaused) return;
@@ -106,4 +108,14 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnDisable() => playerControls.Disable();
+    
+    public void Suspend(bool suspend)
+    {
+        isSuspended = suspend;
+
+        if (suspend)
+            OnDisable();
+        else
+            OnEnable();
+    }
 }
