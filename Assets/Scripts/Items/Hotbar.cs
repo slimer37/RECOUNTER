@@ -70,7 +70,7 @@ public class Hotbar : MonoBehaviour
 
         items.Add(item);
 
-        SetActiveSlot(activeIndex);
+        SetActiveSlot(activeIndex, false, true);
 
         return true;
     }
@@ -91,8 +91,10 @@ public class Hotbar : MonoBehaviour
             placer.StopHoldingItem();
     }
 
-    void SetActiveSlot(int index)
+    void SetActiveSlot(int index, bool resetPosition = true, bool force = false)
     {
+        if (!force && slots[activeIndex].Item == slots[index].Item) return;
+
         placer.StopHoldingItem();
 
         slots[activeIndex].SetSlotActive(false);
@@ -104,6 +106,6 @@ public class Hotbar : MonoBehaviour
         var item = slots[index].Item;
 
         if (item)
-            placer.SetItem(item);
+            placer.SetItem(item, resetPosition);
     }
 }

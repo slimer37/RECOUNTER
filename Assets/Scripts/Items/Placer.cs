@@ -62,7 +62,7 @@ public class Placer : MonoBehaviour
     void OnEnable() => playerControls.Enable();
     void OnDisable() => playerControls.Disable();
 
-    public void SetItem(Item item)
+    public void SetItem(Item item, bool resetPosition)
     {
         active = item;
 
@@ -70,9 +70,9 @@ public class Placer : MonoBehaviour
 
         ghost.CopyMesh(item);
 
-        active.transform.position = body.position;
+        if (!resetPosition) return;
 
-        MoveActiveToHand();
+        active.transform.position = body.position;
     }
 
     public void StopHoldingItem()
