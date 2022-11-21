@@ -38,6 +38,7 @@ public class Placer : MonoBehaviour
     Item active;
     float itemRotation;
     Vector3 itemVelocity;
+    float itemRotationVelocity;
 
     Vector2 mousePosition;
 
@@ -239,8 +240,22 @@ public class Placer : MonoBehaviour
     void MoveActiveToHand()
     {
         SetLayer(true);
-        active.transform.localRotation = cam.transform.rotation;
-        active.transform.position = Vector3.SmoothDamp(active.transform.position, cam.transform.TransformPoint(holdPosition), ref itemVelocity, smoothing);
+
+        var currRot = active.transform.rotation;
+        var targetRot = cam.transform.rotation;
+        var delta = Quaternion.Angle(currRot, targetRot);
+        if (delta > 0f)
+        {
+            var t = Mathf.SmoothDampAngle(delta, 0, ref itemRotationVelocity, smoothing);
+            t = 1f - (t / delta);
+            active.transform.rotation = Quaternion.Slerp(currRot, targetRot, t);
+        }
+
+        active.transform.position = Vector3.SmoothDamp(
+            active.transform.position,
+            cam.transform.TransformPoint(holdPosition),
+            ref itemVelocity,
+            smoothing);
     }
 
     void SetLayer(bool heldLayer)
