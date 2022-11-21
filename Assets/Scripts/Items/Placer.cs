@@ -74,6 +74,7 @@ public class Placer : MonoBehaviour
         if (!resetPosition) return;
 
         active.transform.position = body.position;
+        active.transform.rotation = body.rotation;
     }
 
     public void StopHoldingItem()
