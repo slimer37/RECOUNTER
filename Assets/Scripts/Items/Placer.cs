@@ -19,6 +19,7 @@ public class Placer : MonoBehaviour
     [SerializeField, Layer] int heldItemLayer;
     [SerializeField, Layer] int defaultLayer;
     [SerializeField] Vector3 holdPosition;
+    [SerializeField] float smoothing;
 
     [Header("Components")]
     [SerializeField] PlayerController playerController;
@@ -36,6 +37,8 @@ public class Placer : MonoBehaviour
 
     Item active;
     float itemRotation;
+    Vector3 itemVelocity;
+
     Vector2 mousePosition;
 
     Vector3 playerRotation;
@@ -67,7 +70,7 @@ public class Placer : MonoBehaviour
 
         ghost.CopyMesh(item);
 
-        active.transform.parent = transform;
+        active.transform.position = body.position;
 
         MoveActiveToHand();
     }
@@ -231,8 +234,8 @@ public class Placer : MonoBehaviour
     void MoveActiveToHand()
     {
         SetLayer(true);
-        active.transform.localRotation = Quaternion.identity;
-        active.transform.localPosition = holdPosition;
+        active.transform.localRotation = cam.transform.rotation;
+        active.transform.position = Vector3.SmoothDamp(active.transform.position, cam.transform.TransformPoint(holdPosition), ref itemVelocity, smoothing);
     }
 
     void SetLayer(bool heldLayer)

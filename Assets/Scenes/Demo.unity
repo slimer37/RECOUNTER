@@ -412,7 +412,8 @@ MonoBehaviour:
     m_Bits: 1
   heldItemLayer: 3
   defaultLayer: 0
-  holdPosition: {x: 0.58, y: 0, z: 0.85}
+  holdPosition: {x: 0.36, y: -0.31, z: 0.85}
+  smoothing: 0.025
   playerController: {fileID: 273294031}
   playerInteraction: {fileID: 273294029}
   cam: {fileID: 1065023558}
