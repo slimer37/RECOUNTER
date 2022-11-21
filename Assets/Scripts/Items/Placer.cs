@@ -168,7 +168,19 @@ public class Placer : MonoBehaviour
         if (rotating)
         {
             var mouseX = Mouse.current.delta.ReadValue().x;
-            itemRotation += mouseX * rotateSpeed * Time.deltaTime;
+
+            if (mouseX != 0)
+            {
+                itemRotation += mouseX * rotateSpeed * Time.deltaTime;
+                icon.transform.localScale = new Vector3(mouseX > 0 ? 1 : -1, 1, 1);
+            }
+
+            icon.transform.localEulerAngles = Vector3.forward * -itemRotation;
+        }
+        else
+        {
+            icon.transform.localScale = Vector3.one;
+            icon.transform.localEulerAngles = Vector3.zero;
         }
 
         rotation = Quaternion.Euler(Vector3.up * itemRotation);
@@ -190,6 +202,8 @@ public class Placer : MonoBehaviour
         placing = false;
 
         icon.transform.position = new Vector2(Screen.width, Screen.height) / 2;
+        icon.transform.rotation = Quaternion.identity;
+        icon.transform.localScale = Vector3.one;
 
         icon.sprite = defaultIcon;
 
