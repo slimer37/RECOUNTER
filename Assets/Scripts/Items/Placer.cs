@@ -42,6 +42,7 @@ public class Placer : MonoBehaviour
 
     bool placing;
     bool rotating;
+    bool itemIntersects;
 
     Controls.PlayerActions playerControls;
 
@@ -117,8 +118,9 @@ public class Placer : MonoBehaviour
             icon.sprite = rotating ? rotateIcon : placeIcon;
 
             var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
+            itemIntersects = active.WouldIntersectAt(position, rotation, obstacleMask);
 
-            if (active.WouldIntersectAt(position, rotation, obstacleMask))
+            if (itemIntersects)
             {
                 ghost.ShowAt(position, rotation);
 
@@ -132,7 +134,7 @@ public class Placer : MonoBehaviour
                 ghost.Hide();
             }
         }
-        else if (placing)
+        else if (placing && !itemIntersects)
         {
             DropItem();
         }
