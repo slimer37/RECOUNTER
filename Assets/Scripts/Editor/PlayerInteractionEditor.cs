@@ -26,32 +26,34 @@ public class PlayerInteractionEditor : Editor
         Handles.ArrowHandleCap(0, end, camTransform.rotation, arrowSize, EventType.Repaint);
     }
 
-    public override void OnInspectorGUI()
+    static void CheckIconsAgainstEnum(SerializedProperty arrayProp, string[] names)
     {
-        base.OnInspectorGUI();
-
-        var icons = serializedObject.FindProperty("icons");
-        var names = System.Enum.GetNames(typeof(Interactable.Icon));
-
-        if (icons.arraySize != names.Length)
-        {
-            EditorGUILayout.HelpBox($"Wrong number of icons. You need {names.Length}.", MessageType.Error);
-        }
+        if (arrayProp.arraySize != names.Length)
+            EditorGUILayout.HelpBox($"{arrayProp.displayName} has the wrong length. You need {names.Length}.", MessageType.Error);
 
         var message = "";
 
-        for (int i = 0; i < icons.arraySize && i < names.Length; i++)
+        for (int i = 0; i < arrayProp.arraySize && i < names.Length; i++)
         {
-            var iconName = icons.GetArrayElementAtIndex(i).objectReferenceValue?.name ?? "null";
-            if (iconName != names[i])
+            var element = arrayProp.GetArrayElementAtIndex(i).objectReferenceValue;
+            var objName = element ? element.name : "null";
+            if (objName != names[i])
             {
-                message += $"Icon {i} (\"{iconName}\") does not match enum name \"{names[i]}\"\n";
+                message += $"Icon {i} (\"{objName}\") does not match enum name \"{names[i]}\"\n";
             }
         }
 
         if (message != "")
-        {
-            EditorGUILayout.HelpBox(message[..^1], MessageType.Warning);
-        }
+            EditorGUILayout.HelpBox($"{arrayProp.displayName} incorrect:\n" + message[..^1], MessageType.Warning);
+    }
+
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        var interactIcons = serializedObject.FindProperty("icons");
+        var interactNames = System.Enum.GetNames(typeof(Interactable.Icon));
+
+        CheckIconsAgainstEnum(interactIcons, interactNames);
     }
 }
