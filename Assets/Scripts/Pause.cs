@@ -21,6 +21,7 @@ public class Pause : MonoBehaviour
 
         group.alpha = 0;
         group.blocksRaycasts = false;
+        group.interactable = false;
     }
 
     void OnDestroy()
@@ -46,6 +47,7 @@ public class Pause : MonoBehaviour
 
         group.alpha = pause ? 1 : 0;
         group.blocksRaycasts = pause;
+        group.interactable = pause;
 
         if (pause)
         {
