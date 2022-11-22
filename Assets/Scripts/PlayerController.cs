@@ -9,6 +9,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform body;
     [SerializeField] CharacterController controller;
 
+    [Header("Footsteps/Bobbing")]
+    [SerializeField] CinemachineImpulseSource walkImpulse;
+    [SerializeField] float walkImpulseInterval;
+    [SerializeField] CinemachineImpulseSource sprintImpulse;
+    [SerializeField] float sprintImpulseInterval;
+
     [Header("Jumping")]
     [SerializeField] float jumpForce;
     [SerializeField] float gravity;
@@ -30,6 +36,7 @@ public class PlayerController : MonoBehaviour
     Vector2 camRot;
     float fov;
     float yVelocity;
+    float time;
 
     bool isSuspended;
 
@@ -59,6 +66,29 @@ public class PlayerController : MonoBehaviour
 
         // Sprinting only allowed when moving forward
         var isSprinting = playerControls.Sprint.IsPressed() && move.y > 0;
+
+        if (move.sqrMagnitude > 0)
+        {
+            var impulse = isSprinting ? sprintImpulse : walkImpulse;
+
+            if (time == 0)
+                impulse.GenerateImpulse();
+
+            time += Time.deltaTime;
+
+            var impulseInterval = impulse.m_ImpulseDefinition.m_ImpulseDuration;
+            impulseInterval += isSprinting ? sprintImpulseInterval : walkImpulseInterval;
+
+            if (time > impulseInterval)
+            {
+                impulse.GenerateImpulse();
+                time = 0;
+            }
+        }
+        else
+        {
+            time = 0;
+        }
 
         var speed = isSprinting ? sprintSpeed : walkSpeed;
 
@@ -108,7 +138,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnDisable() => playerControls.Disable();
-    
+
     public void Suspend(bool suspend)
     {
         isSuspended = suspend;
