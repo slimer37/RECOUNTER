@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Moving")]
+    [SerializeField] bool canMove = true;
     [SerializeField] float walkSpeed;
     [SerializeField] float sprintSpeed;
     [SerializeField] Transform body;
@@ -16,11 +17,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float sprintImpulseInterval;
 
     [Header("Jumping")]
+    [SerializeField] bool canJump = true;
     [SerializeField] float jumpForce;
     [SerializeField] float gravity;
     [SerializeField] float lowJumpMultiplier;
 
     [Header("Looking")]
+    [SerializeField] bool canLookAround = true;
     [SerializeField] Transform camTarget;
     [SerializeField] float sensitivity;
     [SerializeField] float clamp;
@@ -36,73 +39,24 @@ public class PlayerController : MonoBehaviour
     Vector2 camRot;
     float fov;
     float yVelocity;
-    float time;
-
-    bool isSuspended;
+    float bobTime;
 
     void Update()
     {
         if (Pause.IsPaused) return;
 
-        // Jumping & Gravity
+        HandleJump();
 
-        if (controller.isGrounded)
-        {
-            if (playerControls.Jump.WasPressedThisFrame())
-                yVelocity = jumpForce;
-        }
-        else if (yVelocity > 0 && !playerControls.Jump.IsPressed())
-        {
-            yVelocity -= gravity * lowJumpMultiplier * Time.deltaTime;
-        }
-        else
-        {
-            yVelocity -= gravity * Time.deltaTime;
-        }
+        ApplyGravity();
 
-        // Movement
+        HandleMovement();
 
-        var move = playerControls.Move.ReadValue<Vector2>();
+        HandleLooking();
+    }
 
-        // Sprinting only allowed when moving forward
-        var isSprinting = playerControls.Sprint.IsPressed() && move.y > 0;
-
-        if (move.sqrMagnitude > 0)
-        {
-            var impulse = isSprinting ? sprintImpulse : walkImpulse;
-
-            if (time == 0)
-                impulse.GenerateImpulse();
-
-            time += Time.deltaTime;
-
-            var impulseInterval = impulse.m_ImpulseDefinition.m_ImpulseDuration;
-            impulseInterval += isSprinting ? sprintImpulseInterval : walkImpulseInterval;
-
-            if (time > impulseInterval)
-            {
-                impulse.GenerateImpulse();
-                time = 0;
-            }
-        }
-        else
-        {
-            time = 0;
-        }
-
-        var speed = isSprinting ? sprintSpeed : walkSpeed;
-
-        var velocity = body.TransformDirection(move.x, 0, move.y) * speed + Vector3.up * yVelocity;
-
-        controller.Move(velocity * Time.deltaTime);
-
-        // FOV change
-
-        var targetFov = isSprinting ? sprintFov : walkFov;
-        fov = Mathf.Lerp(fov, targetFov, fovChangeSpeed * Time.deltaTime);
-        vcam.m_Lens.FieldOfView = fov;
-
-        // Look rotation
+    void HandleLooking()
+    {
+        if (!canLookAround) return;
 
         var look = playerControls.Look.ReadValue<Vector2>() * sensitivity;
 
@@ -112,6 +66,82 @@ public class PlayerController : MonoBehaviour
 
         body.eulerAngles = camRot.y * Vector3.up;
         camTarget.localEulerAngles = camRot.x * Vector3.right;
+    }
+
+    void AnimateFov(bool isSprinting)
+    {
+        var targetFov = isSprinting ? sprintFov : walkFov;
+        fov = Mathf.Lerp(fov, targetFov, fovChangeSpeed * Time.deltaTime);
+        vcam.m_Lens.FieldOfView = fov;
+    }
+
+    void HandleJump()
+    {
+        if (!canJump || !controller.isGrounded) return;
+
+        if (playerControls.Jump.WasPressedThisFrame())
+            yVelocity = jumpForce;
+    }
+
+    void ApplyGravity()
+    {
+        if (controller.isGrounded) return;
+
+        var holdingJump = canJump && playerControls.Jump.IsPressed();
+
+        var velocityChange = gravity * Time.deltaTime;
+
+        if (yVelocity > 0 && !holdingJump)
+            velocityChange *= lowJumpMultiplier;
+
+        yVelocity -= velocityChange;
+    }
+
+    void HandleMovement()
+    {
+        var inputMovement = playerControls.Move.ReadValue<Vector2>();
+
+        // Sprinting only allowed when moving forward
+        var isSprinting = playerControls.Sprint.IsPressed() && inputMovement.y > 0;
+
+        HandleBobbing(inputMovement, isSprinting);
+        AnimateFov(isSprinting);
+
+        if (!canMove) return;
+
+        var speed = isSprinting ? sprintSpeed : walkSpeed;
+
+        var velocity = body.TransformDirection(inputMovement.x, 0, inputMovement.y) * speed + Vector3.up * yVelocity;
+
+        controller.Move(velocity * Time.deltaTime);
+    }
+
+    void HandleBobbing(Vector2 movement, bool isSprinting)
+    {
+        if (!controller.isGrounded) return;
+
+        if (movement.sqrMagnitude > 0)
+        {
+            var impulse = isSprinting ? sprintImpulse : walkImpulse;
+
+            if (bobTime == 0)
+                impulse.GenerateImpulse();
+
+            bobTime += Time.deltaTime;
+
+            var impulseInterval = impulse.m_ImpulseDefinition.m_ImpulseDuration;
+            impulseInterval += isSprinting ? sprintImpulseInterval : walkImpulseInterval;
+
+            if (bobTime > impulseInterval)
+            {
+                impulse.GenerateImpulse();
+                bobTime = 0;
+            }
+        }
+        else
+        {
+            bobTime = 0;
+        }
     }
 
     void Awake()
@@ -141,8 +171,6 @@ public class PlayerController : MonoBehaviour
 
     public void Suspend(bool suspend)
     {
-        isSuspended = suspend;
-
         if (suspend)
             OnDisable();
         else

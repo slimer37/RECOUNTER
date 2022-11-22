@@ -539,6 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626ebd925ebf54f4c8690eb73261098f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canMove: 1
   walkSpeed: 3
   sprintSpeed: 5
   body: {fileID: 840553857}
@@ -547,9 +548,11 @@ MonoBehaviour:
   walkImpulseInterval: 0.1
   sprintImpulse: {fileID: 240787178}
   sprintImpulseInterval: 0.1
+  canJump: 1
   jumpForce: 5
   gravity: 9
   lowJumpMultiplier: 2
+  canLookAround: 1
   camTarget: {fileID: 2136512939}
   sensitivity: 2
   clamp: 90
