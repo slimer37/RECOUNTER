@@ -2675,6 +2675,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 1261333744}
   activeImage: {fileID: 1569126488}
+  punch: {x: 0, y: 15, z: 0}
+  punchDuration: 0.1
 --- !u!1 &1366354352
 GameObject:
   m_ObjectHideFlags: 0

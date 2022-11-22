@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using Cinemachine;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,8 +8,11 @@ public class HotbarSlot : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] Image activeImage;
+    [SerializeField] Vector3 punch;
+    [SerializeField] float punchDuration;
 
     Item contents;
+    Tween punchTween;
 
     public Item Item => contents;
 
@@ -17,10 +22,19 @@ public class HotbarSlot : MonoBehaviour
         SetSlotActive(false);
     }
 
+    void Start()
+    {
+        punchTween = transform.DOPunchPosition(punch, punchDuration)
+            .SetAutoKill(false).Pause();
+    }
+
     public void SetSlotActive(bool active)
     {
         activeImage.enabled = active;
         text.fontStyle = active ? FontStyles.Bold : FontStyles.Normal;
+
+        if (!active) return;
+        punchTween.Restart();
     }
 
     public void AssignItem(Item item)
