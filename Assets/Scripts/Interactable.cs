@@ -2,18 +2,7 @@ using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour
 {
-    public enum Icon
-    {
-        None,
-        Access,
-        Door,
-        Eye,
-        Hand,
-        Invalid,
-        Pickup,
-        Pull,
-        Push
-    }
+    public enum Icon { None, Access, Door, Eye, Hand, Invalid, Pickup, Pull, Push }
 
     public struct HudInfo
     {
