@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
     float yVelocity;
     float bobTime;
 
+    bool isSuspended;
+
     void Update()
     {
         if (Pause.IsPaused) return;
@@ -56,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleLooking()
     {
-        if (!canLookAround) return;
+        if (!canLookAround || isSuspended) return;
 
         var look = playerControls.Look.ReadValue<Vector2>() * sensitivity;
 
@@ -152,12 +154,14 @@ public class PlayerController : MonoBehaviour
         fov = walkFov;
 
         playerControls = new Controls().Player;
-    }
 
-    void OnEnable()
-    {
         playerControls.Enable();
 
+        RecordCameraAngles();
+    }
+
+    void RecordCameraAngles()
+    {
         camRot.y = body.eulerAngles.y;
         camRot.x = camTarget.localEulerAngles.x;
 
@@ -167,13 +171,22 @@ public class PlayerController : MonoBehaviour
             camRot.x += 360;
     }
 
-    void OnDisable() => playerControls.Disable();
+    void OnResume()
+    {
+        playerControls.Enable();
+
+        RecordCameraAngles();
+    }
+
+    void OnSuspend() => playerControls.Disable();
 
     public void Suspend(bool suspend)
     {
+        isSuspended = suspend;
+
         if (suspend)
-            OnDisable();
+            OnSuspend();
         else
-            OnEnable();
+            OnResume();
     }
 }
