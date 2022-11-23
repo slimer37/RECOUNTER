@@ -567,7 +567,7 @@ MonoBehaviour:
   clamp: 90
   vcam: {fileID: 409238788}
   walkFov: 50
-  sprintFov: 60
+  sprintFov: 55
   fovChangeSpeed: 10
 --- !u!1 &334750059
 GameObject:
