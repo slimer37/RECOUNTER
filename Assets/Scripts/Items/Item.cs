@@ -35,18 +35,18 @@ public class Item : Interactable
         TryGetComponent(out rb);
     }
 
-    public float SizeAlong(Vector3 localdirection)
+    public float SizeAlong(Vector3 localDirection)
     {
         var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
 
         if (isCylindrical)
         {
-            var radialComponent = new Vector2(localdirection.x, localdirection.z).magnitude;
-            return Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * localdirection.y;
+            var radialComponent = new Vector2(localDirection.x, localDirection.z).magnitude;
+            return Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * localDirection.y;
         }
         else
         {
-            var absDirection = new Vector3(Mathf.Abs(localdirection.x), Mathf.Abs(localdirection.y), Mathf.Abs(localdirection.z));
+            var absDirection = new Vector3(Mathf.Abs(localDirection.x), Mathf.Abs(localDirection.y), Mathf.Abs(localDirection.z));
             return Vector3.Dot(absDirection, scaledExtents);
         }
     }
