@@ -161,6 +161,12 @@ public class Placer : MonoBehaviour
         var normalizedMouse = 2 * mousePosition / new Vector2(Screen.width, Screen.height) - Vector2.one;
         var tilt = new Vector3(-normalizedMouse.y, normalizedMouse.x, 0) * tiltEffect;
         var angles = playerRotation + tilt;
+
+        if (angles.x > 90)
+            angles.x -= 360;
+        else if (angles.x < -90)
+            angles.x += 360;
+
         angles.x = Mathf.Clamp(angles.x, -clampTiltX, clampTiltX);
 
         body.eulerAngles = angles.y * Vector3.up;
