@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] VoidChannel sensitivityUpdateChannel;
+
     [Header("Moving")]
     [SerializeField] bool canMove = true;
     [SerializeField] float walkSpeed;
@@ -25,7 +27,7 @@ public class PlayerController : MonoBehaviour
     [Header("Looking")]
     [SerializeField] bool canLookAround = true;
     [SerializeField] Transform camTarget;
-    [SerializeField] float sensitivity;
+    [SerializeField] float defaultSensitivity;
     [SerializeField] float clamp;
 
     [Header("FOV")]
@@ -41,7 +43,11 @@ public class PlayerController : MonoBehaviour
     float yVelocity;
     float bobTime;
 
+    float sensitivity;
+
     bool isSuspended;
+
+    const string SensitivityPref = "Sensitivity";
 
     void Update()
     {
@@ -148,6 +154,8 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        UpdateSensitivity();
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -189,4 +197,10 @@ public class PlayerController : MonoBehaviour
         else
             OnResume();
     }
+
+    void UpdateSensitivity() =>
+        sensitivity = PlayerPrefs.GetFloat(SensitivityPref, defaultSensitivity);
+
+    void OnEnable() => sensitivityUpdateChannel.OnEventRaised += UpdateSensitivity;
+    void OnDisable() => sensitivityUpdateChannel.OnEventRaised -= UpdateSensitivity;
 }
