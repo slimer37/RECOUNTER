@@ -514,7 +514,7 @@ MonoBehaviour:
   range: 2
   rotateSpeed: 90
   surfaceSeparation: 0.001
-  tiltEffect: 5
+  tiltEffect: 7
   clampTiltX: 90
   placementMask:
     serializedVersion: 2
