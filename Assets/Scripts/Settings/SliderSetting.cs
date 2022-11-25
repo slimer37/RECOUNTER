@@ -15,6 +15,8 @@ public class SliderSetting : MonoBehaviour
 
     Slider slider;
 
+    public void ResetPref() => SetSliderValue(defaultValue);
+
     void Awake()
     {
         slider = GetComponent<Slider>();
