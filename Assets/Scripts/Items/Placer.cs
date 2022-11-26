@@ -69,7 +69,7 @@ public class Placer : MonoBehaviour
 
     public void SetItem(Item item, bool resetPosition)
     {
-        source.PlayOneShot(holdSounds.NextClip());
+        holdSounds.PlayOneShot(source);
 
         active = item;
 

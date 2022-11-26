@@ -515,6 +515,10 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 53f6c459c1a606343b7d5265de32f134, type: 3}
     - {fileID: 8300000, guid: 1c5c020dd3a421d41bf79c3ff815e19a, type: 3}
     mode: 0
+    volume: 1
+    volumeVariation: 0.1
+    pitch: 1
+    pitchVariation: 0.14
   source: {fileID: 1786630811}
   sensitivity: 5
   range: 2
@@ -591,11 +595,19 @@ MonoBehaviour:
     - {fileID: 8300000, guid: bbf72e8ee392fa54ca7c3ab1a41b55f9, type: 3}
     - {fileID: 8300000, guid: 0ec2a10b1c3a65d4187e74c58ce32045, type: 3}
     mode: 0
+    volume: 1
+    volumeVariation: 0.1
+    pitch: 1
+    pitchVariation: 0.1
   jumpSfx:
     clips:
     - {fileID: 8300000, guid: 540f19265d18e7e4da5e58fef69499a3, type: 3}
     - {fileID: 8300000, guid: a22ecdc21a2ca954eb8142a510d11aff, type: 3}
     mode: 0
+    volume: 1
+    volumeVariation: 0.1
+    pitch: 1
+    pitchVariation: 0.2
 --- !u!1 &334750059
 GameObject:
   m_ObjectHideFlags: 0

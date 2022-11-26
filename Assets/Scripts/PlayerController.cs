@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
     const string SensitivityPref = "Sensitivity";
 
-    void PlaySound(AudioClipGroup group) => audioSource.PlayOneShot(group.NextClip());
+    void PlaySound(AudioClipGroup group) => group.PlayOneShot(audioSource);
 
     void Update()
     {
