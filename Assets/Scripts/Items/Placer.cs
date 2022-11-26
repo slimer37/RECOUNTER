@@ -18,6 +18,10 @@ public class Placer : MonoBehaviour
     [SerializeField] LayerMask placementMask;
     [SerializeField] LayerMask obstacleMask;
 
+    [Header("Deintersection")]
+    [SerializeField] float attemptDistance;
+    [SerializeField] int maxAttemptsPerDirection;
+
     [Header("Range/Scrolling")]
     [SerializeField] float rangeMin;
     [SerializeField] float range;
@@ -143,7 +147,7 @@ public class Placer : MonoBehaviour
             icon.sprite = rotating ? rotateIcon : placeIcon;
 
             var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
-            itemIntersects = active.WouldIntersectAt(position, rotation, obstacleMask);
+            itemIntersects = !TryCorrectPosition(position, rotation, hit.normal, out var correctedPos);
 
             if (itemIntersects)
             {
@@ -154,7 +158,7 @@ public class Placer : MonoBehaviour
             else
             {
                 SetLayer(false);
-                active.transform.SetPositionAndRotation(position, rotation);
+                active.transform.SetPositionAndRotation(correctedPos, rotation);
 
                 ghost.Hide();
             }
@@ -168,6 +172,38 @@ public class Placer : MonoBehaviour
             EndPlace();
             MoveActiveToHand();
         }
+    }
+
+    bool TryCorrectPosition(Vector3 pos, Quaternion rot, Vector3 surfaceNormal, out Vector3 corrected)
+    {
+        corrected = pos;
+
+        var noNormal = surfaceNormal == Vector3.zero;
+
+        if (!active.WouldIntersectAt(pos, rot, obstacleMask)) return true;
+
+        var tan = Vector3.Cross(noNormal ? Vector3.up : surfaceNormal, body.forward);
+
+        return (noNormal && TryCorrect(pos, rot, Vector3.up, out corrected))
+            || TryCorrect(pos, rot, tan, out corrected)
+            || TryCorrect(pos, rot, -tan, out corrected)
+            || TryCorrect(pos, rot, -body.forward, out corrected);
+    }
+
+    bool TryCorrect(Vector3 position, Quaternion rotation, Vector3 direction, out Vector3 corrected)
+    {
+        for (var i = 0; i < maxAttemptsPerDirection; i++)
+        {
+            var help = direction * attemptDistance * (i + 1);
+            if (!active.WouldIntersectAt(position + help, rotation, obstacleMask))
+            {
+                corrected = position + help;
+                return true;
+            }
+        }
+
+        corrected = position;
+        return false;
     }
 
     void HandleScroll()
