@@ -561,9 +561,9 @@ MonoBehaviour:
   sprintImpulse: {fileID: 240787178}
   sprintImpulseInterval: 0
   canJump: 1
-  jumpForce: 5
-  gravity: 9
-  lowJumpMultiplier: 2
+  jumpForce: 4
+  gravity: 10
+  lowJumpMultiplier: 4
   canLookAround: 1
   camTarget: {fileID: 2136512939}
   defaultSensitivity: 2
