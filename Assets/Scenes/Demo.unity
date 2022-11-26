@@ -531,8 +531,8 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 1
-  attemptDistance: 0.005
-  maxAttemptsPerDirection: 50
+  attemptDistance: 0.001
+  maxAttemptsPerDirection: 200
   rangeMin: 0.2
   range: 2
   scrollSpeed: 0.2
