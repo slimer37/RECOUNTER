@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool canMove = true;
     [SerializeField] float walkSpeed;
     [SerializeField] float sprintSpeed;
+    [SerializeField] float inputSmoothing;
     [SerializeField] Transform body;
     [SerializeField] CharacterController controller;
 
@@ -46,6 +47,9 @@ public class PlayerController : MonoBehaviour
     float sensitivity;
 
     bool isSuspended;
+
+    Vector2 smoothInput;
+    Vector2 smoothInputVelocity;
 
     const string SensitivityPref = "Sensitivity";
 
@@ -107,19 +111,20 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
-        var inputMovement = playerControls.Move.ReadValue<Vector2>();
+        var input = playerControls.Move.ReadValue<Vector2>();
 
         // Sprinting only allowed when moving forward
-        var isSprinting = playerControls.Sprint.IsPressed() && inputMovement.y > 0;
+        var isSprinting = playerControls.Sprint.IsPressed() && input.y > 0;
 
-        HandleBobbing(inputMovement, isSprinting);
+        HandleBobbing(input, isSprinting);
         AnimateFov(isSprinting);
 
         if (!canMove) return;
 
         var speed = isSprinting ? sprintSpeed : walkSpeed;
 
-        var velocity = body.TransformDirection(inputMovement.x, 0, inputMovement.y) * speed + Vector3.up * yVelocity;
+        smoothInput = Vector2.SmoothDamp(smoothInput, input * speed, ref smoothInputVelocity, inputSmoothing);
+        var velocity = body.TransformDirection(smoothInput.x, 0, smoothInput.y) + Vector3.up * yVelocity;
 
         controller.Move(velocity * Time.deltaTime);
     }

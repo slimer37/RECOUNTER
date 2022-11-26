@@ -553,6 +553,7 @@ MonoBehaviour:
   canMove: 1
   walkSpeed: 2
   sprintSpeed: 4
+  inputSmoothing: 0.1
   body: {fileID: 840553857}
   controller: {fileID: 840553853}
   walkImpulse: {fileID: 1095713310}
