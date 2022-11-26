@@ -6,7 +6,7 @@ public class AudioClipGroup
     enum SelectionMode
     {
         Random,
-        PingPong,
+        RandomNoImmediateRepeat,
         Sequential
     }
 
@@ -21,13 +21,20 @@ public class AudioClipGroup
 
     public AudioClip NextClip()
     {
-        return mode switch
+        switch (mode)
         {
-            SelectionMode.Random => clips[Random.Range(0, clips.Length)],
-            SelectionMode.PingPong => clips[(int)Mathf.PingPong(i++, clips.Length)],
-            SelectionMode.Sequential => clips[i++ % clips.Length],
-            _ => throw new System.Exception("Invalid selection mode.")
-        };
+            case SelectionMode.Random:
+                return clips[Random.Range(0, clips.Length)];
+            case SelectionMode.RandomNoImmediateRepeat:
+                var j = Random.Range(0, clips.Length - 1);
+                if (i == j) j++;
+                i = j;
+                return clips[j];
+            case SelectionMode.Sequential:
+                return clips[i++ % clips.Length];
+            default:
+                throw new System.Exception("Invalid selection mode.");
+        }
     }
 
     public void PlayOneShot(AudioSource source)

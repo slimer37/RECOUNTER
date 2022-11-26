@@ -594,7 +594,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 898d6685956d1d84b832b1edec501314, type: 3}
     - {fileID: 8300000, guid: bbf72e8ee392fa54ca7c3ab1a41b55f9, type: 3}
     - {fileID: 8300000, guid: 0ec2a10b1c3a65d4187e74c58ce32045, type: 3}
-    mode: 0
+    mode: 1
     volume: 1
     volumeVariation: 0.1
     pitch: 1
