@@ -37,6 +37,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float sprintFov;
     [SerializeField] float fovChangeSpeed;
 
+    [Header("SFX")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClipGroup footstepSfx;
+    [SerializeField] AudioClipGroup jumpSfx;
+
     Controls.PlayerActions playerControls;
 
     Vector2 camRot;
@@ -52,6 +57,8 @@ public class PlayerController : MonoBehaviour
     Vector2 smoothInputVelocity;
 
     const string SensitivityPref = "Sensitivity";
+
+    void PlaySound(AudioClipGroup group) => audioSource.PlayOneShot(group.NextClip());
 
     void Update()
     {
@@ -92,7 +99,10 @@ public class PlayerController : MonoBehaviour
         if (!canJump || !controller.isGrounded) return;
 
         if (playerControls.Jump.WasPressedThisFrame())
+        {
             yVelocity = jumpForce;
+            PlaySound(jumpSfx);
+        }
     }
 
     void ApplyGravity()
@@ -148,6 +158,7 @@ public class PlayerController : MonoBehaviour
             if (bobTime > impulseInterval)
             {
                 impulse.GenerateImpulse();
+                PlaySound(footstepSfx);
                 bobTime = 0;
             }
         }
