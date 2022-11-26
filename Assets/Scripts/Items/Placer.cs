@@ -79,7 +79,7 @@ public class Placer : MonoBehaviour
     void Awake()
     {
         playerControls = new Controls().Player;
-        currentRange = range;
+        rawRange = range;
     }
 
     void OnEnable() => playerControls.Enable();
@@ -194,7 +194,7 @@ public class Placer : MonoBehaviour
     {
         for (var i = 0; i < maxAttemptsPerDirection; i++)
         {
-            var help = direction * attemptDistance * (i + 1);
+            var help = (i + 1) * attemptDistance * direction;
             if (!active.WouldIntersectAt(position + help, rotation, obstacleMask))
             {
                 corrected = position + help;
