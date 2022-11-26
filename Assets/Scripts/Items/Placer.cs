@@ -54,6 +54,7 @@ public class Placer : MonoBehaviour
 
     Controls.PlayerActions playerControls;
 
+    public bool IsPlacing => placing;
     public Item Active => active;
 
     void OnDrawGizmosSelected()
