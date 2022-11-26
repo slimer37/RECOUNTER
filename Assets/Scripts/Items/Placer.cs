@@ -178,6 +178,9 @@ public class Placer : MonoBehaviour
     {
         corrected = pos;
 
+        // Stop if ghost is already at that position, i.e., we've failed there before.
+        if (ghost.transform.position == pos) return false;
+
         var noNormal = surfaceNormal == Vector3.zero;
 
         if (!active.WouldIntersectAt(pos, rot, obstacleMask)) return true;
