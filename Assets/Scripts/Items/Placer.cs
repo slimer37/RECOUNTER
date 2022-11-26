@@ -11,13 +11,19 @@ public class Placer : MonoBehaviour
 
     [Header("Placement Settings")]
     [SerializeField] float sensitivity;
-    [SerializeField] float range;
     [SerializeField] float rotateSpeed;
     [SerializeField] float surfaceSeparation;
     [SerializeField] float tiltEffect;
     [SerializeField] float clampTiltX;
     [SerializeField] LayerMask placementMask;
     [SerializeField] LayerMask obstacleMask;
+
+    [Header("Range/Scrolling")]
+    [SerializeField] float rangeMin;
+    [SerializeField] float range;
+    [SerializeField] float scrollSpeed;
+    [SerializeField] float slowScrollSpeed;
+    [SerializeField] float scrollSnappiness;
 
     [Header("Viewmodel Settings")]
     [SerializeField, Layer] int heldItemLayer;
@@ -52,6 +58,9 @@ public class Placer : MonoBehaviour
     bool rotating;
     bool itemIntersects;
 
+    float rawRange;
+    float currentRange;
+
     Controls.PlayerActions playerControls;
 
     public bool IsPlacing => placing;
@@ -63,7 +72,11 @@ public class Placer : MonoBehaviour
         Gizmos.DrawWireSphere(cam.transform.position, range);
     }
 
-    void Awake() => playerControls = new Controls().Player;
+    void Awake()
+    {
+        playerControls = new Controls().Player;
+        currentRange = range;
+    }
 
     void OnEnable() => playerControls.Enable();
     void OnDisable() => playerControls.Disable();
@@ -111,15 +124,16 @@ public class Placer : MonoBehaviour
 
             var ray = cam.ScreenPointToRay(mousePosition);
 
-            if (!Physics.Raycast(ray, out var hit, range, placementMask))
+            if (!Physics.Raycast(ray, out var hit, currentRange, placementMask))
             {
-                hit.point = ray.GetPoint(range);
+                hit.point = ray.GetPoint(currentRange);
             }
 
             HandleRotation(out var rotation);
 
             if (!rotating)
             {
+                HandleScroll();
                 TrackMouseLook();
                 TiltCamera();
             }
@@ -154,6 +168,21 @@ public class Placer : MonoBehaviour
             EndPlace();
             MoveActiveToHand();
         }
+    }
+
+    void HandleScroll()
+    {
+        var scroll = Mouse.current.scroll.ReadValue().y;
+        var slow = Keyboard.current.leftShiftKey.IsPressed();
+
+        if (scroll != 0)
+        {
+            var delta = scroll > 0 ? 1f : -1f;
+            delta *= slow ? slowScrollSpeed : scrollSpeed;
+            rawRange = Mathf.Clamp(currentRange + delta, rangeMin, range);
+        }
+
+        currentRange = Mathf.Lerp(currentRange, rawRange, scrollSnappiness);
     }
 
     void TrackMouseLook()

@@ -521,7 +521,6 @@ MonoBehaviour:
     pitchVariation: 0.14
   source: {fileID: 1786630811}
   sensitivity: 5
-  range: 2
   rotateSpeed: 90
   surfaceSeparation: 0.001
   tiltEffect: 7
@@ -532,6 +531,11 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 1
+  rangeMin: 0.2
+  range: 2
+  scrollSpeed: 0.2
+  slowScrollSpeed: 0.05
+  scrollSnappiness: 0.6
   heldItemLayer: 3
   defaultLayer: 0
   holdPosition: {x: 0.36, y: -0.31, z: 0.85}
