@@ -5,6 +5,10 @@ using System;
 
 public class Placer : MonoBehaviour
 {
+    [Header("SFX")]
+    [SerializeField] AudioClipGroup holdSounds;
+    [SerializeField] AudioSource source;
+
     [Header("Placement Settings")]
     [SerializeField] float sensitivity;
     [SerializeField] float range;
@@ -65,6 +69,8 @@ public class Placer : MonoBehaviour
 
     public void SetItem(Item item, bool resetPosition)
     {
+        source.PlayOneShot(holdSounds.NextClip());
+
         active = item;
 
         active.gameObject.SetActive(true);
