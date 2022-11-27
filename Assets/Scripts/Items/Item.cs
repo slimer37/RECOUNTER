@@ -50,7 +50,7 @@ public class Item : Interactable
     public float SizeAlong(Vector3 localDirection)
     {
         var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
-        var originShift = -Vector3.Dot(localDirection, rend.localBounds.center);
+        var originShift = Vector3.Dot(localDirection, rend.localBounds.center);
 
         if (isCylindrical)
         {
