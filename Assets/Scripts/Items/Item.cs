@@ -20,9 +20,18 @@ public class Item : Interactable
 
     public bool IsHeld => containerHotbar;
 
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.DrawWireCube(rend.localBounds.center, rend.localBounds.size);
+    }
+
     public bool WouldIntersectAt(Vector3 position, Quaternion rotation, LayerMask mask)
     {
         var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
+
+        position -= rend.localBounds.center;
+
         if (isCylindrical)
         {
             var radius = Mathf.Max(scaledExtents.x, scaledExtents.z);
@@ -44,16 +53,17 @@ public class Item : Interactable
     public float SizeAlong(Vector3 localDirection)
     {
         var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
+        var originShift = Vector3.Dot(localDirection, rend.localBounds.center);
 
         if (isCylindrical)
         {
             var radialComponent = new Vector2(localDirection.x, localDirection.z).magnitude;
-            return Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * localDirection.y;
+            return originShift + Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * localDirection.y;
         }
         else
         {
             var absDirection = new Vector3(Mathf.Abs(localDirection.x), Mathf.Abs(localDirection.y), Mathf.Abs(localDirection.z));
-            return Vector3.Dot(absDirection, scaledExtents);
+            return originShift + Vector3.Dot(absDirection, scaledExtents);
         }
     }
 
