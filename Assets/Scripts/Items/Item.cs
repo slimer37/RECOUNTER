@@ -8,9 +8,15 @@ public class Item : Interactable
 
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
+    [SerializeField] Vector3 holdPosShift;
+    [SerializeField] bool overridesHoldRot;
+    [SerializeField] Vector3 holdRot;
 
     Collider[] colliders;
     Hotbar containerHotbar;
+
+    public Vector3 HoldPosShift => holdPosShift;
+    public Quaternion? OverrideHoldRotation => overridesHoldRot ? Quaternion.Euler(holdRot) : null;
 
     public bool IsHeld => containerHotbar;
 

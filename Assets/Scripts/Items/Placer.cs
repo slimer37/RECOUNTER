@@ -51,8 +51,12 @@ public class Placer : MonoBehaviour
 
     Item active;
     float itemRotation;
+
     Vector3 itemVelocity;
     float itemRotationVelocity;
+
+    Vector3 adjustedHoldPos;
+    Quaternion adjustedHoldRot;
 
     Vector2 mousePosition;
 
@@ -94,6 +98,9 @@ public class Placer : MonoBehaviour
         active.gameObject.SetActive(true);
 
         ghost.CopyMesh(item);
+
+        adjustedHoldPos = holdPosition + item.HoldPosShift;
+        adjustedHoldRot = item.OverrideHoldRotation ?? Quaternion.identity;
 
         if (!resetPosition) return;
 
@@ -324,7 +331,7 @@ public class Placer : MonoBehaviour
         SetLayer(true);
 
         var currRot = active.transform.rotation;
-        var targetRot = cam.transform.rotation;
+        var targetRot = cam.transform.rotation * adjustedHoldRot;
         var delta = Quaternion.Angle(currRot, targetRot);
         if (delta > 0f)
         {
@@ -335,7 +342,7 @@ public class Placer : MonoBehaviour
 
         active.transform.position = Vector3.SmoothDamp(
             active.transform.position,
-            cam.transform.TransformPoint(holdPosition),
+            cam.transform.TransformPoint(adjustedHoldPos),
             ref itemVelocity,
             smoothing);
     }

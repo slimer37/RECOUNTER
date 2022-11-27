@@ -651,6 +651,9 @@ MonoBehaviour:
   rend: {fileID: 334750062}
   isCylindrical: 0
   rb: {fileID: 334750065}
+  holdPosShift: {x: 0, y: 0, z: 0}
+  overridesHoldRot: 0
+  holdRot: {x: 0, y: 0, z: 0}
 --- !u!65 &334750061
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4126,6 +4129,9 @@ MonoBehaviour:
   rend: {fileID: 1366354356}
   isCylindrical: 1
   rb: {fileID: 1366354353}
+  holdPosShift: {x: 0, y: 0, z: 0}
+  overridesHoldRot: 0
+  holdRot: {x: 0, y: 0, z: 0}
 --- !u!1 &1375358987
 GameObject:
   m_ObjectHideFlags: 0
@@ -6415,6 +6421,9 @@ MonoBehaviour:
   rend: {fileID: 2146010317}
   isCylindrical: 0
   rb: {fileID: 2146010319}
+  holdPosShift: {x: 0.1, y: 0.15, z: 0}
+  overridesHoldRot: 1
+  holdRot: {x: 0, y: 240, z: 0}
 --- !u!54 &2146010319
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6673,6 +6682,9 @@ MonoBehaviour:
   rend: {fileID: 1694746379359014693}
   isCylindrical: 1
   rb: {fileID: 6388072172700720962}
+  holdPosShift: {x: 0, y: 0, z: 0}
+  overridesHoldRot: 0
+  holdRot: {x: 0, y: 0, z: 0}
 --- !u!54 &6388072172700720962
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6797,6 +6809,9 @@ MonoBehaviour:
   rend: {fileID: 5446082290525636598}
   isCylindrical: 1
   rb: {fileID: 8040567922078275105}
+  holdPosShift: {x: 0, y: 0, z: 0}
+  overridesHoldRot: 0
+  holdRot: {x: 0, y: 0, z: 0}
 --- !u!65 &8040567922078275109
 BoxCollider:
   m_ObjectHideFlags: 0
