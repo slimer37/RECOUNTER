@@ -30,18 +30,15 @@ public class Item : Interactable
     {
         var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
 
-        position -= rend.localBounds.center;
+        var intersects = Physics.CheckBox(position, scaledExtents, rotation, mask);
 
-        if (isCylindrical)
+        if (intersects && isCylindrical)
         {
             var radius = Mathf.Max(scaledExtents.x, scaledExtents.z);
-            scaledExtents.y -= radius;
-            return Physics.CheckCapsule(position - Vector3.up * scaledExtents.y, position + Vector3.up * scaledExtents.y, radius, mask);
+            intersects = Physics.CheckCapsule(position - Vector3.up * scaledExtents.y, position + Vector3.up * scaledExtents.y, radius, mask);
         }
-        else
-        {
-            return Physics.CheckBox(position, scaledExtents, rotation, mask);
-        }
+        
+        return intersects;
     }
 
     void Reset()
@@ -53,7 +50,7 @@ public class Item : Interactable
     public float SizeAlong(Vector3 localDirection)
     {
         var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
-        var originShift = Vector3.Dot(localDirection, rend.localBounds.center);
+        var originShift = -Vector3.Dot(localDirection, rend.localBounds.center);
 
         if (isCylindrical)
         {

@@ -194,7 +194,7 @@ public class Placer : MonoBehaviour
 
         var tan = Vector3.Cross(noNormal ? Vector3.up : surfaceNormal, body.forward);
 
-        return (noNormal && TryCorrect(pos, rot, Vector3.up, out corrected))
+        return TryCorrect(pos, rot, noNormal ? Vector3.up : surfaceNormal, out corrected)
             || TryCorrect(pos, rot, tan, out corrected)
             || TryCorrect(pos, rot, -tan, out corrected)
             || TryCorrect(pos, rot, -body.forward, out corrected);
