@@ -284,6 +284,7 @@ public class Placer : MonoBehaviour
     {
         mousePosition = new Vector2(Screen.width, Screen.height) / 2;
         playerRotation = new Vector3(camTarget.localEulerAngles.x, body.localEulerAngles.y, 0);
+        itemRotation = body.eulerAngles.y + 180;
     }
 
     void StartPlace()
