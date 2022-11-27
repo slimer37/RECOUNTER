@@ -225,7 +225,7 @@ public class Placer : MonoBehaviour
         {
             var delta = scroll > 0 ? 1f : -1f;
             delta *= slow ? slowScrollSpeed : scrollSpeed;
-            rawRange = Mathf.Clamp(currentRange + delta, rangeMin, range);
+            rawRange = Mathf.Clamp(currentRange + delta, rangeMin + active.SizeAlong(Vector3.forward), range);
         }
 
         currentRange = Mathf.Lerp(currentRange, rawRange, scrollSnappiness);

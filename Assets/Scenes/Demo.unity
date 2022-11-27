@@ -541,7 +541,7 @@ MonoBehaviour:
     m_Bits: 1
   attemptDistance: 0.001
   maxAttemptsPerDirection: 200
-  rangeMin: 0.2
+  rangeMin: 0.25
   range: 2
   scrollSpeed: 0.2
   slowScrollSpeed: 0.05
