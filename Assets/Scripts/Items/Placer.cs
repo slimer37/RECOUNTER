@@ -265,7 +265,7 @@ public class Placer : MonoBehaviour
 
             if (mouseX != 0)
             {
-                itemRotation += mouseX * rotateSpeed * Time.deltaTime;
+                itemRotation += mouseX * rotateSpeed;
                 icon.transform.localScale = new Vector3(mouseX > 0 ? 1 : -1, 1, 1);
             }
 

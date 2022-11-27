@@ -522,7 +522,7 @@ MonoBehaviour:
     pitchVariation: 0.14
   source: {fileID: 1786630811}
   sensitivity: 5
-  rotateSpeed: 90
+  rotateSpeed: 0.25
   surfaceSeparation: 0.001
   tiltEffect: 7
   clampTiltX: 90
