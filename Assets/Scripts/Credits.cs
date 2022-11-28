@@ -1,5 +1,4 @@
 using DG.Tweening;
-using NaughtyAttributes;
 using UnityEngine;
 
 public class Credits : MonoBehaviour
@@ -8,12 +7,12 @@ public class Credits : MonoBehaviour
     [SerializeField] Canvas canvas;
     [SerializeField] CanvasGroup group;
     [SerializeField, Min(0.01f)] float speed = 5;
-    [SerializeField, Min(0), MaxValue(1)] float pivotGoal;
+    [SerializeField] float screenHeight = 1080;
     [SerializeField, Min(0.01f)] float fadeTime = 2;
 
     Controls.MenuActions controls;
 
-    Tween creditsScroll;
+    Tween creditsRoll;
 
     void Awake()
     {
@@ -25,13 +24,16 @@ public class Credits : MonoBehaviour
 
         group.alpha = 0;
 
-        var anchor = new Vector2(0.5f, 1 - pivotGoal);
+        var creditsHeight = credits.rect.height;
+        var top = creditsHeight / 2 + screenHeight / 2;
+        var bottom = -top;
 
-        creditsScroll = DOTween.Sequence()
-            .AppendInterval(fadeTime)
-            .Append(credits.DOPivotY(pivotGoal, credits.rect.height / speed).SetEase(Ease.Linear))
-            .Join(credits.DOAnchorMax(anchor, credits.rect.height / speed).SetEase(Ease.Linear))
-            .Join(credits.DOAnchorMax(anchor, credits.rect.height / speed).SetEase(Ease.Linear))
+        credits.localPosition = Vector3.up * bottom;
+
+        creditsRoll = credits.DOLocalMoveY(top, speed)
+            .SetSpeedBased()
+            .SetEase(Ease.Linear)
+            .SetDelay(fadeTime)
             .Pause()
             .SetAutoKill(false)
             .OnComplete(Hide);
@@ -40,15 +42,15 @@ public class Credits : MonoBehaviour
     void End()
     {
         canvas.enabled = false;
-        creditsScroll.Pause();
+        creditsRoll.Pause();
     }
 
-    public void Show()
+    public void Roll()
     {
         canvas.enabled = true;
         group.DOKill();
         group.DOFade(1, fadeTime);
-        creditsScroll.Restart();
+        creditsRoll.Restart();
     }
 
     void Hide()
