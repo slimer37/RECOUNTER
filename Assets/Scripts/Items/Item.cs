@@ -8,7 +8,7 @@ public class Item : Interactable
 
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
-    [SerializeField] bool isThrowable;
+    [SerializeField] bool isThrowable = true;
     [SerializeField] Vector3 holdPosShift;
     [SerializeField] bool overridesHoldRot;
     [SerializeField] Vector3 holdRot;
