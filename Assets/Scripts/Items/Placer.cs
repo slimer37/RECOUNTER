@@ -158,7 +158,7 @@ public class Placer : MonoBehaviour
 
             if (itemIntersects)
             {
-                ghost.ShowAt(position, rotation);
+                ghost.ShowAt(position + rotation * -active.OriginShift, rotation);
 
                 MoveActiveToHand();
             }

@@ -12,10 +12,16 @@ public class Item : Interactable
     [SerializeField] bool overridesHoldRot;
     [SerializeField] Vector3 holdRot;
 
+    [Header("Bounds Override")]
+    [SerializeField] bool overridesBounds;
+    [SerializeField] Vector3 overrideCenter;
+    [SerializeField, Min(0)] Vector3 overrideSize;
+
     Collider[] colliders;
     Hotbar containerHotbar;
 
     public Vector3 HoldPosShift => holdPosShift;
+    public Vector3 OriginShift => GetOriginShift();
     public Quaternion? OverrideHoldRotation => overridesHoldRot ? Quaternion.Euler(holdRot) : null;
 
     public bool IsHeld => containerHotbar;
@@ -24,11 +30,24 @@ public class Item : Interactable
     {
         Gizmos.matrix = transform.localToWorldMatrix;
         Gizmos.DrawWireCube(rend.localBounds.center, rend.localBounds.size);
+
+        if (!overridesBounds) return;
+
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawWireCube(overrideCenter, overrideSize);
     }
+
+    Vector3 GetScaledExtents() => overridesBounds ?
+        overrideSize / 2 : Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
+
+    Vector3 GetOriginShift() => overridesBounds ?
+        overrideCenter : rend.localBounds.center;
 
     public bool WouldIntersectAt(Vector3 position, Quaternion rotation, LayerMask mask)
     {
-        var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
+        var scaledExtents = GetScaledExtents();
+        position += rotation * GetOriginShift();
 
         var intersects = Physics.CheckBox(position, scaledExtents, rotation, mask);
 
@@ -49,8 +68,8 @@ public class Item : Interactable
 
     public float SizeAlong(Vector3 localDirection)
     {
-        var scaledExtents = Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
-        var originShift = Vector3.Dot(localDirection, rend.localBounds.center);
+        var scaledExtents = GetScaledExtents();
+        var originShift = Vector3.Dot(localDirection, GetOriginShift());
 
         if (isCylindrical)
         {
