@@ -293,6 +293,8 @@ public class Placer : MonoBehaviour
         mousePosition = new Vector2(Screen.width, Screen.height) / 2;
         playerRotation = new Vector3(camTarget.localEulerAngles.x, body.localEulerAngles.y, 0);
         itemRotation = body.eulerAngles.y + 180;
+
+        active.transform.DOKill();
     }
 
     void StartPlace()
@@ -344,10 +346,19 @@ public class Placer : MonoBehaviour
     {
         if (!active) throw new InvalidOperationException("No active item to throw.");
 
+        if (!active.IsThrowable)
+        {
+            active.transform.DOKill();
+            active.transform.parent = cam.transform;
+            active.transform.DOShakeRotation(0.5f, 15, 10).OnKill(() => active.transform.parent = null);
+            return;
+        }
+
         if (active.WouldIntersectAt(active.transform.position, active.transform.rotation, throwMask))
         {
             active.transform.DOKill();
-            active.transform.DOShakeRotation(0.1f, 15, 20);
+            active.transform.parent = cam.transform;
+            active.transform.DOShakeRotation(0.1f, 15, 30).OnKill(() => active.transform.parent = null); ;
             return;
         }
 

@@ -26,6 +26,7 @@ public class Item : Interactable
     public Quaternion? OverrideHoldRotation => overridesHoldRot ? Quaternion.Euler(holdRot) : null;
 
     public bool IsHeld => containerHotbar;
+    public bool IsThrowable => rb && isThrowable;
 
     void OnDrawGizmosSelected()
     {
