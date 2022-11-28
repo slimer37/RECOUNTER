@@ -8,6 +8,7 @@ public class Item : Interactable
 
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
+    [SerializeField] bool isThrowable;
     [SerializeField] Vector3 holdPosShift;
     [SerializeField] bool overridesHoldRot;
     [SerializeField] Vector3 holdRot;
@@ -38,6 +39,27 @@ public class Item : Interactable
         Gizmos.DrawWireCube(overrideCenter, overrideSize);
     }
 
+    void Reset()
+    {
+        TryGetComponent(out rend);
+        TryGetComponent(out rb);
+    }
+
+    void OnValidate()
+    {
+        if (!rb && isThrowable)
+        {
+            Debug.LogWarning($"Cannot set {isThrowable} if no rigidbody is selected.");
+            isThrowable = false;
+        }
+    }
+
+    public void Throw(Vector3 force)
+    {
+        Release();
+        rb.AddForce(force, ForceMode.VelocityChange);
+    }
+
     Vector3 GetScaledExtents() => overridesBounds ?
         overrideSize / 2 : Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
 
@@ -56,14 +78,8 @@ public class Item : Interactable
             var radius = Mathf.Max(scaledExtents.x, scaledExtents.z);
             intersects = Physics.CheckCapsule(position - Vector3.up * scaledExtents.y, position + Vector3.up * scaledExtents.y, radius, mask);
         }
-        
-        return intersects;
-    }
 
-    void Reset()
-    {
-        TryGetComponent(out rend);
-        TryGetComponent(out rb);
+        return intersects;
     }
 
     public float SizeAlong(Vector3 localDirection)

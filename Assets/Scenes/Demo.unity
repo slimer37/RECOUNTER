@@ -529,6 +529,10 @@ MonoBehaviour:
     pitch: 1
     pitchVariation: 0.14
   source: {fileID: 1786630811}
+  throwForce: 5
+  throwMask:
+    serializedVersion: 2
+    m_Bits: 1
   sensitivity: 5
   rotateSpeed: 0.25
   surfaceSeparation: 0.001
@@ -539,7 +543,7 @@ MonoBehaviour:
     m_Bits: 1
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
   attemptDistance: 0.001
   maxAttemptsPerDirection: 200
   rangeMin: 0.25
@@ -659,6 +663,7 @@ MonoBehaviour:
   rend: {fileID: 334750062}
   isCylindrical: 0
   rb: {fileID: 334750065}
+  isThrowable: 0
   holdPosShift: {x: 0, y: 0, z: 0}
   overridesHoldRot: 0
   holdRot: {x: 0, y: 0, z: 0}
@@ -2170,7 +2175,7 @@ GameObject:
   - component: {fileID: 840553857}
   - component: {fileID: 840553853}
   - component: {fileID: 840553860}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Employee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2428,6 +2433,7 @@ MonoBehaviour:
   rend: {fileID: 872607850}
   isCylindrical: 0
   rb: {fileID: 872607852}
+  isThrowable: 0
   holdPosShift: {x: 0, y: 0, z: 0}
   overridesHoldRot: 0
   holdRot: {x: 0, y: 0, z: 0}
@@ -3760,6 +3766,7 @@ MonoBehaviour:
   rend: {fileID: 1142382809}
   isCylindrical: 0
   rb: {fileID: 1142382811}
+  isThrowable: 0
   holdPosShift: {x: 0, y: 0, z: 0}
   overridesHoldRot: 1
   holdRot: {x: 10, y: 210, z: 0}
@@ -4664,6 +4671,7 @@ MonoBehaviour:
   rend: {fileID: 1366354356}
   isCylindrical: 1
   rb: {fileID: 1366354353}
+  isThrowable: 0
   holdPosShift: {x: 0, y: 0, z: 0}
   overridesHoldRot: 0
   holdRot: {x: 0, y: 0, z: 0}
@@ -6959,6 +6967,7 @@ MonoBehaviour:
   rend: {fileID: 2146010317}
   isCylindrical: 0
   rb: {fileID: 2146010319}
+  isThrowable: 0
   holdPosShift: {x: 0.1, y: 0.15, z: 0}
   overridesHoldRot: 1
   holdRot: {x: 0, y: 240, z: 0}
@@ -7735,6 +7744,7 @@ MonoBehaviour:
   rend: {fileID: 1694746379359014693}
   isCylindrical: 1
   rb: {fileID: 6388072172700720962}
+  isThrowable: 0
   holdPosShift: {x: 0, y: 0, z: 0}
   overridesHoldRot: 0
   holdRot: {x: 0, y: 0, z: 0}
@@ -7899,6 +7909,7 @@ MonoBehaviour:
   rend: {fileID: 450447160920312349}
   isCylindrical: 0
   rb: {fileID: 6678217908996710820}
+  isThrowable: 0
   holdPosShift: {x: 0, y: 0, z: 0}
   overridesHoldRot: 0
   holdRot: {x: 0, y: 0, z: 0}
@@ -8146,6 +8157,7 @@ MonoBehaviour:
   rend: {fileID: 5446082290525636598}
   isCylindrical: 1
   rb: {fileID: 8040567922078275105}
+  isThrowable: 0
   holdPosShift: {x: 0, y: 0, z: 0}
   overridesHoldRot: 0
   holdRot: {x: 0, y: 0, z: 0}
@@ -8260,6 +8272,7 @@ MonoBehaviour:
   rend: {fileID: 8972040311066535794}
   isCylindrical: 0
   rb: {fileID: 8972040311066535795}
+  isThrowable: 0
   holdPosShift: {x: 0, y: 0.2, z: 0}
   overridesHoldRot: 1
   holdRot: {x: 35, y: 180, z: -5}

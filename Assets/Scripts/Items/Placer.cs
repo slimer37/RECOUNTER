@@ -2,12 +2,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
+using DG.Tweening;
 
 public class Placer : MonoBehaviour
 {
     [Header("SFX")]
     [SerializeField] AudioClipGroup holdSounds;
     [SerializeField] AudioSource source;
+
+    [Header("Throwing")]
+    [SerializeField] float throwForce;
+    [SerializeField] LayerMask throwMask;
 
     [Header("Placement Settings")]
     [SerializeField] float sensitivity;
@@ -178,6 +183,9 @@ public class Placer : MonoBehaviour
         {
             EndPlace();
             MoveActiveToHand();
+
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+                ThrowItem();
         }
     }
 
@@ -311,10 +319,8 @@ public class Placer : MonoBehaviour
         ghost.Hide();
     }
 
-    void DropItem()
+    Item PrepareToReleaseItem()
     {
-        if (!active) throw new InvalidOperationException("No active item to drop.");
-
         EndPlace();
 
         SetLayer(false);
@@ -324,7 +330,38 @@ public class Placer : MonoBehaviour
 
         active = null;
 
-        temp.Release();
+        return temp;
+    }
+
+    void DropItem()
+    {
+        if (!active) throw new InvalidOperationException("No active item to drop.");
+
+        PrepareToReleaseItem().Release();
+    }
+
+    void ThrowItem()
+    {
+        if (!active) throw new InvalidOperationException("No active item to throw.");
+
+        if (active.WouldIntersectAt(active.transform.position, active.transform.rotation, throwMask))
+        {
+            active.transform.DOKill();
+            active.transform.DOShakeRotation(0.1f, 15, 20);
+            return;
+        }
+
+        var ray = cam.ViewportPointToRay(Vector2.one / 2);
+
+        var throwDir = cam.transform.forward;
+
+        if (Physics.Raycast(ray, out var hit, Mathf.Infinity, throwMask))
+        {
+            throwDir = hit.point - active.transform.position;
+            throwDir.Normalize();
+        }
+
+        PrepareToReleaseItem().Throw(throwDir * throwForce);
     }
 
     void MoveActiveToHand()
