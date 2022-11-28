@@ -1,4 +1,5 @@
 using UnityEngine;
+using NaughtyAttributes;
 
 [RequireComponent(typeof(Renderer))]
 public class Item : Interactable
@@ -8,15 +9,15 @@ public class Item : Interactable
 
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
-    [SerializeField] bool isThrowable = true;
+    [SerializeField, ShowIf(nameof(HasRigidbody))] bool isThrowable = true;
     [SerializeField] Vector3 holdPosShift;
     [SerializeField] bool overridesHoldRot;
-    [SerializeField] Vector3 holdRot;
+    [SerializeField, ShowIf(nameof(overridesHoldRot))] Vector3 holdRot;
 
     [Header("Bounds Override")]
     [SerializeField] bool overridesBounds;
-    [SerializeField] Vector3 overrideCenter;
-    [SerializeField, Min(0)] Vector3 overrideSize;
+    [SerializeField, ShowIf(nameof(overridesBounds))] Vector3 overrideCenter;
+    [SerializeField, Min(0), ShowIf(nameof(overridesBounds))] Vector3 overrideSize;
 
     Collider[] colliders;
     Hotbar containerHotbar;
@@ -27,6 +28,7 @@ public class Item : Interactable
 
     public bool IsHeld => containerHotbar;
     public bool IsThrowable => rb && isThrowable;
+    public bool HasRigidbody => rb;
 
     void OnDrawGizmosSelected()
     {
@@ -50,7 +52,7 @@ public class Item : Interactable
     {
         if (!rb && isThrowable)
         {
-            Debug.LogWarning($"Cannot set {isThrowable} if no rigidbody is selected.");
+            Debug.LogWarning($"Cannot set {nameof(isThrowable)} if no rigidbody is selected.");
             isThrowable = false;
         }
     }

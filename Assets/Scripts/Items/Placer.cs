@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
 using DG.Tweening;
+using NaughtyAttributes;
 
 public class Placer : MonoBehaviour
 {

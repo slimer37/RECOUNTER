@@ -5,9 +5,6 @@ using UnityEngine;
 public class HideInSubClassAttribute : PropertyAttribute { }
 
 [AttributeUsage(AttributeTargets.Field)]
-public class LayerAttribute : PropertyAttribute { }
-
-[AttributeUsage(AttributeTargets.Field)]
 public class RequireSubstringAttribute : PropertyAttribute
 {
     public readonly string[] substrings;
