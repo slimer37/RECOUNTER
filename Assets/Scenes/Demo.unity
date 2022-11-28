@@ -6971,7 +6971,7 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 2146010319}
   isThrowable: 1
-  holdPosShift: {x: 0.1, y: 0.15, z: 0}
+  holdPosShift: {x: 0.1, y: 0.05, z: 0}
   overridesHoldRot: 1
   holdRot: {x: 0, y: 240, z: 0}
   overridesBounds: 0
@@ -7913,9 +7913,9 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 6678217908996710820}
   isThrowable: 1
-  holdPosShift: {x: 0, y: 0, z: 0}
-  overridesHoldRot: 0
-  holdRot: {x: 0, y: 0, z: 0}
+  holdPosShift: {x: 0, y: 0.1, z: 0}
+  overridesHoldRot: 1
+  holdRot: {x: 35, y: 180, z: -5}
   overridesBounds: 1
   overrideCenter: {x: 0.000000059604645, y: -0.04147716, z: 0}
   overrideSize: {x: 0.48814794, y: 0.10105404, z: 0.3902598}
@@ -8276,7 +8276,7 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 8972040311066535795}
   isThrowable: 1
-  holdPosShift: {x: 0, y: 0.2, z: 0}
+  holdPosShift: {x: 0, y: 0.1, z: 0}
   overridesHoldRot: 1
   holdRot: {x: 35, y: 180, z: -5}
   overridesBounds: 1

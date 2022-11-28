@@ -135,7 +135,7 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 4699588665926180303}
   isThrowable: 1
-  holdPosShift: {x: 0, y: 0.07, z: 0}
+  holdPosShift: {x: 0, y: 0, z: 0}
   overridesHoldRot: 1
   holdRot: {x: 0, y: -120, z: 0}
   overridesBounds: 0
