@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Slider))]
 public class SliderSetting : MonoBehaviour
@@ -12,6 +13,7 @@ public class SliderSetting : MonoBehaviour
     [Header("Optional")]
     [SerializeField] TMP_InputField inputField;
     [SerializeField] VoidChannel channel;
+    [SerializeField] UnityEvent<float> Change;
 
     Slider slider;
 
@@ -69,5 +71,7 @@ public class SliderSetting : MonoBehaviour
 
         if (channel)
             channel.RaiseEvent();
+
+        Change?.Invoke(v);
     }
 }
