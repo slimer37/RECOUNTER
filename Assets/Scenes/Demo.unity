@@ -529,7 +529,10 @@ MonoBehaviour:
     pitch: 1
     pitchVariation: 0.14
   source: {fileID: 1786630811}
-  throwForce: 5
+  throwForce: 4
+  throwPointMaxDist: 5
+  throwPointOffset: {x: 0, y: 0.2, z: 0}
+  defaultThrowDirection: {x: -0.1, y: 0.2, z: 0.5}
   throwMask:
     serializedVersion: 2
     m_Bits: 1
@@ -553,7 +556,7 @@ MonoBehaviour:
   scrollSnappiness: 0.6
   heldItemLayer: 3
   defaultLayer: 0
-  holdPosition: {x: 0.36, y: -0.31, z: 0.85}
+  holdPosition: {x: 0.36, y: -0.25, z: 0.85}
   smoothing: 0.025
   playerController: {fileID: 273294031}
   playerInteraction: {fileID: 273294029}
