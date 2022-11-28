@@ -530,7 +530,9 @@ MonoBehaviour:
   source: {fileID: 1786630811}
   throwForce: 4
   throwPointMaxDist: 5
-  throwPointOffset: {x: 0, y: 0.2, z: 0}
+  rearTime: 0.5
+  rearPosition: {x: 0.27, y: 0.02, z: 0.56}
+  slerpCenter: {x: 0.27, y: 0, z: 0}
   defaultThrowDirection: {x: -0.1, y: 0.2, z: 0.5}
   throwMask:
     serializedVersion: 2

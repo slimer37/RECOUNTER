@@ -13,7 +13,9 @@ public class Placer : MonoBehaviour
     [Header("Throwing")]
     [SerializeField] float throwForce;
     [SerializeField] float throwPointMaxDist;
-    [SerializeField] Vector3 throwPointOffset;
+    [SerializeField] float rearTime;
+    [SerializeField] Vector3 rearPosition;
+    [SerializeField] Vector3 slerpCenter;
     [SerializeField] Vector3 defaultThrowDirection;
     [SerializeField] LayerMask throwMask;
 
@@ -63,6 +65,7 @@ public class Placer : MonoBehaviour
     Vector3 itemVelocity;
     float itemRotationVelocity;
 
+    Vector3 targetHoldPos;
     Vector3 adjustedHoldPos;
     Quaternion adjustedHoldRot;
 
@@ -74,6 +77,9 @@ public class Placer : MonoBehaviour
     bool rotating;
     bool itemIntersects;
 
+    float rearing;
+    float rearingVelocity;
+
     float rawRange;
     float currentRange;
 
@@ -84,8 +90,15 @@ public class Placer : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+        Gizmos.matrix = cam.transform.localToWorldMatrix;
+
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(cam.transform.position, range);
+        Gizmos.DrawWireSphere(Vector3.zero, range);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawCube(holdPosition, Vector3.one * 0.25f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(rearPosition, Vector3.one * 0.25f);
+        Gizmos.DrawWireSphere(slerpCenter, Vector3.Distance(rearPosition, slerpCenter));
     }
 
     void Awake()
@@ -109,6 +122,10 @@ public class Placer : MonoBehaviour
 
         adjustedHoldPos = holdPosition + item.HoldPosShift;
         adjustedHoldRot = item.OverrideHoldRotation ?? Quaternion.identity;
+
+        targetHoldPos = adjustedHoldPos;
+
+        rearing = 0;
 
         if (!resetPosition) return;
 
@@ -186,10 +203,25 @@ public class Placer : MonoBehaviour
         {
             EndPlace();
             MoveActiveToHand();
-
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-                ThrowItem();
+            HandleThrowing();
         }
+    }
+
+    void HandleThrowing()
+    {
+        var holdingThrow = Mouse.current.leftButton.isPressed;
+
+        rearing = Mathf.SmoothDamp(rearing, holdingThrow ? 1 : 0, ref rearingVelocity, rearTime);
+
+        targetHoldPos = slerpCenter + Vector3.Slerp(
+            adjustedHoldPos - slerpCenter,
+            rearPosition - slerpCenter + active.HoldPosShift,
+            rearing);
+
+        var throwNow = Mouse.current.leftButton.wasReleasedThisFrame;
+
+        if (throwNow)
+            ThrowItem();
     }
 
     bool TryCorrectPosition(Vector3 pos, Quaternion rot, Vector3 surfaceNormal, out Vector3 corrected)
@@ -371,12 +403,12 @@ public class Placer : MonoBehaviour
 
         if (Physics.Raycast(ray, out var hit, throwPointMaxDist, throwMask))
         {
-            throwDir = hit.point + throwPointOffset - active.transform.position;
+            throwDir = hit.point - active.transform.position;
         }
 
         throwDir.Normalize();
 
-        PrepareToReleaseItem().Throw(throwDir * throwForce);
+        PrepareToReleaseItem().Throw(throwDir * rearing * throwForce);
     }
 
     void MoveActiveToHand()
@@ -395,7 +427,7 @@ public class Placer : MonoBehaviour
 
         active.transform.position = Vector3.SmoothDamp(
             active.transform.position,
-            cam.transform.TransformPoint(adjustedHoldPos),
+            cam.transform.TransformPoint(targetHoldPos),
             ref itemVelocity,
             smoothing);
     }
