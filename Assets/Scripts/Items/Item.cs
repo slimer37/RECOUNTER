@@ -30,6 +30,8 @@ public class Item : Interactable
     public bool IsThrowable => rb && isThrowable;
     public bool HasRigidbody => rb;
 
+    bool justReleased;
+
     void OnDrawGizmosSelected()
     {
         Gizmos.matrix = transform.localToWorldMatrix;
@@ -124,13 +126,24 @@ public class Item : Interactable
 
     public void Release()
     {
+        justReleased = true;
+
         containerHotbar.RemoveItem(this);
 
         containerHotbar = null;
         EnableColliders(true);
 
         if (rb)
+        {
             rb.isKinematic = false;
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (justReleased)
+            rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
     }
 
     void EnableColliders(bool enable)
