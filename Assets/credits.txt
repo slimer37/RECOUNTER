@@ -1,0 +1,38 @@
+RECOUNTER by Alfred Roy M
+
+-- Made with
+
+Unity
+Blender
+Affinity Designer
+
+-- Graphical Assets
+
+Unsplash Photographers
+Elvira Syamsir
+James Day
+Joel Vodell
+Nick Nice
+
+Fonts sourced from Google Fonts
+Abril Fatface
+Amatic SC
+Anton
+Chango
+Oswald
+Pacifico
+Roboto
+Secular One
+
+-- Editor Plugins
+
+Made my life so much easier!
+
+DOTween
+Daniele Giardini
+
+NaughtyAttributes
+Denis Risov
+
+Gridbox Materials
+Ciathyza
