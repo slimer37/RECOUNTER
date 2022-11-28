@@ -13,7 +13,6 @@ public class Placer : MonoBehaviour
 
     [Header("Throwing")]
     [SerializeField] float throwForce;
-    [SerializeField] float throwPointMaxDist;
     [SerializeField] float rearTime;
     [SerializeField] Vector3 rearPosition;
     [SerializeField] Vector3 rearRotation;
@@ -405,11 +404,6 @@ public class Placer : MonoBehaviour
         var ray = cam.ViewportPointToRay(Vector2.one / 2);
 
         var throwDir = cam.transform.TransformDirection(defaultThrowDirection);
-
-        if (Physics.Raycast(ray, out var hit, throwPointMaxDist, throwMask))
-        {
-            throwDir = hit.point - active.transform.position;
-        }
 
         throwDir.Normalize();
 
