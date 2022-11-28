@@ -532,6 +532,7 @@ MonoBehaviour:
   throwPointMaxDist: 5
   rearTime: 0.5
   rearPosition: {x: 0.27, y: 0.02, z: 0.56}
+  rearRotation: {x: 20, y: 0, z: 35}
   slerpCenter: {x: 0.27, y: 0, z: 0}
   defaultThrowDirection: {x: -0.1, y: 0.2, z: 0.5}
   throwMask:

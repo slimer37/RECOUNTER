@@ -15,6 +15,7 @@ public class Placer : MonoBehaviour
     [SerializeField] float throwPointMaxDist;
     [SerializeField] float rearTime;
     [SerializeField] Vector3 rearPosition;
+    [SerializeField] Vector3 rearRotation;
     [SerializeField] Vector3 slerpCenter;
     [SerializeField] Vector3 defaultThrowDirection;
     [SerializeField] LayerMask throwMask;
@@ -67,6 +68,7 @@ public class Placer : MonoBehaviour
 
     Vector3 targetHoldPos;
     Vector3 adjustedHoldPos;
+    Quaternion targetHoldRot;
     Quaternion adjustedHoldRot;
 
     Vector2 mousePosition;
@@ -217,6 +219,8 @@ public class Placer : MonoBehaviour
             adjustedHoldPos - slerpCenter,
             rearPosition - slerpCenter + active.HoldPosShift,
             rearing);
+
+        targetHoldRot = adjustedHoldRot * Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(rearRotation), rearing);
 
         var throwNow = Mouse.current.leftButton.wasReleasedThisFrame;
 
@@ -416,7 +420,7 @@ public class Placer : MonoBehaviour
         SetLayer(true);
 
         var currRot = active.transform.rotation;
-        var targetRot = cam.transform.rotation * adjustedHoldRot;
+        var targetRot = cam.transform.rotation * targetHoldRot;
         var delta = Quaternion.Angle(currRot, targetRot);
         if (delta > 0f)
         {
