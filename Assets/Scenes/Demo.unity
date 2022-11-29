@@ -133,7 +133,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 50119778}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Items
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -545,9 +545,12 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 1
+  shiftPlacementMask:
+    serializedVersion: 2
+    m_Bits: 129
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 193
   correctMask:
     serializedVersion: 2
     m_Bits: 64
@@ -559,7 +562,7 @@ MonoBehaviour:
   slowScrollSpeed: 0.05
   scrollSnappiness: 0.6
   heldItemLayer: 3
-  defaultLayer: 0
+  defaultLayer: 7
   holdPosition: {x: 0.36, y: -0.25, z: 0.85}
   smoothing: 0.025
   playerController: {fileID: 273294031}
@@ -648,7 +651,7 @@ GameObject:
   - component: {fileID: 334750061}
   - component: {fileID: 334750060}
   - component: {fileID: 334750065}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1217,6 +1220,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ink cartridge m
       objectReference: {fileID: 0}
+    - target: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8355476728119689632, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1243,7 +1251,7 @@ GameObject:
   - component: {fileID: 722050941}
   - component: {fileID: 722050940}
   - component: {fileID: 722050942}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: water bottle liquid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1397,6 +1405,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ink cartridge y
+      objectReference: {fileID: 0}
+    - target: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8355476728119689632, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
         type: 3}
@@ -1983,6 +1996,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: paper
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b279e37d920babb41b0a25e21b3f69e8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: b279e37d920babb41b0a25e21b3f69e8, type: 3}
@@ -2494,7 +2512,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 183
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3003,6 +3021,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: chip
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 50e43394b2c25f94baf572e27f6bc2df,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 50e43394b2c25f94baf572e27f6bc2df, type: 3}
@@ -3470,6 +3493,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ink cartridge c
+      objectReference: {fileID: 0}
+    - target: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8355476728119689632, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
         type: 3}
@@ -5236,6 +5264,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: mug
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f486b98c10334624fafd2682e9d2fab0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: f486b98c10334624fafd2682e9d2fab0, type: 3}
@@ -5387,7 +5420,7 @@ GameObject:
   - component: {fileID: 9035574122580249515}
   - component: {fileID: 1051149143747944630}
   - component: {fileID: 4021597662602467725}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5459,7 +5492,7 @@ GameObject:
   - component: {fileID: 3222627332201104292}
   - component: {fileID: 1029548508600635662}
   - component: {fileID: 5092992084085350586}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: chickenlegs flipped
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5543,7 +5576,7 @@ GameObject:
   - component: {fileID: 3191024513100292567}
   - component: {fileID: 1983159761519735469}
   - component: {fileID: 7865714994511466506}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: chicken packaging
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5569,7 +5602,7 @@ GameObject:
   - component: {fileID: 4865557440578747107}
   - component: {fileID: 1252862122265118124}
   - component: {fileID: 999107241611130093}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: chicken label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5701,7 +5734,7 @@ GameObject:
   - component: {fileID: 8972040311066535796}
   - component: {fileID: 8972040311066535795}
   - component: {fileID: 8972040311066535797}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: packaged tbone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5719,7 +5752,7 @@ GameObject:
   - component: {fileID: 617837582333920187}
   - component: {fileID: 6013480768025187975}
   - component: {fileID: 7814232896502720127}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: packaging
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5980,7 +6013,7 @@ GameObject:
   - component: {fileID: 6388072172700720962}
   - component: {fileID: 6388072172700720964}
   - component: {fileID: 6388072172700720963}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: water bottle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6001,7 +6034,7 @@ GameObject:
   - component: {fileID: 6678217908996710819}
   - component: {fileID: 6678217908996710821}
   - component: {fileID: 6678217908996710820}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: packaged chicken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6065,7 +6098,7 @@ GameObject:
   - component: {fileID: 8040567922078275105}
   - component: {fileID: 8040567922078275109}
   - component: {fileID: 8040567922078275110}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: jarate jar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6322,7 +6355,7 @@ GameObject:
   - component: {fileID: 7897231333074040783}
   - component: {fileID: 8731281745634087814}
   - component: {fileID: 9184497305574150819}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: meat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6341,7 +6374,7 @@ GameObject:
   - component: {fileID: 1072215072006549042}
   - component: {fileID: 5237129273768019384}
   - component: {fileID: 6571963639189692530}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: jarate liquid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6444,7 +6477,7 @@ GameObject:
   - component: {fileID: 3495917317363103208}
   - component: {fileID: 4746050935175814512}
   - component: {fileID: 1934700475007973414}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: chickenlegs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6518,6 +6551,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ink cartridge
+      objectReference: {fileID: 0}
+    - target: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

@@ -27,6 +27,7 @@ public class Placer : MonoBehaviour
     [SerializeField] float tiltEffect;
     [SerializeField] float clampTiltX;
     [SerializeField] LayerMask placementMask;
+    [SerializeField] LayerMask shiftPlacementMask;
     [SerializeField] LayerMask obstacleMask;
     [SerializeField] LayerMask correctMask;
 
@@ -163,7 +164,9 @@ public class Placer : MonoBehaviour
 
             var ray = cam.ScreenPointToRay(mousePosition);
 
-            if (!Physics.Raycast(ray, out var hit, currentRange, placementMask))
+            var placeMask = Keyboard.current.leftShiftKey.IsPressed() ? shiftPlacementMask : placementMask;
+
+            if (!Physics.Raycast(ray, out var hit, currentRange, placeMask))
             {
                 hit.point = ray.GetPoint(currentRange);
             }
