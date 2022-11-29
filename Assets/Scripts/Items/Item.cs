@@ -74,7 +74,7 @@ public class Item : Interactable
     public bool WouldIntersectAt(Vector3 position, Quaternion rotation, LayerMask mask)
     {
         var scaledExtents = GetScaledExtents();
-        position += rotation * GetOriginShift();
+        position += Quaternion.Inverse(rotation) * GetOriginShift();
 
         var intersects = Physics.CheckBox(position, scaledExtents, rotation, mask);
 
