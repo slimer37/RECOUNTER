@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Pause : MonoBehaviour
 {
-    [SerializeField] CanvasGroup group;
+    [SerializeField] Canvas canvas;
+    [SerializeField] Canvas[] additionalMenus;
 
     Controls controls;
 
@@ -19,9 +20,7 @@ public class Pause : MonoBehaviour
         controls.Menu.Exit.performed += _ => SetPaused(!IsPaused);
         controls.Enable();
 
-        group.alpha = 0;
-        group.blocksRaycasts = false;
-        group.interactable = false;
+        canvas.enabled = false;
     }
 
     void OnDestroy()
@@ -37,17 +36,22 @@ public class Pause : MonoBehaviour
         SetPaused(true);
     }
 
+    void HideAdditionalMenus()
+    {
+        foreach (var menu in additionalMenus)
+            menu.enabled = false;
+    }
+
     public void SetPaused(bool pause)
     {
         if (IsPaused == pause) return;
 
-        IsPaused = pause;
+        IsPaused = canvas.enabled = pause;
+
+        if (!pause)
+            HideAdditionalMenus();
 
         Time.timeScale = pause ? 0 : 1;
-
-        group.alpha = pause ? 1 : 0;
-        group.blocksRaycasts = pause;
-        group.interactable = pause;
 
         if (pause)
         {
