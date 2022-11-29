@@ -573,6 +573,7 @@ MonoBehaviour:
   ghost: {fileID: 569942456}
   defaultIcon: {fileID: 21300000, guid: 6a482d055e851fe4db099ee2a13e1db4, type: 3}
   placeIcon: {fileID: 21300000, guid: f823c910bebc79e48b0eb659bd45b954, type: 3}
+  shiftPlaceIcon: {fileID: 21300000, guid: c04277fa32b08e0469daa837ef00bd36, type: 3}
   rotateIcon: {fileID: 21300000, guid: 141f55b40da731746a84d2dc184a5952, type: 3}
   icon: {fileID: 1200812864}
 --- !u!114 &273294031

@@ -59,6 +59,7 @@ public class Placer : MonoBehaviour
     [Header("UI")]
     [SerializeField] Sprite defaultIcon;
     [SerializeField] Sprite placeIcon;
+    [SerializeField] Sprite shiftPlaceIcon;
     [SerializeField] Sprite rotateIcon;
     [SerializeField] Image icon;
 
@@ -164,7 +165,8 @@ public class Placer : MonoBehaviour
 
             var ray = cam.ScreenPointToRay(mousePosition);
 
-            var placeMask = Keyboard.current.leftShiftKey.IsPressed() ? shiftPlacementMask : placementMask;
+            var shift = Keyboard.current.leftShiftKey.IsPressed();
+            var placeMask = shift ? shiftPlacementMask : placementMask;
 
             if (!Physics.Raycast(ray, out var hit, currentRange, placeMask))
             {
@@ -182,7 +184,9 @@ public class Placer : MonoBehaviour
 
             StartPlace();
 
-            icon.sprite = rotating ? rotateIcon : placeIcon;
+            icon.sprite = rotating
+                ? rotateIcon
+                : (shift ? shiftPlaceIcon : placeIcon);
 
             var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
             var correctedPos = Vector3.zero;
