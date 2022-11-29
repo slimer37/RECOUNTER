@@ -28,6 +28,7 @@ public class Placer : MonoBehaviour
     [SerializeField] float clampTiltX;
     [SerializeField] LayerMask placementMask;
     [SerializeField] LayerMask obstacleMask;
+    [SerializeField] LayerMask correctMask;
 
     [Header("Deintersection")]
     [SerializeField] float attemptDistance;
@@ -181,7 +182,11 @@ public class Placer : MonoBehaviour
             icon.sprite = rotating ? rotateIcon : placeIcon;
 
             var position = hit.point + hit.normal * (surfaceSeparation + active.SizeAlong(rotation * hit.normal));
-            itemIntersects = !TryCorrectPosition(position, rotation, hit.normal, out var correctedPos);
+            var correctedPos = Vector3.zero;
+
+            itemIntersects =
+                active.WouldIntersectAt(position, rotation, correctMask)
+                || !TryCorrectPosition(position, rotation, hit.normal, out correctedPos);
 
             if (itemIntersects)
             {

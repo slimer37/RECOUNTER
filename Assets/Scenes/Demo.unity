@@ -548,6 +548,9 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 65
+  correctMask:
+    serializedVersion: 2
+    m_Bits: 64
   attemptDistance: 0.001
   maxAttemptsPerDirection: 200
   rangeMin: 0.25
