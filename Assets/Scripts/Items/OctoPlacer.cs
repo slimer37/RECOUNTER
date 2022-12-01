@@ -69,9 +69,9 @@ public class OctoPlacer : MonoBehaviour
 
         _active.gameObject.SetActive(true);
 
-        if (canResetPosition)
-            _active.transform.position = _body.position;
+        if (!canResetPosition) return;
 
+        _active.transform.position = _body.position;
         _active.transform.rotation = _body.rotation;
     }
 
@@ -98,7 +98,8 @@ public class OctoPlacer : MonoBehaviour
 
         StartPlace();
 
-        var previousPlacePos = _localPlacePosition;
+        var previousPos = _localPlacePosition;
+        var previousRot = _localPlaceRotation;
 
         HandleVertical(mouse.scroll.ReadValue().y);
 
@@ -111,14 +112,17 @@ public class OctoPlacer : MonoBehaviour
 
         RestrictPlacePosition();
 
-        var placePos = _body.TransformPoint(_localPlacePosition);
         var placeRot = Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
 
         if (ItemIntersectsAtPosition(_localPlacePosition, placeRot))
         {
-            _localPlacePosition = previousPlacePos;
-            placePos = _body.TransformPoint(_localPlacePosition);
+            _localPlacePosition = previousPos;
+            _localPlaceRotation = previousRot;
+
+            placeRot = Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
         }
+
+        var placePos = _body.TransformPoint(_localPlacePosition);
 
         PullItemTo(placePos, placeRot);
 
