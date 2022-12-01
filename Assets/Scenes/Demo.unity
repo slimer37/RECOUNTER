@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   capacity: 5
-  placer: {fileID: 273294030}
+  placer: {fileID: 317501403}
   slotPrefab: {fileID: 1353271330}
   slotParent: {fileID: 222449572}
 --- !u!1 &240787176
@@ -486,7 +486,6 @@ GameObject:
   - component: {fileID: 273294028}
   - component: {fileID: 273294031}
   - component: {fileID: 273294029}
-  - component: {fileID: 273294030}
   m_Layer: 0
   m_Name: components
   m_TagString: Untagged
@@ -538,76 +537,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8be4cbd45c161474f8befdc1e3f8adc6, type: 3}
   - {fileID: 21300000, guid: 88fab226540177647a541372e4ce3b7c, type: 3}
   - {fileID: 21300000, guid: f4daae1fe4245c54bbcf4bbc2a7ba64b, type: 3}
---- !u!114 &273294030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 273294027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c670981602911984083354f808c814f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  holdSounds:
-    clips:
-    - {fileID: 8300000, guid: 53f6c459c1a606343b7d5265de32f134, type: 3}
-    - {fileID: 8300000, guid: 1c5c020dd3a421d41bf79c3ff815e19a, type: 3}
-    mode: 0
-    volume: 1
-    volumeVariation: 0.1
-    pitch: 1
-    pitchVariation: 0.14
-  source: {fileID: 1786630811}
-  throwForce: 7
-  rearTime: 0.5
-  rearPosition: {x: 0.27, y: 0.02, z: 0.56}
-  rearRotation: {x: 20, y: 0, z: 35}
-  slerpCenter: {x: 0.27, y: 0, z: 0}
-  defaultThrowDirection: {x: -0.03, y: 0.2, z: 0.5}
-  throwMask:
-    serializedVersion: 2
-    m_Bits: 1
-  sensitivity: 5
-  rotateSpeed: 0.25
-  surfaceSeparation: 0.001
-  tiltEffect: 7
-  clampTiltX: 90
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 1
-  shiftPlacementMask:
-    serializedVersion: 2
-    m_Bits: 129
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 193
-  correctMask:
-    serializedVersion: 2
-    m_Bits: 64
-  attemptDistance: 0.001
-  maxAttemptsPerDirection: 200
-  rangeMin: 0.25
-  range: 2
-  scrollSpeed: 0.2
-  slowScrollSpeed: 0.05
-  scrollSnappiness: 0.6
-  heldItemLayer: 3
-  defaultLayer: 7
-  holdPosition: {x: 0.36, y: -0.25, z: 0.85}
-  smoothing: 0.025
-  playerController: {fileID: 273294031}
-  playerInteraction: {fileID: 273294029}
-  cam: {fileID: 1065023558}
-  camTarget: {fileID: 2136512939}
-  body: {fileID: 840553857}
-  ghost: {fileID: 569942456}
-  defaultIcon: {fileID: 21300000, guid: 6a482d055e851fe4db099ee2a13e1db4, type: 3}
-  placeIcon: {fileID: 21300000, guid: f823c910bebc79e48b0eb659bd45b954, type: 3}
-  shiftPlaceIcon: {fileID: 21300000, guid: c04277fa32b08e0469daa837ef00bd36, type: 3}
-  rotateIcon: {fileID: 21300000, guid: 141f55b40da731746a84d2dc184a5952, type: 3}
-  icon: {fileID: 1200812864}
 --- !u!114 &273294031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -639,7 +568,7 @@ MonoBehaviour:
   canLookAround: 1
   camTarget: {fileID: 2136512939}
   defaultSensitivity: 2
-  clamp: 90
+  clamp: 85
   vcam: {fileID: 409238788}
   walkFov: 50
   sprintFov: 55
@@ -670,6 +599,73 @@ MonoBehaviour:
     volumeVariation: 0.1
     pitch: 1
     pitchVariation: 0.2
+--- !u!1 &317501402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 317501404}
+  - component: {fileID: 317501403}
+  m_Layer: 6
+  m_Name: Octoplacer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &317501403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317501402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52bba4d117361c4780ea5c571152556, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lateralSpeed: 0.0025
+  _verticalSpeed: 0.1
+  _surfaceSeparation: 0.01
+  _obstacleMask:
+    serializedVersion: 2
+    m_Bits: 129
+  _smoothing: 0.05
+  _placementRegionExtents: {x: 1, y: 1, z: 1}
+  _placementRegionCenter: {x: 0, y: 0.25, z: 1.5}
+  _startPlaceDistance: 0.5
+  rotateSpeed: 0.8
+  _holdPos: {x: 0.2, y: -0.2, z: 0.7}
+  _holdRot: {x: 0, y: 0, z: 0}
+  _body: {fileID: 840553857}
+  _cursorImage: {fileID: 1200812864}
+  _placeIcon: {fileID: 21300000, guid: f823c910bebc79e48b0eb659bd45b954, type: 3}
+  _rotateIcon: {fileID: 21300000, guid: 141f55b40da731746a84d2dc184a5952, type: 3}
+  _defaultIcon: {fileID: 21300000, guid: 6a482d055e851fe4db099ee2a13e1db4, type: 3}
+  _viewmodelLayer: 3
+  _defaultLayer: 7
+  _playerController: {fileID: 273294031}
+  _playerInteraction: {fileID: 273294029}
+  _camera: {fileID: 1065023558}
+--- !u!4 &317501404
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317501402}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 840553857}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &334750059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1841,11 +1837,11 @@ Transform:
   - {fileID: 409238789}
   - {fileID: 2136512939}
   - {fileID: 273294028}
-  - {fileID: 317501404}
   - {fileID: 105586282}
   - {fileID: 1095713309}
   - {fileID: 240787177}
   - {fileID: 1786630810}
+  - {fileID: 317501404}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4159,7 +4155,7 @@ RectTransform:
   - {fileID: 1200812863}
   - {fileID: 222449572}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5874,7 +5870,7 @@ PrefabInstance:
     - target: {fileID: 2899833472501647552, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2899833472501647552, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
         type: 3}

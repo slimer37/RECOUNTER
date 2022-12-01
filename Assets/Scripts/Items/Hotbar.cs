@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class Hotbar : MonoBehaviour
 {
     [SerializeField] int capacity;
-    [SerializeField] Placer placer;
+    [SerializeField] OctoPlacer placer;
     [SerializeField] HotbarSlot slotPrefab;
     [SerializeField] Transform slotParent;
 
@@ -91,7 +91,7 @@ public class Hotbar : MonoBehaviour
             placer.StopHoldingItem();
     }
 
-    void SetActiveSlot(int index, bool resetPosition = true, bool force = false)
+    void SetActiveSlot(int index, bool canResetPosition = false, bool force = false)
     {
         if (!force && (activeIndex == index || placer.IsPlacing || Pause.IsPaused)) return;
 
@@ -106,6 +106,6 @@ public class Hotbar : MonoBehaviour
         var item = slots[index].Item;
 
         if (item)
-            placer.SetItem(item, resetPosition);
+            placer.SetItem(item, canResetPosition);
     }
 }
