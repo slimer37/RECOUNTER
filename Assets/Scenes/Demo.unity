@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   employee: {fileID: 840553860}
-  range: 2.5
+  range: 2
   cam: {fileID: 1065023558}
   text: {fileID: 1925832153}
   punchAmount: 0.1
@@ -639,6 +639,8 @@ MonoBehaviour:
   _placementRegionCenter: {x: 0, y: 0.25, z: 1.5}
   _startPlaceDistance: 0.5
   rotateSpeed: 0.8
+  _intersectHoldShift: {x: 0, y: -0.1, z: -0.4}
+  _intersectHoldRotShift: {x: -10, y: -25, z: 0}
   _holdPos: {x: 0.2, y: -0.2, z: 0.7}
   _holdRot: {x: 0, y: 0, z: 0}
   _body: {fileID: 840553857}

@@ -18,8 +18,11 @@ public class OctoPlacer : MonoBehaviour
 
     [Header("Rotation")]
     [SerializeField] float rotateSpeed;
+    [SerializeField] float defaultRot = 180f;
 
     [Header("Holding")]
+    [SerializeField] Vector3 _intersectHoldShift;
+    [SerializeField] Vector3 _intersectHoldRotShift;
     [SerializeField] Vector3 _holdPos;
     [SerializeField] Vector3 _holdRot;
     [SerializeField] Transform _body;
@@ -42,11 +45,10 @@ public class OctoPlacer : MonoBehaviour
     Vector3 _localPlacePosition;
     float _localPlaceRotation;
 
-    Vector3 _adjustedHoldPos;
-    Quaternion _adjustedHoldRot;
-
     Item _active;
     bool _isPlacing;
+
+    bool _canStartPlace;
 
     float _itemRotationVelocity;
     Vector3 _itemVelocity;
@@ -65,13 +67,11 @@ public class OctoPlacer : MonoBehaviour
     {
         _active = item;
 
-        _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
-        _adjustedHoldPos = _holdPos + _active.HoldPosShift;
-
         _active.gameObject.SetActive(true);
 
         if (canResetPosition)
             _active.transform.position = _body.position;
+
         _active.transform.rotation = _body.rotation;
     }
 
@@ -179,7 +179,7 @@ public class OctoPlacer : MonoBehaviour
         _localPlacePosition = restrictedPos;
     }
 
-    void InitializePlacement()
+    Vector3 CalculateLocalStartPos()
     {
         var pitch = -_camera.transform.eulerAngles.x * Mathf.Deg2Rad;
         var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
@@ -187,16 +187,15 @@ public class OctoPlacer : MonoBehaviour
         localStartPos += Vector3.forward * _active.SizeAlong(Vector3.forward);
         localStartPos += _body.InverseTransformPoint(_camera.transform.position);
 
-        _localPlacePosition = localStartPos;
+        return localStartPos;
+    }
 
-        _localPlaceRotation = 180f;
-
-        if (ItemIntersectsAtPosition(_localPlacePosition, _active.transform.rotation))
-        {
-            ShakeItem();
+    void InitializePlacement()
+    {
+        if (!_canStartPlace)
             return;
-        }
 
+        _localPlaceRotation = defaultRot;
         _isPlacing = true;
     }
 
@@ -237,8 +236,25 @@ public class OctoPlacer : MonoBehaviour
     void KeepItemInHand()
     {
         SetViewmodelLayer(true);
-        var localRot = _camera.transform.rotation * _adjustedHoldRot;
-        PullItemTo(_camera.transform.TransformPoint(_adjustedHoldPos), localRot);
+
+        var adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
+        var adjustedHoldPos = _holdPos + _active.HoldPosShift;
+
+        _localPlacePosition = CalculateLocalStartPos();
+        var localRot = _camera.transform.rotation * adjustedHoldRot;
+
+        _canStartPlace = !ItemIntersectsAtPosition(
+            _localPlacePosition,
+            Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + defaultRot))
+            );
+
+        if (!_canStartPlace)
+        {
+            adjustedHoldPos += _intersectHoldShift;
+            localRot *= Quaternion.Euler(_intersectHoldRotShift);
+        }
+
+        PullItemTo(_camera.transform.TransformPoint(adjustedHoldPos), localRot);
     }
 
     public void StopHoldingItem()
@@ -279,15 +295,5 @@ public class OctoPlacer : MonoBehaviour
         {
             child.gameObject.layer = layer;
         }
-    }
-
-    void ShakeItem()
-    {
-        var t = _active.transform;
-
-        if (t.DOKill() == 0)
-            t.parent = _camera.transform;
-
-        t.DOShakeRotation(0.5f, 15, 10).OnComplete(() => t.parent = null);
     }
 }
