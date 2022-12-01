@@ -91,7 +91,7 @@ public class Hotbar : MonoBehaviour
             placer.StopHoldingItem();
     }
 
-    void SetActiveSlot(int index, bool canResetPosition = false, bool force = false)
+    void SetActiveSlot(int index, bool canResetPosition = true, bool force = false)
     {
         if (!force && (activeIndex == index || placer.IsPlacing || Pause.IsPaused)) return;
 
