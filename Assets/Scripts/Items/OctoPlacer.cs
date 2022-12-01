@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using NaughtyAttributes;
-using DG.Tweening;
 
 public class OctoPlacer : MonoBehaviour
 {
@@ -45,6 +44,9 @@ public class OctoPlacer : MonoBehaviour
     Vector3 _localPlacePosition;
     float _localPlaceRotation;
 
+    Vector3 _adjustedHoldPos;
+    Quaternion _adjustedHoldRot;
+
     Item _active;
     bool _isPlacing;
 
@@ -68,6 +70,9 @@ public class OctoPlacer : MonoBehaviour
         _active = item;
 
         _active.gameObject.SetActive(true);
+
+        _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
+        _adjustedHoldPos = _holdPos + _active.HoldPosShift;
 
         if (!canResetPosition) return;
 
@@ -241,24 +246,24 @@ public class OctoPlacer : MonoBehaviour
     {
         SetViewmodelLayer(true);
 
-        var adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
-        var adjustedHoldPos = _holdPos + _active.HoldPosShift;
-
         _localPlacePosition = CalculateLocalStartPos();
-        var localRot = _camera.transform.rotation * adjustedHoldRot;
+
+        var localRot = _camera.transform.rotation * _adjustedHoldRot;
 
         _canStartPlace = !ItemIntersectsAtPosition(
             _localPlacePosition,
             Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot))
             );
 
+        var cameraLocalPos = _adjustedHoldPos;
+
         if (!_canStartPlace)
         {
-            adjustedHoldPos += _intersectHoldShift;
+            cameraLocalPos += _intersectHoldShift;
             localRot *= Quaternion.Euler(_intersectHoldRotShift);
         }
 
-        PullItemTo(_camera.transform.TransformPoint(adjustedHoldPos), localRot);
+        PullItemTo(_camera.transform.TransformPoint(cameraLocalPos), localRot);
     }
 
     public void StopHoldingItem()
