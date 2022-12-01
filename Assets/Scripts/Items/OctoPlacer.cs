@@ -17,8 +17,8 @@ public class OctoPlacer : MonoBehaviour
     [SerializeField] float _startPlaceDistance;
 
     [Header("Rotation")]
-    [SerializeField] float rotateSpeed;
-    [SerializeField] float defaultRot = 180f;
+    [SerializeField] float _rotateSpeed;
+    [SerializeField] float _defaultRot = 180f;
 
     [Header("Holding")]
     [SerializeField] Vector3 _intersectHoldShift;
@@ -144,7 +144,7 @@ public class OctoPlacer : MonoBehaviour
 
     void HandleRotation(Vector2 delta)
     {
-        _localPlaceRotation += delta.x * rotateSpeed;
+        _localPlaceRotation += delta.x * _rotateSpeed;
         _cursorImage.sprite = _rotateIcon;
         _cursorImage.transform.eulerAngles = -Vector3.forward * _localPlaceRotation;
     }
@@ -199,7 +199,7 @@ public class OctoPlacer : MonoBehaviour
         if (!_canStartPlace)
             return;
 
-        _localPlaceRotation = defaultRot;
+        _localPlaceRotation = _defaultRot;
         _isPlacing = true;
     }
 
@@ -249,7 +249,7 @@ public class OctoPlacer : MonoBehaviour
 
         _canStartPlace = !ItemIntersectsAtPosition(
             _localPlacePosition,
-            Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + defaultRot))
+            Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot))
             );
 
         if (!_canStartPlace)
