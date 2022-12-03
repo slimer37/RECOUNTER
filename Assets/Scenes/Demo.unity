@@ -721,7 +721,7 @@ MonoBehaviour:
   _smoothing: 0.05
   _placementRegionExtents: {x: 1, y: 1, z: 1}
   _placementRegionCenter: {x: 0, y: 0.25, z: 1.5}
-  _startPlaceDistance: 0.5
+  _startPlaceDistance: 0.3
   _rotateSpeed: 0.8
   _defaultRot: 180
   _intersectHoldShift: {x: 0, y: -0.1, z: -0.4}
