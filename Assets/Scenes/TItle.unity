@@ -1646,8 +1646,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4494f2237d2f604d897df862597a5ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeDuration: 0.25
-  duration: 2
+  fadeDuration: 0.5
+  duration: 3
   background: {fileID: 1646884105}
   group: {fileID: 172479981}
   canvas: {fileID: 758689149}
