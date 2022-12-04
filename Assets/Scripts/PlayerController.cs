@@ -1,4 +1,5 @@
 using Cinemachine;
+using FMODUnity;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -38,9 +39,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float fovChangeSpeed;
 
     [Header("SFX")]
-    [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClipGroup footstepSfx;
-    [SerializeField] AudioClipGroup jumpSfx;
+    [SerializeField] EventReference footstepSfx;
+    [SerializeField] EventReference jumpSfx;
 
     Controls.PlayerActions playerControls;
 
@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
     const string SensitivityPref = "Sensitivity";
 
-    void PlaySound(AudioClipGroup group) => group.PlayOneShot(audioSource);
+    void PlaySound(EventReference eventRef) => RuntimeManager.PlayOneShot(eventRef, body.position);
 
     void Update()
     {

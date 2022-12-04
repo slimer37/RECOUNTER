@@ -573,32 +573,20 @@ MonoBehaviour:
   walkFov: 50
   sprintFov: 55
   fovChangeSpeed: 10
-  audioSource: {fileID: 0}
   footstepSfx:
-    clips:
-    - {fileID: 8300000, guid: c703b4f61a31ea04fa1cca1ebd96bc67, type: 3}
-    - {fileID: 8300000, guid: 640fd22021fd3b34197d4c505cdaa938, type: 3}
-    - {fileID: 8300000, guid: 6c78b8c3360a7a14a8bcfbac782d6f7c, type: 3}
-    - {fileID: 8300000, guid: 076ea5bb643b0434e90ae5c1c1023254, type: 3}
-    - {fileID: 8300000, guid: e62e1de64c7d1d84fab3b89a6d2ab3ca, type: 3}
-    - {fileID: 8300000, guid: dbdf7e7ce7186854f90a34b570f562e3, type: 3}
-    - {fileID: 8300000, guid: 898d6685956d1d84b832b1edec501314, type: 3}
-    - {fileID: 8300000, guid: bbf72e8ee392fa54ca7c3ab1a41b55f9, type: 3}
-    - {fileID: 8300000, guid: 0ec2a10b1c3a65d4187e74c58ce32045, type: 3}
-    mode: 1
-    volume: 1
-    volumeVariation: 0.1
-    pitch: 1
-    pitchVariation: 0.1
+    Guid:
+      Data1: 1986808085
+      Data2: 1155371784
+      Data3: 605664952
+      Data4: -299844080
+    Path: event:/Footstep
   jumpSfx:
-    clips:
-    - {fileID: 8300000, guid: 540f19265d18e7e4da5e58fef69499a3, type: 3}
-    - {fileID: 8300000, guid: a22ecdc21a2ca954eb8142a510d11aff, type: 3}
-    mode: 0
-    volume: 1
-    volumeVariation: 0.1
-    pitch: 1
-    pitchVariation: 0.2
+    Guid:
+      Data1: 291430401
+      Data2: 1218254001
+      Data3: -355129681
+      Data4: 1618548372
+    Path: event:/Jump
 --- !u!1001 &307352442
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4917,21 +4905,23 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1986808085
+      Data2: 1155371784
+      Data3: 605664952
+      Data4: -299844080
+    Path: event:/Footstep
   Event: 
   PlayEvent: 0
   StopEvent: 0
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
-  Params: []
+  Params:
+  - Name: Pitch
+    Value: 0.5
   OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &1791814495
 GameObject:
   m_ObjectHideFlags: 0
@@ -5735,7 +5725,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2899833471711347749, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
         type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899833471711347749, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899833471711347749, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899833472097990983, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2899833472097990983, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,

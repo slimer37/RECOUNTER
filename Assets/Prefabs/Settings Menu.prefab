@@ -2134,25 +2134,13 @@ MonoBehaviour:
   m_FillRect: {fileID: 2899833472097990983}
   m_HandleRect: {fileID: 2899833471711347749}
   m_Direction: 0
-  m_MinValue: 0.0001
+  m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.0001
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2899833472487858768}
-        m_TargetAssemblyTypeName: SliderSetting, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2899833472487858768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2197,7 +2185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 328ef5c67c258454a977d341559d8836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parameter: MasterVol
 --- !u!1 &2899833472501647556
 GameObject:
   m_ObjectHideFlags: 0
@@ -2234,7 +2221,7 @@ RectTransform:
   - {fileID: 2899833471974875986}
   - {fileID: 2899833472054876546}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
