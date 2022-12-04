@@ -6,6 +6,8 @@ Unity
 Blender
 Affinity Designer
 
+FMOD Studio by Firelight Technologies Pty Ltd.
+
 -- Graphical Assets
 
 Unsplash Photographers

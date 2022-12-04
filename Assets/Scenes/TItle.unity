@@ -610,7 +610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1201,7 +1201,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1620.01}
+  m_SizeDelta: {x: 1920, y: 1662.19}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &634553809
 MonoBehaviour:
@@ -1224,12 +1224,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "<font=Staatliches SDF><size=3em>RECOUNTER</size></font>\n<i>by Alfred
-    Roy M</i>\n\n<style=h2>Made with</style>\n\r\nUnity\r\nBlender\r\nAffinity Designer\r\n\r\n<style=h2>Graphical
-    Assets\r</style>\n\r\n<style=h3>Unsplash Photographers</style>\r\n\nElvira Syamsir\r\nJames
-    Day\r\nJoel Vodell\r\nNick Nice\r\n\r\n<style=h3>Fonts from Google Fonts\r</style>\n\nAbril
-    Fatface \u2022 Amatic SC \u2022 Anton \u2022 Chango \u2022 Oswald \u2022 Pacifico
-    \u2022 Roboto \u2022 Secular One\r\n\r\n<style=h2>Editor Plugins\r</style>\n\r\nMade
-    my life so much easier!\r\n\r\nDOTween\r\nDaniele Giardini\r\n\r\nGridbox Materials\r\nCiathyza\n\r\nNaughtyAttributes\r\nDenis
+    Roy M</i>\n\n<style=h2>Made with</style>\n\r\nUnity\r\nBlender\r\nAffinity Designer\r\nFMOD
+    Studio by Firelight Technologies Pty Ltd.\n\r\n<style=h2>Graphical Assets\r</style>\n\r\n<style=h3>Unsplash
+    Photographers</style>\r\n\nElvira Syamsir\r\nJames Day\r\nJoel Vodell\r\nNick
+    Nice\r\n\r\n<style=h3>Fonts from Google Fonts\r</style>\n\nAbril Fatface \u2022
+    Amatic SC \u2022 Anton \u2022 Chango \u2022 Oswald \u2022 Pacifico \u2022 Roboto
+    \u2022 Secular One\r\n\r\n<style=h2>Editor Plugins\r</style>\n\r\nMade my life
+    so much easier!\r\n\r\nDOTween\r\nDaniele Giardini\r\n\r\nGridbox Materials\r\nCiathyza\n\r\nNaughtyAttributes\r\nDenis
     Risov\r"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: afd2db86ecf719f4186a2a859162a51b, type: 2}
@@ -1575,7 +1576,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933070368}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -2109,7 +2110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -2571,7 +2572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
