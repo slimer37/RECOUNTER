@@ -51,7 +51,7 @@ public class PlayerInteraction : MonoBehaviour
     void OnDisable()
     {
         playerControls.Disable();
-        if (!hovered) return;
+        if (!hovered || !text || !iconImage) return;
         HandleInteraction(null);
     }
 
