@@ -24,6 +24,9 @@ ModelImporter:
   - first:
       74: 221988811259610538
     second: chase
+  - first:
+      74: -910492019568624298
+    second: chase
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -97,7 +100,7 @@ ModelImporter:
       takeName: def_rig|chase
       internalID: 0
       firstFrame: 0
-      lastFrame: 16
+      lastFrame: 20
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -123,7 +126,10 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
-    lODScreenPercentages: []
+    lODScreenPercentages:
+    - 0.25
+    - 0.125
+    - 0.01
     globalScale: 1
     meshCompression: 0
     addColliders: 0
