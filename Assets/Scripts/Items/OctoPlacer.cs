@@ -76,8 +76,7 @@ public class OctoPlacer : MonoBehaviour
 
         if (!canResetPosition) return;
 
-        _active.transform.position = _body.position;
-        _active.transform.rotation = _body.rotation;
+        _active.transform.SetPositionAndRotation(_body.position, _body.rotation);
     }
 
     void Update()
@@ -285,7 +284,7 @@ public class OctoPlacer : MonoBehaviour
         {
             var t = Mathf.SmoothDampAngle(delta, 0, ref _itemRotationVelocity, _smoothing);
             t = 1f - (t / delta);
-            active.transform.rotation = Quaternion.Slerp(currRot, targetRot, t);
+            active.rotation = Quaternion.Slerp(currRot, targetRot, t);
         }
 
         active.position = Vector3.SmoothDamp(
