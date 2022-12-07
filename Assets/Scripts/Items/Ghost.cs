@@ -2,14 +2,14 @@
 
 internal class Ghost : MonoBehaviour
 {
-    [SerializeField] MeshFilter filter;
-    [SerializeField] MeshRenderer rend;
-    [SerializeField] Material mat;
+    [SerializeField] MeshFilter _filter;
+    [SerializeField] MeshRenderer _rend;
+    [SerializeField] Material _mat;
 
     void Reset()
     {
-        rend = GetComponent<MeshRenderer>();
-        filter = GetComponent<MeshFilter>();
+        TryGetComponent(out _rend);
+        TryGetComponent(out _filter);
     }
 
     void Start() => gameObject.SetActive(false);
@@ -17,13 +17,24 @@ internal class Ghost : MonoBehaviour
     public void CopyMesh(Component source)
     {
         transform.localScale = source.transform.localScale;
-        filter.mesh = source.GetComponentInChildren<MeshFilter>().mesh;
+        _filter.mesh = source.GetComponentInChildren<MeshFilter>().mesh;
 
-        var materials = new Material[filter.mesh.subMeshCount];
+        SetMaterial(_mat);
+    }
+
+    void SetMaterial(Material material)
+    {
+        var materials = new Material[_filter.mesh.subMeshCount];
         for (var i = 0; i < materials.Length; i++)
-            materials[i] = mat;
+            materials[i] = material;
 
-        rend.materials = materials;
+        _rend.materials = materials;
+    }
+
+    public void ShowAt(Vector3 position, Quaternion rotation, Material material)
+    {
+        ShowAt(position, rotation);
+        SetMaterial(material);
     }
 
     public void ShowAt(Vector3 position, Quaternion rotation)

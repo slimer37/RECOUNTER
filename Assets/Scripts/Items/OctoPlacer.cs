@@ -5,6 +5,10 @@ using NaughtyAttributes;
 
 public class OctoPlacer : MonoBehaviour
 {
+    [SerializeField] Ghost _ghost;
+    [SerializeField] Material _freeMat;
+    [SerializeField] Material _obstructedMat;
+
     [Header("Placing")]
     [SerializeField] float _lateralSpeed;
     [SerializeField] float _verticalSpeed;
@@ -50,7 +54,7 @@ public class OctoPlacer : MonoBehaviour
     Item _active;
     bool _isPlacing;
 
-    bool _canStartPlace;
+    bool _startPlaceObstructed;
 
     float _itemRotationVelocity;
     Vector3 _itemVelocity;
@@ -73,6 +77,8 @@ public class OctoPlacer : MonoBehaviour
 
         _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
         _adjustedHoldPos = _holdPos + _active.HoldPosShift;
+
+        _ghost.CopyMesh(item);
 
         if (!canResetPosition) return;
 
@@ -114,7 +120,7 @@ public class OctoPlacer : MonoBehaviour
         else
             HandleLateral(delta);
 
-        RestrictPlacePosition();
+        RestrictPlacePosition(ref _localPlacePosition);
 
         var placeRot = Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
 
@@ -172,9 +178,9 @@ public class OctoPlacer : MonoBehaviour
         _localPlacePosition += moveDelta;
     }
 
-    void RestrictPlacePosition()
+    void RestrictPlacePosition(ref Vector3 localPlacePos)
     {
-        var restrictedPos = _localPlacePosition;
+        var restrictedPos = localPlacePos;
         var center = _placementRegionCenter;
         var extents = _placementRegionExtents;
 
@@ -184,7 +190,7 @@ public class OctoPlacer : MonoBehaviour
         restrictedPos.z = Mathf.Clamp(restrictedPos.z, -extents.z, extents.z);
         restrictedPos += center;
 
-        _localPlacePosition = restrictedPos;
+        localPlacePos = restrictedPos;
     }
 
     Vector3 CalculateLocalStartPos()
@@ -200,11 +206,13 @@ public class OctoPlacer : MonoBehaviour
 
     void InitializePlacement()
     {
-        if (!_canStartPlace)
+        if (_startPlaceObstructed)
             return;
 
         _localPlaceRotation = _defaultRot;
         _isPlacing = true;
+
+        _ghost.Hide();
     }
 
     void StartPlace()
@@ -247,22 +255,28 @@ public class OctoPlacer : MonoBehaviour
 
         _localPlacePosition = CalculateLocalStartPos();
 
+        RestrictPlacePosition(ref _localPlacePosition);
+
         var localRot = _camera.transform.rotation * _adjustedHoldRot;
 
-        _canStartPlace = !ItemIntersectsAtPosition(
+        _startPlaceObstructed = ItemIntersectsAtPosition(
             _localPlacePosition,
             Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot))
             );
 
         var cameraLocalPos = _adjustedHoldPos;
 
-        if (!_canStartPlace)
+        if (_startPlaceObstructed)
         {
             cameraLocalPos += _intersectHoldShift;
             localRot *= Quaternion.Euler(_intersectHoldRotShift);
         }
 
         PullItemTo(_camera.transform.TransformPoint(cameraLocalPos), localRot);
+
+        var ghostRot = Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
+        var ghostMat = _startPlaceObstructed ? _obstructedMat : _freeMat;
+        _ghost.ShowAt(_body.TransformPoint(_localPlacePosition), ghostRot, ghostMat);
     }
 
     public void StopHoldingItem()
@@ -272,6 +286,10 @@ public class OctoPlacer : MonoBehaviour
         EndPlace();
 
         _active.gameObject.SetActive(false);
+
+        _ghost.Hide();
+
+        _active = null;
     }
 
     void PullItemTo(Vector3 targetPos, Quaternion targetRot)
