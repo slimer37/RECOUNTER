@@ -561,7 +561,7 @@ MonoBehaviour:
   walkImpulseInterval: 0.1
   sprintImpulse: {fileID: 240787178}
   sprintImpulseInterval: 0
-  canJump: 1
+  canJump: 0
   jumpForce: 4
   gravity: 10
   lowJumpMultiplier: 4
