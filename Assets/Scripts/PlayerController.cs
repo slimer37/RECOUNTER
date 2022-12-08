@@ -121,8 +121,7 @@ public class PlayerController : MonoBehaviour
         // Sprinting only allowed when moving forward
         var isSprinting = playerControls.Sprint.IsPressed() && input.y > 0;
 
-        if (BobbingEnabled)
-            HandleBobbing(input, isSprinting);
+        HandleBobbingAndFootsteps(input, isSprinting);
 
         AnimateFov(isSprinting);
 
@@ -136,7 +135,7 @@ public class PlayerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
-    void HandleBobbing(Vector2 movement, bool isSprinting)
+    void HandleBobbingAndFootsteps(Vector2 movement, bool isSprinting)
     {
         if (!controller.isGrounded) return;
 
@@ -144,7 +143,7 @@ public class PlayerController : MonoBehaviour
         {
             var impulse = isSprinting ? sprintImpulse : walkImpulse;
 
-            if (bobTime == 0)
+            if (BobbingEnabled && bobTime == 0)
                 impulse.GenerateImpulse();
 
             bobTime += Time.deltaTime;
@@ -154,7 +153,9 @@ public class PlayerController : MonoBehaviour
 
             if (bobTime > impulseInterval)
             {
-                impulse.GenerateImpulse();
+                if (BobbingEnabled)
+                    impulse.GenerateImpulse();
+
                 PlaySound(footstepSfx);
                 bobTime = 0;
             }
