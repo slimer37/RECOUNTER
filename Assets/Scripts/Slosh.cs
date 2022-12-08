@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Slosh : MonoBehaviour
 {
+    public int MaterialIndex = 0;
     public float MaxWobble = 0.15f;
     public float WobbleSpeed = 3f;
     public float Recovery = 5f;
@@ -9,7 +10,7 @@ public class Slosh : MonoBehaviour
     float pulse;
     float time = 0.5f;
 
-    Renderer rend;
+    Material material;
     Vector3 lastPos;
     Vector3 velocity;
     Vector3 lastRot;
@@ -20,7 +21,7 @@ public class Slosh : MonoBehaviour
 
     void Start()
     {
-        rend = GetComponent<Renderer>();
+        material = GetComponent<Renderer>().materials[MaterialIndex];
     }
 
     void Update()
@@ -40,8 +41,8 @@ public class Slosh : MonoBehaviour
         wobbleAmount = wobbleAmountToAdd * Mathf.Sin(pulse * time);
 
         // send it to the shader
-        rend.material.SetFloat("_WobbleX", Vector3.Dot(wobbleAmount, transform.forward));
-        rend.material.SetFloat("_WobbleZ", Vector3.Dot(wobbleAmount, transform.right));
+        material.SetFloat("_WobbleX", Vector3.Dot(wobbleAmount, transform.forward));
+        material.SetFloat("_WobbleZ", Vector3.Dot(wobbleAmount, transform.right));
 
         // velocity
         velocity = (lastPos - transform.position) / Time.deltaTime;
