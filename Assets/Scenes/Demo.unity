@@ -486,6 +486,8 @@ GameObject:
   - component: {fileID: 273294028}
   - component: {fileID: 273294031}
   - component: {fileID: 273294029}
+  - component: {fileID: 273294032}
+  - component: {fileID: 273294033}
   m_Layer: 0
   m_Name: components
   m_TagString: Untagged
@@ -565,8 +567,8 @@ MonoBehaviour:
   gravity: 10
   lowJumpMultiplier: 4
   <CanLookAround>k__BackingField: 1
+  <Sensitivity>k__BackingField: 2
   camTarget: {fileID: 2136512939}
-  defaultSensitivity: 2
   clamp: 85
   vcam: {fileID: 409238788}
   walkFov: 50
@@ -586,6 +588,88 @@ MonoBehaviour:
       Data3: -355129681
       Data4: 1618548372
     Path: event:/Jump
+--- !u!114 &273294032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273294027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fcbca4adb3bd947b99fa03c88e2301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 2
+  key: Sensitivity
+  defaultString: 
+  StringChange:
+    m_PersistentCalls:
+      m_Calls: []
+  defaultInt: 0
+  IntChange:
+    m_PersistentCalls:
+      m_Calls: []
+  BoolChange:
+    m_PersistentCalls:
+      m_Calls: []
+  defaultFloat: 0
+  FloatChange:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 273294031}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: set_Sensitivity
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &273294033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273294027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fcbca4adb3bd947b99fa03c88e2301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  key: Bob
+  defaultString: 
+  StringChange:
+    m_PersistentCalls:
+      m_Calls: []
+  defaultInt: 1
+  IntChange:
+    m_PersistentCalls:
+      m_Calls: []
+  BoolChange:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 273294031}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: set_BobbingEnabled
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  defaultFloat: 0
+  FloatChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &307352442
 PrefabInstance:
   m_ObjectHideFlags: 0

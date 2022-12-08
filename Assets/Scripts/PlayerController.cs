@@ -27,8 +27,8 @@ public class PlayerController : MonoBehaviour
 
     [field: Header("Looking")]
     [field: SerializeField] public bool CanLookAround { get; set; } = true;
+    [field: SerializeField] public float Sensitivity { get; set; }
     [SerializeField] Transform camTarget;
-    [SerializeField] float defaultSensitivity;
     [SerializeField] float clamp;
 
     [Header("FOV")]
@@ -47,8 +47,6 @@ public class PlayerController : MonoBehaviour
     float fov;
     float yVelocity;
     float bobTime;
-
-    float sensitivity;
 
     bool isSuspended;
 
@@ -74,7 +72,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!CanLookAround || isSuspended) return;
 
-        var look = playerControls.Look.ReadValue<Vector2>() * sensitivity;
+        var look = playerControls.Look.ReadValue<Vector2>() * Sensitivity;
 
         camRot.y += look.x;
         camRot.x -= look.y;
