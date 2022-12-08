@@ -557,6 +557,7 @@ MonoBehaviour:
   inputSmoothing: 0.1
   body: {fileID: 840553857}
   controller: {fileID: 840553853}
+  bobbingEnabled: 1
   walkImpulse: {fileID: 1095713310}
   walkImpulseInterval: 0.1
   sprintImpulse: {fileID: 240787178}

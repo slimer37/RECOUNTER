@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] CharacterController controller;
 
     [Header("Footsteps/Bobbing")]
+    [SerializeField] bool bobbingEnabled = true;
     [SerializeField] CinemachineImpulseSource walkImpulse;
     [SerializeField] float walkImpulseInterval;
     [SerializeField] CinemachineImpulseSource sprintImpulse;
@@ -126,7 +127,9 @@ public class PlayerController : MonoBehaviour
         // Sprinting only allowed when moving forward
         var isSprinting = playerControls.Sprint.IsPressed() && input.y > 0;
 
-        HandleBobbing(input, isSprinting);
+        if (bobbingEnabled)
+            HandleBobbing(input, isSprinting);
+
         AnimateFov(isSprinting);
 
         if (!canMove) return;
