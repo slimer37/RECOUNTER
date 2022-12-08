@@ -549,22 +549,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626ebd925ebf54f4c8690eb73261098f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMove: 1
+  <CanMove>k__BackingField: 1
   walkSpeed: 2
   sprintSpeed: 4
   inputSmoothing: 0.1
   body: {fileID: 840553857}
   controller: {fileID: 840553853}
-  bobbingEnabled: 1
+  <BobbingEnabled>k__BackingField: 1
   walkImpulse: {fileID: 1095713310}
   walkImpulseInterval: 0.1
   sprintImpulse: {fileID: 240787178}
   sprintImpulseInterval: 0
-  canJump: 0
+  <CanJump>k__BackingField: 0
   jumpForce: 4
   gravity: 10
   lowJumpMultiplier: 4
-  canLookAround: 1
+  <CanLookAround>k__BackingField: 1
   camTarget: {fileID: 2136512939}
   defaultSensitivity: 2
   clamp: 85

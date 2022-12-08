@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Moving")]
-    [SerializeField] bool canMove = true;
+    [field: Header("Moving")]
+    [field: SerializeField] public bool CanMove { get; set; } = true;
     [SerializeField] float walkSpeed;
     [SerializeField] float sprintSpeed;
     [SerializeField] float inputSmoothing;
     [SerializeField] Transform body;
     [SerializeField] CharacterController controller;
 
-    [Header("Footsteps/Bobbing")]
-    [SerializeField] bool bobbingEnabled = true;
+    [field: Header("Footsteps/Bobbing")]
+    [field: SerializeField] public bool BobbingEnabled { get; set; } = true;
     [SerializeField] CinemachineImpulseSource walkImpulse;
     [SerializeField] float walkImpulseInterval;
     [SerializeField] CinemachineImpulseSource sprintImpulse;
     [SerializeField] float sprintImpulseInterval;
 
-    [Header("Jumping")]
-    [SerializeField] bool canJump = true;
+    [field: Header("Jumping")]
+    [field: SerializeField] public bool CanJump { get; set; } = true;
     [SerializeField] float jumpForce;
     [SerializeField] float gravity;
     [SerializeField] float lowJumpMultiplier;
 
-    [Header("Looking")]
-    [SerializeField] bool canLookAround = true;
+    [field: Header("Looking")]
+    [field: SerializeField] public bool CanLookAround { get; set; } = true;
     [SerializeField] Transform camTarget;
     [SerializeField] float defaultSensitivity;
     [SerializeField] float clamp;
@@ -55,8 +55,6 @@ public class PlayerController : MonoBehaviour
     Vector2 smoothInput;
     Vector2 smoothInputVelocity;
 
-    const string SensitivityPref = "Sensitivity";
-
     void PlaySound(EventReference eventRef) => RuntimeManager.PlayOneShot(eventRef, body.position);
 
     void Update()
@@ -74,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleLooking()
     {
-        if (!canLookAround || isSuspended) return;
+        if (!CanLookAround || isSuspended) return;
 
         var look = playerControls.Look.ReadValue<Vector2>() * sensitivity;
 
@@ -95,7 +93,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleJump()
     {
-        if (!canJump || !controller.isGrounded) return;
+        if (!CanJump || !controller.isGrounded) return;
 
         if (playerControls.Jump.WasPressedThisFrame())
         {
@@ -108,7 +106,7 @@ public class PlayerController : MonoBehaviour
     {
         if (controller.isGrounded) return;
 
-        var holdingJump = canJump && playerControls.Jump.IsPressed();
+        var holdingJump = CanJump && playerControls.Jump.IsPressed();
 
         var velocityChange = gravity * Time.deltaTime;
 
@@ -125,12 +123,12 @@ public class PlayerController : MonoBehaviour
         // Sprinting only allowed when moving forward
         var isSprinting = playerControls.Sprint.IsPressed() && input.y > 0;
 
-        if (bobbingEnabled)
+        if (BobbingEnabled)
             HandleBobbing(input, isSprinting);
 
         AnimateFov(isSprinting);
 
-        if (!canMove) return;
+        if (!CanMove) return;
 
         var speed = isSprinting ? sprintSpeed : walkSpeed;
 
@@ -171,8 +169,6 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        sensitivity = PlayerPrefs.GetFloat(SensitivityPref, defaultSensitivity);
-
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -214,13 +210,4 @@ public class PlayerController : MonoBehaviour
         else
             OnResume();
     }
-
-    void SensitivityPrefChanged(string pref, float value)
-    {
-        if (pref != SensitivityPref) return;
-        sensitivity = value;
-    }
-
-    void OnEnable() => PrefManager.OnFloatPrefChanged += SensitivityPrefChanged;
-    void OnDisable() => PrefManager.OnFloatPrefChanged -= SensitivityPrefChanged;
 }
