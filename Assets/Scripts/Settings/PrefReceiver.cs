@@ -19,6 +19,7 @@ public class PrefReceiver : MonoBehaviour, IPrefListener
 
     [SerializeField, ShowIf("type", PrefType.Int)] int defaultInt;
     [SerializeField, ShowIf("type", PrefType.Int)] UnityEvent<int> IntChange;
+    [SerializeField, ShowIf("type", PrefType.Int)] UnityEvent<bool> BoolChange;
 
     [SerializeField, ShowIf("type", PrefType.Float)] float defaultFloat;
     [SerializeField, ShowIf("type", PrefType.Float)] UnityEvent<float> FloatChange;
@@ -26,18 +27,21 @@ public class PrefReceiver : MonoBehaviour, IPrefListener
     void OnEnable() => PrefManager.SetCallbacks(this);
     void OnDisable() => PrefManager.RemoveCallbacks(this);
 
+    bool GetBool() => PlayerPrefs.GetInt(key, defaultInt) > 0;
+
     void Awake()
     {
         switch (type)
         {
             case PrefType.String:
-                StringChange.Invoke(PlayerPrefs.GetString(key, defaultString));
+                StringChange?.Invoke(PlayerPrefs.GetString(key, defaultString));
                 break;
             case PrefType.Int:
-                IntChange.Invoke(PlayerPrefs.GetInt(key, defaultInt));
+                IntChange?.Invoke(PlayerPrefs.GetInt(key, defaultInt));
+                BoolChange?.Invoke(GetBool());
                 break;
             case PrefType.Float:
-                FloatChange.Invoke(PlayerPrefs.GetFloat(key, defaultFloat));
+                FloatChange?.Invoke(PlayerPrefs.GetFloat(key, defaultFloat));
                 break;
         }
     }
@@ -52,6 +56,7 @@ public class PrefReceiver : MonoBehaviour, IPrefListener
     {
         if (type != PrefType.Int || this.key != key) return;
         IntChange?.Invoke(value);
+        BoolChange?.Invoke(GetBool());
     }
 
     public void OnFloatPrefChanged(string key, float value)
