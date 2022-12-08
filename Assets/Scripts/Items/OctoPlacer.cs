@@ -99,6 +99,8 @@ public class OctoPlacer : MonoBehaviour
         _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
         _adjustedHoldPos = _holdPos + _active.HoldPosShift;
 
+        _localPlaceRotation = _defaultRot;
+
         _ghost.CopyMesh(item);
 
         if (!canResetPosition) return;
@@ -234,7 +236,6 @@ public class OctoPlacer : MonoBehaviour
         if (_startPlaceObstructed)
             return;
 
-        _localPlaceRotation = _defaultRot;
         _isPlacing = true;
 
         _ghost.Hide();
