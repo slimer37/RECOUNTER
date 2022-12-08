@@ -5,9 +5,17 @@ using NaughtyAttributes;
 
 public class OctoPlacer : MonoBehaviour
 {
+    [Header("Ghost")]
     [SerializeField] Ghost _ghost;
     [SerializeField] Material _freeMat;
     [SerializeField] Material _obstructedMat;
+
+    [Header("Controls")]
+    [SerializeField] InputActionReference startPlaceButton;
+    [SerializeField] InputActionReference confirmPlaceButton;
+    [SerializeField] InputActionReference holdRotateButton;
+    [SerializeField] InputActionReference verticalAxis;
+    [SerializeField] InputActionReference lateralDelta;
 
     [Header("Placing")]
     [SerializeField] float _lateralSpeed;
@@ -63,6 +71,15 @@ public class OctoPlacer : MonoBehaviour
 
     public bool IsPlacing => _isPlacing;
 
+    void Awake()
+    {
+        startPlaceButton.action.Enable();
+        confirmPlaceButton.action.Enable();
+        holdRotateButton.action.Enable();
+        verticalAxis.action.Enable();
+        lateralDelta.action.Enable();
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.matrix = _body.localToWorldMatrix;
@@ -89,9 +106,7 @@ public class OctoPlacer : MonoBehaviour
     {
         if (!_active) return;
 
-        var mouse = Mouse.current;
-
-        if (mouse.rightButton.wasPressedThisFrame)
+        if (startPlaceButton.action.triggered)
         {
             if (_isPlacing)
                 _isPlacing = false;
@@ -111,11 +126,11 @@ public class OctoPlacer : MonoBehaviour
         var previousPos = _localPlacePosition;
         var previousRot = _localPlaceRotation;
 
-        HandleVertical(mouse.scroll.ReadValue().y);
+        HandleVertical(verticalAxis.action.ReadValue<float>());
 
-        var delta = mouse.delta.ReadValue();
+        var delta = lateralDelta.action.ReadValue<Vector2>();
 
-        if (Keyboard.current.leftShiftKey.isPressed)
+        if (holdRotateButton.action.IsPressed())
             HandleRotation(delta);
         else
             HandleLateral(delta);
@@ -138,7 +153,7 @@ public class OctoPlacer : MonoBehaviour
 
         _cursorImage.transform.position = _camera.WorldToScreenPoint(_active.transform.position);
 
-        if (mouse.leftButton.wasPressedThisFrame)
+        if (confirmPlaceButton.action.triggered)
             DropItem();
     }
 

@@ -202,6 +202,114 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Placement"",
+            ""id"": ""655f113b-9a73-4e85-8079-6f3cb1a85c0c"",
+            ""actions"": [
+                {
+                    ""name"": ""Hold Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""e62c06e1-f19e-42ce-967f-e91e06473b89"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Start Place"",
+                    ""type"": ""Button"",
+                    ""id"": ""2e455372-520e-42e5-b474-83bb86d54f14"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm Place"",
+                    ""type"": ""Button"",
+                    ""id"": ""c99b560e-2086-4a40-ab44-40037586da6d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Vertical Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""5f7eadb8-63a8-4d80-a67e-0b5d62d5e771"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Lateral"",
+                    ""type"": ""Value"",
+                    ""id"": ""5ac4891a-f259-4fbf-909a-a1cb691d3829"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""0366e12e-1867-4a56-97ae-86bc3b49fa55"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Hold Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3aef1b9-81c8-459a-ac1e-6e4f9b72de6b"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Start Place"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd42b12e-c37a-4366-9324-208e712e887e"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Confirm Place"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1b7adad-dc67-4362-92c3-ee6156f56b94"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Vertical Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53122f12-5c02-4e3e-ad04-e0ee909eef1f"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Lateral"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -233,6 +341,13 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Exit = m_Menu.FindAction("Exit", throwIfNotFound: true);
+        // Placement
+        m_Placement = asset.FindActionMap("Placement", throwIfNotFound: true);
+        m_Placement_HoldRotate = m_Placement.FindAction("Hold Rotate", throwIfNotFound: true);
+        m_Placement_StartPlace = m_Placement.FindAction("Start Place", throwIfNotFound: true);
+        m_Placement_ConfirmPlace = m_Placement.FindAction("Confirm Place", throwIfNotFound: true);
+        m_Placement_VerticalMove = m_Placement.FindAction("Vertical Move", throwIfNotFound: true);
+        m_Placement_Lateral = m_Placement.FindAction("Lateral", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -386,6 +501,71 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         }
     }
     public MenuActions @Menu => new MenuActions(this);
+
+    // Placement
+    private readonly InputActionMap m_Placement;
+    private IPlacementActions m_PlacementActionsCallbackInterface;
+    private readonly InputAction m_Placement_HoldRotate;
+    private readonly InputAction m_Placement_StartPlace;
+    private readonly InputAction m_Placement_ConfirmPlace;
+    private readonly InputAction m_Placement_VerticalMove;
+    private readonly InputAction m_Placement_Lateral;
+    public struct PlacementActions
+    {
+        private @Controls m_Wrapper;
+        public PlacementActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @HoldRotate => m_Wrapper.m_Placement_HoldRotate;
+        public InputAction @StartPlace => m_Wrapper.m_Placement_StartPlace;
+        public InputAction @ConfirmPlace => m_Wrapper.m_Placement_ConfirmPlace;
+        public InputAction @VerticalMove => m_Wrapper.m_Placement_VerticalMove;
+        public InputAction @Lateral => m_Wrapper.m_Placement_Lateral;
+        public InputActionMap Get() { return m_Wrapper.m_Placement; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlacementActions set) { return set.Get(); }
+        public void SetCallbacks(IPlacementActions instance)
+        {
+            if (m_Wrapper.m_PlacementActionsCallbackInterface != null)
+            {
+                @HoldRotate.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnHoldRotate;
+                @HoldRotate.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnHoldRotate;
+                @HoldRotate.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnHoldRotate;
+                @StartPlace.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnStartPlace;
+                @StartPlace.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnStartPlace;
+                @StartPlace.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnStartPlace;
+                @ConfirmPlace.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnConfirmPlace;
+                @ConfirmPlace.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnConfirmPlace;
+                @ConfirmPlace.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnConfirmPlace;
+                @VerticalMove.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnVerticalMove;
+                @VerticalMove.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnVerticalMove;
+                @VerticalMove.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnVerticalMove;
+                @Lateral.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnLateral;
+                @Lateral.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnLateral;
+                @Lateral.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnLateral;
+            }
+            m_Wrapper.m_PlacementActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @HoldRotate.started += instance.OnHoldRotate;
+                @HoldRotate.performed += instance.OnHoldRotate;
+                @HoldRotate.canceled += instance.OnHoldRotate;
+                @StartPlace.started += instance.OnStartPlace;
+                @StartPlace.performed += instance.OnStartPlace;
+                @StartPlace.canceled += instance.OnStartPlace;
+                @ConfirmPlace.started += instance.OnConfirmPlace;
+                @ConfirmPlace.performed += instance.OnConfirmPlace;
+                @ConfirmPlace.canceled += instance.OnConfirmPlace;
+                @VerticalMove.started += instance.OnVerticalMove;
+                @VerticalMove.performed += instance.OnVerticalMove;
+                @VerticalMove.canceled += instance.OnVerticalMove;
+                @Lateral.started += instance.OnLateral;
+                @Lateral.performed += instance.OnLateral;
+                @Lateral.canceled += instance.OnLateral;
+            }
+        }
+    }
+    public PlacementActions @Placement => new PlacementActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -406,5 +586,13 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     public interface IMenuActions
     {
         void OnExit(InputAction.CallbackContext context);
+    }
+    public interface IPlacementActions
+    {
+        void OnHoldRotate(InputAction.CallbackContext context);
+        void OnStartPlace(InputAction.CallbackContext context);
+        void OnConfirmPlace(InputAction.CallbackContext context);
+        void OnVerticalMove(InputAction.CallbackContext context);
+        void OnLateral(InputAction.CallbackContext context);
     }
 }

@@ -786,6 +786,16 @@ MonoBehaviour:
   _ghost: {fileID: 1233657121}
   _freeMat: {fileID: 2100000, guid: 0e27b5a3fe491174cb762e6c13aec700, type: 2}
   _obstructedMat: {fileID: 2100000, guid: 6c14ab0bcbcbfbd498b96a56e51ebd2b, type: 2}
+  startPlaceButton: {fileID: 3317019715493461203, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
+    type: 3}
+  confirmPlaceButton: {fileID: 6144993341962269626, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
+    type: 3}
+  holdRotateButton: {fileID: -866833083026863365, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
+    type: 3}
+  verticalAxis: {fileID: -2183814545298528705, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
+    type: 3}
+  lateralDelta: {fileID: -5693229950180574212, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
+    type: 3}
   _lateralSpeed: 0.0025
   _verticalSpeed: 0.1
   _surfaceSeparation: 0.01
@@ -6390,6 +6400,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Settings Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 8323134219840692819, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8323134219840692819, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8323134219840692819, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8323134219840692819, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

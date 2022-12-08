@@ -180,6 +180,114 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Placement",
+            "id": "655f113b-9a73-4e85-8079-6f3cb1a85c0c",
+            "actions": [
+                {
+                    "name": "Hold Rotate",
+                    "type": "Button",
+                    "id": "e62c06e1-f19e-42ce-967f-e91e06473b89",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Start Place",
+                    "type": "Button",
+                    "id": "2e455372-520e-42e5-b474-83bb86d54f14",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Confirm Place",
+                    "type": "Button",
+                    "id": "c99b560e-2086-4a40-ab44-40037586da6d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Vertical Move",
+                    "type": "Value",
+                    "id": "5f7eadb8-63a8-4d80-a67e-0b5d62d5e771",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Lateral",
+                    "type": "Value",
+                    "id": "5ac4891a-f259-4fbf-909a-a1cb691d3829",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0366e12e-1867-4a56-97ae-86bc3b49fa55",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Hold Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e3aef1b9-81c8-459a-ac1e-6e4f9b72de6b",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Start Place",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bd42b12e-c37a-4366-9324-208e712e887e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Confirm Place",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b1b7adad-dc67-4362-92c3-ee6156f56b94",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Vertical Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53122f12-5c02-4e3e-ad04-e0ee909eef1f",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Lateral",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
