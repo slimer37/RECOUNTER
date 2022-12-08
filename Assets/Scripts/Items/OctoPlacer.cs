@@ -71,19 +71,23 @@ public class OctoPlacer : MonoBehaviour
 
     public bool IsPlacing => _isPlacing;
 
-    void Awake()
-    {
-        startPlaceButton.action.Enable();
-        confirmPlaceButton.action.Enable();
-        holdRotateButton.action.Enable();
-        verticalAxis.action.Enable();
-        lateralDelta.action.Enable();
-    }
-
     void OnDrawGizmosSelected()
     {
         Gizmos.matrix = _body.localToWorldMatrix;
         Gizmos.DrawWireCube(_placementRegionCenter, _placementRegionExtents * 2);
+    }
+
+    void Awake()
+    {
+        startPlaceButton.action.Enable();
+        startPlaceButton.action.performed += OnStartPlace;
+
+        confirmPlaceButton.action.Enable();
+        confirmPlaceButton.action.performed += OnConfirmPlace;
+
+        holdRotateButton.action.Enable();
+        verticalAxis.action.Enable();
+        lateralDelta.action.Enable();
     }
 
     public void SetItem(Item item, bool canResetPosition)
@@ -102,26 +106,32 @@ public class OctoPlacer : MonoBehaviour
         _active.transform.SetPositionAndRotation(_body.position, _body.rotation);
     }
 
+    void OnStartPlace(InputAction.CallbackContext ctx)
+    {
+        if (!_active) return;
+
+        if (_isPlacing)
+            EndPlace();
+        else
+            InitializePlacement();
+    }
+
+    void OnConfirmPlace(InputAction.CallbackContext ctx)
+    {
+        if (!_active) return;
+
+        DropItem();
+    }
+
     void Update()
     {
         if (!_active) return;
 
-        if (startPlaceButton.action.triggered)
-        {
-            if (_isPlacing)
-                _isPlacing = false;
-            else
-                InitializePlacement();
-        }
-
         if (!_isPlacing)
         {
-            EndPlace();
             KeepItemInHand();
             return;
         }
-
-        StartPlace();
 
         var previousPos = _localPlacePosition;
         var previousRot = _localPlaceRotation;
@@ -137,25 +147,25 @@ public class OctoPlacer : MonoBehaviour
 
         RestrictPlacePosition(ref _localPlacePosition);
 
-        var placeRot = Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
+        var placeRot = GetWorldPlaceRot();
 
         if (ItemIntersectsAtPosition(_localPlacePosition, placeRot))
         {
             _localPlacePosition = previousPos;
             _localPlaceRotation = previousRot;
 
-            placeRot = Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
+            placeRot = GetWorldPlaceRot();
         }
 
-        var placePos = _body.TransformPoint(_localPlacePosition);
+        var placePos = GetWorldPlacePos();
 
         PullItemTo(placePos, placeRot);
 
         _cursorImage.transform.position = _camera.WorldToScreenPoint(_active.transform.position);
-
-        if (confirmPlaceButton.action.triggered)
-            DropItem();
     }
+
+    Vector3 GetWorldPlacePos() => _body.TransformPoint(_localPlacePosition);
+    Quaternion GetWorldPlaceRot() => Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
 
     bool ItemIntersectsAtPosition(Vector3 localPosition, Quaternion rotation) =>
         _active.WouldIntersectAt(_body.TransformPoint(localPosition), rotation, _obstacleMask);
@@ -228,10 +238,7 @@ public class OctoPlacer : MonoBehaviour
         _isPlacing = true;
 
         _ghost.Hide();
-    }
 
-    void StartPlace()
-    {
         SetViewmodelLayer(false);
         _playerInteraction.enabled = false;
         _playerController.Suspend(true);
@@ -244,6 +251,8 @@ public class OctoPlacer : MonoBehaviour
 
         _isPlacing = false;
 
+        _ghost.Hide();
+
         _cursorImage.sprite = _defaultIcon;
 
         _cursorImage.transform.SetPositionAndRotation(
@@ -255,7 +264,7 @@ public class OctoPlacer : MonoBehaviour
     {
         EndPlace();
 
-        _active.transform.position = _body.TransformPoint(_localPlacePosition);
+        _active.transform.SetPositionAndRotation(GetWorldPlacePos(), GetWorldPlaceRot());
 
         var temp = _active;
 
@@ -301,8 +310,6 @@ public class OctoPlacer : MonoBehaviour
         EndPlace();
 
         _active.gameObject.SetActive(false);
-
-        _ghost.Hide();
 
         _active = null;
     }
