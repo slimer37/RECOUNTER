@@ -549,8 +549,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626ebd925ebf54f4c8690eb73261098f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivityUpdateChannel: {fileID: 11400000, guid: 444b5b55bb648424aa8fa82dabf633db,
-    type: 2}
   canMove: 1
   walkSpeed: 2
   sprintSpeed: 4

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] VoidChannel sensitivityUpdateChannel;
-
     [Header("Moving")]
     [SerializeField] bool canMove = true;
     [SerializeField] float walkSpeed;
@@ -173,7 +171,7 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        UpdateSensitivity();
+        sensitivity = PlayerPrefs.GetFloat(SensitivityPref, defaultSensitivity);
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -217,9 +215,12 @@ public class PlayerController : MonoBehaviour
             OnResume();
     }
 
-    void UpdateSensitivity() =>
-        sensitivity = PlayerPrefs.GetFloat(SensitivityPref, defaultSensitivity);
+    void SensitivityPrefChanged(string pref, float value)
+    {
+        if (pref != SensitivityPref) return;
+        sensitivity = value;
+    }
 
-    void OnEnable() => sensitivityUpdateChannel.OnEventRaised += UpdateSensitivity;
-    void OnDisable() => sensitivityUpdateChannel.OnEventRaised -= UpdateSensitivity;
+    void OnEnable() => PrefManager.OnFloatPrefChanged += SensitivityPrefChanged;
+    void OnDisable() => PrefManager.OnFloatPrefChanged -= SensitivityPrefChanged;
 }

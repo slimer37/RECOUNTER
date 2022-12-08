@@ -1,23 +1,26 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(Slider))]
-public class SliderSetting : MonoBehaviour
+public class SliderSetting : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] string key;
     [SerializeField] float defaultValue;
     [SerializeField] bool isInt;
 
     [Header("Optional")]
-    [SerializeField] TMP_InputField inputField;
-    [SerializeField] VoidChannel channel;
-    [SerializeField] UnityEvent<float> Change;
+    [SerializeField] TextMeshProUGUI display;
+    [SerializeField] string format = "0.0";
 
     Slider slider;
 
-    public void ResetPref() => slider.value = defaultValue;
+    public void ResetPref()
+    {
+        slider.value = defaultValue;
+        UpdatePref();
+    }
 
     void Awake()
     {
@@ -27,51 +30,22 @@ public class SliderSetting : MonoBehaviour
             ? PlayerPrefs.GetInt(key, (int)defaultValue)
             : PlayerPrefs.GetFloat(key, defaultValue);
 
-        slider.onValueChanged.AddListener(SetSliderValue);
+        if (!display) return;
 
-        if (inputField)
-        {
-            inputField.contentType = isInt
-                ? TMP_InputField.ContentType.IntegerNumber
-                : TMP_InputField.ContentType.DecimalNumber;
-
-            inputField.onEndEdit.AddListener(SetFieldValue);
-            inputField.onValueChanged.AddListener(SetFieldValue);
-
-            inputField.text = slider.value.ToString();
-        }
+        display.text = slider.value.ToString(format);
+        slider.onValueChanged.AddListener(v => display.text = v.ToString(format));
     }
 
-    void SetSliderValue(float v)
+    void UpdatePref()
     {
-        SetValue(v);
-
-        if (inputField)
-            inputField.text = v.ToString();
-    }
-
-    void SetFieldValue(string s)
-    {
-        if (!float.TryParse(s, out var v))
-        {
-            v = 0;
-            inputField.text = "0";
-        }
-
-        SetValue(v);
-        slider.value = v;
-    }
-
-    void SetValue(float v)
-    {
+        var value = slider.value;
         if (isInt)
-            PlayerPrefs.SetInt(key, (int)v);
+            PrefManager.SetInt(key, (int)value);
         else
-            PlayerPrefs.SetFloat(key, v);
-
-        if (channel)
-            channel.RaiseEvent();
-
-        Change?.Invoke(v);
+            PrefManager.SetFloat(key, value);
     }
+
+    public void OnPointerUp(PointerEventData eventData) => UpdatePref();
+
+    public void OnPointerDown(PointerEventData eventData) { }
 }
