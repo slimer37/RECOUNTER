@@ -38,21 +38,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.5
+    - _Alpha: 0.8
     - _Fill: 0.396
     - _Level: 0.06
     - _Metallic: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Smoothness: 0.8
+    - _Smoothness: 0.5
     - _WobbleX: 0
     - _WobbleZ: 0
     m_Colors:
     - _EmitInside: {r: 0, g: 0.58431375, b: 1, a: 0}
     - _EmitSide: {r: 0, g: 0, b: 0, a: 0}
     - _EmitTop: {r: 0, g: 0, b: 0, a: 0}
-    - _SideColor: {r: 1, g: 0.9208172, b: 0.47400004, a: 0}
-    - _TopColor: {r: 1, g: 0.9450981, b: 0.63529414, a: 0}
+    - _SideColor: {r: 1, g: 0.8032365, b: 0, a: 0}
+    - _TopColor: {r: 1, g: 0.82950974, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2074903525165976445
 MonoBehaviour:
