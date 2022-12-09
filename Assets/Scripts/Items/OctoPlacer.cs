@@ -127,13 +127,7 @@ public class OctoPlacer : MonoBehaviour
 
     void Update()
     {
-        if (!_active) return;
-
-        if (!_isPlacing)
-        {
-            KeepItemInHand();
-            return;
-        }
+        if (!_active || !_isPlacing) return;
 
         var previousPos = _localPlacePosition;
         var previousRot = _localPlaceRotation;
@@ -164,6 +158,14 @@ public class OctoPlacer : MonoBehaviour
         PullItemTo(placePos, placeRot);
 
         _cursorImage.transform.position = _camera.WorldToScreenPoint(_active.transform.position);
+    }
+
+    void LateUpdate()
+    {
+        if (!_active || _isPlacing) return;
+
+        KeepItemInHand();
+        ShowPreviewGhost();
     }
 
     Vector3 GetWorldPlacePos() => _body.TransformPoint(_localPlacePosition);
@@ -298,7 +300,10 @@ public class OctoPlacer : MonoBehaviour
         }
 
         PullItemTo(_camera.transform.TransformPoint(cameraLocalPos), localRot);
+    }
 
+    void ShowPreviewGhost()
+    {
         var ghostRot = Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
         var ghostMat = _startPlaceObstructed ? _obstructedMat : _freeMat;
         _ghost.ShowAt(_body.TransformPoint(_localPlacePosition), ghostRot, ghostMat);
