@@ -806,7 +806,7 @@ MonoBehaviour:
   _obstructedMat: {fileID: 2100000, guid: 6c14ab0bcbcbfbd498b96a56e51ebd2b, type: 2}
   startPlaceButton: {fileID: 3317019715493461203, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
     type: 3}
-  confirmPlaceButton: {fileID: 6144993341962269626, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
+  dropOrThrow: {fileID: 6144993341962269626, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
     type: 3}
   holdRotateButton: {fileID: -866833083026863365, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
     type: 3}
@@ -814,12 +814,16 @@ MonoBehaviour:
     type: 3}
   lateralDelta: {fileID: -5693229950180574212, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
     type: 3}
+  _timeToFullCharge: 0.5
+  _chargedPos: {x: 0, y: 0.1, z: 0.7}
+  _throwForce: 5
+  _throwDirection: {x: 0, y: 0.2, z: 1}
   _lateralSpeed: 0.0025
   _verticalSpeed: 0.1
   _surfaceSeparation: 0.01
   _obstacleMask:
     serializedVersion: 2
-    m_Bits: 129
+    m_Bits: 193
   _smoothing: 0.05
   _placementRegionExtents: {x: 1, y: 1, z: 1}
   _placementRegionCenter: {x: 0, y: 0.25, z: 1.5}

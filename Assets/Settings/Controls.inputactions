@@ -204,13 +204,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Confirm Place",
+                    "name": "Drop/Throw",
                     "type": "Button",
                     "id": "c99b560e-2086-4a40-ab44-40037586da6d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
+                    "interactions": "Tap,Hold",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Vertical Move",
@@ -261,7 +261,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard + Mouse",
-                    "action": "Confirm Place",
+                    "action": "Drop/Throw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

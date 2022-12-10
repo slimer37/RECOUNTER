@@ -71,6 +71,9 @@ public class Item : Interactable
     Vector3 GetOriginShift() => overridesBounds ?
         overrideCenter : rend.localBounds.center;
 
+    public bool IsIntersecting(LayerMask mask) =>
+        WouldIntersectAt(transform.position, transform.rotation, mask);
+
     public bool WouldIntersectAt(Vector3 position, Quaternion rotation, LayerMask mask)
     {
         var scaledExtents = GetScaledExtents();
