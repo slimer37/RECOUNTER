@@ -178,6 +178,14 @@ public class PlayerController : MonoBehaviour
         playerControls.Enable();
 
         RecordCameraAngles();
+
+        Pause.Paused += OnPause;
+    }
+
+    void OnPause(bool paused)
+    {
+        Cursor.visible = paused;
+        Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     void RecordCameraAngles()

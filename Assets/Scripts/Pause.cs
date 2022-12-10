@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Pause : MonoBehaviour
 {
@@ -7,8 +9,7 @@ public class Pause : MonoBehaviour
 
     Controls controls;
 
-    bool cursorVisible;
-    CursorLockMode cursorLockMode;
+    public static event Action<bool> Paused;
 
     public static bool IsPaused { get; private set; }
 
@@ -53,18 +54,6 @@ public class Pause : MonoBehaviour
 
         Time.timeScale = pause ? 0 : 1;
 
-        if (pause)
-        {
-            cursorVisible = Cursor.visible;
-            cursorLockMode = Cursor.lockState;
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.visible = cursorVisible;
-            Cursor.lockState = cursorLockMode;
-        }
+        Paused?.Invoke(pause);
     }
 }
