@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "com.dbrizov.naughtyattributes": "https://github.com/dbrizov/NaughtyAttributes.git#upm",
-    "com.spoiledcat.git": "1.0.12",
     "com.unity.ai.navigation": "1.1.1",
     "com.unity.cinemachine": "2.9.2",
     "com.unity.collab-proxy": "1.17.7",
@@ -49,13 +48,5 @@
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
   },
-  "scopedRegistries": [
-    {
-      "name": "spoiledcat",
-      "url": "https://registry.spoiledcat.com",
-      "scopes": [
-        "com.spoiledcat"
-      ]
-    }
-  ]
+  "scopedRegistries": []
 }
