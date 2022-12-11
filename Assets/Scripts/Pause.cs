@@ -21,6 +21,10 @@ public class Pause : MonoBehaviour
         controls.Menu.Exit.performed += _ => SetPaused(!IsPaused);
         controls.Enable();
 
+#if UNITY_EDITOR
+        controls.Menu.Exit.ApplyBindingOverride("<Keyboard>/backquote", path: "<Keyboard>/escape");
+#endif
+
         canvas.enabled = false;
     }
 
