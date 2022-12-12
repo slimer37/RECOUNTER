@@ -142,6 +142,8 @@ public class OctoPlacer : MonoBehaviour
 
     void StartChargingThrow(float initialTime)
     {
+        if (!_active.IsThrowable) return;
+
         _isCharging = true;
         _chargeTime = initialTime;
         _ghost.Hide();
