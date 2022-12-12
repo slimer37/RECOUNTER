@@ -18,5 +18,8 @@ public abstract class Interactable : MonoBehaviour
     public virtual bool CanInteract(Employee e) => true;
 
     public abstract void Interact(Employee e);
+
+    public virtual void InteractEnd() { }
+
     public virtual void OnHover(bool hover) { }
 }

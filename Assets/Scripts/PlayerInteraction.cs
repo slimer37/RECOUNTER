@@ -24,6 +24,8 @@ public class PlayerInteraction : MonoBehaviour
     Tween punch;
     Controls.PlayerActions playerControls;
 
+    bool isInteracting;
+
     void Awake()
     {
         if (icons.Length != System.Enum.GetNames(typeof(Interactable.Icon)).Length)
@@ -31,6 +33,7 @@ public class PlayerInteraction : MonoBehaviour
 
         playerControls = new Controls().Player;
         playerControls.Interact.performed += OnInteract;
+        playerControls.Interact.canceled += OnInteractCancel;
 
         punch = iconImage.rectTransform.DOPunchScale(Vector3.one * punchAmount, punchDuration)
             .Pause().SetAutoKill(false);
@@ -62,6 +65,15 @@ public class PlayerInteraction : MonoBehaviour
         if (!hovered.CanInteract(employee)) return;
 
         hovered.Interact(employee);
+        isInteracting = true;
+    }
+
+    void OnInteractCancel(InputAction.CallbackContext context)
+    {
+        if (!isInteracting) return;
+
+        hovered.InteractEnd();
+        isInteracting = false;
     }
 
     void LateUpdate()
@@ -87,9 +99,17 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (hovered?.transform == currentHover) return;
 
+        hovered?.OnHover(false);
+
+        if (isInteracting)
+        {
+            hovered?.InteractEnd();
+            isInteracting = false;
+        }
+
         if (currentHover && currentHover.TryGetComponent(out hovered))
         {
-            hovered?.OnHover(true);
+            hovered.OnHover(true);
 
             if (!hovered.CanInteract(employee)) return;
 
@@ -97,7 +117,6 @@ public class PlayerInteraction : MonoBehaviour
         }
         else
         {
-            hovered?.OnHover(false);
             hovered = null;
 
             ResetUI();
