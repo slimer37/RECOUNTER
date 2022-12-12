@@ -161,7 +161,7 @@ public class OctoPlacer : MonoBehaviour
     {
         _isCharging = false;
 
-        if (_active.IsIntersecting(_obstacleMask))
+        if (IsLineOfSightBlocked(_active.transform.position) || _active.IsIntersecting(_obstacleMask))
             return;
 
         PreReleaseItem().Throw(_chargeTime * _throwForce * _camera.transform.TransformDirection(_throwDirection));
@@ -236,13 +236,14 @@ public class OctoPlacer : MonoBehaviour
     bool ItemIntersectsAtPosition(Vector3 localPosition, Quaternion rotation) =>
         _active.WouldIntersectAt(_body.TransformPoint(localPosition), rotation, _obstacleMask);
 
-    bool IsLineOfSightBlocked(Vector3 localPosition)
+    bool IsLineOfSightBlocked(Vector3 worldPosition)
     {
-        var pos = _body.TransformPoint(localPosition);
         var camPos = _camera.transform.position;
-        var dir = pos - _camera.transform.position;
-        return Physics.Raycast(camPos, dir, Vector3.Distance(camPos, pos), _lineOfSightMask);
+        var dir = worldPosition - _camera.transform.position;
+        return Physics.Raycast(camPos, dir, Vector3.Distance(camPos, worldPosition), _lineOfSightMask);
     }
+
+    bool IsLocalLineOfSightBlocked(Vector3 localPosition) => IsLineOfSightBlocked(_body.TransformPoint(localPosition));
 
     void HandleLateral(Vector2 delta)
     {
@@ -348,6 +349,8 @@ public class OctoPlacer : MonoBehaviour
 
     void DropItem()
     {
+        if (_startPlaceObstructed) return;
+
         _active.transform.SetPositionAndRotation(GetWorldPlacePos(), GetWorldPlaceRot());
 
         PreReleaseItem().Release();
@@ -361,7 +364,7 @@ public class OctoPlacer : MonoBehaviour
 
         RestrictPlacePosition(ref _localPlacePosition);
 
-        _startPlaceObstructed = IsLineOfSightBlocked(_localPlacePosition)
+        _startPlaceObstructed = IsLocalLineOfSightBlocked(_localPlacePosition)
             || ItemIntersectsAtPosition(
             _localPlacePosition,
             Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot))
