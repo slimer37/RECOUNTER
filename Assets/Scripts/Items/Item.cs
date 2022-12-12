@@ -62,7 +62,7 @@ public class Item : Interactable
     public void Throw(Vector3 force)
     {
         Release();
-        rb.AddForce(force, ForceMode.VelocityChange);
+        rb.AddForce(force, ForceMode.Impulse);
     }
 
     Vector3 GetScaledExtents() => overridesBounds ?
