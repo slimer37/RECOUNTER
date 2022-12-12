@@ -904,6 +904,9 @@ MonoBehaviour:
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 193
+  _lineOfSightMask:
+    serializedVersion: 2
+    m_Bits: 129
   _smoothing: 0.05
   _placementRegionExtents: {x: 1, y: 1, z: 1}
   _placementRegionCenter: {x: 0, y: 0.25, z: 1.5}
@@ -13034,6 +13037,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7880708760212590609, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668977044889645585, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668977044889645585, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668977044889645585, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668977044889645585, guid: 201dfcfe86dfc6e479ea31c22a29c4f6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0

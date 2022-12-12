@@ -29,6 +29,7 @@ public class OctoPlacer : MonoBehaviour
     [SerializeField] float _verticalSpeed;
     [SerializeField] float _surfaceSeparation;
     [SerializeField] LayerMask _obstacleMask;
+    [SerializeField] LayerMask _lineOfSightMask;
     [SerializeField] float _smoothing;
     [SerializeField] Vector3 _placementRegionExtents;
     [SerializeField] Vector3 _placementRegionCenter;
@@ -235,6 +236,14 @@ public class OctoPlacer : MonoBehaviour
     bool ItemIntersectsAtPosition(Vector3 localPosition, Quaternion rotation) =>
         _active.WouldIntersectAt(_body.TransformPoint(localPosition), rotation, _obstacleMask);
 
+    bool IsLineOfSightBlocked(Vector3 localPosition)
+    {
+        var pos = _body.TransformPoint(localPosition);
+        var camPos = _camera.transform.position;
+        var dir = pos - _camera.transform.position;
+        return Physics.Raycast(camPos, dir, Vector3.Distance(camPos, pos), _lineOfSightMask);
+    }
+
     void HandleLateral(Vector2 delta)
     {
         _localPlacePosition += _lateralSpeed * new Vector3(delta.x, 0, delta.y);
@@ -352,7 +361,8 @@ public class OctoPlacer : MonoBehaviour
 
         RestrictPlacePosition(ref _localPlacePosition);
 
-        _startPlaceObstructed = ItemIntersectsAtPosition(
+        _startPlaceObstructed = IsLineOfSightBlocked(_localPlacePosition)
+            || ItemIntersectsAtPosition(
             _localPlacePosition,
             Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot))
             );
