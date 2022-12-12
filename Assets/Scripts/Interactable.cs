@@ -2,6 +2,9 @@ using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour
 {
+    public bool IsInteractionInProgress { get; private set; }
+    protected Employee Interactor { get; private set; }
+
     public enum Icon { None, Access, Door, Eye, Hand, Invalid, Pickup, Pull, Push }
 
     public struct HudInfo
@@ -26,6 +29,22 @@ public abstract class Interactable : MonoBehaviour
     /// </param>
     public virtual bool CanInteract(Employee e) => true;
 
+    public void Interact(Employee e)
+    {
+        IsInteractionInProgress = true;
+        Interactor = e;
+        OnInteract(e);
+    }
+
+    public void EndInteract()
+    {
+        if (!IsInteractionInProgress) return;
+
+        IsInteractionInProgress = false;
+        Interactor = null;
+        OnEndInteraction();
+    }
+
     /// <summary>
     /// The main interaction method of an object. Called once on interaction.
 	/// </summary>
@@ -35,7 +54,7 @@ public abstract class Interactable : MonoBehaviour
 	/// <param name="e">
     /// The player initiating the interaction.
     /// </param>
-    public abstract void Interact(Employee e);
+    protected virtual void OnInteract(Employee e) { }
 
     /// <summary>
     /// Called when the interact key is released or the object loses hover while the key is held.
@@ -43,7 +62,7 @@ public abstract class Interactable : MonoBehaviour
     /// <remarks>
     /// Guaranteed to follow one call to <c>Interact</c>.
     /// </remarks>
-    public virtual void InteractEnd() { }
+    protected virtual void OnEndInteraction() { }
 
     public virtual void OnHover(bool hover) { }
 }

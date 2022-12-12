@@ -24,8 +24,6 @@ public class PlayerInteraction : MonoBehaviour
     Tween punch;
     Controls.PlayerActions playerControls;
 
-    bool isInteracting;
-
     void Awake()
     {
         if (icons.Length != System.Enum.GetNames(typeof(Interactable.Icon)).Length)
@@ -65,16 +63,9 @@ public class PlayerInteraction : MonoBehaviour
         if (!hovered.CanInteract(employee)) return;
 
         hovered.Interact(employee);
-        isInteracting = true;
     }
 
-    void OnInteractCancel(InputAction.CallbackContext context)
-    {
-        if (!isInteracting) return;
-
-        hovered.InteractEnd();
-        isInteracting = false;
-    }
+    void OnInteractCancel(InputAction.CallbackContext context) => hovered.EndInteract();
 
     void LateUpdate()
     {
@@ -99,12 +90,10 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (hovered?.transform == currentHover) return;
 
-        hovered?.OnHover(false);
-
-        if (isInteracting)
+        if (hovered)
         {
-            hovered?.InteractEnd();
-            isInteracting = false;
+            hovered.OnHover(false);
+            hovered.EndInteract();
         }
 
         if (currentHover && currentHover.TryGetComponent(out hovered))

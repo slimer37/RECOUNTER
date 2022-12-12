@@ -112,7 +112,7 @@ public class Item : Interactable
 
     public override bool CanInteract(Employee e) => !IsHeld && !e.ItemHotbar.IsActiveSlotFull;
 
-    public override void Interact(Employee e)
+    protected override void OnInteract(Employee e)
     {
         if (!e.ItemHotbar.TryAddItem(this)) return;
 

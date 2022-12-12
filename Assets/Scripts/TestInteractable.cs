@@ -11,5 +11,5 @@ public class TestInteractable : Interactable
             .Pause().SetAutoKill(false);
     }
 
-    public override void Interact(Employee e) => tween.Restart();
+    protected override void OnInteract(Employee e) => tween.Restart();
 }
