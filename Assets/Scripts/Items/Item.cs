@@ -1,7 +1,6 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-[RequireComponent(typeof(Renderer))]
 public class Item : Interactable
 {
     [SerializeField] Renderer rend;
@@ -34,6 +33,8 @@ public class Item : Interactable
 
     void OnDrawGizmosSelected()
     {
+        if (!rend) return;
+
         Gizmos.matrix = transform.localToWorldMatrix;
         Gizmos.DrawWireCube(rend.localBounds.center, rend.localBounds.size);
 
