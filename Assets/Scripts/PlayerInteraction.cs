@@ -65,7 +65,7 @@ public class PlayerInteraction : MonoBehaviour
         hovered.Interact(employee);
     }
 
-    void OnInteractCancel(InputAction.CallbackContext context) => hovered.EndInteract();
+    void OnInteractCancel(InputAction.CallbackContext context) => hovered?.EndInteract();
 
     void LateUpdate()
     {
