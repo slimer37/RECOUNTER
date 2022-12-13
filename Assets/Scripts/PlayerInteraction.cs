@@ -11,6 +11,12 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] float range;
     [SerializeField] Camera cam;
     [SerializeField] TextMeshProUGUI text;
+    [SerializeField] LayerMask interactableMask;
+
+    [Header("Fade Reticle")]
+    [SerializeField] float detectionRadius;
+    [SerializeField] float fade;
+    [SerializeField] CanvasGroup fadeReticle;
 
     [Header("Animation")]
     [SerializeField] float punchAmount;
@@ -78,12 +84,24 @@ public class PlayerInteraction : MonoBehaviour
 
         Transform currentHover = null;
 
-        if (Physics.Raycast(cam.ViewportPointToRay(Vector2.one / 2), out var hit, range))
+        if (Physics.Raycast(cam.ViewportPointToRay(Vector2.one / 2), out var hit, range, interactableMask))
         {
             currentHover = hit.transform;
         }
 
         HandleInteraction(currentHover);
+    }
+
+    void FixedUpdate()
+    {
+        var alpha = 0;
+
+        if (Physics.CheckSphere(cam.transform.position, detectionRadius, interactableMask))
+        {
+            alpha = 1;
+        }
+
+        fadeReticle.alpha = Mathf.Lerp(fadeReticle.alpha, alpha, fade * Time.fixedDeltaTime);
     }
 
     void HandleInteraction(Transform currentHover)

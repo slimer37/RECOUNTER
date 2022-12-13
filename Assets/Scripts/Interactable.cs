@@ -16,6 +16,21 @@ public abstract class Interactable : MonoBehaviour
     public static readonly HudInfo DefaultInteractHud = new() { icon = Icon.Access, text = "Interact" };
     public static readonly HudInfo BlankHud = new() { icon = Icon.None };
 
+#if UNITY_EDITOR
+    [UnityEditor.InitializeOnEnterPlayMode]
+    static void CheckLayers()
+    {
+        var layer = LayerMask.NameToLayer("Interactable");
+        foreach (var i in FindObjectsOfType<Interactable>())
+        {
+            if (i.gameObject.layer != layer)
+            {
+                Debug.LogError($"{i.name} has the wrong layer.", i);
+            }
+        }
+    }
+#endif
+
     /// <summary>
     /// Forms the HUD elements that should be shown while this object is hovered.
     /// </summary>
@@ -23,8 +38,8 @@ public abstract class Interactable : MonoBehaviour
     
     /// <summary>
     /// Checks if an object can be interacted with.
-	/// </summary>
-	/// <param name="e">The player that would interact.</param>
+    /// </summary>
+    /// <param name="e">The player that would interact.</param>
     public virtual bool CanInteract(Employee e) => true;
 
     /// <summary>
