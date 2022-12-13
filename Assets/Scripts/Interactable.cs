@@ -24,11 +24,13 @@ public abstract class Interactable : MonoBehaviour
     /// <summary>
     /// Checks if an object can be interacted with.
 	/// </summary>
-	/// <param name="e">
-    /// The player that would initiate the interaction.
-    /// </param>
+	/// <param name="e">The player that would interact.</param>
     public virtual bool CanInteract(Employee e) => true;
 
+    /// <summary>
+    /// Interacts with this object and records the interactor.
+    /// </summary>
+    /// <param name="e">The interacting player.</param>
     public void Interact(Employee e)
     {
         IsInteractionInProgress = true;
@@ -36,6 +38,9 @@ public abstract class Interactable : MonoBehaviour
         OnInteract(e);
     }
 
+    /// <summary>
+    /// Ends the interaction in progress.
+    /// </summary>
     public void EndInteract()
     {
         if (!IsInteractionInProgress) return;
@@ -49,20 +54,22 @@ public abstract class Interactable : MonoBehaviour
     /// The main interaction method of an object. Called once on interaction.
 	/// </summary>
 	/// <remarks>
-	/// Will only be called if <c>CanInteract</c> returns true.
+	/// Will only be called if <see cref="CanInteract(Employee)"/> returns true.
 	/// </remarks>
-	/// <param name="e">
-    /// The player initiating the interaction.
-    /// </param>
+	/// <param name="e">The interacting player.</param>
     protected virtual void OnInteract(Employee e) { }
 
     /// <summary>
     /// Called when the interact key is released or the object loses hover while the key is held.
     /// </summary>
     /// <remarks>
-    /// Guaranteed to follow one call to <c>Interact</c>.
+    /// Guaranteed to follow one call to <see cref="Interact(Employee)"/>.
     /// </remarks>
     protected virtual void OnEndInteraction() { }
 
+    /// <summary>
+    /// Directly executes hover events.
+    /// </summary>
+    /// <param name="hover">True when entering hover, false when exiting.</param>
     public virtual void OnHover(bool hover) { }
 }
