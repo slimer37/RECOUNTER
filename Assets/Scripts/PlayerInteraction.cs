@@ -27,6 +27,8 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] Sprite[] icons;
 
     Interactable hovered;
+    Interactable interactTarget;
+
     Tween punch;
     Controls.PlayerActions playerControls;
 
@@ -66,12 +68,17 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (!hovered) return;
 
-        if (!hovered.CanInteract(employee)) return;
-
-        hovered.Interact(employee);
+        interactTarget = hovered;
+        interactTarget.Interact(employee);
     }
 
-    void OnInteractCancel(InputAction.CallbackContext context) => hovered?.EndInteract();
+    void OnInteractCancel(InputAction.CallbackContext context)
+    {
+        if (!interactTarget) return;
+
+        interactTarget.EndInteract();
+        interactTarget = null;
+    }
 
     void LateUpdate()
     {
@@ -108,19 +115,14 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (hovered?.transform == currentHover) return;
 
-        if (hovered)
-        {
-            hovered.OnHover(false);
-            hovered.EndInteract();
-        }
+        hovered?.OnHover(false);
 
-        if (currentHover && currentHover.TryGetComponent(out hovered))
+        if (currentHover)
         {
+            hovered = currentHover.GetComponent<Interactable>();
             hovered.OnHover(true);
 
-            if (!hovered.CanInteract(employee)) return;
-
-            punch.Restart();
+            UpdateUI(true);
         }
         else
         {
@@ -130,13 +132,13 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    void UpdateUI()
+    void UpdateUI(bool forcePunch = false)
     {
         var info = hovered.GetHudInfo(employee);
         var icon = icons[(int)info.icon];
 
         // Punch when icon changes (except if it's the blank pointer).
-        if (info.icon != Interactable.Icon.None && iconImage.sprite != icon)
+        if (info.icon != Interactable.Icon.None && (forcePunch || iconImage.sprite != icon))
             punch.Restart();
 
         text.text = info.text;
