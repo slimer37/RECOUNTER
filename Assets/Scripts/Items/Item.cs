@@ -110,7 +110,7 @@ public class Item : Interactable
 
     public override HudInfo GetHudInfo(Employee e) => CanInteract(e) ? new HudInfo { icon = Icon.Pickup, text = "Pick up" } : BlankHud;
 
-    public override bool CanInteract(Employee e) => !IsHeld && !e.ItemHotbar.IsActiveSlotFull;
+    protected override bool CanInteract(Employee e) => !IsHeld && !e.ItemHotbar.IsActiveSlotFull;
 
     protected override void OnInteract(Employee e)
     {

@@ -40,7 +40,7 @@ public abstract class Interactable : MonoBehaviour
     /// Checks if an object can be interacted with.
     /// </summary>
     /// <param name="e">The player that would interact.</param>
-    public virtual bool CanInteract(Employee e) => true;
+    protected virtual bool CanInteract(Employee e) => true;
 
     /// <summary>
     /// Interacts with this object and records the interactor.
@@ -48,6 +48,8 @@ public abstract class Interactable : MonoBehaviour
     /// <param name="e">The interacting player.</param>
     public void Interact(Employee e)
     {
+        if (!CanInteract(e)) return;
+
         IsInteractionInProgress = true;
         Interactor = e;
         OnInteract(e);
