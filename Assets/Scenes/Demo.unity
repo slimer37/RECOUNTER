@@ -2341,11 +2341,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pullPointDistance: 1
   _pullStrength: -360
-  _smoothing: 0.5
   _rotator: {fileID: 760947120}
   _pullDirection: {x: 0, y: 0, z: 1}
   _rotationAxis: {x: 0, y: 1, z: 0}
   _deceleration: 1
+  _limits: {x: -90, y: 0}
 --- !u!1001 &780027655
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7602,7 +7602,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh44882
+  m_Name: pb_Mesh99854
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
