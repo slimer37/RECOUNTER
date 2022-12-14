@@ -429,10 +429,20 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 423645328272682048, guid: ec94afbe92d7fb64f80af2c194fea290,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -44.721
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ec94afbe92d7fb64f80af2c194fea290,
         type: 3}
       propertyPath: m_Name
       value: tutorialstore
+      objectReference: {fileID: 0}
+    - target: {fileID: 2726818094815543010, guid: ec94afbe92d7fb64f80af2c194fea290,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -442,6 +452,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 760947118}
+    - targetCorrespondingSourceObject: {fileID: 2726818094815543010, guid: ec94afbe92d7fb64f80af2c194fea290,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 760947123}
     - targetCorrespondingSourceObject: {fileID: -2487388224481515238, guid: ec94afbe92d7fb64f80af2c194fea290,
         type: 3}
       insertIndex: -1
@@ -2307,6 +2321,31 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.290555, y: 2.2326915, z: 0.12578185}
   m_Center: {x: 0.6452775, y: 0, z: -0.062890925}
+--- !u!4 &760947120 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 423645328272682048, guid: ec94afbe92d7fb64f80af2c194fea290,
+    type: 3}
+  m_PrefabInstance: {fileID: 70528171}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &760947123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760947114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3881d6392516924c8d4fa0f2d1a4beb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pullPointDistance: 1
+  _pullStrength: -360
+  _smoothing: 0.5
+  _rotator: {fileID: 760947120}
+  _pullDirection: {x: 0, y: 0, z: 1}
+  _rotationAxis: {x: 0, y: 1, z: 0}
+  _deceleration: 1
 --- !u!1001 &780027655
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7563,7 +7602,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh78780
+  m_Name: pb_Mesh44882
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
