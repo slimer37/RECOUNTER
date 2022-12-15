@@ -10,7 +10,7 @@ public class Credits : MonoBehaviour
     [SerializeField] float screenHeight = 1080;
     [SerializeField, Min(0.01f)] float fadeTime = 2;
 
-    Controls.MenuActions controls;
+    Controls controls;
 
     Tween creditsRoll;
 
@@ -18,9 +18,9 @@ public class Credits : MonoBehaviour
     {
         canvas.enabled = false;
 
-        controls = new Controls().Menu;
+        controls = new Controls();
         controls.Enable();
-        controls.Exit.performed += _ => Hide();
+        controls.Menu.Exit.performed += _ => Hide();
 
         group.alpha = 0;
 
@@ -42,6 +42,7 @@ public class Credits : MonoBehaviour
     void OnDestroy()
     {
         creditsRoll.Kill();
+        controls.Dispose();
     }
 
     void End()
@@ -60,6 +61,8 @@ public class Credits : MonoBehaviour
 
     void Hide()
     {
+        if (!creditsRoll.IsPlaying()) return;
+
         group.DOKill();
         group.DOFade(0, fadeTime).OnComplete(End);
     }
