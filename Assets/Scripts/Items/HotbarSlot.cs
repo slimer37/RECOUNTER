@@ -1,5 +1,4 @@
-﻿using Cinemachine;
-using DG.Tweening;
+﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,7 +32,7 @@ public class HotbarSlot : MonoBehaviour
         activeImage.enabled = active;
         text.fontStyle = active ? FontStyles.Bold : FontStyles.Normal;
 
-        if (!active) return;
+        if (!active || !punchTween.IsActive()) return;
         punchTween.Restart();
     }
 
