@@ -456,6 +456,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 760947123}
+    - targetCorrespondingSourceObject: {fileID: 2726818094815543010, guid: ec94afbe92d7fb64f80af2c194fea290,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 760947127}
+    - targetCorrespondingSourceObject: {fileID: 2726818094815543010, guid: ec94afbe92d7fb64f80af2c194fea290,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 760947126}
     - targetCorrespondingSourceObject: {fileID: -2487388224481515238, guid: ec94afbe92d7fb64f80af2c194fea290,
         type: 3}
       insertIndex: -1
@@ -3283,7 +3291,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.290555, y: 2.2326915, z: 0.12578185}
+  m_Size: {x: 1.260555, y: 2.222692, z: 0.1157818}
   m_Center: {x: 0.6452775, y: 0, z: -0.062890925}
 --- !u!4 &760947120 stripped
 Transform:
@@ -3307,9 +3315,73 @@ MonoBehaviour:
   _pullStrength: -360
   _rotator: {fileID: 760947120}
   _pullDirection: {x: 0, y: 0, z: 1}
-  _rotationAxis: {x: 0, y: 1, z: 0}
   _deceleration: 1
-  _limits: {x: -90, y: 0}
+--- !u!59 &760947126
+HingeJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760947114}
+  m_ConnectedBody: {fileID: 0}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 1.1163458, z: 0}
+  m_Axis: {x: 0, y: 1, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0.51472247, y: 2.4226916, z: -16.332783}
+  serializedVersion: 2
+  m_UseSpring: 0
+  m_Spring:
+    spring: 0
+    damper: 5
+    targetPosition: 0
+  m_UseMotor: 1
+  m_Motor:
+    targetVelocity: 0
+    force: 5
+    freeSpin: 0
+  m_UseLimits: 1
+  m_ExtendedLimits: 0
+  m_UseAcceleration: 0
+  m_Limits:
+    min: -135
+    max: 0
+    bounciness: 0
+    bounceMinVelocity: 0.2
+    contactDistance: 0
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
+--- !u!54 &760947127
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760947114}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &780027655
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4479,7 +4551,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-117042
+  m_Name: pb_Mesh32316
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -8941,7 +9013,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh65484
+  m_Name: pb_Mesh32892
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
