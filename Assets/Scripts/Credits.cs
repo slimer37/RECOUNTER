@@ -39,6 +39,11 @@ public class Credits : MonoBehaviour
             .OnComplete(Hide);
     }
 
+    void OnDestroy()
+    {
+        creditsRoll.Kill();
+    }
+
     void End()
     {
         canvas.enabled = false;
