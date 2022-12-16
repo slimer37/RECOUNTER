@@ -8,6 +8,8 @@ public class Door : Interactable
     [SerializeField, Required] Transform _rotator;
     [SerializeField] Vector3 _pullDirection = Vector3.forward;
     [SerializeField] float _deceleration;
+    [SerializeField, Min(0)] float _closeAngle;
+    [SerializeField] float _closingForce;
 
     HingeJoint _hinge;
 
@@ -45,6 +47,10 @@ public class Door : Interactable
             var pull = Vector3.Dot(pullPoint - _rotator.position, pullDir);
 
             rotationVelocity = pull * _pullStrength;
+        }
+        else if (Mathf.Abs(_hinge.angle) < _closeAngle)
+        {
+            rotationVelocity = _closingForce * (_closeAngle - Mathf.Abs(_hinge.angle));
         }
 
         Rotate(rotationVelocity);

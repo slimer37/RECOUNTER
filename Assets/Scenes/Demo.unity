@@ -4829,6 +4829,8 @@ MonoBehaviour:
   _rotator: {fileID: 760947120}
   _pullDirection: {x: 0, y: 0, z: 1}
   _deceleration: 1
+  _closeAngle: 135
+  _closingForce: 1
 --- !u!59 &760947126
 HingeJoint:
   m_ObjectHideFlags: 0
