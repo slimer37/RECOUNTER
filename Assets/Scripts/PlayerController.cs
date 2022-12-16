@@ -102,14 +102,21 @@ public class PlayerController : MonoBehaviour
 
     void ApplyGravity()
     {
-        if (controller.isGrounded) return;
-
-        var holdingJump = CanJump && playerControls.Jump.IsPressed();
+        if (controller.isGrounded)
+        {
+            yVelocity = -gravity * Time.deltaTime;
+            return;
+        }
 
         var velocityChange = gravity * Time.deltaTime;
 
-        if (yVelocity > 0 && !holdingJump)
-            velocityChange *= lowJumpMultiplier;
+        if (CanJump)
+        {
+            var holdingJump = playerControls.Jump.IsPressed();
+
+            if (yVelocity > 0 && !holdingJump)
+                velocityChange *= lowJumpMultiplier;
+        }
 
         yVelocity -= velocityChange;
     }
