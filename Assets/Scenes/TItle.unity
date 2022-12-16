@@ -2011,7 +2011,7 @@ MonoBehaviour:
   splashes:
   - group: {fileID: 172479981}
     duration: 2
-    fadeDuration: 0.2
+    fadeDuration: 0.5
   canvas: {fileID: 758689149}
   raycaster: {fileID: 758689147}
 --- !u!1 &793146093

@@ -1,5 +1,4 @@
 using DG.Tweening;
-using NaughtyAttributes;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,14 +12,14 @@ public class SplashScreen : MonoBehaviour
         [SerializeField] float duration;
         [SerializeField] float fadeDuration;
 
-        public Tween GetTween(object target)
+        public void AppendTo(Sequence sequence)
         {
             group.alpha = 0;
 
-            return DOTween.Sequence(target)
-            .Append(group.DOFade(1, fadeDuration))
-            .AppendInterval(duration)
-            .Append(group.DOFade(0, fadeDuration));
+            sequence
+                .Append(group.DOFade(1, fadeDuration))
+                .AppendInterval(duration)
+                .Append(group.DOFade(0, fadeDuration));
         }
     }
 
@@ -42,12 +41,12 @@ public class SplashScreen : MonoBehaviour
 
         foreach (var splash in splashes)
         {
-            sequence.Append(splash.GetTween(this));
+            splash.AppendTo(sequence);
         }
 
         sequence
             .AppendCallback(OnLogosFinished)
-            .Append(background.DOFade(0, finalFadeOut))
+            .Join(background.DOFade(0, finalFadeOut))
             .AppendCallback(OnSplashScreenFinished);
     }
 
