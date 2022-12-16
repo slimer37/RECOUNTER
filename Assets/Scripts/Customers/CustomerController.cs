@@ -17,7 +17,7 @@ public class CustomerController : MonoBehaviour
 
     void Update()
     {
-        animator.SetFloat(speedParam, agent.desiredVelocity.sqrMagnitude);
+        animator.SetFloat(speedParam, agent.desiredVelocity.magnitude);
     }
 
     public void MoveTo(Vector3 position)
