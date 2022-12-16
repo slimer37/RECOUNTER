@@ -3775,7 +3775,7 @@ GameObject:
   - component: {fileID: 334750065}
   m_Layer: 7
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4763,6 +4763,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+        type: 3}
+      propertyPath: m_TagString
+      value: Draggable
+      objectReference: {fileID: 0}
     - target: {fileID: 8355476728119689632, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -4969,6 +4974,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+        type: 3}
+      propertyPath: m_TagString
+      value: Draggable
       objectReference: {fileID: 0}
     - target: {fileID: 8355476728119689632, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
         type: 3}
@@ -5767,6 +5777,7 @@ GameObject:
   - component: {fileID: 840553857}
   - component: {fileID: 840553853}
   - component: {fileID: 840553860}
+  - component: {fileID: 840553861}
   m_Layer: 6
   m_Name: Employee
   m_TagString: Untagged
@@ -5837,6 +5848,42 @@ MonoBehaviour:
   <ItemHotbar>k__BackingField: {fileID: 222449576}
   <Controller>k__BackingField: {fileID: 273294031}
   <Interaction>k__BackingField: {fileID: 273294029}
+--- !u!114 &840553861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840553850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4dc3b12164b9b41910815c3e41cf69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 1065023558}
+  _range: 3
+  _force: 100
+  _mask:
+    serializedVersion: 2
+    m_Bits: 129
+  _tag: Draggable
+  _dragAction:
+    m_Name: Drag
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f93111c0-c35b-4f69-80f0-f413153aca63
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 88202473-4d37-46f1-8cd7-cd0f2e1243db
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Drag
+      m_Flags: 0
+    m_Flags: 0
 --- !u!1 &841520586
 GameObject:
   m_ObjectHideFlags: 0
@@ -6016,6 +6063,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b279e37d920babb41b0a25e21b3f69e8,
+        type: 3}
+      propertyPath: m_TagString
+      value: Draggable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6127,7 +6179,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh131564
+  m_Name: pb_Mesh42028
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -7221,7 +7273,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-271068
+  m_Name: pb_Mesh42016
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -7685,6 +7737,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 50e43394b2c25f94baf572e27f6bc2df,
+        type: 3}
+      propertyPath: m_TagString
+      value: Draggable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8776,6 +8833,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+        type: 3}
+      propertyPath: m_TagString
+      value: Draggable
+      objectReference: {fileID: 0}
     - target: {fileID: 8355476728119689632, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -9720,7 +9782,7 @@ GameObject:
   - component: {fileID: 1501167269}
   m_Layer: 0
   m_Name: interact title
-  m_TagString: Untagged
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10283,7 +10345,7 @@ GameObject:
   - component: {fileID: 1691863454}
   m_Layer: 0
   m_Name: items title
-  m_TagString: Untagged
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11275,7 +11337,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh132164
+  m_Name: pb_Mesh42656
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -11451,7 +11513,7 @@ GameObject:
   - component: {fileID: 2008331972}
   m_Layer: 7
   m_Name: donut
-  m_TagString: Untagged
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17497,6 +17559,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f486b98c10334624fafd2682e9d2fab0,
+        type: 3}
+      propertyPath: m_TagString
+      value: Draggable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18532,7 +18599,7 @@ GameObject:
   - component: {fileID: 8972040311066535797}
   m_Layer: 7
   m_Name: packaged tbone
-  m_TagString: Untagged
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19255,7 +19322,7 @@ GameObject:
   - component: {fileID: 6388072172700720965}
   m_Layer: 7
   m_Name: water bottle
-  m_TagString: Untagged
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19300,7 +19367,7 @@ GameObject:
   - component: {fileID: 6678217908996710820}
   m_Layer: 7
   m_Name: packaged chicken
-  m_TagString: Untagged
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19339,7 +19406,7 @@ GameObject:
   - component: {fileID: 8040567922078275111}
   m_Layer: 7
   m_Name: jarate jar
-  m_TagString: Untagged
+  m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20364,6 +20431,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+        type: 3}
+      propertyPath: m_TagString
+      value: Draggable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
