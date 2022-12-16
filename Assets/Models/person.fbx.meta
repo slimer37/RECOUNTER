@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 4547298ef4b2da8468f303d05a1f7cfe
 ModelImporter:
-  serializedVersion: 22103
+  serializedVersion: 22200
   internalIDToNameTable:
   - first:
       74: 1599155768152908184
@@ -103,7 +103,7 @@ ModelImporter:
       takeName: def_rig|chase
       internalID: 0
       firstFrame: 0
-      lastFrame: 20
+      lastFrame: 16
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -139,7 +139,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
