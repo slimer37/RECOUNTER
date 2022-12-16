@@ -15,7 +15,7 @@ public class Pause : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        IsPaused = false;
 
         controls = new Controls();
         controls.Menu.Exit.performed += _ => SetPaused(!IsPaused);

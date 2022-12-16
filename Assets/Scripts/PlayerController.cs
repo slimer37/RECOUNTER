@@ -168,8 +168,7 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        SetCursor(false);
 
         fov = walkFov;
 
@@ -182,11 +181,14 @@ public class PlayerController : MonoBehaviour
         Pause.Paused += OnPause;
     }
 
-    void OnPause(bool paused)
+    void SetCursor(bool show)
     {
-        Cursor.visible = paused;
-        Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = show;
+        Cursor.lockState = show ? CursorLockMode.None : CursorLockMode.Locked;
     }
+
+    void OnPause(bool paused) => SetCursor(paused);
+    void OnDestroy() => SetCursor(true);
 
     void RecordCameraAngles()
     {

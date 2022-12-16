@@ -26,9 +26,11 @@ namespace SceneLoading
 
         IEnumerator LoadScenes(params AssetReference[] scenes)
         {
+            Time.timeScale = 1;
+
             // Wait for loading screen to show.
             yield return loadingScreen.WaitToShow();
-            
+
             var operations = new AsyncOperationHandle[scenes.Length];
             for (var i = 0; i < scenes.Length; i++)
             {
