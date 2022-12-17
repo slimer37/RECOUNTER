@@ -8,6 +8,7 @@ public class ItemDragger : MonoBehaviour
     [SerializeField] Camera _camera;
     [SerializeField] float _range;
     [SerializeField] float _force;
+    [SerializeField] float _transformDeltaForce;
     [SerializeField] float _maxThrowForce;
     [SerializeField] float _throwMultiplier;
     [SerializeField] LayerMask _mask;
@@ -18,6 +19,9 @@ public class ItemDragger : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] InputAction _dragAction;
+
+    Vector3 _bodyDelta;
+    Vector3 _lastPosition;
 
     Vector3 _dragPosition;
     Rigidbody _dragTarget;
@@ -65,12 +69,16 @@ public class ItemDragger : MonoBehaviour
 
     void FixedUpdate()
     {
+        _bodyDelta = transform.position - _lastPosition;
+        _lastPosition = transform.position;
+
         if (!_dragTarget || !Mouse.current.leftButton.isPressed) return;
 
         var force = _camera.transform.TransformPoint(_dragPosition) - _dragTarget.position;
         var distance = force.magnitude;
 
         _dragTarget.AddForce(force * _force, ForceMode.Acceleration);
+        _dragTarget.AddForce(_bodyDelta * _transformDeltaForce, ForceMode.VelocityChange);
 
         _dragTarget.velocity *= Mathf.Min(1f, distance / 2);
     }
