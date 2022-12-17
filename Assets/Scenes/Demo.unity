@@ -3437,7 +3437,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   detectionRadius: 2
-  fade: 10
+  fade: 0.1
   fadeReticle: {fileID: 966473368}
   punchAmount: 0.1
   punchDuration: 0.15

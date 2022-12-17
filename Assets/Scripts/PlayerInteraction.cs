@@ -32,6 +32,10 @@ public class PlayerInteraction : MonoBehaviour
     Tween punch;
     Controls.PlayerActions playerControls;
 
+    float reticleAlpha;
+
+    Tween fadeReticleTween;
+
     void Awake()
     {
         if (icons.Length != System.Enum.GetNames(typeof(Interactable.Icon)).Length)
@@ -43,6 +47,8 @@ public class PlayerInteraction : MonoBehaviour
 
         punch = iconImage.rectTransform.DOPunchScale(Vector3.one * punchAmount, punchDuration)
             .Pause().SetAutoKill(false);
+
+        fadeReticleTween = fadeReticle.DOFade(0, fade).SetAutoKill(false).Pause();
     }
 
     void ResetUI()
@@ -101,14 +107,14 @@ public class PlayerInteraction : MonoBehaviour
 
     void FixedUpdate()
     {
-        var alpha = 0;
-
         if (Physics.CheckSphere(cam.transform.position, detectionRadius, interactableMask))
         {
-            alpha = 1;
+            fadeReticleTween.PlayBackwards();
         }
-
-        fadeReticle.alpha = Mathf.Lerp(fadeReticle.alpha, alpha, fade * Time.fixedDeltaTime);
+        else
+        {
+            fadeReticleTween.PlayForward();
+        }
     }
 
     void HandleInteraction(Transform currentHover)
