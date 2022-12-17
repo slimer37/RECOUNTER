@@ -60,6 +60,7 @@ public class ItemDragger : MonoBehaviour
 
         Setup(_hoverTarget);
         interaction.enabled = false;
+        interaction.FadeReticle(true);
     }
 
     void FixedUpdate()

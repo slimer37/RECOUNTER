@@ -107,13 +107,19 @@ public class PlayerInteraction : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Physics.CheckSphere(cam.transform.position, detectionRadius, interactableMask))
+        var interactableInRange = Physics.CheckSphere(cam.transform.position, detectionRadius, interactableMask);
+        FadeReticle(!interactableInRange);
+    }
+
+    public void FadeReticle(bool fadeOut)
+    {
+        if (fadeOut)
         {
-            fadeReticleTween.PlayBackwards();
+            fadeReticleTween.PlayForward();
         }
         else
         {
-            fadeReticleTween.PlayForward();
+            fadeReticleTween.PlayBackwards();
         }
     }
 
