@@ -46,7 +46,13 @@ public class Slosh : MonoBehaviour
 
         // velocity
         velocity = (lastPos - transform.position) / Time.deltaTime;
-        angularVelocity = transform.rotation.eulerAngles - lastRot;
+
+        var currentAngles = transform.eulerAngles;
+
+        for (var i = 0; i < 3; i++)
+        {
+            angularVelocity[i] = Mathf.DeltaAngle(currentAngles[i], lastRot[i]);
+        }
 
         // add clamped velocity to wobble
         wobbleAmountToAdd += Vector3.ClampMagnitude(
