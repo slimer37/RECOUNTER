@@ -119,7 +119,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (currentHover)
         {
-            hovered = currentHover.GetComponent<Interactable>();
+            hovered = currentHover.GetComponentInParent<Interactable>();
             hovered.OnHover(true);
 
             UpdateUI(true);
