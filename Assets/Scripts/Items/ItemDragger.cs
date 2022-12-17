@@ -7,6 +7,8 @@ public class ItemDragger : MonoBehaviour
     [SerializeField] Camera _camera;
     [SerializeField] float _range;
     [SerializeField] float _force;
+    [SerializeField] float _maxThrowForce;
+    [SerializeField] float _throwMultiplier;
     [SerializeField] LayerMask _mask;
     [SerializeField, Tag] string _tag;
 
@@ -45,7 +47,7 @@ public class ItemDragger : MonoBehaviour
         var force = _camera.transform.TransformPoint(_dragPosition) - _dragTarget.position;
         var distance = force.magnitude;
 
-        _dragTarget.AddForce(force * _force);
+        _dragTarget.AddForce(force * _force, ForceMode.Acceleration);
 
         _dragTarget.velocity *= Mathf.Min(1f, distance / 2);
     }
@@ -60,6 +62,7 @@ public class ItemDragger : MonoBehaviour
     void Setup(Rigidbody target)
     {
         _dragTarget = target;
+        _dragTarget.constraints = RigidbodyConstraints.FreezeRotation;
 
         _interpolateSetting = _dragTarget.interpolation;
         _dragTarget.interpolation = RigidbodyInterpolation.Interpolate;
@@ -72,8 +75,13 @@ public class ItemDragger : MonoBehaviour
 
     void ClearTarget()
     {
+        _dragTarget.constraints = RigidbodyConstraints.None;
         _dragTarget.interpolation = _interpolateSetting;
         _dragTarget.useGravity = _gravitySetting;
+
+        var magnitude = _dragTarget.velocity.magnitude;
+        var throwForce = magnitude * _throwMultiplier;
+        _dragTarget.velocity = _dragTarget.velocity / magnitude * Mathf.Min(_maxThrowForce, throwForce);
 
         _dragTarget = null;
     }

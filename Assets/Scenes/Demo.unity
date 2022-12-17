@@ -5863,6 +5863,8 @@ MonoBehaviour:
   _camera: {fileID: 1065023558}
   _range: 3
   _force: 100
+  _maxThrowForce: 8
+  _throwMultiplier: 0.6
   _mask:
     serializedVersion: 2
     m_Bits: 129
