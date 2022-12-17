@@ -204,12 +204,12 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Drop/Throw",
+                    "name": "Drop",
                     "type": "Button",
                     "id": "c99b560e-2086-4a40-ab44-40037586da6d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Tap,Hold",
+                    "interactions": "",
                     "initialStateCheck": true
                 },
                 {
@@ -261,7 +261,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard + Mouse",
-                    "action": "Drop/Throw",
+                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

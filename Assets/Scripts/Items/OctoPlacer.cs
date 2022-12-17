@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using NaughtyAttributes;
-using UnityEngine.InputSystem.Interactions;
 
 public class OctoPlacer : MonoBehaviour
 {
@@ -13,16 +12,10 @@ public class OctoPlacer : MonoBehaviour
 
     [Header("Controls")]
     [SerializeField] InputActionReference startPlaceButton;
-    [SerializeField] InputActionReference dropOrThrow;
+    [SerializeField] InputActionReference drop;
     [SerializeField] InputActionReference holdRotateButton;
     [SerializeField] InputActionReference verticalAxis;
     [SerializeField] InputActionReference lateralDelta;
-
-    [Header("Throwing")]
-    [SerializeField] float _timeToFullCharge;
-    [SerializeField] Vector3 _chargedPos;
-    [SerializeField] float _throwForce;
-    [SerializeField] Vector3 _throwDirection;
 
     [Header("Placing")]
     [SerializeField] float _lateralSpeed;
@@ -70,9 +63,6 @@ public class OctoPlacer : MonoBehaviour
     Item _active;
     bool _isPlacing;
 
-    bool _isCharging;
-    float _chargeTime = 0;
-
     bool _startPlaceObstructed;
 
     float _itemRotationVelocity;
@@ -93,9 +83,8 @@ public class OctoPlacer : MonoBehaviour
         startPlaceButton.action.Enable();
         startPlaceButton.action.performed += OnStartPlace;
 
-        dropOrThrow.action.Enable();
-        dropOrThrow.action.performed += OnDropOrThrow;
-        dropOrThrow.action.canceled += OnEndDropOrThrow;
+        drop.action.Enable();
+        drop.action.performed += OnDrop;
 
         holdRotateButton.action.Enable();
         verticalAxis.action.Enable();
@@ -130,66 +119,16 @@ public class OctoPlacer : MonoBehaviour
             InitializePlacement();
     }
 
-    void OnDropOrThrow(InputAction.CallbackContext ctx)
+    void OnDrop(InputAction.CallbackContext ctx)
     {
         if (!_active) return;
 
-        if (ctx.interaction is TapInteraction)
-            DropItem();
-        else if (!_isPlacing)
-            StartChargingThrow(0);
-    }
-
-    void StartChargingThrow(float initialTime)
-    {
-        if (!_active.IsThrowable) return;
-
-        _isCharging = true;
-        _chargeTime = initialTime;
-        _ghost.Hide();
-    }
-
-    void OnEndDropOrThrow(InputAction.CallbackContext ctx)
-    {
-        if (!_active || ctx.interaction is not HoldInteraction) return;
-
-        if (_isPlacing)
-            DropItem();
-        else if (_isCharging)
-            ThrowHeldItem();
-    }
-
-    void ThrowHeldItem()
-    {
-        _isCharging = false;
-
-        if (IsLineOfSightBlocked(_active.transform.position) || _active.IsIntersecting(_obstacleMask))
-            return;
-
-        PreReleaseItem().Throw(_chargeTime * _throwForce * _camera.transform.TransformDirection(_throwDirection));
-    }
-
-    void HandleThrowCharge()
-    {
-        _chargeTime = Mathf.Clamp01(_chargeTime + Time.deltaTime / _timeToFullCharge);
-
-        SetViewmodelLayer(true);
-
-        var cameraLocalPos = Vector3.Slerp(_adjustedHoldPos, _chargedPos, _chargeTime);
-        var cameraLocalRot = _camera.transform.rotation * _adjustedHoldRot;
-
-        PullItemTo(_camera.transform.TransformPoint(cameraLocalPos), cameraLocalRot);
+        DropItem();
     }
 
     void Update()
     {
         if (!_active) return;
-
-        if (_isCharging)
-        {
-            HandleThrowCharge();
-            return;
-        }
 
         if (!_isPlacing) return;
 
@@ -226,7 +165,7 @@ public class OctoPlacer : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!_active || _isPlacing || _isCharging) return;
+        if (!_active || _isPlacing) return;
 
         KeepItemInHand();
         ShowPreviewGhost();
