@@ -1,9 +1,14 @@
 using Cinemachine;
 using FMODUnity;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Animation")]
+    [SerializeField] Animator animator;
+    [SerializeField, AnimatorParam(nameof(animator))] string speedParam;
+
     [field: Header("Moving")]
     [field: SerializeField] public bool CanMove { get; set; } = true;
     [SerializeField] float walkSpeed;
@@ -52,6 +57,8 @@ public class PlayerController : MonoBehaviour
 
     Vector2 smoothInput;
     Vector2 smoothInputVelocity;
+
+    int speedId;
 
     void PlaySound(EventReference eventRef) => RuntimeManager.PlayOneShot(eventRef, body.position);
 
@@ -123,6 +130,8 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
+        animator.SetFloat(speedId, controller.velocity.magnitude);
+
         var input = playerControls.Move.ReadValue<Vector2>();
 
         // Sprinting only allowed when moving forward
@@ -186,6 +195,8 @@ public class PlayerController : MonoBehaviour
         RecordCameraAngles();
 
         Pause.Paused += OnPause;
+
+        speedId = Animator.StringToHash(speedParam);
     }
 
     void SetCursor(bool show)
