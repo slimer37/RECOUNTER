@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class ItemDragger : MonoBehaviour
 {
+    [SerializeField] PlayerInteraction interaction;
     [SerializeField] Camera _camera;
     [SerializeField] float _range;
     [SerializeField] float _force;
@@ -12,14 +13,21 @@ public class ItemDragger : MonoBehaviour
     [SerializeField] LayerMask _mask;
     [SerializeField, Tag] string _tag;
 
+    [Header("UI")]
+    [SerializeField] Canvas _instructions;
+
     [Header("Input")]
     [SerializeField] InputAction _dragAction;
 
     Vector3 _dragPosition;
     Rigidbody _dragTarget;
 
+    Rigidbody _hoverTarget;
+
     RigidbodyInterpolation _interpolateSetting;
     bool _gravitySetting;
+
+    bool IsDragging => _dragTarget;
 
     void Awake()
     {
@@ -30,14 +38,28 @@ public class ItemDragger : MonoBehaviour
     void OnEnable() => _dragAction.Enable();
     void OnDisable() => _dragAction.Disable();
 
-    void StartDrag(InputAction.CallbackContext ctx)
+    void Update()
     {
+        if (IsDragging) return;
+
+        _instructions.enabled = false;
+        _hoverTarget = null;
+
         if (Physics.Raycast(_camera.ViewportPointToRay(Vector2.one / 2), out var hit, _range, _mask))
         {
             if (!hit.rigidbody || !hit.collider.CompareTag(_tag)) return;
 
-            Setup(hit.rigidbody);
+            _hoverTarget = hit.rigidbody;
+            _instructions.enabled = true;
         }
+    }
+
+    void StartDrag(InputAction.CallbackContext ctx)
+    {
+        if (!_hoverTarget) return;
+
+        Setup(_hoverTarget);
+        interaction.enabled = false;
     }
 
     void FixedUpdate()
@@ -57,6 +79,7 @@ public class ItemDragger : MonoBehaviour
         if (!_dragTarget) return;
 
         ClearTarget();
+        interaction.enabled = true;
     }
 
     void Setup(Rigidbody target)
