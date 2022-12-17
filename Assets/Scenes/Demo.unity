@@ -5858,7 +5858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 273294029}
   _camera: {fileID: 1065023558}
-  _range: 1
+  _range: 1.5
   _force: 300
   _transformDeltaForce: 40
   _maxThrowForce: 8
