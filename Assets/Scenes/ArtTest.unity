@@ -1140,11 +1140,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa38562ca88790848935700d44f5df47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resolution: {x: 500, y: 500}
+  resolution: {x: 1024, y: 1024}
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  cs: {fileID: 7200000, guid: 86e4112288e002a499ccb318b829c644, type: 3}
   image: {fileID: 713753689}
-  format: 3
-  mode: 0
+  mode: 1
   colorPicker: {fileID: 103092490}
   radiusSlider: {fileID: 957681059}
   radiusDisplay: {fileID: 103129856}
@@ -1197,7 +1197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1400979439}
   rectTransform: {fileID: 1400979437}
-  radiusOffset: -1
+  radiusOffset: 0
   radiusMultiplier: 2
 --- !u!114 &713753692
 MonoBehaviour:
@@ -1450,7 +1450,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 345558595}
   m_Direction: 0
   m_MinValue: 1
-  m_MaxValue: 50
+  m_MaxValue: 100
   m_WholeNumbers: 1
   m_Value: 1
   m_OnValueChanged:
@@ -1890,7 +1890,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 7e4d52c16ac19f0499ee4534db69909f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
