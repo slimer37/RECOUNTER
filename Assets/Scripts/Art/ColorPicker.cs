@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ColorPicker : MonoBehaviour, IDragHandler
+public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler
 {
     [SerializeField] Color color;
     public UnityEvent<Color> onColorChanged;
@@ -139,4 +139,6 @@ public class ColorPicker : MonoBehaviour, IDragHandler
         computeShader.SetTexture(0, "Result", renderTexture);
         computeShader.SetFloats("Dimensions", bgResolution.x, bgResolution.y);
     }
+
+    public void OnPointerDown(PointerEventData eventData) => OnDrag(eventData);
 }
