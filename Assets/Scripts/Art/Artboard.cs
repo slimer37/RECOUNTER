@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
@@ -65,17 +66,34 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         var p = GetBrushPosition(eventData.position);
-        cs.SetFloats("A", p.x, p.y);
-        cs.SetFloats("B", p.x, p.y);
+
+        if (Keyboard.current.shiftKey.isPressed)
+        {
+            DrawContinuousLine(p);
+        }
+        else
+        {
+            Draw(p);
+        }
+    }
+
+    void Draw(Vector2 point)
+    {
+        cs.SetFloats("A", point.x, point.y);
         cs.Dispatch(1, texture.width / 8, texture.height / 8, 1);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         var p = GetBrushPosition(eventData.position);
-        cs.SetFloats("B", p.x, p.y);
+        DrawContinuousLine(p);
+    }
+
+    void DrawContinuousLine(Vector2 next)
+    {
+        cs.SetFloats("B", next.x, next.y);
         cs.Dispatch(2, texture.width / 8, texture.height / 8, 1);
-        cs.SetFloats("A", p.x, p.y);
+        cs.SetFloats("A", next.x, next.y);
     }
 
     Vector2 GetBrushPosition(Vector2 mousePosition)
