@@ -51,7 +51,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 0
     optimizeGameObjects: 0
-    removeConstantScaleCurves: 0
+    removeConstantScaleCurves: 1
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -103,7 +103,7 @@ ModelImporter:
       takeName: def_rig|chase
       internalID: 0
       firstFrame: 0
-      lastFrame: 20
+      lastFrame: 16
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -111,7 +111,7 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
-      loopBlend: 1
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -131,8 +131,8 @@ ModelImporter:
       name: run
       takeName: def_rig|run
       internalID: 0
-      firstFrame: 0
-      lastFrame: 16
+      firstFrame: 1
+      lastFrame: 17
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -160,7 +160,7 @@ ModelImporter:
       name: walk
       takeName: def_rig|walk
       internalID: -2026914765631043046
-      firstFrame: 0
+      firstFrame: 1
       lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
