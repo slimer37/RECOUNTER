@@ -23,10 +23,6 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     void Awake()
     {
-        SetThickness(radiusSlider.value);
-        radiusSlider.onValueChanged.AddListener(SetThickness);
-        colorPicker.onColorChanged.AddListener(SetColor);
-
         texture = new RenderTexture(resolution.x, resolution.y, 0);
         texture.enableRandomWrite = true;
         texture.filterMode = mode;
@@ -36,7 +32,15 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
         cs.SetTexture(2, "Result", texture);
         cs.SetInts("Dimensions", resolution.x, resolution.y);
 
+        SetColor(backgroundColor);
+
         Clear();
+
+        SetThickness(radiusSlider.value);
+        radiusSlider.onValueChanged.AddListener(SetThickness);
+
+        SetColor(colorPicker.Color);
+        colorPicker.onColorChanged.AddListener(SetColor);
 
         image.texture = texture;
     }
@@ -50,10 +54,9 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
         radiusDisplay.text = radius.ToString();
     }
 
-    void Clear()
+    public void Clear()
     {
         var c = backgroundColor;
-        cs.SetFloats("Color", c.r, c.g, c.b, c.a);
         cs.Dispatch(0, texture.width / 8, texture.height / 8, 1);
     }
 
