@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,19 +14,32 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     [Header("Brush")]
     [SerializeField] ColorPicker colorPicker;
-    [SerializeField] int thickness;
+    [SerializeField] Slider radiusSlider;
+    [SerializeField] TextMeshProUGUI radiusDisplay;
 
+    int radius;
     Texture2D texture;
     Vector2Int lastDrawPosition;
 
     void Awake()
     {
+        SetThickness(radiusSlider.value);
+        radiusSlider.onValueChanged.AddListener(SetThickness);
+
         texture = new Texture2D(resolution.x, resolution.y, format, -1, false);
         texture.filterMode = mode;
 
         Clear();
 
         image.texture = texture;
+    }
+
+    void SetThickness(float v)
+    {
+        radius = (int)v;
+
+        if (!radiusDisplay) return;
+        radiusDisplay.text = radius.ToString();
     }
 
     void Clear()
@@ -44,7 +58,10 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         lastDrawPosition = GetBrushPosition(eventData.position);
+
         Draw(lastDrawPosition.x, lastDrawPosition.y);
+
+        texture.Apply();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -133,26 +150,32 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     void Draw(int x, int y)
     {
-        var radius = thickness / 2;
+        var color = colorPicker.Color;
 
-        var xMin = Mathf.Clamp(x - radius, 0, texture.width);
-        var xMax = Mathf.Clamp(x + radius, 0, texture.width);
-        var yMin = Mathf.Clamp(y - radius, 0, texture.height);
-        var yMax = Mathf.Clamp(y + radius, 0, texture.height);
+        if (radius == 1)
+        {
+            texture.SetPixel(x, y, color);
+            return;
+        }
+
+        var r = radius - 1;
+
+        var xMin = Mathf.Clamp(x - r, 0, texture.width);
+        var xMax = Mathf.Clamp(x + r, 0, texture.width);
+        var yMin = Mathf.Clamp(y - r, 0, texture.height);
+        var yMax = Mathf.Clamp(y + r, 0, texture.height);
         var brushRect = Rect.MinMaxRect(xMin, yMin, xMax, yMax);
 
-        var topLeft = Vector2Int.FloorToInt(brushRect.position);
         var size = Vector2Int.FloorToInt(brushRect.size);
 
         if (size.x == 0 || size.y == 0) return;
 
         var brush = new Color32[size.x * size.y];
-        var color = colorPicker.Color;
         for (var i = 0; i < brush.Length; i++)
         {
             brush[i] = color;
         }
 
-        texture.SetPixels32(topLeft.x, topLeft.y, size.x, size.y, brush);
+        texture.SetPixels32(xMin, yMin, size.x, size.y, brush);
     }
 }
