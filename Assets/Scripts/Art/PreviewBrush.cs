@@ -8,6 +8,7 @@ public class PreviewBrush : MonoBehaviour, IPointerEnterHandler, IPointerMoveHan
     [SerializeField] RectTransform rectTransform;
     [SerializeField] float radiusOffset;
     [SerializeField] float radiusMultiplier;
+    [SerializeField] Outline outline;
 
     public float Radius { get; set; }
     public Color Color { get; set; }
@@ -20,8 +21,12 @@ public class PreviewBrush : MonoBehaviour, IPointerEnterHandler, IPointerMoveHan
     public void OnPointerEnter(PointerEventData eventData)
     {
         rectTransform.position = eventData.position;
-        rectTransform.sizeDelta = Vector2.one * (Radius + radiusOffset) * radiusMultiplier;
+        rectTransform.sizeDelta = (Radius + radiusOffset) * radiusMultiplier * Vector2.one;
+
         image.color = Color;
+        Color.RGBToHSV(Color, out _, out _, out float v);
+        outline.effectColor = Color.HSVToRGB(0, 0, 1 - v);
+
         image.enabled = true;
     }
 
