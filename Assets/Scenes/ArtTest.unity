@@ -1221,7 +1221,7 @@ MonoBehaviour:
       m_Action: Undo
       m_Flags: 0
     m_Flags: 0
-  undoLimit: 5
+  undoLimit: 10
 --- !u!114 &713753689
 MonoBehaviour:
   m_ObjectHideFlags: 0
