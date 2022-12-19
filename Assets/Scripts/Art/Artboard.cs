@@ -52,8 +52,16 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     void Dispatch(int kernelIndex) => cs.Dispatch(kernelIndex, threadCount.x, threadCount.y, 1);
 
-    public void ExecuteClear() => Dispatch(0);
+    public void ClearBoard()
+    {
+        SetColor(backgroundColor);
 
+        ExecuteClear();
+
+        SetColor(brush.Color);
+    }
+
+    void ExecuteClear() => Dispatch(0);
     void ExecuteDrawPoint() => Dispatch(1);
     void ExecuteDrawLine() => Dispatch(2);
 

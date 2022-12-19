@@ -1783,11 +1783,11 @@ RectTransform:
   m_Father: {fileID: 1912837273}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -40, y: 200}
-  m_SizeDelta: {x: 350, y: 30}
-  m_Pivot: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -40, y: 40}
+  m_SizeDelta: {x: 350, y: 50}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &1228344869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1834,7 +1834,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 713753688}
         m_TargetAssemblyTypeName: Artboard, Assembly-CSharp
-        m_MethodName: Clear
+        m_MethodName: ClearBoard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2263,7 +2263,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Clear With Color
+  m_text: Clear
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: afd2db86ecf719f4186a2a859162a51b, type: 2}
   m_sharedMaterial: {fileID: -1004145594809765983, guid: afd2db86ecf719f4186a2a859162a51b,
