@@ -56,13 +56,11 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     public void Clear()
     {
-        var c = backgroundColor;
         cs.Dispatch(0, texture.width / 8, texture.height / 8, 1);
     }
 
-    void SetColor(Color color)
+    void SetColor(Color c)
     {
-        var c = colorPicker.Color;
         cs.SetFloats("Color", c.r, c.g, c.b, c.a);
     }
 
