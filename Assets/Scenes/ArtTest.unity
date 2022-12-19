@@ -742,7 +742,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -100}
+  m_AnchoredPosition: {x: -175, y: -100}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &301934539
@@ -849,6 +849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1b64f57cb7aba14cb83a7611eb3c866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _computeShader: {fileID: 7200000, guid: c52b92933ff73d441ad6019e809b9387, type: 3}
   colorPicker: {fileID: 103092490}
   radiusSlider: {fileID: 957681059}
   radiusDisplay: {fileID: 103129856}
@@ -1198,7 +1199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resolution: {x: 1024, y: 1024}
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
-  cs: {fileID: 7200000, guid: 86e4112288e002a499ccb318b829c644, type: 3}
+  clearCs: {fileID: 7200000, guid: 86e4112288e002a499ccb318b829c644, type: 3}
   image: {fileID: 713753689}
   mode: 1
   brush: {fileID: 329660170}

@@ -1,75 +1,66 @@
-using System;
-using TMPro;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-public class Brush : MonoBehaviour
+public abstract class Brush : MonoBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] ColorPicker colorPicker;
-    [SerializeField] Slider radiusSlider;
-    [SerializeField] TextMeshProUGUI radiusDisplay;
+    [SerializeField] ComputeShader _computeShader;
 
-    [Header("Preview")]
-    [SerializeField] Image preview;
-    [SerializeField] RectTransform previewTransform;
-    [SerializeField] Outline outline;
+    int _drawKernel;
+    int _drawLineKernel;
 
-    [Header("Shortcuts")]
-    [SerializeField] RectTransform canvas;
-    [SerializeField] InputAction changeBrushSize;
-    [SerializeField] int radiusIncrement;
+    int _threadX;
+    int _threadY;
 
-    public Color Color { get; private set; }
-    public float Radius { get; private set; }
+    float _radius;
 
-    public event Action<Color> ColorChanged;
-    public event Action<float> RadiusChanged;
-
-    void Awake()
+    protected float Radius
     {
-        UpdateRadius(radiusSlider.value);
-        radiusSlider.onValueChanged.AddListener(UpdateRadius);
-
-        UpdateColor(colorPicker.Color);
-        colorPicker.onColorChanged.AddListener(UpdateColor);
-
-        changeBrushSize.performed += ChangeBrushSize;
-        changeBrushSize.Enable();
+        get { return _radius; }
+        set
+        {
+            _radius = value;
+            _computeShader.SetFloat("Radius", value);
+        }
     }
 
-    void UpdateRadius(float newRadius)
+    Color _color;
+
+    protected Color Color
     {
-        Radius = newRadius;
-
-        radiusDisplay.text = Radius.ToString();
-
-        previewTransform.sizeDelta = Radius * 2 * Vector2.one;
-
-        RadiusChanged?.Invoke(newRadius);
+        get { return _color; }
+        set
+        {
+            _color = value;
+            _computeShader.SetFloats("Color", value.r, value.g, value.b, value.a);
+        }
     }
 
-    void UpdateColor(Color newColor)
+    protected virtual void Awake()
     {
-        Color = newColor;
-
-        // Invert outline value based on current color
-        preview.color = Color;
-        Color.RGBToHSV(Color, out _, out _, out float v);
-        outline.effectColor = Color.HSVToRGB(0, 0, 1 - v);
-
-        ColorChanged?.Invoke(newColor);
+        _drawKernel = _computeShader.FindKernel("Draw");
+        _drawLineKernel = _computeShader.FindKernel("DrawLine");
     }
 
-    void ChangeBrushSize(InputAction.CallbackContext ctx)
+    public virtual void InitializeWithTexture(Texture texture)
     {
-        var scroll = ctx.ReadValue<float>() > 0 ? 1 : -1;
-        radiusSlider.value += scroll * radiusIncrement;
+        _threadX = texture.width / 8;
+        _threadY = texture.height / 8;
+
+        _computeShader.SetTexture(_drawKernel, "Result", texture);
+        _computeShader.SetTexture(_drawLineKernel, "Result", texture);
     }
 
-    void Update()
+    void Dispatch(int kernelIndex) => _computeShader.Dispatch(kernelIndex, _threadX, _threadY, 1);
+
+    public virtual void Draw(float x, float y)
     {
-        previewTransform.position = Mouse.current.position.ReadValue();
+        _computeShader.SetFloats("A", x, y);
+        Dispatch(_drawKernel);
+    }
+
+    public virtual void DrawContinuousLine(float x, float y)
+    {
+        _computeShader.SetFloats("B", x, y);
+        Dispatch(_drawLineKernel);
+        _computeShader.SetFloats("A", x, y);
     }
 }

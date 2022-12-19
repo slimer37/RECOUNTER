@@ -8,7 +8,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
     [Header("Texture")]
     [SerializeField, Min(1)] Vector2Int resolution = Vector2Int.one * 100;
     [SerializeField] Color backgroundColor;
-    [SerializeField] ComputeShader cs;
+    [SerializeField] ComputeShader clearCs;
     [SerializeField] RawImage image;
     [SerializeField] FilterMode mode;
 
@@ -18,53 +18,37 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
     RenderTexture texture;
 
     Vector2Int threadCount;
+    int clearKernel;
 
     void Awake()
     {
+        threadCount = new(resolution.x / 8, resolution.y / 8);
+        clearKernel = clearCs.FindKernel("Clear");
+
         texture = new RenderTexture(resolution.x, resolution.y, 0)
         {
             enableRandomWrite = true,
             filterMode = mode
         };
 
-        cs.SetTexture(0, "Result", texture);
-        cs.SetTexture(1, "Result", texture);
-        cs.SetTexture(2, "Result", texture);
-        cs.SetInts("Dimensions", resolution.x, resolution.y);
-
-        threadCount = new(resolution.x / 8, resolution.y / 8);
+        clearCs.SetTexture(0, "Result", texture);
 
         SetColor(backgroundColor);
-
-        ExecuteClear();
-
-        SetRadius(brush.Radius);
-        brush.RadiusChanged += SetRadius;
-
-        SetColor(brush.Color);
-        brush.ColorChanged += SetColor;
+        ClearBoard();
 
         image.texture = texture;
+
+        SetBrush(brush);
     }
 
-    void SetRadius(float v) => cs.SetFloat("Radius", v);
-    void SetColor(Color c) => cs.SetFloats("Color", c.r, c.g, c.b, c.a);
-
-    void Dispatch(int kernelIndex) => cs.Dispatch(kernelIndex, threadCount.x, threadCount.y, 1);
-
-    public void ClearBoard()
+    public void SetBrush(Brush newBrush)
     {
-        SetColor(backgroundColor);
-
-        ExecuteClear();
-
-        SetColor(brush.Color);
+        brush = newBrush;
+        brush.InitializeWithTexture(texture);
     }
 
-    void ExecuteClear() => Dispatch(0);
-    void ExecuteDrawPoint() => Dispatch(1);
-    void ExecuteDrawLine() => Dispatch(2);
-
+    void SetColor(Color c) => clearCs.SetFloats("Color", c.r, c.g, c.b, c.a);
+    void ClearBoard() => clearCs.Dispatch(clearKernel, threadCount.x, threadCount.y, 1);
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -80,11 +64,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
         }
     }
 
-    void Draw(Vector2 point)
-    {
-        cs.SetFloats("A", point.x, point.y);
-        ExecuteDrawPoint();
-    }
+    void Draw(Vector2 point) => brush.Draw(point.x, point.y);
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -92,12 +72,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
         DrawContinuousLine(p);
     }
 
-    void DrawContinuousLine(Vector2 next)
-    {
-        cs.SetFloats("B", next.x, next.y);
-        ExecuteDrawLine();
-        cs.SetFloats("A", next.x, next.y);
-    }
+    void DrawContinuousLine(Vector2 next) => brush.DrawContinuousLine(next.x, next.y);
 
     Vector2 GetBrushPosition(Vector2 mousePosition)
     {

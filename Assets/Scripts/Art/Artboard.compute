@@ -1,36 +1,9 @@
 #pragma kernel Clear
-#pragma kernel Draw
-#pragma kernel DrawLine
 
 RWTexture2D<float4> Result;
-float Radius;
 float4 Color;
-float2 A;
-float2 B;
-uint2 Dimensions;
-
-float DistToSegment(float2 p, float2 a, float2 b) {
-    float2 ap = p - a, ab = b - a;
-    float h = saturate(dot(ap, ab) / dot(ab, ab));
-    float2 cp = a + ab * h;
-    return distance(p, cp);
-}
 
 [numthreads(8,8,1)]
 void Clear(uint2 id : SV_DispatchThreadID) {
     Result[id.xy] = Color;
-}
-
-[numthreads(8, 8, 1)]
-void Draw(uint2 id : SV_DispatchThreadID) {
-    float k = distance(id.xy, A);
-    if (k < Radius)
-        Result[id.xy] = Color;
-}
-
-[numthreads(8, 8, 1)]
-void DrawLine(uint2 id : SV_DispatchThreadID) {
-    float k = DistToSegment(id.xy, A, B);
-    if (k < Radius)
-        Result[id.xy] = Color;
 }
