@@ -1204,6 +1204,24 @@ MonoBehaviour:
   image: {fileID: 713753689}
   mode: 1
   brush: {fileID: 329660170}
+  undo:
+    m_Name: Undo
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 47d34e07-70f3-45bf-8f0a-3c2ac2ce57c5
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: ace5869b-0932-4bb1-ba26-da7a45b4044c
+      m_Path: <Keyboard>/z
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Undo
+      m_Flags: 0
+    m_Flags: 0
+  undoLimit: 5
 --- !u!114 &713753689
 MonoBehaviour:
   m_ObjectHideFlags: 0

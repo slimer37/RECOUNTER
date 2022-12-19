@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
+public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     [Header("Texture")]
     [SerializeField, Min(1)] Vector2Int resolution = Vector2Int.one * 100;
@@ -15,10 +15,19 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
     [Header("Brush")]
     [SerializeField] Brush brush;
 
+    [Header("Undo")]
+    [SerializeField] InputAction undo;
+    [SerializeField] int undoLimit;
+
     RenderTexture texture;
+
+    Texture2D[] undoSteps;
+    int currentUndoStep;
 
     Vector2Int threadCount;
     int clearKernel;
+
+    bool canUndo;
 
     void Awake()
     {
@@ -39,6 +48,8 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
         image.texture = texture;
 
         SetBrush(brush);
+
+        InitializeUndo();
     }
 
     public void SetBrush(Brush newBrush)
@@ -52,6 +63,8 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        RecordUndo();
+
         var p = GetBrushPosition(eventData.position);
 
         if (Keyboard.current.shiftKey.isPressed)
@@ -87,5 +100,39 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
         brushCenter.y *= resolution.y / rect.height;
 
         return brushCenter;
+    }
+
+    void InitializeUndo()
+    {
+        undoSteps = new Texture2D[undoLimit];
+
+        for (int i = 0; i < undoSteps.Length; i++)
+        {
+            undoSteps[i] = new Texture2D(resolution.x, resolution.y, TextureFormat.RGBA32, false);
+        }
+
+        undo.performed += Undo;
+        undo.Enable();
+    }
+
+    void RecordUndo()
+    {
+        if (currentUndoStep >= undoLimit) return;
+
+        canUndo = false;
+
+        Graphics.CopyTexture(texture, undoSteps[currentUndoStep++]);
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        canUndo = true;
+    }
+
+    void Undo(InputAction.CallbackContext ctx)
+    {
+        if (!canUndo || currentUndoStep <= 0) return;
+
+        Graphics.CopyTexture(undoSteps[--currentUndoStep], texture);
     }
 }
