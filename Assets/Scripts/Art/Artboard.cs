@@ -17,8 +17,9 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
     [SerializeField] ColorPicker colorPicker;
     [SerializeField] Slider radiusSlider;
     [SerializeField] TextMeshProUGUI radiusDisplay;
+    [SerializeField] InputAction increaseBrushSize;
+    [SerializeField] int radiusIncrement;
 
-    int radius;
     RenderTexture texture;
 
     void Awake()
@@ -36,22 +37,30 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
 
         Clear();
 
-        SetThickness(radiusSlider.value);
-        radiusSlider.onValueChanged.AddListener(SetThickness);
+        SetRadius(radiusSlider.value);
+        radiusSlider.onValueChanged.AddListener(SetRadius);
 
         SetColor(colorPicker.Color);
         colorPicker.onColorChanged.AddListener(SetColor);
 
         image.texture = texture;
+
+        increaseBrushSize.performed += IncreaseBrushSize;
+        increaseBrushSize.Enable();
     }
 
-    void SetThickness(float v)
+    void IncreaseBrushSize(InputAction.CallbackContext ctx)
     {
-        radius = (int)v;
-        cs.SetFloat("Radius", radius);
+        var scroll = ctx.ReadValue<float>() > 0 ? 1 : -1;
+        radiusSlider.value += scroll * radiusIncrement;
+    }
+
+    void SetRadius(float v)
+    {
+        cs.SetFloat("Radius", v);
 
         if (!radiusDisplay) return;
-        radiusDisplay.text = radius.ToString();
+        radiusDisplay.text = v.ToString();
     }
 
     public void Clear()

@@ -6,22 +6,27 @@ public class PreviewBrush : MonoBehaviour, IPointerEnterHandler, IPointerMoveHan
 {
     [SerializeField] Image image;
     [SerializeField] RectTransform rectTransform;
-    [SerializeField] float radiusOffset;
-    [SerializeField] float radiusMultiplier;
     [SerializeField] Outline outline;
+    [SerializeField] Slider radiusSlider;
 
-    public float Radius { get; set; }
     public Color Color { get; set; }
 
     void Awake()
     {
         image.enabled = false;
+
+        UpdateRadius(radiusSlider.value);
+        radiusSlider.onValueChanged.AddListener(UpdateRadius);
+    }
+
+    void UpdateRadius(float radius)
+    {
+        rectTransform.sizeDelta = radius * 2 * Vector2.one;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         rectTransform.position = eventData.position;
-        rectTransform.sizeDelta = (Radius + radiusOffset) * radiusMultiplier * Vector2.one;
 
         image.color = Color;
         Color.RGBToHSV(Color, out _, out _, out float v);

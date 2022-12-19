@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Radius
+  m_text: Radius <size=80%><i>(Scroll Wheel)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: afd2db86ecf719f4186a2a859162a51b, type: 2}
   m_sharedMaterial: {fileID: -1004145594809765983, guid: afd2db86ecf719f4186a2a859162a51b,
@@ -1148,6 +1148,24 @@ MonoBehaviour:
   colorPicker: {fileID: 103092490}
   radiusSlider: {fileID: 957681059}
   radiusDisplay: {fileID: 103129856}
+  increaseBrushSize:
+    m_Name: Increase Brush Size
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: c066700e-716e-4a27-8f3d-f38412310138
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a10693e7-dca9-4452-aafc-ab13dae0a05e
+      m_Path: <Mouse>/scroll/y
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Increase Brush Size
+      m_Flags: 0
+    m_Flags: 0
+  radiusIncrement: 1
 --- !u!114 &713753689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1197,9 +1215,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1400979439}
   rectTransform: {fileID: 1400979437}
-  radiusOffset: 0
-  radiusMultiplier: 2
   outline: {fileID: 1400979441}
+  radiusSlider: {fileID: 957681059}
 --- !u!114 &713753692
 MonoBehaviour:
   m_ObjectHideFlags: 0
