@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -14,64 +13,50 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
     [SerializeField] FilterMode mode;
 
     [Header("Brush")]
-    [SerializeField] ColorPicker colorPicker;
-    [SerializeField] Slider radiusSlider;
-    [SerializeField] TextMeshProUGUI radiusDisplay;
-    [SerializeField] InputAction increaseBrushSize;
-    [SerializeField] int radiusIncrement;
+    [SerializeField] Brush brush;
 
     RenderTexture texture;
 
+    Vector2Int threadCount;
+
     void Awake()
     {
-        texture = new RenderTexture(resolution.x, resolution.y, 0);
-        texture.enableRandomWrite = true;
-        texture.filterMode = mode;
+        texture = new RenderTexture(resolution.x, resolution.y, 0)
+        {
+            enableRandomWrite = true,
+            filterMode = mode
+        };
 
         cs.SetTexture(0, "Result", texture);
         cs.SetTexture(1, "Result", texture);
         cs.SetTexture(2, "Result", texture);
         cs.SetInts("Dimensions", resolution.x, resolution.y);
 
+        threadCount = new(resolution.x / 8, resolution.y / 8);
+
         SetColor(backgroundColor);
 
-        Clear();
+        ExecuteClear();
 
-        SetRadius(radiusSlider.value);
-        radiusSlider.onValueChanged.AddListener(SetRadius);
+        SetRadius(brush.Radius);
+        brush.RadiusChanged += SetRadius;
 
-        SetColor(colorPicker.Color);
-        colorPicker.onColorChanged.AddListener(SetColor);
+        SetColor(brush.Color);
+        brush.ColorChanged += SetColor;
 
         image.texture = texture;
-
-        increaseBrushSize.performed += IncreaseBrushSize;
-        increaseBrushSize.Enable();
     }
 
-    void IncreaseBrushSize(InputAction.CallbackContext ctx)
-    {
-        var scroll = ctx.ReadValue<float>() > 0 ? 1 : -1;
-        radiusSlider.value += scroll * radiusIncrement;
-    }
+    void SetRadius(float v) => cs.SetFloat("Radius", v);
+    void SetColor(Color c) => cs.SetFloats("Color", c.r, c.g, c.b, c.a);
 
-    void SetRadius(float v)
-    {
-        cs.SetFloat("Radius", v);
+    void Dispatch(int kernelIndex) => cs.Dispatch(kernelIndex, threadCount.x, threadCount.y, 1);
 
-        if (!radiusDisplay) return;
-        radiusDisplay.text = v.ToString();
-    }
+    public void ExecuteClear() => Dispatch(0);
 
-    public void Clear()
-    {
-        cs.Dispatch(0, texture.width / 8, texture.height / 8, 1);
-    }
+    void ExecuteDrawPoint() => Dispatch(1);
+    void ExecuteDrawLine() => Dispatch(2);
 
-    void SetColor(Color c)
-    {
-        cs.SetFloats("Color", c.r, c.g, c.b, c.a);
-    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -90,7 +75,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
     void Draw(Vector2 point)
     {
         cs.SetFloats("A", point.x, point.y);
-        cs.Dispatch(1, texture.width / 8, texture.height / 8, 1);
+        ExecuteDrawPoint();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -102,7 +87,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler
     void DrawContinuousLine(Vector2 next)
     {
         cs.SetFloats("B", next.x, next.y);
-        cs.Dispatch(2, texture.width / 8, texture.height / 8, 1);
+        ExecuteDrawLine();
         cs.SetFloats("A", next.x, next.y);
     }
 

@@ -534,19 +534,7 @@ MonoBehaviour:
   color: {r: 0, g: 0, b: 0, a: 1}
   onColorChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 713753691}
-        m_TargetAssemblyTypeName: PreviewBrush, Assembly-CSharp
-        m_MethodName: set_Color
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   computeShader: {fileID: 7200000, guid: 1251f6dea3a4ec248be02811291cfb54, type: 3}
   bgImage: {fileID: 744524021}
   bgResolution: {x: 352, y: 200}
@@ -832,6 +820,75 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &329660169
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 329660171}
+  - component: {fileID: 329660170}
+  m_Layer: 0
+  m_Name: Brush
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &329660170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329660169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1b64f57cb7aba14cb83a7611eb3c866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorPicker: {fileID: 103092490}
+  radiusSlider: {fileID: 957681059}
+  radiusDisplay: {fileID: 103129856}
+  preview: {fileID: 1400979439}
+  previewTransform: {fileID: 1400979437}
+  outline: {fileID: 1400979441}
+  canvas: {fileID: 713753687}
+  changeBrushSize:
+    m_Name: Change Brush Size
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a6a82fae-84d9-4689-832a-333510e222ac
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 69ef2694-09b4-45c0-9d68-52ab30000234
+      m_Path: <Mouse>/scroll/y
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Change Brush Size
+      m_Flags: 0
+    m_Flags: 0
+  radiusIncrement: 1
+--- !u!4 &329660171
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329660169}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &345558594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,7 +1155,6 @@ GameObject:
   - component: {fileID: 713753690}
   - component: {fileID: 713753689}
   - component: {fileID: 713753688}
-  - component: {fileID: 713753691}
   - component: {fileID: 713753692}
   m_Layer: 5
   m_Name: Artboard
@@ -1145,27 +1201,7 @@ MonoBehaviour:
   cs: {fileID: 7200000, guid: 86e4112288e002a499ccb318b829c644, type: 3}
   image: {fileID: 713753689}
   mode: 1
-  colorPicker: {fileID: 103092490}
-  radiusSlider: {fileID: 957681059}
-  radiusDisplay: {fileID: 103129856}
-  increaseBrushSize:
-    m_Name: Increase Brush Size
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: c066700e-716e-4a27-8f3d-f38412310138
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: a10693e7-dca9-4452-aafc-ab13dae0a05e
-      m_Path: <Mouse>/scroll/y
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Increase Brush Size
-      m_Flags: 0
-    m_Flags: 0
-  radiusIncrement: 1
+  brush: {fileID: 329660170}
 --- !u!114 &713753689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1201,22 +1237,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 713753686}
   m_CullTransparentMesh: 1
---- !u!114 &713753691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713753686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1b64f57cb7aba14cb83a7611eb3c866, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  image: {fileID: 1400979439}
-  rectTransform: {fileID: 1400979437}
-  outline: {fileID: 1400979441}
-  radiusSlider: {fileID: 957681059}
 --- !u!114 &713753692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1473,19 +1493,7 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 713753691}
-        m_TargetAssemblyTypeName: PreviewBrush, Assembly-CSharp
-        m_MethodName: set_Radius
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1018042800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,7 +1741,7 @@ RectTransform:
   m_Children:
   - {fileID: 103092489}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2547,7 +2555,7 @@ RectTransform:
   - {fileID: 957681058}
   - {fileID: 1228344868}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2793,7 +2801,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2140022921
 GameObject:
