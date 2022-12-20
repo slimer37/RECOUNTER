@@ -15,6 +15,9 @@ public class ConstrainedUndoRedo<T> where T : class
     int _availableRedos;
     int _availableUndos;
 
+    public bool CanUndo => _availableUndos > 0;
+    public bool CanRedo => _availableRedos > 0;
+
     public ConstrainedUndoRedo(int capacity, T[] emptyStates, T initialState, TransferState record, TransferState restore)
     {
         if (emptyStates.Length != capacity)
@@ -48,7 +51,7 @@ public class ConstrainedUndoRedo<T> where T : class
     {
         result = default;
 
-        if (_availableUndos == 0) return false;
+        if (!CanUndo) return false;
 
         _index--;
 
@@ -67,7 +70,7 @@ public class ConstrainedUndoRedo<T> where T : class
     {
         result = default;
 
-        if (_availableRedos == 0) return false;
+        if (!CanRedo) return false;
 
         _index++;
 

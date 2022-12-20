@@ -15,9 +15,11 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     [Header("Brush")]
     [SerializeField] Brush brush;
 
-    [Header("Undo")]
+    [Header("Undo/Redo")]
     [SerializeField] InputAction undo;
     [SerializeField] InputAction redo;
+    [SerializeField] Button redoButton;
+    [SerializeField] Button undoButton;
     [SerializeField] int undoLimit;
 
     RenderTexture texture;
@@ -129,11 +131,23 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
         redo.performed += Redo;
         redo.Enable();
+
+        undoButton.onClick.AddListener(Undo);
+        redoButton.onClick.AddListener(Redo);
+
+        UpdateButtons();
+    }
+
+    void UpdateButtons()
+    {
+        undoButton.interactable = undoRedo.CanUndo;
+        redoButton.interactable = undoRedo.CanRedo;
     }
 
     void RecordDraw()
     {
         undoRedo.RecordState(texture);
+        UpdateButtons();
     }
 
     public void Undo()
@@ -141,6 +155,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         if (isDrawing) return;
 
         undoRedo.Undo(texture, out _);
+        UpdateButtons();
     }
 
     public void Redo()
@@ -148,6 +163,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         if (isDrawing) return;
 
         undoRedo.Redo(texture, out _);
+        UpdateButtons();
     }
 
     void Undo(InputAction.CallbackContext ctx) => Undo();
