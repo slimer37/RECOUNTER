@@ -7,8 +7,6 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 {
     [Header("Texture")]
     [SerializeField, Min(1)] Vector2Int resolution = Vector2Int.one * 100;
-    [SerializeField] Color backgroundColor;
-    [SerializeField] ComputeShader clearCs;
     [SerializeField] RawImage image;
     [SerializeField] FilterMode mode;
 
@@ -22,9 +20,14 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     [SerializeField] Button undoButton;
     [SerializeField] int undoLimit;
 
-    RenderTexture texture;
+    [Header("Clearing")]
+    [SerializeField] Color backgroundColor;
+    [SerializeField] ComputeShader clearCs;
+    [SerializeField] Button clearButton;
 
-    ConstrainedUndoRedo<Texture> undoRedo;
+    Painting painting;
+
+    ConstrainedUndoRedo<Painting> undoRedo;
 
     Vector2Int threadCount;
     int clearKernel;
@@ -36,35 +39,52 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         threadCount = new(resolution.x / 8, resolution.y / 8);
         clearKernel = clearCs.FindKernel("Clear");
 
-        texture = new RenderTexture(resolution.x, resolution.y, 0)
+        var texture = new RenderTexture(resolution.x, resolution.y, 0)
         {
             enableRandomWrite = true,
             filterMode = mode
         };
 
+        painting = new Painting(texture);
+
         clearCs.SetTexture(0, "Result", texture);
 
         SetColor(backgroundColor);
-        ClearBoard();
+        clearCs.Dispatch(clearKernel, threadCount.x, threadCount.y, 1);
 
         image.texture = texture;
 
         SetBrush(brush);
 
         InitializeUndo();
+
+        clearButton.onClick.AddListener(ClearBoard);
+
+        UpdateButtons();
     }
 
     public void SetBrush(Brush newBrush)
     {
         brush = newBrush;
-        brush.InitializeWithTexture(texture);
+        brush.InitializeWithTexture(painting.Texture);
     }
 
     void SetColor(Color c) => clearCs.SetFloats("Color", c.r, c.g, c.b, c.a);
-    void ClearBoard() => clearCs.Dispatch(clearKernel, threadCount.x, threadCount.y, 1);
+
+    public void ClearBoard()
+    {
+        if (painting.IsClear) return;
+
+        painting.IsClear = true;
+
+        clearCs.Dispatch(clearKernel, threadCount.x, threadCount.y, 1);
+
+        RecordDraw();
+    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        painting.IsClear = false;
         isDrawing = true;
 
         var p = GetBrushPosition(eventData.position);
@@ -112,19 +132,15 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     void InitializeUndo()
     {
-        var undoTextures = new Texture2D[undoLimit];
+        var undoTextures = new Painting[undoLimit];
 
         for (int i = 0; i < undoTextures.Length; i++)
         {
-            undoTextures[i] = new Texture2D(resolution.x, resolution.y, TextureFormat.RGBA32, false);
+            var texture = new Texture2D(resolution.x, resolution.y, TextureFormat.RGBA32, false);
+            undoTextures[i] = new Painting(texture);
         }
 
-        undoRedo = new ConstrainedUndoRedo<Texture>(undoLimit, undoTextures, texture,
-            (src, dest) =>
-            {
-                Graphics.CopyTexture(src, dest);
-                return dest;
-            });
+        undoRedo = new ConstrainedUndoRedo<Painting>(undoLimit, undoTextures, painting, Painting.Restore);
 
         undo.performed += Undo;
         undo.Enable();
@@ -134,19 +150,18 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
         undoButton.onClick.AddListener(Undo);
         redoButton.onClick.AddListener(Redo);
-
-        UpdateButtons();
     }
 
     void UpdateButtons()
     {
         undoButton.interactable = undoRedo.CanUndo;
         redoButton.interactable = undoRedo.CanRedo;
+        clearButton.interactable = !painting.IsClear;
     }
 
     void RecordDraw()
     {
-        undoRedo.RecordState(texture);
+        undoRedo.RecordState(painting);
         UpdateButtons();
     }
 
@@ -154,7 +169,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         if (isDrawing) return;
 
-        undoRedo.Undo(texture, out _);
+        undoRedo.Undo(painting, out _);
         UpdateButtons();
     }
 
@@ -162,7 +177,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         if (isDrawing) return;
 
-        undoRedo.Redo(texture, out _);
+        undoRedo.Redo(painting, out _);
         UpdateButtons();
     }
 
