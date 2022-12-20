@@ -12,10 +12,11 @@ public abstract class Brush : MonoBehaviour
 
     float _radius;
 
-    protected float Radius
+    public float Radius
     {
         get { return _radius; }
-        set
+
+        protected set
         {
             _radius = value;
             _computeShader.SetFloat("Radius", value);
@@ -24,10 +25,11 @@ public abstract class Brush : MonoBehaviour
 
     Color _color;
 
-    protected Color Color
+    public Color Color
     {
         get { return _color; }
-        set
+
+        protected set
         {
             _color = value;
             _computeShader.SetFloats("Color", value.r, value.g, value.b, value.a);
