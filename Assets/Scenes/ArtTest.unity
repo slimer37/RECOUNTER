@@ -742,7 +742,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -100}
+  m_AnchoredPosition: {x: -175, y: -100}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &301934539
@@ -1219,6 +1219,23 @@ MonoBehaviour:
       m_Processors: 
       m_Groups: 
       m_Action: Undo
+      m_Flags: 0
+    m_Flags: 0
+  redo:
+    m_Name: Redo
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: b859d365-d95e-413e-b23d-0af2e11e9b9e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: bbc8bdb8-8fbc-4422-bbdc-a80cefe26e6c
+      m_Path: <Keyboard>/y
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Redo
       m_Flags: 0
     m_Flags: 0
   undoLimit: 10
