@@ -17,14 +17,12 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     [Header("Undo")]
     [SerializeField] InputAction undo;
+    [SerializeField] InputAction redo;
     [SerializeField] int undoLimit;
 
     RenderTexture texture;
 
-    Texture2D[] undoTextures;
-    int currentUndoStep;
-
-    DropOutStack<int> undoStack;
+    ConstrainedUndoRedo<Texture> undoRedo;
 
     Vector2Int threadCount;
     int clearKernel;
@@ -67,8 +65,6 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         isDrawing = true;
 
-        RecordUndo();
-
         var p = GetBrushPosition(eventData.position);
 
         if (Keyboard.current.shiftKey.isPressed)
@@ -81,7 +77,11 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         }
     }
 
-    public void OnPointerUp(PointerEventData eventData) => isDrawing = false;
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        isDrawing = false;
+        RecordDraw();
+    }
 
     void Draw(Vector2 point) => brush.Draw(point.x, point.y);
 
@@ -110,35 +110,46 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     void InitializeUndo()
     {
-        undoTextures = new Texture2D[undoLimit];
-        undoStack = new DropOutStack<int>(undoLimit);
+        var undoTextures = new Texture2D[undoLimit];
 
         for (int i = 0; i < undoTextures.Length; i++)
         {
             undoTextures[i] = new Texture2D(resolution.x, resolution.y, TextureFormat.RGBA32, false);
         }
 
+        undoRedo = new ConstrainedUndoRedo<Texture>(undoLimit, undoTextures, texture,
+            (src, dest) =>
+            {
+                Graphics.CopyTexture(src, dest);
+                return dest;
+            });
+
         undo.performed += Undo;
         undo.Enable();
+
+        redo.performed += Redo;
+        redo.Enable();
     }
 
-    void RecordUndo()
+    void RecordDraw()
     {
-        currentUndoStep %= undoTextures.Length;
-
-        Graphics.CopyTexture(texture, undoTextures[currentUndoStep]);
-
-        undoStack.Push(currentUndoStep);
-
-        currentUndoStep++;
+        undoRedo.RecordState(texture);
     }
 
-    void Undo()
+    public void Undo()
     {
-        if (isDrawing || !undoStack.TryPop(out var step)) return;
+        if (isDrawing) return;
 
-        Graphics.CopyTexture(undoTextures[step], texture);
+        undoRedo.Undo(texture, out _);
+    }
+
+    public void Redo()
+    {
+        if (isDrawing) return;
+
+        undoRedo.Redo(texture, out _);
     }
 
     void Undo(InputAction.CallbackContext ctx) => Undo();
+    void Redo(InputAction.CallbackContext ctx) => Redo();
 }
