@@ -17,7 +17,7 @@ public class BrushPreview : MonoBehaviour
         artboard.BrushSelected += OnBrushSelected;
 
         var dimensions = artboard.Resolution;
-        var actual = (artboard.transform as RectTransform).sizeDelta;
+        var actual = (artboard.transform as RectTransform).rect.size;
         scaleRatio = new Vector2(actual.x / dimensions.x, actual.y / dimensions.y);
 
         OnBrushSelected(artboard.CurrentBrush);
