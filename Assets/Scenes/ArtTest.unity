@@ -742,7 +742,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -175, y: -100}
+  m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &301934539
@@ -853,9 +853,6 @@ MonoBehaviour:
   colorPicker: {fileID: 103092490}
   radiusSlider: {fileID: 957681059}
   radiusDisplay: {fileID: 103129856}
-  preview: {fileID: 1400979439}
-  previewTransform: {fileID: 1400979437}
-  outline: {fileID: 1400979441}
   canvas: {fileID: 713753687}
   changeBrushSize:
     m_Name: Change Brush Size
@@ -1280,6 +1277,7 @@ GameObject:
   - component: {fileID: 713753689}
   - component: {fileID: 713753688}
   - component: {fileID: 713753692}
+  - component: {fileID: 713753693}
   m_Layer: 5
   m_Name: Artboard
   m_TagString: Untagged
@@ -1413,6 +1411,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
+--- !u!114 &713753693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713753686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48442c63b523a8245b618989f10d9e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artboard: {fileID: 713753688}
+  preview: {fileID: 1400979439}
+  previewTransform: {fileID: 1400979437}
+  outline: {fileID: 1400979441}
 --- !u!1 &744524018
 GameObject:
   m_ObjectHideFlags: 0
@@ -1602,9 +1616,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -40, y: -400}
+  m_AnchoredPosition: {x: -40, y: -390}
   m_SizeDelta: {x: 350, y: 20}
-  m_Pivot: {x: 1, y: 0.5}
+  m_Pivot: {x: 1, y: 1}
 --- !u!114 &957681059
 MonoBehaviour:
   m_ObjectHideFlags: 0

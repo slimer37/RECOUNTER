@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -34,6 +35,11 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     bool isDrawing;
 
+    public Vector2Int Resolution => resolution;
+    public Brush CurrentBrush => brush;
+
+    public event Action<Brush> BrushSelected;
+
     void Awake()
     {
         threadCount = new(resolution.x / 8, resolution.y / 8);
@@ -67,6 +73,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         brush = newBrush;
         brush.InitializeWithTexture(painting.Texture);
+        BrushSelected?.Invoke(brush);
     }
 
     void SetColor(Color c) => clearCs.SetFloats("Color", c.r, c.g, c.b, c.a);

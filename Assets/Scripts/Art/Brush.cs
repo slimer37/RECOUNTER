@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public abstract class Brush : MonoBehaviour
 {
@@ -20,8 +21,11 @@ public abstract class Brush : MonoBehaviour
         {
             _radius = value;
             _computeShader.SetFloat("Radius", value);
+            RadiusChanged?.Invoke(value);
         }
     }
+
+    public event Action<float> RadiusChanged;
 
     Color _color;
 
@@ -33,8 +37,11 @@ public abstract class Brush : MonoBehaviour
         {
             _color = value;
             _computeShader.SetFloats("Color", value.r, value.g, value.b, value.a);
+            ColorChanged?.Invoke(value);
         }
     }
+
+    public event Action<Color> ColorChanged;
 
     protected virtual void Awake()
     {
