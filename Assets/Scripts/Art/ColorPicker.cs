@@ -17,6 +17,7 @@ public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler
     [SerializeField] Transform picker;
     [SerializeField] Image pickerSprite;
     [SerializeField] Image previewSprite;
+    [SerializeField] RectTransform optionalLayout;
         
     [Header("Slider")]
     [SerializeField] Slider hueSlider;
@@ -35,18 +36,17 @@ public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     void Start()
     {
-        rectT = bgImage.GetComponent<RectTransform>();
+        if (optionalLayout)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(optionalLayout);
+
+        rectT = bgImage.rectTransform;
+        SetColor(color);
+
         hueSlider.onValueChanged.AddListener(UpdateHue);
             
         GenerateColorBar();
         ConfigureShader();
         UpdateHue();
-    }
-
-    void OnValidate()
-    {
-        rectT = bgImage.GetComponent<RectTransform>();
-        SetColor(color);
     }
 
     void SetColor(Color newColor)
@@ -59,7 +59,7 @@ public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler
         hueSlider.value = h;
 
         var point = Rect.NormalizedToPoint(rectT.rect, new Vector2(s, v));
-            
+
         picker.localPosition = point;
             
         if (pickerBackground)
