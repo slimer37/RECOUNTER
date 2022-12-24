@@ -43,6 +43,8 @@ public abstract class Brush : MonoBehaviour
 
     public event Action<Color> ColorChanged;
 
+    protected bool Active { get; private set; }
+
     protected virtual void Awake()
     {
         _drawKernel = _computeShader.FindKernel("Draw");
@@ -50,13 +52,20 @@ public abstract class Brush : MonoBehaviour
         _computeShader = Instantiate(_computeShader);
     }
 
-    public virtual void InitializeWithTexture(Texture texture)
+    public virtual void Activate(Texture texture)
     {
+        Active = true;
+
         _threadX = texture.width / 8;
         _threadY = texture.height / 8;
 
         _computeShader.SetTexture(_drawKernel, "Result", texture);
         _computeShader.SetTexture(_drawLineKernel, "Result", texture);
+    }
+
+    public virtual void Deactivate()
+    {
+        Active = false;
     }
 
     void Dispatch(int kernelIndex) => _computeShader.Dispatch(kernelIndex, _threadX, _threadY, 1);

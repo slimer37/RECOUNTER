@@ -71,8 +71,11 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public void SetBrush(Brush newBrush)
     {
+        if (brush != null)
+            brush.Deactivate();
+
         brush = newBrush;
-        brush.InitializeWithTexture(Painting.Texture);
+        brush.Activate(Painting.Texture);
         BrushSelected?.Invoke(brush);
     }
 

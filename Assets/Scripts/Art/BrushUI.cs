@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,6 +18,7 @@ public class BrushUI : Brush
     protected override void Awake()
     {
         base.Awake();
+        UpdateUIState();
 
         UpdateRadius(radiusSlider.value);
         radiusSlider.onValueChanged.AddListener(UpdateRadius);
@@ -28,6 +28,23 @@ public class BrushUI : Brush
 
         changeBrushSize.performed += ChangeBrushSize;
         changeBrushSize.Enable();
+    }
+
+    public override void Activate(Texture texture)
+    {
+        base.Activate(texture);
+        UpdateUIState();
+    }
+
+    public override void Deactivate()
+    {
+        base.Deactivate();
+        UpdateUIState();
+    }
+
+    void UpdateUIState()
+    {
+        colorPicker.Interactable = Active;
     }
 
     void UpdateRadius(float newRadius)
