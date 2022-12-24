@@ -26,7 +26,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     [SerializeField] ComputeShader clearCs;
     [SerializeField] Button clearButton;
 
-    Painting painting;
+    public Painting Painting { get; private set; }
 
     ConstrainedUndoRedo<Painting> undoRedo;
 
@@ -51,7 +51,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
             filterMode = mode
         };
 
-        painting = new Painting(texture);
+        Painting = new Painting(texture, backgroundColor);
 
         clearCs.SetTexture(0, "Result", texture);
 
@@ -72,7 +72,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     public void SetBrush(Brush newBrush)
     {
         brush = newBrush;
-        brush.InitializeWithTexture(painting.Texture);
+        brush.InitializeWithTexture(Painting.Texture);
         BrushSelected?.Invoke(brush);
     }
 
@@ -80,9 +80,9 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public void ClearBoard()
     {
-        if (painting.IsClear) return;
+        if (Painting.IsClear) return;
 
-        painting.IsClear = true;
+        Painting.IsClear = true;
 
         clearCs.Dispatch(clearKernel, threadCount.x, threadCount.y, 1);
 
@@ -91,7 +91,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        painting.IsClear = false;
+        Painting.IsClear = false;
         isDrawing = true;
 
         var p = GetBrushPosition(eventData.position);
@@ -144,10 +144,10 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         for (int i = 0; i < undoTextures.Length; i++)
         {
             var texture = new Texture2D(resolution.x, resolution.y, TextureFormat.RGBA32, false);
-            undoTextures[i] = new Painting(texture);
+            undoTextures[i] = new Painting(texture, backgroundColor);
         }
 
-        undoRedo = new ConstrainedUndoRedo<Painting>(undoLimit, undoTextures, painting, Painting.Restore);
+        undoRedo = new ConstrainedUndoRedo<Painting>(undoLimit, undoTextures, Painting, Painting.Restore);
 
         undo.performed += Undo;
         undo.Enable();
@@ -163,12 +163,12 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         undoButton.interactable = undoRedo.CanUndo;
         redoButton.interactable = undoRedo.CanRedo;
-        clearButton.interactable = !painting.IsClear;
+        clearButton.interactable = !Painting.IsClear;
     }
 
     void RecordDraw()
     {
-        undoRedo.RecordState(painting);
+        undoRedo.RecordState(Painting);
         UpdateButtons();
     }
 
@@ -176,7 +176,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         if (isDrawing) return;
 
-        undoRedo.Undo(painting, out _);
+        undoRedo.Undo(Painting, out _);
         UpdateButtons();
     }
 
@@ -184,7 +184,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         if (isDrawing) return;
 
-        undoRedo.Redo(painting, out _);
+        undoRedo.Redo(Painting, out _);
         UpdateButtons();
     }
 

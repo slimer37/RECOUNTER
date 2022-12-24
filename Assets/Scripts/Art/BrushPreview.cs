@@ -1,8 +1,8 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BrushPreview : MonoBehaviour
+public class BrushPreview : MonoBehaviour, IPointerEnterHandler, IPointerMoveHandler, IPointerExitHandler
 {
     [SerializeField] Artboard artboard;
     [SerializeField] Image preview;
@@ -40,10 +40,7 @@ public class BrushPreview : MonoBehaviour
         lastBrush = brush;
     }
 
-    void UpdateRadius(float radius)
-    {
-        previewTransform.sizeDelta = radius * 2 * scaleRatio;
-    }
+    void UpdateRadius(float radius) => previewTransform.sizeDelta = radius * 2 * scaleRatio;
 
     void UpdateColor(Color color)
     {
@@ -53,8 +50,9 @@ public class BrushPreview : MonoBehaviour
         outline.effectColor = Color.HSVToRGB(0, 0, 1 - v);
     }
 
-    void Update()
-    {
-        previewTransform.position = Mouse.current.position.ReadValue();
-    }
+    public void OnPointerMove(PointerEventData eventData) => previewTransform.position = eventData.position;
+
+    public void OnPointerEnter(PointerEventData eventData) => preview.enabled = true;
+
+    public void OnPointerExit(PointerEventData eventData) => preview.enabled = false;
 }

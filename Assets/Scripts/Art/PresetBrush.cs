@@ -3,13 +3,17 @@
 public class PresetBrush : Brush
 {
     [SerializeField] Color color;
-    [SerializeField] float radius;
+
+    new public float Radius
+    {
+        get => base.Radius;
+        set => base.Radius = value;
+    }
 
     protected override void Awake()
     {
         base.Awake();
 
         Color = color;
-        Radius = radius;
     }
 }

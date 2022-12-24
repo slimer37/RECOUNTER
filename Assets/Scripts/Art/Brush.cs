@@ -47,6 +47,7 @@ public abstract class Brush : MonoBehaviour
     {
         _drawKernel = _computeShader.FindKernel("Draw");
         _drawLineKernel = _computeShader.FindKernel("DrawLine");
+        _computeShader = Instantiate(_computeShader);
     }
 
     public virtual void InitializeWithTexture(Texture texture)

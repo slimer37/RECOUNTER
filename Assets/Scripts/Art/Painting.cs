@@ -2,13 +2,15 @@
 
 public class Painting
 {
-    public Painting(Texture texture)
+    public Painting(Texture texture, Color backgroundColor)
     {
+        BackgroundColor = backgroundColor;
         _texture = texture;
     }
 
     public bool IsClear { get; set; } = true;
 
+    public readonly Color BackgroundColor;
     Texture _texture;
 
     public Texture Texture => _texture;
