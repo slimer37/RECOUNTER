@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler
 {
+    [SerializeField] bool interactable = true;
+
+    [SerializeField] Color disabledColor;
     [SerializeField] Color color;
     public UnityEvent<Color> onColorChanged;
         
@@ -28,6 +31,18 @@ public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler
     Texture2D pickerBackground;
     RectTransform rectT;
 
+    public bool Interactable
+    {
+        get => interactable;
+        set
+        {
+            interactable = value;
+            var color = interactable ? Color.white : disabledColor;
+            bgImage.color = sliderBar.color = color;
+            hueSlider.interactable = interactable;
+        }
+    }
+
     public Color Color
     {
         get => color;
@@ -36,6 +51,8 @@ public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     void Start()
     {
+        Interactable = interactable;
+
         if (optionalLayout)
             LayoutRebuilder.ForceRebuildLayoutImmediate(optionalLayout);
 
@@ -88,6 +105,8 @@ public class ColorPicker : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!interactable) return;
+
         picker.position = eventData.position;
         var r = rectT.rect;
         var local = picker.localPosition;
