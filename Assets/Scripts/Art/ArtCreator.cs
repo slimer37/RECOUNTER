@@ -35,6 +35,8 @@ public static class ArtCreator
 
     public static ArtSession CurrentArtSession { get; private set; }
 
+    public static bool SessionInProgress => CurrentArtSession != null && !CurrentArtSession.IsComplete;
+
     [RuntimeInitializeOnLoadMethod]
     static void Init()
     {
@@ -52,6 +54,9 @@ public static class ArtCreator
 
     public static ArtSession BeginSession(Texture initialTexture = null)
     {
+        if (SessionInProgress)
+            throw new InvalidOperationException("An art session is still ongoing.");
+
         CurrentArtSession = new ArtSession(initialTexture);
         currentArtCreator = UnityEngine.Object.Instantiate(artCreatorPrefab);
         return CurrentArtSession;
