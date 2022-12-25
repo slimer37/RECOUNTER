@@ -8,6 +8,8 @@ public static class ArtCreator
     {
         public event Action<Texture> Completed;
 
+        public readonly Texture Initial;
+
         public Texture Result { get; private set; }
         public bool IsComplete { get; private set; }
 
@@ -20,13 +22,18 @@ public static class ArtCreator
             Result = result;
             Completed?.Invoke(result);
         }
+
+        public ArtSession(Texture initialTexture)
+        {
+            Initial = initialTexture;
+        }
     }
 
     static GameObject artCreatorPrefab;
 
     static GameObject currentArtCreator;
 
-    static ArtSession currentArtSession;
+    public static ArtSession CurrentArtSession { get; private set; }
 
     [RuntimeInitializeOnLoadMethod]
     static void Init()
@@ -40,12 +47,13 @@ public static class ArtCreator
     public static void Complete(Texture result)
     {
         UnityEngine.Object.Destroy(currentArtCreator);
-        currentArtSession.Complete(result);
+        CurrentArtSession.Complete(result);
     }
 
-    public static ArtSession BeginSession()
+    public static ArtSession BeginSession(Texture initialTexture = null)
     {
+        CurrentArtSession = new ArtSession(initialTexture);
         currentArtCreator = UnityEngine.Object.Instantiate(artCreatorPrefab);
-        return currentArtSession = new ArtSession();
+        return CurrentArtSession;
     }
 }

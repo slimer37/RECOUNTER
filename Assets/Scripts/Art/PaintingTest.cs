@@ -6,6 +6,8 @@ public class PaintingTest : Interactable
 
     PlayerController controller;
 
+    Texture currentPainting;
+
     public override HudInfo GetHudInfo(Employee e)
     {
         return new()
@@ -17,7 +19,7 @@ public class PaintingTest : Interactable
 
     protected override void OnInteract(Employee e)
     {
-        ArtCreator.BeginSession().Completed += OnCompleteSession;
+        ArtCreator.BeginSession(currentPainting).Completed += OnCompleteSession;
 
         controller = e.Controller;
         controller.Suspend(true);
@@ -28,6 +30,7 @@ public class PaintingTest : Interactable
 
     void OnCompleteSession(Texture result)
     {
+        currentPainting = result;
         rend.material.mainTexture = result;
 
         controller.Suspend(false);

@@ -61,7 +61,17 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         clearCs.SetTexture(0, "Result", texture);
 
         SetColor(backgroundColor);
-        clearCs.Dispatch(clearKernel, threadCount.x, threadCount.y, 1);
+
+        var session = ArtCreator.CurrentArtSession;
+        if (session != null && session.Initial)
+        {
+            Graphics.CopyTexture(session.Initial, texture);
+            Painting.IsClear = false;
+        }
+        else
+        {
+            clearCs.Dispatch(clearKernel, threadCount.x, threadCount.y, 1);
+        }
 
         image.texture = texture;
 
