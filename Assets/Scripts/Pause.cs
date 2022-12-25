@@ -11,6 +11,9 @@ public class Pause : MonoBehaviour
 
     public static event Action<bool> Paused;
 
+    bool cursorVisible;
+    CursorLockMode cursorLockState;
+
     public static bool IsPaused { get; private set; }
 
     void Awake()
@@ -58,6 +61,26 @@ public class Pause : MonoBehaviour
 
         Time.timeScale = pause ? 0 : 1;
 
+        if (pause)
+            RecordCursor();
+        else
+            SetCursor();
+
         Paused?.Invoke(pause);
+    }
+
+    void RecordCursor()
+    {
+        cursorVisible = Cursor.visible;
+        cursorLockState = Cursor.lockState;
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    void SetCursor()
+    {
+        Cursor.visible = cursorVisible;
+        Cursor.lockState = cursorLockState;
     }
 }

@@ -194,8 +194,6 @@ public class PlayerController : MonoBehaviour
 
         RecordCameraAngles();
 
-        Pause.Paused += OnPause;
-
         speedId = Animator.StringToHash(speedParam);
     }
 
@@ -205,7 +203,6 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = show ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
-    void OnPause(bool paused) => SetCursor(paused);
     void OnDestroy() => SetCursor(true);
 
     void RecordCameraAngles()
