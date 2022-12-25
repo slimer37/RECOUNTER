@@ -40,6 +40,11 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public event Action<Brush> BrushSelected;
 
+    public void Complete()
+    {
+        ArtCreator.Complete(Painting.Texture);
+    }
+
     void Awake()
     {
         threadCount = new(resolution.x / 8, resolution.y / 8);
