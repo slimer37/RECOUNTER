@@ -12,15 +12,10 @@ public class PowerTest : MonoBehaviour
     void Awake()
     {
         offMaterial = lightbulbRenderer.material;
-        inlet.Powered += OnPower;
-        inlet.Depowered += OnPower;
+        inlet.Powered += () => SetLightbulb(true);
+        inlet.Depowered += () => SetLightbulb(false);
 
         SetLightbulb(false);
-    }
-
-    void OnPower()
-    {
-        SetLightbulb(true);
     }
 
     void SetLightbulb(bool on)

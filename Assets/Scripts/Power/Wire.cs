@@ -22,12 +22,12 @@ public class Wire : MonoBehaviour
 
     Vector3[] positions;
 
-    bool isConnecting;
-
     public Action<PowerInlet, PowerOutlet> Connected;
+    public Action<PowerInlet, PowerOutlet> Disconnected;
 
     public PowerInlet Inlet { get; private set; }
     public PowerOutlet Outlet { get; private set; }
+    public bool IsConnecting { get; private set; }
 
     void Awake()
     {
@@ -37,7 +37,7 @@ public class Wire : MonoBehaviour
 
     void OnEnable()
     {
-        isConnecting = false;
+        IsConnecting = false;
     }
 
     public void SetStart(PowerInlet inlet, Vector3 plugPoint, Vector3 plugDirection, Transform hookParent, Vector3 offset)
@@ -56,7 +56,7 @@ public class Wire : MonoBehaviour
     {
         Outlet = outlet;
 
-        isConnecting = true;
+        IsConnecting = true;
 
         OrientPlug(_plugEnd, plugPoint + plugDirection * _plugStartOffset, plugDirection);
 
@@ -67,14 +67,28 @@ public class Wire : MonoBehaviour
     {
         Connected?.Invoke(Inlet, Outlet);
 
-        isConnecting = false;
+        IsConnecting = false;
 
         enabled = false;
     }
 
+    public void Disconnect(Transform hookParent, Vector3 offset)
+    {
+        if (IsConnecting)
+            throw new InvalidOperationException("Cannot disconnect during connect animation.");
+
+        WireManager.SetActiveWire(this);
+        SetupHook(hookParent, offset);
+        enabled = true;
+
+        Disconnected?.Invoke(Inlet, Outlet);
+
+        Outlet = null;
+    }
+
     void Update()
     {
-        if (isConnecting)
+        if (IsConnecting)
             SetWireEnd();
         else
             FollowHook();

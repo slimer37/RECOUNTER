@@ -9,7 +9,9 @@ public class PowerInlet : Interactable
     public event Action Powered;
     public event Action Depowered;
 
-    PowerOutlet outlet;
+    Wire wire;
+
+    public bool IsPowered { get; private set; }
 
     void OnDrawGizmosSelected()
     {
@@ -19,7 +21,7 @@ public class PowerInlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return !outlet && !WireManager.ActiveWire;
+        return wire ? wire == WireManager.ActiveWire : !WireManager.ActiveWire;
     }
 
     public override HudInfo GetHudInfo(Employee e)
@@ -28,28 +30,44 @@ public class PowerInlet : Interactable
             ? new()
             {
                 icon = Icon.Hand,
-                text = "Connect Wire"
+                text = wire ? "Put Away Wire" : "Connect Wire"
             }
             : BlankHud;
     }
 
     protected override void OnInteract(Employee e)
     {
-        var wire = WireManager.GetWire();
+        if (wire)
+        {
+            WireManager.ReleaseWire(wire);
+            WireManager.ClearActiveWire();
+            wire = null;
+        }
+        else
+        {
+            wire = WireManager.GetWire();
 
-        wire.SetStart(
-            this,
-            transform.TransformPoint(plugPoint),
-            transform.forward,
-            e.transform,
-            Vector3.forward + Vector3.up);
+            wire.SetStart(
+                this,
+                transform.TransformPoint(plugPoint),
+                transform.forward,
+                Camera.main.transform,
+                Vector3.forward);
 
-        wire.Connected += OnPower;
+            wire.Connected += OnPower;
+            wire.Disconnected += OnDepower;
+        }
+    }
+
+    void OnDepower(PowerInlet inlet, PowerOutlet outlet)
+    {
+        IsPowered = false;
+        Depowered?.Invoke();
     }
 
     void OnPower(PowerInlet inlet, PowerOutlet outlet)
     {
-        this.outlet = outlet;
+        IsPowered = true;
         Powered?.Invoke();
     }
 }

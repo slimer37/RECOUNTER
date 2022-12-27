@@ -26,16 +26,50 @@ public static class WireManager
         wires = new ObjectPool<Wire>(Create, Get, Release);
     }
 
-    static Wire Create() => UnityEngine.Object.Instantiate(wirePrefab);
+    static Wire Create()
+    {
+        var wire = UnityEngine.Object.Instantiate(wirePrefab);
+        wire.gameObject.SetActive(false);
+        return wire;
+    }
 
-    static void Get(Wire wire) => wire.enabled = true;
+    static void Get(Wire wire)
+    {
+        wire.gameObject.SetActive(true);
+    }
 
-    static void Release(Wire wire) => wire.enabled = false;
+    static void Release(Wire wire)
+    {
+        wire.gameObject.SetActive(false);
+    }
 
     public static Wire GetWire()
     {
-        ActiveWire = wires.Get();
-        ActiveWire.Connected += (_, _) => ActiveWire = null;
+        SetActiveWire(wires.Get());
         return ActiveWire;
     }
+
+    public static void SetActiveWire(Wire wire)
+    {
+        if (ActiveWire)
+            ActiveWire.Connected -= ClearActiveWire;
+
+        ActiveWire = wire;
+        ActiveWire.Connected += ClearActiveWire;
+    }
+
+    static void ClearActiveWire(PowerInlet inlet, PowerOutlet outlet)
+    {
+        if (ActiveWire)
+            ActiveWire.Connected -= ClearActiveWire;
+
+        ActiveWire = null;
+    }
+
+    public static void ClearActiveWire()
+    {
+        ClearActiveWire(null, null);
+    }
+
+    public static void ReleaseWire(Wire wire) => wires.Release(wire);
 }

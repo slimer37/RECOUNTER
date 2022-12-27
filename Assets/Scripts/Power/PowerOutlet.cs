@@ -6,6 +6,7 @@ public class PowerOutlet : Interactable
     [SerializeField] ParticleSystem sparks;
 
     PowerInlet inlet;
+    Wire wire;
 
     void OnDrawGizmosSelected()
     {
@@ -15,7 +16,7 @@ public class PowerOutlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return !inlet && WireManager.ActiveWire;
+        return !wire || !wire.IsConnecting;
     }
 
     public override HudInfo GetHudInfo(Employee e)
@@ -24,17 +25,25 @@ public class PowerOutlet : Interactable
             ? new()
             {
                 icon = Icon.Hand,
-                text = "Connect Wire"
+                text = wire ? "Unplug" : "Plug"
             }
             : BlankHud;
     }
 
     protected override void OnInteract(Employee e)
     {
-        var wire = WireManager.ActiveWire;
-        wire.Connected += FinishConnection;
-        wire.Connect(this, transform.TransformPoint(plugPoint), transform.forward);
-        
+        if (wire)
+        {
+            wire.Disconnect(Camera.main.transform, Vector3.forward);
+            sparks.Play();
+            wire = null;
+        }
+        else
+        {
+            wire = WireManager.ActiveWire;
+            wire.Connected += FinishConnection;
+            wire.Connect(this, transform.TransformPoint(plugPoint), transform.forward);
+        }
     }
 
     void FinishConnection(PowerInlet inlet, PowerOutlet outlet)
