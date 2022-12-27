@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lineRenderer: {fileID: 4824749417099397496}
-  _floorOffset: 0.04
+  _floorOffset: 0.025
   _raycastHeight: 5
   _plugDepth: 0.125
   _plugStart: {fileID: 6803508364944296571}
