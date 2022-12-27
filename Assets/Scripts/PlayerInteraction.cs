@@ -138,7 +138,7 @@ public class PlayerInteraction : MonoBehaviour
         var icon = icons[(int)info.icon];
 
         // Punch when icon changes (except if it's the blank pointer).
-        if (info.icon != Interactable.Icon.None && (forcePunch || iconImage.sprite != icon))
+        if (info.icon != Interactable.Icon.None && (forcePunch || iconImage.sprite != icon || text.text != info.text))
             punch.Restart();
 
         text.text = info.text;
