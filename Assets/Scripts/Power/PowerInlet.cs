@@ -1,13 +1,13 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class PowerInlet : Interactable
 {
     [SerializeField] float requirement;
     [SerializeField] Vector3 plugPoint;
 
-    public UnityEvent OnPower;
-    public UnityEvent OnDepower;
+    public event Action Powered;
+    public event Action Depowered;
 
     PowerOutlet outlet;
 
@@ -44,6 +44,12 @@ public class PowerInlet : Interactable
             e.transform,
             Vector3.forward + Vector3.up);
 
-        wire.Connected += () => outlet = wire.Outlet;
+        wire.Connected += OnPower;
+    }
+
+    void OnPower(PowerInlet inlet, PowerOutlet outlet)
+    {
+        this.outlet = outlet;
+        Powered?.Invoke();
     }
 }

@@ -35,7 +35,7 @@ public static class WireManager
     public static Wire GetWire()
     {
         ActiveWire = wires.Get();
-        ActiveWire.Connected += () => ActiveWire = null;
+        ActiveWire.Connected += (_, _) => ActiveWire = null;
         return ActiveWire;
     }
 }

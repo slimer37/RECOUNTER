@@ -16,7 +16,7 @@ public class Wire : MonoBehaviour
 
     Vector3[] positions;
 
-    public Action Connected;
+    public Action<PowerInlet, PowerOutlet> Connected;
 
     public PowerInlet Inlet { get; private set; }
     public PowerOutlet Outlet { get; private set; }
@@ -47,7 +47,7 @@ public class Wire : MonoBehaviour
         UpdateRenderer();
 
         enabled = false;
-        Connected?.Invoke();
+        Connected?.Invoke(Inlet, Outlet);
     }
 
     void Update()
