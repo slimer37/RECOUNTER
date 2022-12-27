@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using UnityEngine;
 
 public class Wire : MonoBehaviour
@@ -10,11 +11,18 @@ public class Wire : MonoBehaviour
     [SerializeField] Transform _plugStart;
     [SerializeField] Transform _plugEnd;
 
+    [Header("Animation")]
+    [SerializeField] float _plugTime;
+    [SerializeField] float _plugStartOffset;
+    [SerializeField] Ease _ease;
+
     Vector3 _wireStart;
     Transform _hookParent;
     Vector3 _hookOffset;
 
     Vector3[] positions;
+
+    bool isConnecting;
 
     public Action<PowerInlet, PowerOutlet> Connected;
 
@@ -27,11 +35,17 @@ public class Wire : MonoBehaviour
         _lineRenderer.positionCount = positions.Length;
     }
 
+    void OnEnable()
+    {
+        isConnecting = false;
+    }
+
     public void SetStart(PowerInlet inlet, Vector3 plugPoint, Vector3 plugDirection, Transform hookParent, Vector3 offset)
     {
         Inlet = inlet;
 
-        SetWireStart(plugPoint, plugDirection);
+        OrientPlug(_plugStart, plugPoint, plugDirection);
+        SetWireStart();
 
         SetupHook(hookParent, offset);
 
@@ -42,17 +56,28 @@ public class Wire : MonoBehaviour
     {
         Outlet = outlet;
 
-        SetWireEnd(plugPoint, plugDirection);
+        isConnecting = true;
 
-        UpdateRenderer();
+        OrientPlug(_plugEnd, plugPoint + plugDirection * _plugStartOffset, plugDirection);
+
+        _plugEnd.DOMove(plugPoint, _plugTime).SetEase(_ease).OnComplete(FinishConnect);
+    }
+
+    void FinishConnect()
+    {
+        Connected?.Invoke(Inlet, Outlet);
+
+        isConnecting = false;
 
         enabled = false;
-        Connected?.Invoke(Inlet, Outlet);
     }
 
     void Update()
     {
-        EvaluatePositions();
+        if (isConnecting)
+            SetWireEnd();
+        else
+            FollowHook();
 
         UpdateRenderer();
     }
@@ -70,34 +95,35 @@ public class Wire : MonoBehaviour
 
     Vector3 GetHookPosition() => _hookParent.TransformPoint(_hookOffset);
 
-    void SetWireStart(Vector3 plugPoint, Vector3 plugDirection)
+    void SetWireStart()
     {
-        _wireStart = plugPoint + plugDirection * _plugDepth;
-
-        _plugStart.position = plugPoint;
-        _plugStart.forward = -plugDirection;
+        _wireStart = _plugStart.position + -_plugStart.forward * _plugDepth;
 
         var startPos = _wireStart;
         positions[0] = _wireStart;
-
         startPos.y = _floorOffset;
         positions[1] = startPos;
     }
 
-    void SetWireEnd(Vector3 plugPoint, Vector3 plugDirection)
+    void OrientPlug(Transform plug, Vector3 position, Vector3 direction)
     {
-        _plugEnd.position = plugPoint;
-        _plugEnd.forward = -plugDirection;
+        plug.position = position;
+        plug.forward = -direction;
+    }
 
-        var wireEnd = plugPoint + plugDirection * _plugDepth;
+    void SetWireEnd()
+    {
+        var wireEnd = _plugEnd.position + -_plugEnd.forward * _plugDepth;
         positions[^1] = wireEnd;
         wireEnd.y = _floorOffset;
         positions[^2] = wireEnd;
     }
 
-    void EvaluatePositions()
+    void FollowHook()
     {
         var hookPos = GetHookPosition();
-        SetWireEnd(hookPos, (_wireStart - hookPos).normalized);
+        var direction = (_wireStart - hookPos).normalized;
+        OrientPlug(_plugEnd, hookPos, direction);
+        SetWireEnd();
     }
 }

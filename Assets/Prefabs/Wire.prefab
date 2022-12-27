@@ -241,6 +241,9 @@ MonoBehaviour:
   _plugDepth: 0.1
   _plugStart: {fileID: 6803508364944296571}
   _plugEnd: {fileID: 20759766754589477}
+  _plugTime: 0.5
+  _plugStartOffset: 0.2
+  _ease: 26
 --- !u!1 &8943126251942849891
 GameObject:
   m_ObjectHideFlags: 0

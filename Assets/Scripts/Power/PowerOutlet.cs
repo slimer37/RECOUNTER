@@ -32,8 +32,14 @@ public class PowerOutlet : Interactable
     protected override void OnInteract(Employee e)
     {
         var wire = WireManager.ActiveWire;
+        wire.Connected += FinishConnection;
         wire.Connect(this, transform.TransformPoint(plugPoint), transform.forward);
-        inlet = wire.Inlet;
+        
+    }
+
+    void FinishConnection(PowerInlet inlet, PowerOutlet outlet)
+    {
+        this.inlet = inlet;
         sparks.Play();
     }
 }
