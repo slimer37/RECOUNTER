@@ -12,6 +12,8 @@ public class Wire : MonoBehaviour
     [SerializeField] Transform _plugEnd;
 
     [Header("Animation")]
+    [SerializeField] float _prePlugTime;
+    [SerializeField] Ease _prePlugEase;
     [SerializeField] float _plugTime;
     [SerializeField] float _plugStartOffset;
     [SerializeField] Ease _ease;
@@ -58,9 +60,11 @@ public class Wire : MonoBehaviour
 
         IsConnecting = true;
 
-        OrientPlug(_plugEnd, plugPoint + plugDirection * _plugStartOffset, plugDirection);
-
-        _plugEnd.DOMove(plugPoint, _plugTime).SetEase(_ease).OnComplete(FinishConnect);
+        DOTween.Sequence()
+            .Append(_plugEnd.DOMove(plugPoint + plugDirection * _plugStartOffset, _prePlugTime).SetEase(_prePlugEase))
+            .Join(_plugEnd.DOLookAt(_plugEnd.position - plugDirection, _prePlugTime).SetEase(_prePlugEase))
+            .Append(_plugEnd.DOMove(plugPoint, _plugTime).SetEase(_ease))
+            .OnComplete(FinishConnect);
     }
 
     void FinishConnect()
