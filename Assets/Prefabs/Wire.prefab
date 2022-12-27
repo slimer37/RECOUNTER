@@ -209,7 +209,7 @@ LineRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: 0
+      m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 5
@@ -238,14 +238,17 @@ MonoBehaviour:
   _lineRenderer: {fileID: 4824749417099397496}
   _floorOffset: 0.04
   _raycastHeight: 5
-  _plugDepth: 0.1
+  _plugDepth: 0.125
   _plugStart: {fileID: 6803508364944296571}
   _plugEnd: {fileID: 20759766754589477}
+  _smoothTime: 0.1
   _prePlugTime: 0.4
   _prePlugEase: 4
   _plugTime: 0.3
-  _plugStartOffset: 0.1
+  _plugOutOffset: 0.15
   _ease: 26
+  _unplugTime: 0.3
+  _unplugEase: 12
 --- !u!1 &8943126251942849891
 GameObject:
   m_ObjectHideFlags: 0

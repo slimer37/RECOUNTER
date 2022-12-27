@@ -11,16 +11,22 @@ public class Wire : MonoBehaviour
     [SerializeField] Transform _plugStart;
     [SerializeField] Transform _plugEnd;
 
+    [Header("Hook")]
+    [SerializeField] float _smoothTime;
+
     [Header("Animation")]
     [SerializeField] float _prePlugTime;
     [SerializeField] Ease _prePlugEase;
     [SerializeField] float _plugTime;
-    [SerializeField] float _plugStartOffset;
+    [SerializeField] float _plugOutOffset;
     [SerializeField] Ease _ease;
+    [SerializeField] float _unplugTime;
+    [SerializeField] Ease _unplugEase;
 
     Vector3 _wireStart;
     Transform _hookParent;
     Vector3 _hookOffset;
+    Vector3 _hookVelocity;
 
     Vector3[] positions;
 
@@ -29,7 +35,7 @@ public class Wire : MonoBehaviour
 
     public PowerInlet Inlet { get; private set; }
     public PowerOutlet Outlet { get; private set; }
-    public bool IsConnecting { get; private set; }
+    public bool IsAnimating { get; private set; }
 
     void Awake()
     {
@@ -39,7 +45,7 @@ public class Wire : MonoBehaviour
 
     void OnEnable()
     {
-        IsConnecting = false;
+        IsAnimating = false;
     }
 
     public void SetStart(PowerInlet inlet, Vector3 plugPoint, Vector3 plugDirection, Transform hookParent, Vector3 offset)
@@ -47,6 +53,7 @@ public class Wire : MonoBehaviour
         Inlet = inlet;
 
         OrientPlug(_plugStart, plugPoint, plugDirection);
+        OrientPlug(_plugEnd, plugPoint, plugDirection);
         SetWireStart();
 
         SetupHook(hookParent, offset);
@@ -56,12 +63,15 @@ public class Wire : MonoBehaviour
 
     public void Connect(PowerOutlet outlet, Vector3 plugPoint, Vector3 plugDirection)
     {
+        if (IsAnimating)
+            throw new InvalidOperationException("Cannot connect while animating.");
+
         Outlet = outlet;
 
-        IsConnecting = true;
+        IsAnimating = true;
 
         DOTween.Sequence()
-            .Append(_plugEnd.DOMove(plugPoint + plugDirection * _plugStartOffset, _prePlugTime).SetEase(_prePlugEase))
+            .Append(_plugEnd.DOMove(plugPoint + plugDirection * _plugOutOffset, _prePlugTime).SetEase(_prePlugEase))
             .Join(_plugEnd.DOLookAt(_plugEnd.position - plugDirection, _prePlugTime).SetEase(_prePlugEase))
             .Append(_plugEnd.DOMove(plugPoint, _plugTime).SetEase(_ease))
             .OnComplete(FinishConnect);
@@ -71,28 +81,40 @@ public class Wire : MonoBehaviour
     {
         Connected?.Invoke(Inlet, Outlet);
 
-        IsConnecting = false;
+        IsAnimating = false;
 
         enabled = false;
     }
 
     public void Disconnect(Transform hookParent, Vector3 offset)
     {
-        if (IsConnecting)
-            throw new InvalidOperationException("Cannot disconnect during connect animation.");
+        if (IsAnimating)
+            throw new InvalidOperationException("Cannot disconnect while animating.");
 
         WireManager.SetActiveWire(this);
         SetupHook(hookParent, offset);
+        Disconnected?.Invoke(Inlet, Outlet);
+
         enabled = true;
 
-        Disconnected?.Invoke(Inlet, Outlet);
+        IsAnimating = true;
+
+        _plugEnd
+            .DOMove(_plugEnd.position - _plugEnd.forward * _plugOutOffset, _unplugTime)
+            .SetEase(_unplugEase)
+            .OnComplete(FinishDisconnect);
 
         Outlet = null;
     }
 
+    void FinishDisconnect()
+    {
+        IsAnimating = false;
+    }
+
     void Update()
     {
-        if (IsConnecting)
+        if (IsAnimating)
             SetWireEnd();
         else
             FollowHook();
@@ -141,7 +163,9 @@ public class Wire : MonoBehaviour
     {
         var hookPos = GetHookPosition();
         var direction = (_wireStart - hookPos).normalized;
-        OrientPlug(_plugEnd, hookPos, direction);
+        var smoothPos = Vector3.SmoothDamp(_plugEnd.position, hookPos, ref _hookVelocity, _smoothTime);
+        var smoothDirection = Vector3.Slerp(-_plugEnd.forward, direction, Time.deltaTime / _smoothTime);
+        OrientPlug(_plugEnd, smoothPos, smoothDirection);
         SetWireEnd();
     }
 }

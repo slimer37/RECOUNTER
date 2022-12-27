@@ -39,9 +39,7 @@ public class PowerInlet : Interactable
     {
         if (wire)
         {
-            WireManager.ReleaseWire(wire);
-            WireManager.ClearActiveWire();
-            wire = null;
+            StashWire();
         }
         else
         {
@@ -57,6 +55,17 @@ public class PowerInlet : Interactable
             wire.Connected += OnPower;
             wire.Disconnected += OnDepower;
         }
+    }
+
+    void StashWire()
+    {
+        WireManager.ReleaseWire(wire);
+        WireManager.ClearActiveWire();
+
+        wire.Connected -= OnPower;
+        wire.Disconnected -= OnDepower;
+
+        wire = null;
     }
 
     void OnDepower(PowerInlet inlet, PowerOutlet outlet)

@@ -16,7 +16,7 @@ public class PowerOutlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return !wire || !wire.IsConnecting;
+        return !wire || !wire.IsAnimating;
     }
 
     public override HudInfo GetHudInfo(Employee e)
@@ -35,8 +35,8 @@ public class PowerOutlet : Interactable
         if (wire)
         {
             wire.Disconnect(Camera.main.transform, Vector3.forward);
-            sparks.Play();
             wire = null;
+            sparks.Play();
         }
         else
         {
@@ -49,6 +49,7 @@ public class PowerOutlet : Interactable
     void FinishConnection(PowerInlet inlet, PowerOutlet outlet)
     {
         this.inlet = inlet;
+        wire.Connected -= FinishConnection;
         sparks.Play();
     }
 }
