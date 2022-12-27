@@ -14,7 +14,7 @@ public class PowerInlet : Interactable
     void OnDrawGizmosSelected()
     {
         Gizmos.matrix = transform.localToWorldMatrix;
-        Gizmos.DrawSphere(plugPoint, 0.1f);
+        Gizmos.DrawSphere(plugPoint, 0.05f);
     }
 
     protected override bool CanInteract(Employee e)

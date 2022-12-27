@@ -7,6 +7,12 @@ public class PowerOutlet : Interactable
 
     PowerInlet inlet;
 
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.DrawSphere(plugPoint, 0.05f);
+    }
+
     protected override bool CanInteract(Employee e)
     {
         return !inlet && WireManager.ActiveWire;
