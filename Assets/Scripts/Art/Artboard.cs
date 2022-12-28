@@ -84,10 +84,16 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         UpdateButtons();
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        undo.Dispose();
-        redo.Dispose();
+        undo.Disable();
+        redo.Disable();
+    }
+
+    void OnEnable()
+    {
+        undo.Enable();
+        redo.Enable();
     }
 
     public void SetBrush(Brush newBrush)
@@ -174,10 +180,7 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         undoRedo = new ConstrainedUndoRedo<Painting>(undoLimit, undoTextures, Painting, Painting.Restore);
 
         undo.performed += Undo;
-        undo.Enable();
-
         redo.performed += Redo;
-        redo.Enable();
 
         undoButton.onClick.AddListener(Undo);
         redoButton.onClick.AddListener(Redo);
