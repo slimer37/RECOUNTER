@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float crouchedHeight;
     [SerializeField] float crouchedCamHeight;
     [SerializeField] float crouchSpeed;
+    [SerializeField] float camHeightSmoothing;
 
     [Header("FOV")]
     [SerializeField] CinemachineVirtualCamera vcam;
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
 
     float defaultHeight;
     float defaultCamHeight;
+    float camHeightVelocity;
 
     int speedId;
 
@@ -94,7 +96,12 @@ public class PlayerController : MonoBehaviour
         var isCrouching = playerControls.Crouch.IsPressed();
 
         var height = isCrouching ? crouchedHeight : defaultHeight;
-        var camHeight = isCrouching ? crouchedCamHeight : defaultCamHeight;
+        var goalCamHeight = isCrouching ? crouchedCamHeight : defaultCamHeight;
+        var camHeight = Mathf.SmoothDamp(
+            camTarget.localPosition.y,
+            goalCamHeight,
+            ref camHeightVelocity,
+            camHeightSmoothing);
 
         controller.height = height;
         controller.center = Vector3.up * height / 2;

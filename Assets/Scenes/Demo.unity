@@ -1994,6 +1994,7 @@ MonoBehaviour:
   crouchedHeight: 1
   crouchedCamHeight: 1
   crouchSpeed: 1
+  camHeightSmoothing: 0.1
   vcam: {fileID: 409238788}
   walkFov: 50
   sprintFov: 55
@@ -13207,7 +13208,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32440
+  m_Name: pb_Mesh251164
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -13372,7 +13373,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32356
+  m_Name: pb_Mesh251080
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -22593,7 +22594,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh33024
+  m_Name: pb_Mesh251768
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
