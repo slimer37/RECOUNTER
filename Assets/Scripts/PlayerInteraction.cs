@@ -24,6 +24,7 @@ public class PlayerInteraction : MonoBehaviour
 
     [Header("Icons")]
     [SerializeField] Image iconImage;
+    [SerializeField] InteractableIconSettings iconSettings;
 
     Interactable hovered;
     Interactable interactTarget;
@@ -44,7 +45,7 @@ public class PlayerInteraction : MonoBehaviour
     void ResetUI()
     {
         text.text = "";
-        iconImage.sprite = Interactable.Icon.None.ToSprite();
+        iconImage.sprite = iconSettings.GetSprite(Interactable.Icon.None);
     }
 
     void OnEnable()
@@ -131,7 +132,7 @@ public class PlayerInteraction : MonoBehaviour
     void UpdateUI(bool forcePunch = false)
     {
         var info = hovered.GetHudInfo(employee);
-        var iconSprite = info.icon.ToSprite();
+        var iconSprite = iconSettings.GetSprite(info.icon);
 
         // Punch when icon changes (except if it's the blank pointer).
         if (info.icon != Interactable.Icon.None && (forcePunch || iconImage.sprite != iconSprite || text.text != info.text))
