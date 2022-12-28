@@ -58,7 +58,6 @@ public class PlayerController : MonoBehaviour
     Vector2 camRot;
     float fov;
     float yVelocity;
-    float bobTime;
 
     bool isSuspended;
 
