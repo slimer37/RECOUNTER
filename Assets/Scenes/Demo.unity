@@ -1993,7 +1993,7 @@ MonoBehaviour:
   <CanCrouch>k__BackingField: 1
   crouchedHeight: 1
   crouchedCamHeight: 1
-  crouchSpeed: 1
+  crouchSpeed: 0.6
   camHeightSmoothing: 0.1
   vcam: {fileID: 409238788}
   walkFov: 50
