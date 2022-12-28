@@ -4,6 +4,7 @@ public class PowerOutlet : Interactable
 {
     [SerializeField] Vector3 plugPoint;
     [SerializeField] ParticleSystem sparks;
+    [SerializeField] string label = "Outlet";
 
     PowerInlet inlet;
     Wire wire;
@@ -25,7 +26,7 @@ public class PowerOutlet : Interactable
             ? new()
             {
                 icon = Icon.Hand,
-                text = wire ? "Unplug" : "Plug"
+                text = wire ? $"Unplug From {label}" : $"Plug Into {label}"
             }
             : BlankHud;
     }
