@@ -48,12 +48,12 @@ public class Wire : MonoBehaviour
         IsAnimating = false;
     }
 
-    public void SetStart(PowerInlet inlet, Vector3 plugPoint, Vector3 plugDirection, Transform hookParent, Vector3 offset)
+    public void SetStart(PowerInlet inlet, Vector3 plugPoint, Vector3 plugDirection, Vector3 plugUp, Transform hookParent, Vector3 offset)
     {
         Inlet = inlet;
 
-        OrientPlug(_plugStart, plugPoint, plugDirection);
-        OrientPlug(_plugEnd, plugPoint, plugDirection);
+        OrientPlug(_plugStart, plugPoint, plugDirection, plugUp);
+        OrientPlug(_plugEnd, plugPoint, plugDirection, plugUp);
         SetWireStart();
 
         SetupHook(hookParent, offset);
@@ -61,7 +61,7 @@ public class Wire : MonoBehaviour
         enabled = true;
     }
 
-    public void Connect(PowerOutlet outlet, Vector3 plugPoint, Vector3 plugDirection)
+    public void Connect(PowerOutlet outlet, Vector3 plugPoint, Vector3 plugDirection, Vector3 plugUp)
     {
         if (IsAnimating)
             throw new InvalidOperationException("Cannot connect while animating.");
@@ -70,9 +70,11 @@ public class Wire : MonoBehaviour
 
         IsAnimating = true;
 
+        var rotation = Quaternion.LookRotation(-plugDirection, plugUp);
+
         DOTween.Sequence()
             .Append(_plugEnd.DOMove(plugPoint + plugDirection * _plugOutOffset, _prePlugTime).SetEase(_prePlugEase))
-            .Join(_plugEnd.DOLookAt(_plugEnd.position - plugDirection, _prePlugTime).SetEase(_prePlugEase))
+            .Join(_plugEnd.DORotateQuaternion(rotation, _prePlugTime).SetEase(_prePlugEase))
             .Append(_plugEnd.DOMove(plugPoint, _plugTime).SetEase(_ease))
             .OnComplete(FinishConnect);
     }
@@ -149,6 +151,12 @@ public class Wire : MonoBehaviour
     {
         plug.position = position;
         plug.forward = -direction;
+    }
+
+    void OrientPlug(Transform plug, Vector3 position, Vector3 direction, Vector3 up)
+    {
+        OrientPlug(plug, position, direction);
+        plug.rotation = Quaternion.LookRotation(-direction, up);
     }
 
     void SetWireEnd()

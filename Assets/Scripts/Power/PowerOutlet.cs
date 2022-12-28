@@ -43,7 +43,7 @@ public class PowerOutlet : Interactable
         {
             wire = WireManager.ActiveWire;
             wire.Connected += FinishConnection;
-            wire.Connect(this, transform.TransformPoint(plugPoint), transform.forward);
+            wire.Connect(this, transform.TransformPoint(plugPoint), transform.forward, transform.up);
         }
     }
 

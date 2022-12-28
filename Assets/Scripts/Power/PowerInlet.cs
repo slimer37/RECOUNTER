@@ -49,6 +49,7 @@ public class PowerInlet : Interactable
                 this,
                 transform.TransformPoint(plugPoint),
                 transform.forward,
+                transform.up,
                 Camera.main.transform,
                 Vector3.forward);
 
