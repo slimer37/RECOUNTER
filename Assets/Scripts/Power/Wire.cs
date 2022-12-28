@@ -30,6 +30,8 @@ public class Wire : MonoBehaviour
 
     Vector3[] positions;
 
+    Tween currentTween;
+
     public Action<PowerInlet, PowerOutlet> Connected;
     public Action<PowerInlet, PowerOutlet> Disconnected;
 
@@ -63,8 +65,7 @@ public class Wire : MonoBehaviour
 
     public void Connect(PowerOutlet outlet, Vector3 plugPoint, Vector3 plugDirection, Vector3 plugUp)
     {
-        if (IsAnimating)
-            throw new InvalidOperationException("Cannot connect while animating.");
+        currentTween?.Kill();
 
         Outlet = outlet;
 
@@ -72,7 +73,7 @@ public class Wire : MonoBehaviour
 
         var rotation = Quaternion.LookRotation(-plugDirection, plugUp);
 
-        DOTween.Sequence()
+        currentTween = DOTween.Sequence()
             .Append(_plugEnd.DOMove(plugPoint + plugDirection * _plugOutOffset, _prePlugTime).SetEase(_prePlugEase))
             .Join(_plugEnd.DORotateQuaternion(rotation, _prePlugTime).SetEase(_prePlugEase))
             .Append(_plugEnd.DOMove(plugPoint, _plugTime).SetEase(_ease))
@@ -101,7 +102,7 @@ public class Wire : MonoBehaviour
 
         IsAnimating = true;
 
-        _plugEnd
+        currentTween = _plugEnd
             .DOMove(_plugEnd.position - _plugEnd.forward * _plugOutOffset, _unplugTime)
             .SetEase(_unplugEase)
             .OnComplete(FinishDisconnect);
