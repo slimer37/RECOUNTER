@@ -45,6 +45,8 @@ public class SplashScreen : MonoBehaviour
 
     AsyncOperationHandle<SceneInstance> sceneHandle;
 
+    Sequence leaveSequence;
+
     void Awake()
     {
         sceneHandle = titleScreenReference.LoadSceneAsync(LoadSceneMode.Additive);
@@ -53,7 +55,7 @@ public class SplashScreen : MonoBehaviour
 
         background.alpha = 1;
 
-        var sequence = DOTween.Sequence(this);
+        var sequence = DOTween.Sequence(this).SetUpdate(true);
 
         for (var i = 0; i < splashes.Length; i++)
         {
@@ -69,14 +71,20 @@ public class SplashScreen : MonoBehaviour
 
         await sceneHandle.Task;
 
-        DOTween.Sequence()
+        leaveSequence = DOTween.Sequence()
             .Append(splashes[^1].FadeOut())
             .Join(background.DOFade(0, finalFadeOut))
-            .AppendCallback(OnSplashScreenFinished);
+            .AppendCallback(OnSplashScreenFinished)
+            .SetUpdate(true);
     }
 
     void OnSplashScreenFinished()
     {
         canvas.enabled = false;
+    }
+
+    void OnDestroy()
+    {
+        leaveSequence.Kill();
     }
 }

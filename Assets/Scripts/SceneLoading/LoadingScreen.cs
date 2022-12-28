@@ -60,7 +60,7 @@ namespace SceneLoading
             while (t < 1)
             {
                 group.alpha = Mathf.Lerp(start, to, t);
-                t += Time.deltaTime / fadeTime;
+                t += Time.unscaledDeltaTime / fadeTime;
                 yield return null;
             }
 
