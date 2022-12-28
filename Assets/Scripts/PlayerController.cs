@@ -76,9 +76,9 @@ public class PlayerController : MonoBehaviour
     {
         if (Pause.IsPaused) return;
 
-        HandleJump();
-
         ApplyGravity();
+
+        HandleJump();
 
         HandleMovement();
 
