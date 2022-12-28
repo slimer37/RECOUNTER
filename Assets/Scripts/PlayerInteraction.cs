@@ -24,7 +24,6 @@ public class PlayerInteraction : MonoBehaviour
 
     [Header("Icons")]
     [SerializeField] Image iconImage;
-    [SerializeField] Sprite[] icons;
 
     Interactable hovered;
     Interactable interactTarget;
@@ -34,9 +33,6 @@ public class PlayerInteraction : MonoBehaviour
 
     void Awake()
     {
-        if (icons.Length != System.Enum.GetNames(typeof(Interactable.Icon)).Length)
-            Debug.LogError("Wrong number of interaction icons assigned.", this);
-
         playerControls = new Controls().Player;
         playerControls.Interact.performed += OnInteract;
         playerControls.Interact.canceled += OnInteractCancel;
@@ -48,7 +44,7 @@ public class PlayerInteraction : MonoBehaviour
     void ResetUI()
     {
         text.text = "";
-        iconImage.sprite = icons[0];
+        iconImage.sprite = Interactable.Icon.None.ToSprite();
     }
 
     void OnEnable()
@@ -135,13 +131,13 @@ public class PlayerInteraction : MonoBehaviour
     void UpdateUI(bool forcePunch = false)
     {
         var info = hovered.GetHudInfo(employee);
-        var icon = icons[(int)info.icon];
+        var iconSprite = info.icon.ToSprite();
 
         // Punch when icon changes (except if it's the blank pointer).
-        if (info.icon != Interactable.Icon.None && (forcePunch || iconImage.sprite != icon || text.text != info.text))
+        if (info.icon != Interactable.Icon.None && (forcePunch || iconImage.sprite != iconSprite || text.text != info.text))
             punch.Restart();
 
         text.text = info.text;
-        iconImage.sprite = icon;
+        iconImage.sprite = iconSprite;
     }
 }

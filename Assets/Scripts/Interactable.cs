@@ -5,7 +5,11 @@ public abstract class Interactable : MonoBehaviour
     public bool IsInteractionInProgress { get; private set; }
     protected Employee Interactor { get; private set; }
 
-    public enum Icon { None, Access, Door, Eye, Hand, Invalid, Pickup, Pull, Push }
+    public enum Icon
+    {
+        None, Access, Door, Eye, Hand, Invalid, Pickup, Pull, Push,
+        Outlet, Plug, StashPlug, Unplug
+    }
 
     public struct HudInfo
     {
