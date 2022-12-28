@@ -51,7 +51,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float fovChangeSpeed;
 
     [Header("SFX")]
-    [SerializeField] EventReference footstepSfx;
     [SerializeField] EventReference jumpSfx;
 
     Controls.PlayerActions playerControls;
@@ -72,21 +71,38 @@ public class PlayerController : MonoBehaviour
 
     int speedId;
 
+    MoveState moveState = MoveState.Walking;
+
+    public void ImpulseFootstep()
+    {
+        if (!controller.isGrounded) return;
+
+        if (!BobbingEnabled) return;
+
+        var isSprinting = moveState == MoveState.Sprinting;
+
+        var impulse = isSprinting ? sprintImpulse : walkImpulse;
+
+        impulse.GenerateImpulse();
+    }
+
     void PlaySound(EventReference eventRef) => RuntimeManager.PlayOneShot(eventRef, body.position);
 
     void Update()
     {
         if (Pause.IsPaused) return;
 
+        moveState = MoveState.Walking;
+
         ApplyGravity();
 
         HandleJump();
 
+        HandleCrouching();
+
         HandleMovement();
 
         HandleLooking();
-
-        HandleCrouching();
     }
 
     void HandleCrouching()
@@ -94,6 +110,9 @@ public class PlayerController : MonoBehaviour
         if (!CanCrouch) return;
 
         var isCrouching = playerControls.Crouch.IsPressed();
+
+        if (isCrouching)
+            moveState = MoveState.Crouching;
 
         var height = isCrouching ? crouchedHeight : defaultHeight;
         var goalCamHeight = isCrouching ? crouchedCamHeight : defaultCamHeight;
@@ -169,54 +188,30 @@ public class PlayerController : MonoBehaviour
 
         var input = playerControls.Move.ReadValue<Vector2>();
 
-        var isCrouching = playerControls.Crouch.IsPressed();
+        var isCrouching = moveState == MoveState.Crouching;
 
         // Sprinting only allowed when moving forward
         var isSprinting = !isCrouching && playerControls.Sprint.IsPressed() && input.y > 0;
 
-        HandleBobbingAndFootsteps(input, isSprinting);
+        if (isSprinting)
+            moveState = MoveState.Sprinting;
 
         AnimateFov(isSprinting);
 
         if (!CanMove) return;
 
-        var speed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : walkSpeed);
+        var speed = moveState switch
+        {
+            MoveState.Walking => walkSpeed,
+            MoveState.Sprinting => sprintSpeed,
+            MoveState.Crouching => crouchSpeed,
+            _ => throw new System.Exception("Invalid move state.")
+        };
 
         smoothInput = Vector2.SmoothDamp(smoothInput, input * speed, ref smoothInputVelocity, inputSmoothing);
         var velocity = body.TransformDirection(smoothInput.x, 0, smoothInput.y) + Vector3.up * yVelocity;
 
         controller.Move(velocity * Time.deltaTime);
-    }
-
-    void HandleBobbingAndFootsteps(Vector2 movement, bool isSprinting)
-    {
-        if (!controller.isGrounded) return;
-
-        if (movement.sqrMagnitude > 0)
-        {
-            var impulse = isSprinting ? sprintImpulse : walkImpulse;
-
-            if (BobbingEnabled && bobTime == 0)
-                impulse.GenerateImpulse();
-
-            bobTime += Time.deltaTime;
-
-            var impulseInterval = impulse.m_ImpulseDefinition.m_ImpulseDuration;
-            impulseInterval += isSprinting ? sprintImpulseInterval : walkImpulseInterval;
-
-            if (bobTime > impulseInterval)
-            {
-                if (BobbingEnabled)
-                    impulse.GenerateImpulse();
-
-                PlaySound(footstepSfx);
-                bobTime = 0;
-            }
-        }
-        else
-        {
-            bobTime = 0;
-        }
     }
 
     void Awake()
@@ -273,5 +268,12 @@ public class PlayerController : MonoBehaviour
             OnSuspend();
         else
             OnResume();
+    }
+
+    enum MoveState
+    {
+        Walking,
+        Sprinting,
+        Crouching
     }
 }

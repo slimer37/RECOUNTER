@@ -320,6 +320,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 69736183}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4547298ef4b2da8468f303d05a1f7cfe,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 69736185}
   m_SourcePrefab: {fileID: 100100000, guid: 4547298ef4b2da8468f303d05a1f7cfe, type: 3}
 --- !u!1 &69736181 stripped
 GameObject:
@@ -353,6 +357,26 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &69736185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69736181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f55c1e1f3c6f6a428010e40bc3c82ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footstepSfx:
+    Guid:
+      Data1: 1986808085
+      Data2: 1155371784
+      Data3: 605664952
+      Data4: -299844080
+    Path: event:/Footstep
+  controller: {fileID: 273294031}
 --- !u!1001 &70528171
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1999,13 +2023,6 @@ MonoBehaviour:
   walkFov: 50
   sprintFov: 55
   fovChangeSpeed: 10
-  footstepSfx:
-    Guid:
-      Data1: 1986808085
-      Data2: 1155371784
-      Data3: 605664952
-      Data4: -299844080
-    Path: event:/Footstep
   jumpSfx:
     Guid:
       Data1: 291430401
