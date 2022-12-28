@@ -84,6 +84,12 @@ public class Artboard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         UpdateButtons();
     }
 
+    void OnDestroy()
+    {
+        undo.Dispose();
+        redo.Dispose();
+    }
+
     public void SetBrush(Brush newBrush)
     {
         if (brush != null)
