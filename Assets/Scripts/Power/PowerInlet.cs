@@ -11,7 +11,7 @@ public class PowerInlet : Interactable
 
     Wire wire;
 
-    public bool IsPowered { get; private set; }
+    public bool IsPluggedIn => wire;
 
     void OnDrawGizmosSelected()
     {
@@ -21,7 +21,7 @@ public class PowerInlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return wire ? wire == WireManager.ActiveWire : !WireManager.ActiveWire;
+        return IsPluggedIn ? wire == WireManager.ActiveWire : !WireManager.ActiveWire;
     }
 
     public override HudInfo GetHudInfo(Employee e)
@@ -37,7 +37,7 @@ public class PowerInlet : Interactable
 
     protected override void OnInteract(Employee e)
     {
-        if (wire)
+        if (IsPluggedIn)
         {
             StashWire();
         }
@@ -71,13 +71,11 @@ public class PowerInlet : Interactable
 
     void OnDepower(PowerInlet inlet, PowerOutlet outlet)
     {
-        IsPowered = false;
         Depowered?.Invoke();
     }
 
     void OnPower(PowerInlet inlet, PowerOutlet outlet)
     {
-        IsPowered = true;
         Powered?.Invoke();
     }
 }

@@ -9,6 +9,8 @@ public class PowerOutlet : Interactable
     PowerInlet inlet;
     Wire wire;
 
+    public bool IsPluggedIn => wire;
+
     void OnDrawGizmosSelected()
     {
         Gizmos.matrix = transform.localToWorldMatrix;
@@ -17,7 +19,7 @@ public class PowerOutlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return wire ? !wire.IsAnimating : WireManager.ActiveWire;
+        return IsPluggedIn ? !wire.IsAnimating : WireManager.ActiveWire;
     }
 
     public override HudInfo GetHudInfo(Employee e)
@@ -26,14 +28,14 @@ public class PowerOutlet : Interactable
             ? new()
             {
                 icon = Icon.Hand,
-                text = wire ? $"Unplug From {label}" : $"Plug Into {label}"
+                text = IsPluggedIn ? $"Unplug From {label}" : $"Plug Into {label}"
             }
             : BlankHud;
     }
 
     protected override void OnInteract(Employee e)
     {
-        if (wire)
+        if (IsPluggedIn)
         {
             wire.Disconnect(Camera.main.transform, Vector3.forward);
             wire = null;
