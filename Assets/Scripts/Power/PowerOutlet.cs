@@ -16,7 +16,7 @@ public class PowerOutlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return !wire || !wire.IsAnimating;
+        return wire ? !wire.IsAnimating : WireManager.ActiveWire;
     }
 
     public override HudInfo GetHudInfo(Employee e)
