@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [Header("Animation")]
     [SerializeField] Animator animator;
     [SerializeField, AnimatorParam(nameof(animator))] string speedParam;
+    [SerializeField, AnimatorParam(nameof(animator))] string crouchedParam;
 
     [field: Header("Moving")]
     [field: SerializeField] public bool CanMove { get; set; } = true;
@@ -36,6 +37,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform camTarget;
     [SerializeField] float clamp;
 
+    [field: Header("Crouching")]
+    [field: SerializeField] public bool CanCrouch { get; set; } = true;
+    [SerializeField] float crouchedHeight;
+    [SerializeField] float crouchedCamHeight;
+    [SerializeField] float crouchSpeed;
+
     [Header("FOV")]
     [SerializeField] CinemachineVirtualCamera vcam;
     [SerializeField] float walkFov;
@@ -58,6 +65,9 @@ public class PlayerController : MonoBehaviour
     Vector2 smoothInput;
     Vector2 smoothInputVelocity;
 
+    float defaultHeight;
+    float defaultCamHeight;
+
     int speedId;
 
     void PlaySound(EventReference eventRef) => RuntimeManager.PlayOneShot(eventRef, body.position);
@@ -73,6 +83,24 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
 
         HandleLooking();
+
+        HandleCrouching();
+    }
+
+    void HandleCrouching()
+    {
+        if (!CanCrouch) return;
+
+        var isCrouching = playerControls.Crouch.IsPressed();
+
+        var height = isCrouching ? crouchedHeight : defaultHeight;
+        var camHeight = isCrouching ? crouchedCamHeight : defaultCamHeight;
+
+        controller.height = height;
+        controller.center = Vector3.up * height / 2;
+        camTarget.localPosition = Vector3.up * camHeight;
+
+        animator.SetBool(crouchedParam, isCrouching);
     }
 
     void HandleLooking()
@@ -134,8 +162,10 @@ public class PlayerController : MonoBehaviour
 
         var input = playerControls.Move.ReadValue<Vector2>();
 
+        var isCrouching = playerControls.Crouch.IsPressed();
+
         // Sprinting only allowed when moving forward
-        var isSprinting = playerControls.Sprint.IsPressed() && input.y > 0;
+        var isSprinting = !isCrouching && playerControls.Sprint.IsPressed() && input.y > 0;
 
         HandleBobbingAndFootsteps(input, isSprinting);
 
@@ -143,7 +173,7 @@ public class PlayerController : MonoBehaviour
 
         if (!CanMove) return;
 
-        var speed = isSprinting ? sprintSpeed : walkSpeed;
+        var speed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : walkSpeed);
 
         smoothInput = Vector2.SmoothDamp(smoothInput, input * speed, ref smoothInputVelocity, inputSmoothing);
         var velocity = body.TransformDirection(smoothInput.x, 0, smoothInput.y) + Vector3.up * yVelocity;
@@ -195,6 +225,9 @@ public class PlayerController : MonoBehaviour
         RecordCameraAngles();
 
         speedId = Animator.StringToHash(speedParam);
+
+        defaultHeight = controller.height;
+        defaultCamHeight = camTarget.localPosition.y;
     }
 
     void SetCursor(bool show)

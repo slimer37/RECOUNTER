@@ -1970,6 +1970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 69736183}
   speedParam: Speed
+  crouchedParam: Crouching
   <CanMove>k__BackingField: 1
   walkSpeed: 2
   sprintSpeed: 4
@@ -1989,6 +1990,10 @@ MonoBehaviour:
   <Sensitivity>k__BackingField: 2
   camTarget: {fileID: 2136512939}
   clamp: 85
+  <CanCrouch>k__BackingField: 1
+  crouchedHeight: 1
+  crouchedCamHeight: 1
+  crouchSpeed: 1
   vcam: {fileID: 409238788}
   walkFov: 50
   sprintFov: 55
