@@ -1996,8 +1996,8 @@ MonoBehaviour:
   speedParam: Speed
   crouchedParam: Crouching
   <CanMove>k__BackingField: 1
-  walkSpeed: 2
-  sprintSpeed: 4
+  walkSpeed: 1.5
+  sprintSpeed: 3.5
   inputSmoothing: 0.1
   body: {fileID: 840553857}
   controller: {fileID: 840553853}
