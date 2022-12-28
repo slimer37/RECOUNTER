@@ -11,6 +11,8 @@ public class RichPresence : MonoBehaviour
     static Discord.Discord discordClient;
     static ActivityManager activityManager;
 
+    static bool shuttingDown;
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
     static void Init()
     {
@@ -92,11 +94,17 @@ public class RichPresence : MonoBehaviour
 
     static void ActivityCallback(Result r)
     {
+        if (shuttingDown) return;
+
         if (r != Result.Ok)
             Debug.LogError("(Discord RPC) Failed to update activity: " + r);
     }
 
     void Update() => discordClient?.RunCallbacks();
 
-    void OnDestroy() => discordClient?.Dispose();
+    void OnDestroy()
+    {
+        shuttingDown = true;
+        discordClient?.Dispose();
+    }
 }
