@@ -87,6 +87,9 @@ public class Wire : MonoBehaviour
         IsAnimating = false;
 
         enabled = false;
+
+        SetWireEnd();
+        UpdateRenderer();
     }
 
     public void Disconnect(Transform hookParent, Vector3 offset)
