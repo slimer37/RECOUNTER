@@ -27,7 +27,7 @@ public class PowerOutlet : Interactable
         return CanInteract(e)
             ? new()
             {
-                icon = Icon.Hand,
+                icon = IsPluggedIn ? Icon.Unplug : Icon.Outlet,
                 text = IsPluggedIn ? $"Unplug From {label}" : $"Plug Into {label}"
             }
             : BlankHud;

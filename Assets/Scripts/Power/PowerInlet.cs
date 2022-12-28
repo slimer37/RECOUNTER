@@ -29,8 +29,8 @@ public class PowerInlet : Interactable
         return CanInteract(e)
             ? new()
             {
-                icon = Icon.Hand,
-                text = wire ? "Put Away Wire" : "Connect Wire"
+                icon = IsPluggedIn ? Icon.StashPlug : Icon.Plug,
+                text = IsPluggedIn ? "Stash Plug" : "Grab Plug"
             }
             : BlankHud;
     }
