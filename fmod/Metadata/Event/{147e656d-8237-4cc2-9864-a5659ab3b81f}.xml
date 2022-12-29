@@ -135,9 +135,6 @@
 		</relationship>
 	</object>
 	<object class="SingleSound" id="{c0776cb6-5355-4f48-944a-bc1ca3fbea5b}">
-		<property name="triggerProbabilityEnabled">
-			<value>true</value>
-		</property>
 		<property name="triggerProbability">
 			<value>24.5</value>
 		</property>
@@ -150,6 +147,9 @@
 		<property name="timelockedOffset">
 			<value>0.12</value>
 		</property>
+		<relationship name="triggerConditions">
+			<destination>{9c4321e0-01ca-4543-bfb1-f8f43c63b675}</destination>
+		</relationship>
 		<relationship name="audioFile">
 			<destination>{5184279f-a71f-4439-8fb4-6098eae19d01}</destination>
 		</relationship>
@@ -223,6 +223,17 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{837c3489-4fec-4e15-b61d-fe3e5558c801}" />
+	<object class="ParameterCondition" id="{9c4321e0-01ca-4543-bfb1-f8f43c63b675}">
+		<property name="minimum">
+			<value>1</value>
+		</property>
+		<property name="maximum">
+			<value>1</value>
+		</property>
+		<relationship name="parameter">
+			<destination>{984351d0-5306-4176-babb-367fec5e7ba1}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusEffectChain" id="{d163d53d-8223-4849-bbf9-6182aebf7056}">
 		<relationship name="effects">
 			<destination>{d8f018c6-b2fc-4f7e-a2e9-b3ed00882df4}</destination>

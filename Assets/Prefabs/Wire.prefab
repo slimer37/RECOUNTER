@@ -249,10 +249,13 @@ MonoBehaviour:
       Data3: 1705338008
       Data4: 532198298
     Path: event:/Plug
+  _sparkParam: Spark
+  _sparkChance: 0.25
   _prePlugTime: 0.2
   _prePlugEase: 4
   _plugTime: 0.2
   _plugOutOffset: 0.15
   _ease: 26
+  _unplugDelay: 0.2
   _unplugTime: 0.2
   _unplugEase: 12

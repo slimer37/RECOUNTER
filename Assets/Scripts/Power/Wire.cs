@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using FMOD.Studio;
 using FMODUnity;
 using System;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class Wire : MonoBehaviour
     [Header("SFX")]
     [SerializeField] float _plugInSfxDelay;
     [SerializeField] EventReference _plugSfx;
+    [SerializeField] string _sparkParam;
+    [SerializeField] float _sparkChance;
 
     [Header("Animation")]
     [SerializeField] float _prePlugTime;
@@ -45,10 +48,25 @@ public class Wire : MonoBehaviour
 
     public Hand Holder => _hand;
 
+    EventInstance _plugSfxInstance;
+    EventInstance _unplugSfxInstance;
+
     void Awake()
     {
         _positions = new Vector3[4];
         _lineRenderer.positionCount = _positions.Length;
+    }
+
+    void OnEnable()
+    {
+        _plugSfxInstance = RuntimeManager.CreateInstance(_plugSfx);
+        _unplugSfxInstance = RuntimeManager.CreateInstance(_plugSfx);
+    }
+
+    void OnDisable()
+    {
+        _plugSfxInstance.release();
+        _unplugSfxInstance.release();
     }
 
     public void SetStart(PowerInlet inlet, Vector3 wireAttach, Vector3 outward, Vector3 plugUp, Hand hand)
@@ -69,8 +87,6 @@ public class Wire : MonoBehaviour
 
     public void Connect(PowerOutlet outlet, Vector3 plugPoint, Vector3 plugDirection, Vector3 plugUp)
     {
-        Invoke(nameof(PlaySfx), _plugInSfxDelay);
-
         _currentTween?.Kill();
 
         Outlet = outlet;
@@ -84,6 +100,8 @@ public class Wire : MonoBehaviour
             .Join(_plug.DORotateQuaternion(rotation, _prePlugTime).SetEase(_prePlugEase))
             .Append(_plug.DOMove(plugPoint, _plugTime).SetEase(_ease))
             .OnComplete(FinishConnect);
+
+        Invoke(nameof(PlaySfx), _plugInSfxDelay);
     }
 
     void FinishConnect()
@@ -107,8 +125,6 @@ public class Wire : MonoBehaviour
         if (!IsAvailable)
             throw new InvalidOperationException("Cannot disconnect while animating.");
 
-        PlaySfx();
-
         Disconnected?.Invoke(Inlet, Outlet);
 
         StartCarryingPlug(hand);
@@ -122,6 +138,8 @@ public class Wire : MonoBehaviour
             .OnComplete(FinishDisconnect);
 
         Outlet = null;
+
+        PlaySfx();
     }
 
     void FinishDisconnect()
@@ -184,6 +202,12 @@ public class Wire : MonoBehaviour
     {
         if (_plugSfx.IsNull) return;
 
-        RuntimeManager.PlayOneShotAttached(_plugSfx, _plug.gameObject);
+        var instance = Outlet ? _plugSfxInstance : _unplugSfxInstance;
+
+        var spark = (UnityEngine.Random.value <= _sparkChance) ? 1 : 0;
+        instance.setParameterByName(_sparkParam, spark);
+
+        RuntimeManager.AttachInstanceToGameObject(instance, _plug);
+        instance.start();
     }
 }
