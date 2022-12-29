@@ -13,7 +13,7 @@ public class Hand : MonoBehaviour
 
     public bool IsFull => HeldObject;
 
-    List<int> _originalLayers = new();
+    readonly List<int> _originalLayers = new();
 
     public Vector3 HoldPosition { get; set; }
     public Quaternion HoldRot { get; set; }
@@ -24,6 +24,23 @@ public class Hand : MonoBehaviour
     HandReleaseState _releaseState = HandReleaseState.Unreleased;
 
     public HandReleaseState CurrentReleaseState => _releaseState;
+
+    /// <summary>
+    /// Checks for and retrieves (if it exists) a component on the item with the provided type.
+    /// </summary>
+    /// <typeparam name="T">The type of the behavior.</typeparam>
+    /// <param name="result">The result; null if not found.</param>
+    /// <returns>Whether the component was found.</returns>
+    public bool Contains<T>(out T result) where T : class
+    {
+        if (!HeldObject)
+        {
+            result = null;
+            return false;
+        }
+
+        return HeldObject.TryGetComponent(out result);
+    }
 
     /// <summary>
     /// Releases the held item according to <paramref name="state"/>

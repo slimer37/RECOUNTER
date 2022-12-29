@@ -21,7 +21,7 @@ public class PowerOutlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return IsPluggedIn ? !wire.IsAnimating : WireManager.ActiveWire;
+        return IsPluggedIn ? (wire.IsAvailable && !e.LeftHand.IsFull) : e.LeftHand.Contains<Wire>(out _);
     }
 
     public override HudInfo GetHudInfo(Employee e)
@@ -39,14 +39,14 @@ public class PowerOutlet : Interactable
     {
         if (IsPluggedIn)
         {
-            wire.Disconnect(Camera.main.transform, Vector3.forward);
+            wire.Disconnect(e.LeftHand);
             wire = null;
 
             Spark();
         }
         else
         {
-            wire = WireManager.ActiveWire;
+            wire = e.LeftHand.HeldObject.GetComponent<Wire>();
             wire.Connected += FinishConnection;
             wire.Connect(this, transform.TransformPoint(plugPoint), transform.forward, transform.up);
         }

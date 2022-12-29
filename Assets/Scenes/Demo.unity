@@ -12908,6 +12908,7 @@ Transform:
   - {fileID: 240787177}
   - {fileID: 317501404}
   - {fileID: 157413188}
+  - {fileID: 1095714738}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12926,7 +12927,7 @@ MonoBehaviour:
   <ItemHotbar>k__BackingField: {fileID: 1496458287}
   <Controller>k__BackingField: {fileID: 273294031}
   <Interaction>k__BackingField: {fileID: 273294029}
-  <LeftHand>k__BackingField: {fileID: 0}
+  <LeftHand>k__BackingField: {fileID: 1095714737}
   <RightHand>k__BackingField: {fileID: 157413189}
 --- !u!1 &841520586
 GameObject:
@@ -14604,6 +14605,54 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 0, y: -0.025, z: 0}
+--- !u!1 &1095714736
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1095714738}
+  - component: {fileID: 1095714737}
+  m_Layer: 6
+  m_Name: left hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1095714737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1095714736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905dd5d3dba8b8646bcfc34ae1a47b5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _smoothing: 0.05
+  _viewmodelLayer: 3
+  _followCamera: {fileID: 2136512939}
+  <HeldObject>k__BackingField: {fileID: 0}
+--- !u!4 &1095714738
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1095714736}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 840553857}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1098218250 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5981722475187972325, guid: ec94afbe92d7fb64f80af2c194fea290,

@@ -11,8 +11,6 @@ public static class WireManager
 
     public const string prefabKey = "Wire";
 
-    public static Wire ActiveWire { get; private set; }
-
     [RuntimeInitializeOnLoadMethod]
     static async void Init()
     {
@@ -45,30 +43,7 @@ public static class WireManager
 
     public static Wire GetWire()
     {
-        SetActiveWire(wires.Get());
-        return ActiveWire;
-    }
-
-    public static void SetActiveWire(Wire wire)
-    {
-        if (ActiveWire)
-            ActiveWire.Connected -= ClearActiveWire;
-
-        ActiveWire = wire;
-        ActiveWire.Connected += ClearActiveWire;
-    }
-
-    static void ClearActiveWire(PowerInlet inlet, PowerOutlet outlet)
-    {
-        if (ActiveWire)
-            ActiveWire.Connected -= ClearActiveWire;
-
-        ActiveWire = null;
-    }
-
-    public static void ClearActiveWire()
-    {
-        ClearActiveWire(null, null);
+        return wires.Get();
     }
 
     public static void ReleaseWire(Wire wire) => wires.Release(wire);

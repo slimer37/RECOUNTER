@@ -23,7 +23,7 @@ public class PowerInlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return IsPluggedIn ? wire == WireManager.ActiveWire : !WireManager.ActiveWire;
+        return IsPluggedIn ? e.LeftHand == wire.Holder : !e.LeftHand.IsFull;
     }
 
     public override HudInfo GetHudInfo(Employee e)
@@ -52,8 +52,7 @@ public class PowerInlet : Interactable
                 wireAttach.position,
                 wireAttach.forward,
                 wireAttach.up,
-                Camera.main.transform,
-                Vector3.forward);
+                e.LeftHand);
 
             wire.Connected += OnPower;
             wire.Disconnected += OnDepower;
@@ -63,7 +62,6 @@ public class PowerInlet : Interactable
     void StashWire()
     {
         WireManager.ReleaseWire(wire);
-        WireManager.ClearActiveWire();
 
         wire.Connected -= OnPower;
         wire.Disconnected -= OnDepower;

@@ -9,6 +9,8 @@ public class Wire : MonoBehaviour
     [SerializeField] float _raycastHeight;
     [SerializeField] float _plugDepth;
     [SerializeField] Transform _plug;
+    [SerializeField] Vector3 _holdPosition;
+    [SerializeField] Vector3 _holdRotation;
 
     [Header("Hook")]
     [SerializeField] float _smoothTime;
@@ -23,55 +25,56 @@ public class Wire : MonoBehaviour
     [SerializeField] Ease _unplugEase;
 
     Vector3 _wireStart;
-    Transform _hookParent;
-    Vector3 _hookOffset;
-    Vector3 _hookVelocity;
 
-    Vector3[] positions;
+    Vector3[] _positions;
 
-    Tween currentTween;
+    Tween _currentTween;
+
+    Hand _hand;
 
     public Action<PowerInlet, PowerOutlet> Connected;
     public Action<PowerInlet, PowerOutlet> Disconnected;
 
+    public bool IsAvailable => !_currentTween.IsActive() || !_currentTween.IsPlaying();
+
     public PowerInlet Inlet { get; private set; }
     public PowerOutlet Outlet { get; private set; }
-    public bool IsAnimating { get; private set; }
+
+    public Hand Holder => _hand;
 
     void Awake()
     {
-        positions = new Vector3[4];
-        _lineRenderer.positionCount = positions.Length;
+        _positions = new Vector3[4];
+        _lineRenderer.positionCount = _positions.Length;
     }
 
-    void OnEnable()
+    public void SetStart(PowerInlet inlet, Vector3 wireAttach, Vector3 outward, Vector3 plugUp, Hand hand)
     {
-        IsAnimating = false;
-    }
+        if (!hand)
+            throw new ArgumentNullException(nameof(hand));
 
-    public void SetStart(PowerInlet inlet, Vector3 wireAttach, Vector3 outward, Vector3 plugUp, Transform hookParent, Vector3 offset)
-    {
+        if (hand.IsFull)
+            throw new ArgumentException("The supplied hand is full.", nameof(hand));
+
         Inlet = inlet;
 
         OrientPlug(wireAttach, outward, plugUp);
         SetWireStart(wireAttach, outward);
 
-        SetupHook(hookParent, offset);
-
-        enabled = true;
+        StartCarryingPlug(hand);
     }
 
     public void Connect(PowerOutlet outlet, Vector3 plugPoint, Vector3 plugDirection, Vector3 plugUp)
     {
-        currentTween?.Kill();
+        _currentTween?.Kill();
 
         Outlet = outlet;
 
-        IsAnimating = true;
-
         var rotation = Quaternion.LookRotation(-plugDirection, plugUp);
 
-        currentTween = DOTween.Sequence()
+        StopCarryingPlug();
+
+        _currentTween = DOTween.Sequence()
             .Append(_plug.DOMove(plugPoint + plugDirection * _plugOutOffset, _prePlugTime).SetEase(_prePlugEase))
             .Join(_plug.DORotateQuaternion(rotation, _prePlugTime).SetEase(_prePlugEase))
             .Append(_plug.DOMove(plugPoint, _plugTime).SetEase(_ease))
@@ -82,28 +85,30 @@ public class Wire : MonoBehaviour
     {
         Connected?.Invoke(Inlet, Outlet);
 
-        IsAnimating = false;
-
         enabled = false;
 
         SetWireEnd();
         UpdateRenderer();
     }
 
-    public void Disconnect(Transform hookParent, Vector3 offset)
+    public void Disconnect(Hand hand)
     {
-        if (IsAnimating)
+        if (!hand)
+            throw new ArgumentNullException(nameof(hand));
+
+        if (hand.IsFull)
+            throw new ArgumentException("The supplied hand is full.", nameof(hand));
+
+        if (!IsAvailable)
             throw new InvalidOperationException("Cannot disconnect while animating.");
 
-        WireManager.SetActiveWire(this);
-        SetupHook(hookParent, offset);
         Disconnected?.Invoke(Inlet, Outlet);
 
-        enabled = true;
+        StartCarryingPlug(hand);
 
-        IsAnimating = true;
+        hand.SetReleaseState(HandReleaseState.FreePositionAndRotation);
 
-        currentTween = _plug
+        _currentTween = _plug
             .DOMove(_plug.position - _plug.forward * _plugOutOffset, _unplugTime)
             .SetEase(_unplugEase)
             .OnComplete(FinishDisconnect);
@@ -113,69 +118,57 @@ public class Wire : MonoBehaviour
 
     void FinishDisconnect()
     {
-        IsAnimating = false;
+        _hand.SetReleaseState(HandReleaseState.Unreleased);
     }
 
-    void Update()
+    void LateUpdate()
     {
-        if (IsAnimating)
-            SetWireEnd();
-        else
-            FollowHook();
-
+        SetWireEnd();
         UpdateRenderer();
+    }
+
+    void StartCarryingPlug(Hand hand)
+    {
+        _hand = hand;
+
+        hand.Hold(_plug, _holdPosition, Quaternion.Euler(_holdRotation));
+
+        enabled = true;
+    }
+
+    void StopCarryingPlug()
+    {
+        _hand.Clear();
+        _hand = null;
     }
 
     void UpdateRenderer()
     {
-        _lineRenderer.SetPositions(positions);
+        _lineRenderer.SetPositions(_positions);
     }
-
-    void SetupHook(Transform parent, Vector3 offset)
-    {
-        _hookParent = parent;
-        _hookOffset = offset;
-    }
-
-    Vector3 GetHookPosition() => _hookParent.TransformPoint(_hookOffset);
 
     void SetWireStart(Vector3 attachPoint, Vector3 outward)
     {
         _wireStart = attachPoint + outward * _lineRenderer.startWidth / 2;
 
         var startPos = _wireStart;
-        positions[0] = _wireStart;
+        _positions[0] = _wireStart;
         startPos.y = _floorOffset;
-        positions[1] = startPos;
-    }
-
-    void OrientPlug(Vector3 position, Vector3 direction)
-    {
-        _plug.position = position;
-        _plug.forward = -direction;
+        _positions[1] = startPos;
     }
 
     void OrientPlug(Vector3 position, Vector3 direction, Vector3 up)
     {
-        OrientPlug(position, direction);
+        _plug.position = position;
+        _plug.forward = -direction;
         _plug.rotation = Quaternion.LookRotation(-direction, up);
     }
 
     void SetWireEnd()
     {
         var wireEnd = _plug.position + -_plug.forward * _plugDepth;
-        positions[^1] = wireEnd;
+        _positions[^1] = wireEnd;
         wireEnd.y = _floorOffset;
-        positions[^2] = wireEnd;
-    }
-
-    void FollowHook()
-    {
-        var hookPos = GetHookPosition();
-        var direction = (_wireStart - hookPos).normalized;
-        var smoothPos = Vector3.SmoothDamp(_plug.position, hookPos, ref _hookVelocity, _smoothTime);
-        var smoothDirection = Vector3.Slerp(-_plug.forward, direction, Time.deltaTime / _smoothTime);
-        OrientPlug(smoothPos, smoothDirection);
-        SetWireEnd();
+        _positions[^2] = wireEnd;
     }
 }
