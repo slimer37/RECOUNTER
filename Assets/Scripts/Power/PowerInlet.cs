@@ -1,13 +1,16 @@
-using System;
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PowerInlet : Interactable
 {
     [SerializeField] float requirement;
     [SerializeField] Vector3 plugPoint;
 
-    public event Action Powered;
-    public event Action Depowered;
+    [Foldout("Events")] public UnityEvent Powered;
+    [Foldout("Events")] public UnityEvent Depowered;
+
+    [Foldout("Events")] public UnityEvent<bool> StateChanged;
 
     Wire wire;
 
@@ -72,10 +75,12 @@ public class PowerInlet : Interactable
     void OnDepower(PowerInlet inlet, PowerOutlet outlet)
     {
         Depowered?.Invoke();
+        StateChanged?.Invoke(false);
     }
 
     void OnPower(PowerInlet inlet, PowerOutlet outlet)
     {
         Powered?.Invoke();
+        StateChanged?.Invoke(true);
     }
 }
