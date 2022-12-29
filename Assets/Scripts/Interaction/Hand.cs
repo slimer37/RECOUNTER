@@ -8,6 +8,8 @@ public class Hand : MonoBehaviour
     [SerializeField] float _smoothing;
     [SerializeField, Layer] int _viewmodelLayer;
     [SerializeField] Transform _followCamera;
+    [SerializeField] Vector3 _defaultHoldPosition;
+    [SerializeField] Vector3 _defaultHoldRotation;
 
     [field: SerializeField, ReadOnly] public GameObject HeldObject { get; private set; }
 
@@ -96,6 +98,15 @@ public class Hand : MonoBehaviour
 
         SetViewmodelLayer(true);
     }
+
+    /// <inheritdoc cref="Hold(Component, Vector3, Quaternion)"/>
+    public void Hold(Component obj) => Hold(obj, _defaultHoldPosition, Quaternion.Euler(_defaultHoldRotation));
+
+    /// <inheritdoc cref="Hold(Component, Vector3, Quaternion)"/>
+    public void Hold(Component obj, Vector3 holdPosition) => Hold(obj, holdPosition, Quaternion.Euler(_defaultHoldRotation));
+
+    /// <inheritdoc cref="Hold(Component, Vector3, Quaternion)"/>
+    public void Hold(Component obj, Quaternion holdRotation) => Hold(obj, _defaultHoldPosition, holdRotation);
 
     /// <summary>
     /// Removes the item held by this hand.
