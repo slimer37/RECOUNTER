@@ -23,7 +23,7 @@ public class PowerInlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return IsPluggedIn ? e.LeftHand == wire.Holder : !e.LeftHand.IsFull;
+        return wire ? e.LeftHand == wire.Holder : !e.LeftHand.IsFull;
     }
 
     public override HudInfo GetHudInfo(Employee e)
@@ -31,16 +31,17 @@ public class PowerInlet : Interactable
         return CanInteract(e)
             ? new()
             {
-                icon = IsPluggedIn ? Icon.StashPlug : Icon.Plug,
-                text = IsPluggedIn ? "Stash Plug" : "Grab Plug"
+                icon = wire ? Icon.StashPlug : Icon.Plug,
+                text = wire ? "Stash Plug" : "Grab Plug"
             }
             : BlankHud;
     }
 
     protected override void OnInteract(Employee e)
     {
-        if (IsPluggedIn)
+        if (wire)
         {
+            e.LeftHand.Clear();
             StashWire();
         }
         else
