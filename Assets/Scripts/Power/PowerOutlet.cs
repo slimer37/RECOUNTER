@@ -5,9 +5,6 @@ public class PowerOutlet : Interactable
     [SerializeField] Vector3 plugPoint;
     [SerializeField] string label = "Outlet";
 
-    [Header("Particles")]
-    [SerializeField] ParticleSystem sparks;
-
     PowerInlet inlet;
     Wire wire;
 
@@ -41,8 +38,6 @@ public class PowerOutlet : Interactable
         {
             wire.Disconnect(e.LeftHand);
             wire = null;
-
-            Spark();
         }
         else
         {
@@ -56,16 +51,5 @@ public class PowerOutlet : Interactable
     {
         this.inlet = inlet;
         wire.Connected -= FinishConnection;
-
-        Spark();
-    }
-
-    void Spark()
-    {
-        if (sparks)
-        {
-            sparks.transform.position = transform.TransformPoint(plugPoint);
-            sparks.Play();
-        }
     }
 }

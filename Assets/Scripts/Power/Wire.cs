@@ -17,7 +17,10 @@ public class Wire : MonoBehaviour
     [Header("SFX")]
     [SerializeField] float _plugInSfxDelay;
     [SerializeField] EventReference _plugSfx;
-    [SerializeField] string _sparkParam;
+
+    [Header("Sparks")]
+    [SerializeField] string _sparkSfxParam = "Spark";
+    [SerializeField] ParticleSystem sparks;
     [SerializeField] float _sparkChance;
 
     [Header("Animation")]
@@ -51,6 +54,8 @@ public class Wire : MonoBehaviour
     EventInstance _plugSfxInstance;
     EventInstance _unplugSfxInstance;
 
+    bool shouldSpark;
+
     void Awake()
     {
         _positions = new Vector3[4];
@@ -61,6 +66,9 @@ public class Wire : MonoBehaviour
     {
         _plugSfxInstance = RuntimeManager.CreateInstance(_plugSfx);
         _unplugSfxInstance = RuntimeManager.CreateInstance(_plugSfx);
+
+        _plugSfxInstance.set3DAttributes(_plug.position.To3DAttributes());
+        _unplugSfxInstance.set3DAttributes(_plug.position.To3DAttributes());
     }
 
     void OnDisable()
@@ -101,6 +109,7 @@ public class Wire : MonoBehaviour
             .Append(_plug.DOMove(plugPoint, _plugTime).SetEase(_ease))
             .OnComplete(FinishConnect);
 
+        DecideSpark();
         Invoke(nameof(PlaySfx), _plugInSfxDelay);
     }
 
@@ -112,6 +121,7 @@ public class Wire : MonoBehaviour
 
         SetWireEnd();
         UpdateRenderer();
+        Spark();
     }
 
     public void Disconnect(Hand hand)
@@ -139,6 +149,8 @@ public class Wire : MonoBehaviour
 
         Outlet = null;
 
+        DecideSpark();
+        Spark();
         PlaySfx();
     }
 
@@ -198,16 +210,30 @@ public class Wire : MonoBehaviour
         _positions[^2] = wireEnd;
     }
 
+    void DecideSpark()
+    {
+        shouldSpark = UnityEngine.Random.value <= _sparkChance;
+    }
+
     void PlaySfx()
     {
         if (_plugSfx.IsNull) return;
 
-        var instance = Outlet ? _plugSfxInstance : _unplugSfxInstance;
+        var isPluggingIn = (bool)Outlet;
 
-        var spark = (UnityEngine.Random.value <= _sparkChance) ? 1 : 0;
-        instance.setParameterByName(_sparkParam, spark);
+        var instance = isPluggingIn ? _plugSfxInstance : _unplugSfxInstance;
 
-        RuntimeManager.AttachInstanceToGameObject(instance, _plug);
+        instance.set3DAttributes(_plug.position.To3DAttributes());
+
+        instance.setParameterByName(_sparkSfxParam, shouldSpark ? 1 : 0);
+
         instance.start();
+    }
+
+    void Spark()
+    {
+        if (!shouldSpark) return;
+
+        sparks?.Play();
     }
 }
