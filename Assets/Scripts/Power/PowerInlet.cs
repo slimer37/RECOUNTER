@@ -14,7 +14,7 @@ public class PowerInlet : Interactable
 
     Wire wire;
 
-    public bool IsPluggedIn => wire;
+    public bool IsPluggedIn { get; private set; }
 
     void OnDrawGizmosSelected()
     {
@@ -69,17 +69,20 @@ public class PowerInlet : Interactable
         wire.Disconnected -= OnDepower;
 
         wire = null;
+        IsPluggedIn = false;
     }
 
     void OnDepower(PowerInlet inlet, PowerOutlet outlet)
     {
         Depowered?.Invoke();
         StateChanged?.Invoke(false);
+        IsPluggedIn = false;
     }
 
     void OnPower(PowerInlet inlet, PowerOutlet outlet)
     {
         Powered?.Invoke();
         StateChanged?.Invoke(true);
+        IsPluggedIn = true;
     }
 }
