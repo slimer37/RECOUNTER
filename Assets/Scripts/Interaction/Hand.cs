@@ -11,6 +11,10 @@ public class Hand : MonoBehaviour
     [SerializeField] Vector3 _defaultHoldPosition;
     [SerializeField] Vector3 _defaultHoldRotation;
 
+    [Header("Breathing")]
+    [SerializeField] float _breathingIntensity;
+    [SerializeField] float _breathingFrequency;
+
     [field: SerializeField, ReadOnly] public GameObject HeldObject { get; private set; }
 
     public bool IsFull => HeldObject;
@@ -23,7 +27,7 @@ public class Hand : MonoBehaviour
     Vector3 _positionVelocity;
     float _rotationVelocity;
 
-    HandReleaseState _releaseState = HandReleaseState.Unreleased;
+    [ShowNonSerializedField] HandReleaseState _releaseState = HandReleaseState.None;
 
     public HandReleaseState CurrentReleaseState => _releaseState;
 
@@ -121,7 +125,7 @@ public class Hand : MonoBehaviour
 
         HeldObject = null;
 
-        _releaseState = HandReleaseState.Unreleased;
+        _releaseState = HandReleaseState.None;
 
         return HeldObject;
     }
@@ -151,10 +155,16 @@ public class Hand : MonoBehaviour
         var targetPos = HoldPosition;
         var targetRot = HoldRot;
 
+        if (_releaseState == HandReleaseState.None)
+        {
+            var sin = _breathingIntensity * Mathf.Sin(Time.time * Mathf.PI * _breathingFrequency);
+            targetPos += Vector3.up * sin;
+        }
+
         if (!_releaseState.HasFlag(HandReleaseState.WorldSpace))
         {
-            targetPos = _followCamera.TransformPoint(HoldPosition);
-            targetRot = _followCamera.transform.rotation * HoldRot;
+            targetPos = _followCamera.TransformPoint(targetPos);
+            targetRot = _followCamera.transform.rotation * targetRot;
         }
 
         if (!_releaseState.HasFlag(HandReleaseState.FreePosition))
@@ -200,7 +210,7 @@ public class Hand : MonoBehaviour
 [Flags]
 public enum HandReleaseState
 {
-    Unreleased = 0,
+    None = 0,
     FreePosition = 1,
     FreeRotation = 2,
     ResetLayer = 4,

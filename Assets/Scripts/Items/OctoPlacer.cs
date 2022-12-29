@@ -325,7 +325,7 @@ public class OctoPlacer : MonoBehaviour
 
         _ghost.Hide();
 
-        hand.SetReleaseState(HandReleaseState.Unreleased);
+        hand.SetReleaseState(HandReleaseState.None);
 
         _cursorImage.sprite = _defaultIcon;
 

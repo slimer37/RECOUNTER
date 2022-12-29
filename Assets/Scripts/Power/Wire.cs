@@ -118,7 +118,7 @@ public class Wire : MonoBehaviour
 
     void FinishDisconnect()
     {
-        _hand.SetReleaseState(HandReleaseState.Unreleased);
+        _hand.SetReleaseState(HandReleaseState.None);
     }
 
     void LateUpdate()
