@@ -112,7 +112,7 @@ public class Wire : MonoBehaviour
 
         StartCarryingPlug(hand);
 
-        hand.SetReleaseState(HandReleaseState.FreePositionAndRotation);
+        hand.SetReleaseState(HandReleaseState.FreePositionAndRotation | HandReleaseState.ResetLayer);
 
         _currentTween = _plug
             .DOMove(_plug.position - _plug.forward * _plugOutOffset, _unplugTime)
