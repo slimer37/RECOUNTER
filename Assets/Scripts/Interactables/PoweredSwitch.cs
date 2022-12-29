@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,6 +15,9 @@ public class PoweredSwitch : Interactable
     [SerializeField] Vector3 scaleAmount;
     [SerializeField] Vector3 moveAmount;
     [SerializeField] float duration;
+
+    [Header("SFX")]
+    [SerializeField] EventReference switchSound;
 
     public UnityEvent<bool> Switched;
 
@@ -38,6 +42,9 @@ public class PoweredSwitch : Interactable
         Switch(!IsSwitchedOn);
 
         Animate();
+
+        if (!switchSound.IsNull)
+            RuntimeManager.PlayOneShotAttached(switchSound, gameObject);
     }
 
     void VerifyPowerState(bool powered)

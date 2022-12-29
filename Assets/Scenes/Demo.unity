@@ -22073,6 +22073,13 @@ MonoBehaviour:
   scaleAmount: {x: 0, y: 0, z: 0}
   moveAmount: {x: 0, y: -0.033, z: 0}
   duration: 0.2
+  switchSound:
+    Guid:
+      Data1: -1078892495
+      Data2: 1287774973
+      Data3: -868879697
+      Data4: 975029530
+    Path: event:/Pull Chain
   Switched:
     m_PersistentCalls:
       m_Calls:
