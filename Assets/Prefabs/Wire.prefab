@@ -241,7 +241,8 @@ MonoBehaviour:
   _plug: {fileID: 20759766754589477}
   _holdPosition: {x: -0.2, y: 0, z: 0.5}
   _holdRotation: {x: -70, y: 20, z: 0}
-  plugSfx:
+  _plugInSfxDelay: 0.2
+  _plugSfx:
     Guid:
       Data1: 343827821
       Data2: 1287815735

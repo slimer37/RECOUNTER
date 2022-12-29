@@ -14,7 +14,8 @@ public class Wire : MonoBehaviour
     [SerializeField] Vector3 _holdRotation;
 
     [Header("SFX")]
-    [SerializeField] EventReference plugSfx;
+    [SerializeField] float _plugInSfxDelay;
+    [SerializeField] EventReference _plugSfx;
 
     [Header("Animation")]
     [SerializeField] float _prePlugTime;
@@ -67,6 +68,8 @@ public class Wire : MonoBehaviour
 
     public void Connect(PowerOutlet outlet, Vector3 plugPoint, Vector3 plugDirection, Vector3 plugUp)
     {
+        Invoke(nameof(PlaySfx), _plugInSfxDelay);
+
         _currentTween?.Kill();
 
         Outlet = outlet;
@@ -90,7 +93,6 @@ public class Wire : MonoBehaviour
 
         SetWireEnd();
         UpdateRenderer();
-        PlaySfx();
     }
 
     public void Disconnect(Hand hand)
@@ -178,8 +180,8 @@ public class Wire : MonoBehaviour
 
     void PlaySfx()
     {
-        if (plugSfx.IsNull) return;
+        if (_plugSfx.IsNull) return;
 
-        RuntimeManager.PlayOneShotAttached(plugSfx, _plug.gameObject);
+        RuntimeManager.PlayOneShotAttached(_plugSfx, _plug.gameObject);
     }
 }
