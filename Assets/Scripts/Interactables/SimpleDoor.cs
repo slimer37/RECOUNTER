@@ -1,4 +1,7 @@
 using DG.Tweening;
+using FMOD.Studio;
+using FMODUnity;
+using System.Collections;
 using UnityEngine;
 
 public class SimpleDoor : Interactable
@@ -9,6 +12,13 @@ public class SimpleDoor : Interactable
     [SerializeField] Ease closeEase;
     [SerializeField] float tweenSpeed;
     [SerializeField] string label;
+
+    [Header("SFX")]
+    [SerializeField] EventReference creakSfx;
+    [SerializeField] float completeSwingTime;
+    [SerializeField] EventReference completeSwingSfx;
+
+    EventInstance creakSfxInstance;
 
     bool isOpen;
 
@@ -28,6 +38,11 @@ public class SimpleDoor : Interactable
     void Awake()
     {
         localClosedRotation = door.localEulerAngles;
+
+        if (completeSwingSfx.IsNull) return;
+
+        creakSfxInstance = RuntimeManager.CreateInstance(creakSfx);
+        RuntimeManager.AttachInstanceToGameObject(creakSfxInstance, door);
     }
 
     protected override void OnInteract(Employee e)
@@ -38,5 +53,22 @@ public class SimpleDoor : Interactable
         tween = door.DOLocalRotate(isOpen ? localOpenRotation : localClosedRotation, tweenSpeed)
             .SetSpeedBased()
             .SetEase(isOpen ? openEase : closeEase);
+
+        StopAllCoroutines();
+        StartCoroutine(PlayCompleteSwingSfx());
+
+        if (!completeSwingSfx.IsNull)
+        {
+            creakSfxInstance.start();
+        }
+    }
+
+    IEnumerator PlayCompleteSwingSfx()
+    {
+        if (completeSwingSfx.IsNull) yield break;
+
+        yield return new WaitForSeconds(completeSwingTime);
+
+        RuntimeManager.PlayOneShotAttached(completeSwingSfx, door.gameObject);
     }
 }

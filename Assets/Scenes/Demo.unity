@@ -36143,6 +36143,13 @@ MonoBehaviour:
   closeEase: 30
   tweenSpeed: 90
   label: Floor Box Lid
+  sfx:
+    Guid:
+      Data1: 177091040
+      Data2: 1313133151
+      Data3: -1912939585
+      Data4: 1492195072
+    Path: event:/Metal Lid
 --- !u!65 &7833497869546567790
 BoxCollider:
   m_ObjectHideFlags: 0
