@@ -241,7 +241,13 @@ MonoBehaviour:
   _plug: {fileID: 20759766754589477}
   _holdPosition: {x: -0.2, y: 0, z: 0.5}
   _holdRotation: {x: -70, y: 20, z: 0}
-  _smoothTime: 0.1
+  plugSfx:
+    Guid:
+      Data1: 343827821
+      Data2: 1287815735
+      Data3: 1705338008
+      Data4: 532198298
+    Path: event:/Plug
   _prePlugTime: 0.2
   _prePlugEase: 4
   _plugTime: 0.2

@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using FMODUnity;
 using System;
 using UnityEngine;
 
@@ -12,8 +13,8 @@ public class Wire : MonoBehaviour
     [SerializeField] Vector3 _holdPosition;
     [SerializeField] Vector3 _holdRotation;
 
-    [Header("Hook")]
-    [SerializeField] float _smoothTime;
+    [Header("SFX")]
+    [SerializeField] EventReference plugSfx;
 
     [Header("Animation")]
     [SerializeField] float _prePlugTime;
@@ -89,6 +90,7 @@ public class Wire : MonoBehaviour
 
         SetWireEnd();
         UpdateRenderer();
+        PlaySfx();
     }
 
     public void Disconnect(Hand hand)
@@ -101,6 +103,8 @@ public class Wire : MonoBehaviour
 
         if (!IsAvailable)
             throw new InvalidOperationException("Cannot disconnect while animating.");
+
+        PlaySfx();
 
         Disconnected?.Invoke(Inlet, Outlet);
 
@@ -170,5 +174,12 @@ public class Wire : MonoBehaviour
         _positions[^1] = wireEnd;
         wireEnd.y = _floorOffset;
         _positions[^2] = wireEnd;
+    }
+
+    void PlaySfx()
+    {
+        if (plugSfx.IsNull) return;
+
+        RuntimeManager.PlayOneShotAttached(plugSfx, _plug.gameObject);
     }
 }

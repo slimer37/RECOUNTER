@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{c7e071fa-0602-4b93-bda1-4d4e5813dc48}">
+		<property name="assetPath">
+			<value>Electricity/plug-05.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.32013605442176873</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{315c966c-6aa8-4863-87c9-7fce57395eb9}</destination>
+		</relationship>
+	</object>
+</objects>
