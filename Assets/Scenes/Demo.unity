@@ -14726,8 +14726,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plugPoint: {x: 0, y: 0, z: 0}
-  sparks: {fileID: 3379533448209589063}
   label: Upper Outlet
+  sparks: {fileID: 3379533448209589063}
 --- !u!1 &1115510407 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -858680833699509400, guid: 871a872047b96994282110c3e6367de6,
@@ -21777,8 +21777,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plugPoint: {x: 0, y: 0, z: 0}
-  sparks: {fileID: 3379533448209589063}
   label: Lower Outlet
+  sparks: {fileID: 3379533448209589063}
 --- !u!1 &1552252851 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2487388224481515238, guid: ec94afbe92d7fb64f80af2c194fea290,
@@ -35480,8 +35480,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plugPoint: {x: 0, y: 0, z: 0.01}
-  sparks: {fileID: 1416507579}
   label: Outlet
+  sparks: {fileID: 1416507579}
 --- !u!65 &5320444036387936305
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36266,8 +36266,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plugPoint: {x: 0, y: 0, z: 0.01}
-  sparks: {fileID: 1416507579}
   label: Outlet
+  sparks: {fileID: 1416507579}
 --- !u!65 &8257579762943531930
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36350,8 +36350,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plugPoint: {x: 0, y: 0, z: 0.01}
-  sparks: {fileID: 1416507579}
   label: Outlet
+  sparks: {fileID: 1416507579}
 --- !u!65 &8920365971040334020
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36515,8 +36515,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plugPoint: {x: 0, y: 0, z: 0.01}
-  sparks: {fileID: 1416507579}
   label: Outlet
+  sparks: {fileID: 1416507579}
 --- !u!65 &9083838388453728250
 BoxCollider:
   m_ObjectHideFlags: 0

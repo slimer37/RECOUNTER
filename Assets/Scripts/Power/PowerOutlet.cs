@@ -3,8 +3,10 @@ using UnityEngine;
 public class PowerOutlet : Interactable
 {
     [SerializeField] Vector3 plugPoint;
-    [SerializeField] ParticleSystem sparks;
     [SerializeField] string label = "Outlet";
+
+    [Header("Particles")]
+    [SerializeField] ParticleSystem sparks;
 
     PowerInlet inlet;
     Wire wire;
@@ -39,7 +41,8 @@ public class PowerOutlet : Interactable
         {
             wire.Disconnect(Camera.main.transform, Vector3.forward);
             wire = null;
-            sparks.Play();
+
+            Spark();
         }
         else
         {
@@ -53,6 +56,16 @@ public class PowerOutlet : Interactable
     {
         this.inlet = inlet;
         wire.Connected -= FinishConnection;
-        sparks.Play();
+
+        Spark();
+    }
+
+    void Spark()
+    {
+        if (sparks)
+        {
+            sparks.transform.position = transform.TransformPoint(plugPoint);
+            sparks.Play();
+        }
     }
 }
