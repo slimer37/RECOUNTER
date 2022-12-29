@@ -21934,7 +21934,15 @@ MonoBehaviour:
   - {fileID: 1679663867}
   - {fileID: 844831736}
   - {fileID: 2110672287}
-  offIntensity: 0
+  hum:
+    Guid:
+      Data1: 1111204992
+      Data2: 1167311012
+      Data3: 781402241
+      Data4: 296157521
+    Path: event:/Neon Sign Hum
+  fadeInSpeed: 3
+  fadeOutSpeed: 10
 --- !u!114 &1579773181
 MonoBehaviour:
   m_ObjectHideFlags: 0
