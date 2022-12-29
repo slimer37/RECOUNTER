@@ -238,7 +238,7 @@ MonoBehaviour:
   _floorOffset: 0.025
   _raycastHeight: 5
   _plugDepth: 0.125
-  _plug: {fileID: 4824749417099397497}
+  _plug: {fileID: 20759766754589477}
   _holdPosition: {x: -0.2, y: 0, z: 0.5}
   _holdRotation: {x: -70, y: 20, z: 0}
   _smoothTime: 0.1
