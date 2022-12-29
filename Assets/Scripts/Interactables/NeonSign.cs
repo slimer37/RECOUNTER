@@ -1,3 +1,4 @@
+using DG.Tweening;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
@@ -8,14 +9,15 @@ public class NeonSign : MonoBehaviour
     [SerializeField] EventReference hum;
     [SerializeField, Min(0.01f)] float fadeInSpeed = 1f;
     [SerializeField, Min(0.01f)] float fadeOutSpeed = 1f;
+    [SerializeField] Ease inEase = Ease.OutBack;
+    [SerializeField] Ease outEase = Ease.OutBounce;
 
     Color[] onColors;
 
-    float fadeTime;
-
-    bool isOn;
-
     EventInstance humInstance;
+
+    float currentIntensity;
+    Tween fadeTween;
 
     const string Emission = "_EmissionColor";
 
@@ -38,19 +40,15 @@ public class NeonSign : MonoBehaviour
         RuntimeManager.AttachInstanceToGameObject(humInstance, transform);
     }
 
-    void Update()
-    {
-        if (isOn && fadeTime > 1) return;
-        if (!isOn && fadeTime < 0) return;
-
-        fadeTime += Time.deltaTime * (isOn ? fadeInSpeed : -fadeOutSpeed);
-
-        SetIntensity(fadeTime);
-    }
-
     public void Set(bool on)
     {
-        isOn = on;
+        var speed = on ? fadeInSpeed : fadeOutSpeed;
+        var goal = on ? 1 : 0;
+        var ease = on ? inEase : outEase;
+        fadeTween?.Kill();
+        fadeTween = DOTween.To(() => currentIntensity, SetIntensity, goal, speed)
+            .SetSpeedBased()
+            .SetEase(ease);
 
         if (on)
             humInstance.start();
@@ -60,8 +58,6 @@ public class NeonSign : MonoBehaviour
 
     void SetIntensity(float intensity)
     {
-        intensity = Mathf.Clamp01(intensity);
-
         for (var i = 0; i < signParts.Length; i++)
         {
             var part = signParts[i];
@@ -71,6 +67,8 @@ public class NeonSign : MonoBehaviour
 
             part.material.SetColor(Emission, color);
         }
+
+        currentIntensity = intensity;
     }
 
     void OnDestroy()

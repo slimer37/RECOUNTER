@@ -13261,7 +13261,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh74132
+  m_Name: pb_Mesh168550
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -13432,7 +13432,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh74048
+  m_Name: pb_Mesh168466
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -21942,7 +21942,9 @@ MonoBehaviour:
       Data4: 296157521
     Path: event:/Neon Sign Hum
   fadeInSpeed: 3
-  fadeOutSpeed: 10
+  fadeOutSpeed: 5
+  inEase: 27
+  outEase: 30
 --- !u!114 &1579773181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22647,7 +22649,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh74734
+  m_Name: pb_Mesh169164
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
