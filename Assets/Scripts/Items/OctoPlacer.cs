@@ -6,6 +6,9 @@ using UnityEngine.InputSystem.Interactions;
 
 public class OctoPlacer : MonoBehaviour
 {
+    [Header("Hand")]
+    [SerializeField] Hand hand;
+
     [Header("Ghost")]
     [SerializeField] Ghost _ghost;
     [SerializeField] Material _freeMat;
@@ -30,7 +33,6 @@ public class OctoPlacer : MonoBehaviour
     [SerializeField] float _surfaceSeparation;
     [SerializeField] LayerMask _obstacleMask;
     [SerializeField] LayerMask _lineOfSightMask;
-    [SerializeField] float _smoothing;
     [SerializeField] Vector3 _placementRegionExtents;
     [SerializeField] Vector3 _placementRegionCenter;
     [SerializeField] float _startPlaceDistance;
@@ -52,10 +54,6 @@ public class OctoPlacer : MonoBehaviour
     [SerializeField] Sprite _rotateIcon;
     [SerializeField] Sprite _defaultIcon;
 
-    [Header("Layers")]
-    [SerializeField, Layer] int _viewmodelLayer;
-    [SerializeField, Layer] int _defaultLayer;
-
     [Header("Components")]
     [SerializeField] PlayerController _playerController;
     [SerializeField] PlayerInteraction _playerInteraction;
@@ -74,9 +72,6 @@ public class OctoPlacer : MonoBehaviour
     float _chargeTime = 0;
 
     bool _startPlaceObstructed;
-
-    float _itemRotationVelocity;
-    Vector3 _itemVelocity;
 
     public Item Active => _active;
 
@@ -114,6 +109,8 @@ public class OctoPlacer : MonoBehaviour
         _localPlaceRotation = _defaultRot;
 
         _ghost.CopyMesh(item);
+
+        hand.Hold(item, _adjustedHoldPos, _adjustedHoldRot);
 
         if (!canResetPosition) return;
 
@@ -173,12 +170,10 @@ public class OctoPlacer : MonoBehaviour
     {
         _chargeTime = Mathf.Clamp01(_chargeTime + Time.deltaTime / _timeToFullCharge);
 
-        SetViewmodelLayer(true);
-
         var cameraLocalPos = Vector3.Slerp(_adjustedHoldPos, _chargedPos, _chargeTime);
-        var cameraLocalRot = _camera.transform.rotation * _adjustedHoldRot;
+        var cameraLocalRot = _adjustedHoldRot;
 
-        PullItemTo(_camera.transform.TransformPoint(cameraLocalPos), cameraLocalRot);
+        hand.UpdateHoldPositionAndRotation(cameraLocalPos, cameraLocalRot);
     }
 
     void Update()
@@ -219,7 +214,7 @@ public class OctoPlacer : MonoBehaviour
 
         var placePos = GetWorldPlacePos();
 
-        PullItemTo(placePos, placeRot);
+        hand.UpdateHoldPositionAndRotation(placePos, placeRot);
 
         _cursorImage.transform.position = _camera.WorldToScreenPoint(_active.transform.position);
     }
@@ -315,7 +310,8 @@ public class OctoPlacer : MonoBehaviour
 
         _ghost.Hide();
 
-        SetViewmodelLayer(false);
+        hand.SetReleaseState(HandReleaseState.InWorld);
+
         _playerInteraction.enabled = false;
         _playerController.Suspend(true);
     }
@@ -329,6 +325,8 @@ public class OctoPlacer : MonoBehaviour
 
         _ghost.Hide();
 
+        hand.SetReleaseState(HandReleaseState.Unreleased);
+
         _cursorImage.sprite = _defaultIcon;
 
         _cursorImage.transform.SetPositionAndRotation(
@@ -340,7 +338,7 @@ public class OctoPlacer : MonoBehaviour
     {
         EndPlace();
 
-        SetViewmodelLayer(false);
+        hand.Clear();
 
         var temp = _active;
 
@@ -360,8 +358,6 @@ public class OctoPlacer : MonoBehaviour
 
     void KeepItemInHand()
     {
-        SetViewmodelLayer(true);
-
         _localPlacePosition = CalculateLocalStartPos();
 
         RestrictPlacePosition(ref _localPlacePosition);
@@ -373,7 +369,7 @@ public class OctoPlacer : MonoBehaviour
             );
 
         var cameraLocalPos = _adjustedHoldPos;
-        var cameraLocalRot = _camera.transform.rotation * _adjustedHoldRot;
+        var cameraLocalRot = _adjustedHoldRot;
 
         if (_startPlaceObstructed)
         {
@@ -381,7 +377,7 @@ public class OctoPlacer : MonoBehaviour
             cameraLocalRot *= Quaternion.Euler(_intersectHoldRotShift);
         }
 
-        PullItemTo(_camera.transform.TransformPoint(cameraLocalPos), cameraLocalRot);
+        hand.UpdateHoldPositionAndRotation(cameraLocalPos, cameraLocalRot);
     }
 
     void ShowPreviewGhost()
@@ -397,39 +393,10 @@ public class OctoPlacer : MonoBehaviour
 
         EndPlace();
 
+        hand.Clear();
+
         _active.gameObject.SetActive(false);
 
         _active = null;
-    }
-
-    void PullItemTo(Vector3 targetPos, Quaternion targetRot)
-    {
-        var active = _active.transform;
-
-        var currRot = active.rotation;
-        var delta = Quaternion.Angle(currRot, targetRot);
-        if (delta > 0f)
-        {
-            var t = Mathf.SmoothDampAngle(delta, 0, ref _itemRotationVelocity, _smoothing);
-            t = 1f - (t / delta);
-            active.rotation = Quaternion.Slerp(currRot, targetRot, t);
-        }
-
-        active.position = Vector3.SmoothDamp(
-            active.position,
-            targetPos,
-            ref _itemVelocity,
-            _smoothing);
-    }
-
-    void SetViewmodelLayer(bool viewmodel)
-    {
-        var layer = viewmodel ? _viewmodelLayer : _defaultLayer;
-        _active.gameObject.layer = layer;
-
-        foreach (Transform child in _active.transform)
-        {
-            child.gameObject.layer = layer;
-        }
     }
 }
