@@ -1,3 +1,4 @@
+using FMODUnity;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -53,6 +54,8 @@ public class Pause : MonoBehaviour
     public void SetPaused(bool pause)
     {
         if (IsPaused == pause) return;
+
+        RuntimeManager.PauseAllEvents(pause);
 
         IsPaused = canvas.enabled = pause;
 
