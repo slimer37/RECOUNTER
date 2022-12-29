@@ -23,6 +23,7 @@ public class Wire : MonoBehaviour
     [SerializeField] float _plugTime;
     [SerializeField] float _plugOutOffset;
     [SerializeField] Ease _ease;
+    [SerializeField] float _unplugDelay;
     [SerializeField] float _unplugTime;
     [SerializeField] Ease _unplugEase;
 
@@ -116,6 +117,7 @@ public class Wire : MonoBehaviour
 
         _currentTween = _plug
             .DOMove(_plug.position - _plug.forward * _plugOutOffset, _unplugTime)
+            .SetDelay(_unplugDelay)
             .SetEase(_unplugEase)
             .OnComplete(FinishDisconnect);
 
