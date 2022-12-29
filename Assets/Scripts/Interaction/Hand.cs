@@ -17,6 +17,8 @@ public class Hand : MonoBehaviour
 
     [field: SerializeField, ReadOnly] public GameObject HeldObject { get; private set; }
 
+    [ShowNonSerializedField] HandReleaseState _releaseState = HandReleaseState.None;
+
     public bool IsFull => HeldObject;
 
     readonly List<int> _originalLayers = new();
@@ -26,8 +28,6 @@ public class Hand : MonoBehaviour
 
     Vector3 _positionVelocity;
     float _rotationVelocity;
-
-    [ShowNonSerializedField] HandReleaseState _releaseState = HandReleaseState.None;
 
     public HandReleaseState CurrentReleaseState => _releaseState;
 
@@ -46,6 +46,23 @@ public class Hand : MonoBehaviour
         }
 
         return HeldObject.TryGetComponent(out result);
+    }
+
+    /// <summary>
+    /// Checks for a component on the item's parent with the provided type.
+    /// </summary>
+    /// <inheritdoc cref="Contains{T}(out T)"/>
+    public bool ContainsParentComponent<T>(out T result) where T : class
+    {
+        if (!HeldObject)
+        {
+            result = null;
+            return false;
+        }
+
+        result = HeldObject.GetComponentInParent<T>();
+
+        return result != null;
     }
 
     /// <summary>

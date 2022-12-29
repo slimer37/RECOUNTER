@@ -18,7 +18,7 @@ public class PowerOutlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return IsPluggedIn ? (wire.IsAvailable && !e.LeftHand.IsFull) : (e.LeftHand.IsFull && e.LeftHand.HeldObject.GetComponentInParent<Wire>());
+        return IsPluggedIn ? (wire.IsAvailable && !e.LeftHand.IsFull) : e.LeftHand.ContainsParentComponent<Wire>(out _);
     }
 
     public override HudInfo GetHudInfo(Employee e)
