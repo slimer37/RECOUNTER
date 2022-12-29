@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class PowerInlet : Interactable
 {
     [SerializeField] float requirement;
-    [SerializeField] Transform plugPoint;
+    [SerializeField] Transform wireAttach;
 
     [Foldout("Events")] public UnityEvent Powered;
     [Foldout("Events")] public UnityEvent Depowered;
@@ -18,7 +18,7 @@ public class PowerInlet : Interactable
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.DrawSphere(plugPoint.position, 0.05f);
+        Gizmos.DrawSphere(wireAttach.position, 0.05f);
     }
 
     protected override bool CanInteract(Employee e)
@@ -49,9 +49,9 @@ public class PowerInlet : Interactable
 
             wire.SetStart(
                 this,
-                plugPoint.position,
-                plugPoint.forward,
-                plugPoint.up,
+                wireAttach.position,
+                wireAttach.forward,
+                wireAttach.up,
                 Camera.main.transform,
                 Vector3.forward);
 

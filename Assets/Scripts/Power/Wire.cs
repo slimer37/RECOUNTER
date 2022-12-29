@@ -8,8 +8,7 @@ public class Wire : MonoBehaviour
     [SerializeField] float _floorOffset;
     [SerializeField] float _raycastHeight;
     [SerializeField] float _plugDepth;
-    [SerializeField] Transform _plugStart;
-    [SerializeField] Transform _plugEnd;
+    [SerializeField] Transform _plug;
 
     [Header("Hook")]
     [SerializeField] float _smoothTime;
@@ -50,13 +49,12 @@ public class Wire : MonoBehaviour
         IsAnimating = false;
     }
 
-    public void SetStart(PowerInlet inlet, Vector3 plugPoint, Vector3 plugDirection, Vector3 plugUp, Transform hookParent, Vector3 offset)
+    public void SetStart(PowerInlet inlet, Vector3 wireAttach, Vector3 outward, Vector3 plugUp, Transform hookParent, Vector3 offset)
     {
         Inlet = inlet;
 
-        OrientPlug(_plugStart, plugPoint, plugDirection, plugUp);
-        OrientPlug(_plugEnd, plugPoint, plugDirection, plugUp);
-        SetWireStart();
+        OrientPlug(wireAttach, outward, plugUp);
+        SetWireStart(wireAttach, outward);
 
         SetupHook(hookParent, offset);
 
@@ -74,9 +72,9 @@ public class Wire : MonoBehaviour
         var rotation = Quaternion.LookRotation(-plugDirection, plugUp);
 
         currentTween = DOTween.Sequence()
-            .Append(_plugEnd.DOMove(plugPoint + plugDirection * _plugOutOffset, _prePlugTime).SetEase(_prePlugEase))
-            .Join(_plugEnd.DORotateQuaternion(rotation, _prePlugTime).SetEase(_prePlugEase))
-            .Append(_plugEnd.DOMove(plugPoint, _plugTime).SetEase(_ease))
+            .Append(_plug.DOMove(plugPoint + plugDirection * _plugOutOffset, _prePlugTime).SetEase(_prePlugEase))
+            .Join(_plug.DORotateQuaternion(rotation, _prePlugTime).SetEase(_prePlugEase))
+            .Append(_plug.DOMove(plugPoint, _plugTime).SetEase(_ease))
             .OnComplete(FinishConnect);
     }
 
@@ -105,8 +103,8 @@ public class Wire : MonoBehaviour
 
         IsAnimating = true;
 
-        currentTween = _plugEnd
-            .DOMove(_plugEnd.position - _plugEnd.forward * _plugOutOffset, _unplugTime)
+        currentTween = _plug
+            .DOMove(_plug.position - _plug.forward * _plugOutOffset, _unplugTime)
             .SetEase(_unplugEase)
             .OnComplete(FinishDisconnect);
 
@@ -141,9 +139,9 @@ public class Wire : MonoBehaviour
 
     Vector3 GetHookPosition() => _hookParent.TransformPoint(_hookOffset);
 
-    void SetWireStart()
+    void SetWireStart(Vector3 attachPoint, Vector3 outward)
     {
-        _wireStart = _plugStart.position + -_plugStart.forward * _plugDepth;
+        _wireStart = attachPoint + outward * _lineRenderer.startWidth / 2;
 
         var startPos = _wireStart;
         positions[0] = _wireStart;
@@ -151,21 +149,21 @@ public class Wire : MonoBehaviour
         positions[1] = startPos;
     }
 
-    void OrientPlug(Transform plug, Vector3 position, Vector3 direction)
+    void OrientPlug(Vector3 position, Vector3 direction)
     {
-        plug.position = position;
-        plug.forward = -direction;
+        _plug.position = position;
+        _plug.forward = -direction;
     }
 
-    void OrientPlug(Transform plug, Vector3 position, Vector3 direction, Vector3 up)
+    void OrientPlug(Vector3 position, Vector3 direction, Vector3 up)
     {
-        OrientPlug(plug, position, direction);
-        plug.rotation = Quaternion.LookRotation(-direction, up);
+        OrientPlug(position, direction);
+        _plug.rotation = Quaternion.LookRotation(-direction, up);
     }
 
     void SetWireEnd()
     {
-        var wireEnd = _plugEnd.position + -_plugEnd.forward * _plugDepth;
+        var wireEnd = _plug.position + -_plug.forward * _plugDepth;
         positions[^1] = wireEnd;
         wireEnd.y = _floorOffset;
         positions[^2] = wireEnd;
@@ -175,9 +173,9 @@ public class Wire : MonoBehaviour
     {
         var hookPos = GetHookPosition();
         var direction = (_wireStart - hookPos).normalized;
-        var smoothPos = Vector3.SmoothDamp(_plugEnd.position, hookPos, ref _hookVelocity, _smoothTime);
-        var smoothDirection = Vector3.Slerp(-_plugEnd.forward, direction, Time.deltaTime / _smoothTime);
-        OrientPlug(_plugEnd, smoothPos, smoothDirection);
+        var smoothPos = Vector3.SmoothDamp(_plug.position, hookPos, ref _hookVelocity, _smoothTime);
+        var smoothDirection = Vector3.Slerp(-_plug.forward, direction, Time.deltaTime / _smoothTime);
+        OrientPlug(smoothPos, smoothDirection);
         SetWireEnd();
     }
 }

@@ -22055,7 +22055,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requirement: 0
-  plugPoint: {fileID: 1660623903}
+  wireAttach: {fileID: 1660623903}
   Powered:
     m_PersistentCalls:
       m_Calls: []
@@ -22126,7 +22126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1660623903}
   m_Layer: 7
-  m_Name: plug point
+  m_Name: wire attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
