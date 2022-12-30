@@ -4808,7 +4808,7 @@ LineRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 5
@@ -4879,4 +4879,6 @@ MonoBehaviour:
   _length: 5
   _floorHeight: 0.025
   _maxIterations: 40
-  _printIterations: 1
+  _breakStretch: 1
+  _breakingColor: {r: 1, g: 0, b: 0, a: 0}
+  _printIterations: 0

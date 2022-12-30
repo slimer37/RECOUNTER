@@ -1,6 +1,7 @@
 using System;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CableRenderer : MonoBehaviour
 {
@@ -11,11 +12,15 @@ public class CableRenderer : MonoBehaviour
     [SerializeField, Min(0.0001f)] float _length = 1f;
     [SerializeField] float _floorHeight;
     [SerializeField] int _maxIterations = 25;
+    [SerializeField, Min(0)] float _breakStretch;
+    [SerializeField] Color _breakingColor;
 
     [Header("Debug")]
     [SerializeField] bool _printIterations;
 
     Vector3[] _positions;
+
+    Color _normalColor;
 
     void Awake()
     {
@@ -23,6 +28,11 @@ public class CableRenderer : MonoBehaviour
         _lineRenderer.positionCount = numPositions;
         _positions = new Vector3[numPositions];
         _lineRenderer.SetPositions(_positions);
+    }
+
+    void SetLineColor(Color color)
+    {
+        _lineRenderer.material.color = color;
     }
 
     public void SetEndPositions(Vector3 start, Vector3 end)
@@ -35,7 +45,18 @@ public class CableRenderer : MonoBehaviour
         _positions[0] = start;
         _positions[^1] = end;
 
-        var stretched = _length < Vector3.Distance(start, end);
+        var pointDistance = Vector3.Distance(start, end);
+        var stretched = _length < pointDistance;
+
+        if (stretched && _breakStretch > 0)
+        {
+            var stretchedAmount = pointDistance - _length;
+            SetLineColor(Color.Lerp(_normalColor, _breakingColor, stretchedAmount / _breakStretch));
+        }
+        else
+        {
+            SetLineColor(_normalColor);
+        }
 
         // X-coordinate is relative to the starting point.
 
