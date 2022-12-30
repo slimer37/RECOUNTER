@@ -4811,8 +4811,8 @@ LineRenderer:
       m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 5
-    numCapVertices: 5
+    numCornerVertices: 0
+    numCapVertices: 10
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}
@@ -4837,6 +4837,7 @@ MonoBehaviour:
   _cableRenderer: {fileID: 5670072211048291290}
   _raycastHeight: 5
   _plugDepth: 0.125
+  _sidePlugDepth: 0
   _cableOffset: 0
   _plug: {fileID: 20759766754589477}
   _holdPosition: {x: -0.2, y: 0, z: 0.5}
@@ -4877,8 +4878,10 @@ MonoBehaviour:
   _aPrecision: 0.00001
   _aIntervalStep: 400
   _length: 5
-  _floorHeight: 0.025
   _maxIterations: 40
   _breakStretch: 1
   _breakingColor: {r: 1, g: 0, b: 0, a: 0}
+  _floorHeight: 0.025
+  _waveAmplitude: 0.8
+  _waveFrequency: 2
   _printIterations: 0
