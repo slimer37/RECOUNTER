@@ -9,6 +9,7 @@ public class Wire : MonoBehaviour
     [SerializeField] CableRenderer _cableRenderer;
     [SerializeField] float _raycastHeight;
     [SerializeField] float _plugDepth;
+    [SerializeField] float _sidePlugDepth;
     [SerializeField] float _cableOffset;
     [SerializeField] Transform _plug;
     [SerializeField] Vector3 _holdPosition;
@@ -173,6 +174,14 @@ public class Wire : MonoBehaviour
     void UpdateRenderer()
     {
         var wireEnd = _plug.position - _plug.forward * _plugDepth;
+
+        if (_plug.forward.y < 0)
+        {
+            var alongWire = _wireStart - wireEnd;
+            alongWire.y = 0;
+            wireEnd += alongWire.normalized * _sidePlugDepth * -_plug.forward.y;
+        }
+
         _cableRenderer.SetEndPositions(_wireStart, wireEnd);
     }
 
