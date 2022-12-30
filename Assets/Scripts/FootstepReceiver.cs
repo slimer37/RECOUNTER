@@ -11,11 +11,9 @@ public class FootstepReceiver : MonoBehaviour
 
     public void PlayFootstep()
     {
-        if (!characterController || !characterController.isGrounded) return;
-
         RuntimeManager.PlayOneShot(footstepSfx, transform.position);
 
-        if (!controller) return;
+        if (!controller || !characterController.isGrounded) return;
 
         controller.ImpulseFootstep();
     }
