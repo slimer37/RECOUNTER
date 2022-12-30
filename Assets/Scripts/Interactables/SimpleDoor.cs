@@ -26,13 +26,20 @@ public class SimpleDoor : Interactable
 
     Tween tween;
 
+    protected override bool CanInteract(Employee e)
+    {
+        return !tween.IsActive();
+    }
+
     public override HudInfo GetHudInfo(Employee e)
     {
-        return new()
-        {
-            icon = Icon.Hand,
-            text = $"Open {label}",
-        };
+        return CanInteract(e)
+            ? new()
+            {
+                icon = Icon.Hand,
+                text = $"Open {label}",
+            }
+            : BlankHud;
     }
 
     void Awake()
