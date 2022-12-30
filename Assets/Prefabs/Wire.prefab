@@ -4694,6 +4694,7 @@ GameObject:
   - component: {fileID: 4824749417099397497}
   - component: {fileID: 4824749417099397496}
   - component: {fileID: 4824749417099397499}
+  - component: {fileID: 5670072211048291290}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -4833,10 +4834,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a36c301791d05b44ba0f90a44089b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lineRenderer: {fileID: 4824749417099397496}
-  _floorOffset: 0.025
+  _cableRenderer: {fileID: 5670072211048291290}
   _raycastHeight: 5
   _plugDepth: 0.125
+  _cableOffset: 0
   _plug: {fileID: 20759766754589477}
   _holdPosition: {x: -0.2, y: 0, z: 0.5}
   _holdRotation: {x: -70, y: 20, z: 0}
@@ -4859,3 +4860,23 @@ MonoBehaviour:
   _unplugDelay: 0.2
   _unplugTime: 0.2
   _unplugEase: 12
+--- !u!114 &5670072211048291290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4824749417099397498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9708aa80aaab66043af9d8a60076895f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lineRenderer: {fileID: 4824749417099397496}
+  _resolution: 50
+  _aPrecision: 0.00001
+  _aIntervalStep: 400
+  _length: 5
+  _floorHeight: 0.025
+  _maxIterations: 40
+  _printIterations: 1

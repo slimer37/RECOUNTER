@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-    [SerializeField] LineRenderer _lineRenderer;
-    [SerializeField] float _floorOffset;
+    [SerializeField] CableRenderer _cableRenderer;
     [SerializeField] float _raycastHeight;
     [SerializeField] float _plugDepth;
+    [SerializeField] float _cableOffset;
     [SerializeField] Transform _plug;
     [SerializeField] Vector3 _holdPosition;
     [SerializeField] Vector3 _holdRotation;
@@ -35,8 +35,6 @@ public class Wire : MonoBehaviour
 
     Vector3 _wireStart;
 
-    Vector3[] _positions;
-
     Tween _currentTween;
 
     Hand _hand;
@@ -55,12 +53,6 @@ public class Wire : MonoBehaviour
     EventInstance _unplugSfxInstance;
 
     bool shouldSpark;
-
-    void Awake()
-    {
-        _positions = new Vector3[4];
-        _lineRenderer.positionCount = _positions.Length;
-    }
 
     void OnEnable()
     {
@@ -119,7 +111,6 @@ public class Wire : MonoBehaviour
 
         enabled = false;
 
-        SetWireEnd();
         UpdateRenderer();
         Spark();
     }
@@ -161,7 +152,6 @@ public class Wire : MonoBehaviour
 
     void LateUpdate()
     {
-        SetWireEnd();
         UpdateRenderer();
     }
 
@@ -182,32 +172,18 @@ public class Wire : MonoBehaviour
 
     void UpdateRenderer()
     {
-        _lineRenderer.SetPositions(_positions);
+        var wireEnd = _plug.position - _plug.forward * _plugDepth;
+        _cableRenderer.SetEndPositions(_wireStart, wireEnd);
     }
 
-    void SetWireStart(Vector3 attachPoint, Vector3 outward)
-    {
-        _wireStart = attachPoint + outward * _lineRenderer.startWidth / 2;
-
-        var startPos = _wireStart;
-        _positions[0] = _wireStart;
-        startPos.y = _floorOffset;
-        _positions[1] = startPos;
-    }
+    void SetWireStart(Vector3 attachPoint, Vector3 outward) =>
+        _wireStart = attachPoint + outward * _cableOffset;
 
     void OrientPlug(Vector3 position, Vector3 direction, Vector3 up)
     {
         _plug.position = position;
         _plug.forward = -direction;
         _plug.rotation = Quaternion.LookRotation(-direction, up);
-    }
-
-    void SetWireEnd()
-    {
-        var wireEnd = _plug.position + -_plug.forward * _plugDepth;
-        _positions[^1] = wireEnd;
-        wireEnd.y = _floorOffset;
-        _positions[^2] = wireEnd;
     }
 
     void DecideSpark()
