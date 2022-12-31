@@ -20,6 +20,7 @@ public class Wire : Interactable
     [SerializeField] Rigidbody _plugRigidbody;
     [SerializeField] ObiParticleAttachment _plugAttachment;
     [SerializeField] ObiRigidbody _plugObiRb;
+    [SerializeField] float _dropDistance;
     [SerializeField] float _dropDelay;
 
     [Header("SFX")]
@@ -72,7 +73,6 @@ public class Wire : Interactable
         _plugSfxInstance.set3DAttributes(_plug.position.To3DAttributes());
         _unplugSfxInstance.set3DAttributes(_plug.position.To3DAttributes());
 
-        _rope.RecalculateRestLength();
         _rope.ResetParticles();
     }
 
@@ -206,7 +206,7 @@ public class Wire : Interactable
 
         if (timeSinceDisconnect < _dropDelay) return;
 
-        if (Vector3.Distance(_plug.position, _wireStart) > _rope.restLength)
+        if (Vector3.Distance(_plug.position, _wireStart) > _dropDistance)
             DropPlug();
     }
 
@@ -230,8 +230,11 @@ public class Wire : Interactable
     void SetWireStart(Vector3 attachPoint, Vector3 outward)
     {
         _rope.Teleport(attachPoint, Quaternion.identity);
+
+        _rope.ResetParticles();
+
         _rope.TeleportParticle(_rope.elements[0].particle1, attachPoint);
-        _rope.TeleportParticle(_rope.elements[^1].particle2, _plug.position);
+
         _wireStart = attachPoint + outward * _cableOffset;
         _startAttachment.position = _wireStart;
     }
