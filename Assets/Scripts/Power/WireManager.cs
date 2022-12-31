@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Obi;
+using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Pool;
@@ -34,6 +35,7 @@ public static class WireManager
     static void Get(Wire wire)
     {
         wire.gameObject.SetActive(true);
+        wire.transform.parent = GameObject.FindObjectOfType<ObiSolver>().transform;
     }
 
     static void Release(Wire wire)

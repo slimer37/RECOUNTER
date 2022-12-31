@@ -18,7 +18,7 @@ public class PowerOutlet : Interactable
 
     protected override bool CanInteract(Employee e)
     {
-        return IsPluggedIn ? (wire.IsAvailable && !e.LeftHand.IsFull) : e.LeftHand.ContainsParentComponent<Wire>(out _);
+        return !IsPluggedIn && e.LeftHand.ContainsParentComponent<Wire>(out _);
     }
 
     public override HudInfo GetHudInfo(Employee e)
@@ -26,30 +26,29 @@ public class PowerOutlet : Interactable
         return CanInteract(e)
             ? new()
             {
-                icon = IsPluggedIn ? Icon.Unplug : Icon.Outlet,
-                text = IsPluggedIn ? $"Unplug From {label}" : $"Plug Into {label}"
+                icon = Icon.Outlet,
+                text = $"Plug Into {label}"
             }
             : BlankHud;
     }
 
     protected override void OnInteract(Employee e)
     {
-        if (IsPluggedIn)
-        {
-            wire.Disconnect(e.LeftHand);
-            wire = null;
-        }
-        else
-        {
-            wire = e.LeftHand.HeldObject.GetComponentInParent<Wire>();
-            wire.Connected += FinishConnection;
-            wire.Connect(this, transform.TransformPoint(plugPoint), transform.forward, transform.up);
-        }
+        wire = e.LeftHand.HeldObject.GetComponentInParent<Wire>();
+        wire.Connected += FinishConnection;
+        wire.Connect(this, transform.TransformPoint(plugPoint), transform.forward, transform.up);
     }
 
     void FinishConnection(PowerInlet inlet, PowerOutlet outlet)
     {
         this.inlet = inlet;
         wire.Connected -= FinishConnection;
+        wire.Disconnected += Unplug;
+    }
+
+    void Unplug(PowerInlet inlet, PowerOutlet outlet)
+    {
+        wire.Disconnected -= Unplug;
+        wire = null;
     }
 }

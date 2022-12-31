@@ -1,19 +1,26 @@
 ﻿using DG.Tweening;
 using FMOD.Studio;
 using FMODUnity;
+using Obi;
 using System;
 using UnityEngine;
 
-public class Wire : MonoBehaviour
+public class Wire : Interactable
 {
-    [SerializeField] CableRenderer _cableRenderer;
+    [SerializeField] ObiRope _rope;
     [SerializeField] float _raycastHeight;
     [SerializeField] float _plugDepth;
-    [SerializeField] float _sidePlugDepth;
     [SerializeField] float _cableOffset;
-    [SerializeField] Transform _plug;
     [SerializeField] Vector3 _holdPosition;
     [SerializeField] Vector3 _holdRotation;
+    [SerializeField] Transform _startAttachment;
+
+    [Header("Plug")]
+    [SerializeField] Transform _plug;
+    [SerializeField] Rigidbody _plugRigidbody;
+    [SerializeField] ObiParticleAttachment _plugAttachment;
+    [SerializeField] ObiRigidbody _plugObiRb;
+    [SerializeField] float _dropDelay;
 
     [Header("SFX")]
     [SerializeField] float _plugInSfxDelay;
@@ -55,6 +62,8 @@ public class Wire : MonoBehaviour
 
     bool shouldSpark;
 
+    float _timeAtPickup;
+
     void OnEnable()
     {
         _plugSfxInstance = RuntimeManager.CreateInstance(_plugSfx);
@@ -62,6 +71,9 @@ public class Wire : MonoBehaviour
 
         _plugSfxInstance.set3DAttributes(_plug.position.To3DAttributes());
         _unplugSfxInstance.set3DAttributes(_plug.position.To3DAttributes());
+
+        _rope.RecalculateRestLength();
+        _rope.ResetParticles();
     }
 
     void OnDisable()
@@ -112,18 +124,38 @@ public class Wire : MonoBehaviour
 
         enabled = false;
 
-        UpdateRenderer();
         Spark();
     }
 
-    public void Disconnect(Hand hand)
+    protected override bool CanInteract(Employee e)
     {
-        if (!hand)
-            throw new ArgumentNullException(nameof(hand));
+        return IsAvailable && !e.LeftHand.IsFull;
+    }
 
-        if (hand.IsFull)
-            throw new ArgumentException("The supplied hand is full.", nameof(hand));
+    public override HudInfo GetHudInfo(Employee e)
+    {
+        return CanInteract(e)
+            ? new()
+            {
+                icon = Outlet ? Icon.Unplug : Icon.Plug,
+                text = Outlet ? "Unplug" : "Grab Plug"
+            }
+            : BlankHud;
+    }
 
+    protected override void OnInteract(Employee e)
+    {
+        if (Outlet)
+        {
+            Disconnect(e.LeftHand);
+            return;
+        }
+
+        StartCarryingPlug(e.LeftHand);
+    }
+
+    void Disconnect(Hand hand)
+    {
         if (!IsAvailable)
             throw new InvalidOperationException("Cannot disconnect while animating.");
 
@@ -151,18 +183,42 @@ public class Wire : MonoBehaviour
         _hand.SetReleaseState(HandReleaseState.None);
     }
 
-    void LateUpdate()
-    {
-        UpdateRenderer();
-    }
-
     void StartCarryingPlug(Hand hand)
     {
+        _timeAtPickup = Time.time;
+
         _hand = hand;
 
         hand.Hold(_plug, _holdPosition, Quaternion.Euler(_holdRotation));
 
         enabled = true;
+
+        _plugRigidbody.isKinematic = true;
+        _plugAttachment.attachmentType = ObiParticleAttachment.AttachmentType.Static;
+        _plugObiRb.enabled = false;
+    }
+
+    void LateUpdate()
+    {
+        if (!_hand || !IsAvailable) return;
+
+        var timeSinceDisconnect = Time.time - _timeAtPickup;
+
+        if (timeSinceDisconnect < _dropDelay) return;
+
+        if (Vector3.Distance(_plug.position, _wireStart) > _rope.restLength)
+            DropPlug();
+    }
+
+    void DropPlug()
+    {
+        _currentTween?.Complete();
+
+        StopCarryingPlug();
+
+        _plugRigidbody.isKinematic = false;
+        _plugAttachment.attachmentType = ObiParticleAttachment.AttachmentType.Dynamic;
+        _plugObiRb.enabled = true;
     }
 
     void StopCarryingPlug()
@@ -171,22 +227,14 @@ public class Wire : MonoBehaviour
         _hand = null;
     }
 
-    void UpdateRenderer()
+    void SetWireStart(Vector3 attachPoint, Vector3 outward)
     {
-        var wireEnd = _plug.position - _plug.forward * _plugDepth;
-
-        if (_plug.forward.y < 0)
-        {
-            var alongWire = _wireStart - wireEnd;
-            alongWire.y = 0;
-            wireEnd += alongWire.normalized * _sidePlugDepth * -_plug.forward.y;
-        }
-
-        _cableRenderer.SetEndPositions(_wireStart, wireEnd);
-    }
-
-    void SetWireStart(Vector3 attachPoint, Vector3 outward) =>
+        _rope.Teleport(attachPoint, Quaternion.identity);
+        _rope.TeleportParticle(_rope.elements[0].particle1, attachPoint);
+        _rope.TeleportParticle(_rope.elements[^1].particle2, _plug.position);
         _wireStart = attachPoint + outward * _cableOffset;
+        _startAttachment.position = _wireStart;
+    }
 
     void OrientPlug(Vector3 position, Vector3 direction, Vector3 up)
     {
