@@ -786,7 +786,9 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Standalone: STEAMWORKS_NET
+    Android: OBI_ONI_SUPPORTED
+    Standalone: STEAMWORKS_NET;OBI_ONI_SUPPORTED
+    iPhone: OBI_ONI_SUPPORTED
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
