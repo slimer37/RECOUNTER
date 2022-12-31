@@ -2562,6 +2562,7 @@ GameObject:
   - component: {fileID: 353341997}
   - component: {fileID: 353341996}
   - component: {fileID: 353341995}
+  - component: {fileID: 353342000}
   m_Layer: 0
   m_Name: stairs
   m_TagString: Untagged
@@ -11231,6 +11232,23 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!114 &353342000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353341993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6757b231cedd544c583ef8aeaf773b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thickness: 0
+  material: {fileID: 0}
+  filter: -65535
+  m_SourceCollider: {fileID: 353341995}
+  m_DistanceField: {fileID: 0}
 --- !u!1 &409238787
 GameObject:
   m_ObjectHideFlags: 0
@@ -13555,7 +13573,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh33960
+  m_Name: pb_Mesh35820
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -13726,7 +13744,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh33876
+  m_Name: pb_Mesh35736
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -18562,7 +18580,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34598
+  m_Name: pb_Mesh36458
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
