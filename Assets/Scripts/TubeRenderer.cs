@@ -18,13 +18,13 @@ public class TubeRenderer : MonoBehaviour
     
     void Awake()
     {
-        InitializeMesh();
-
         SetPositions(_positions);
     }
 
-    void InitializeMesh()
+    void InitializeMeshIfNeeded()
     {
+        if (_ropeMesh) return;
+
         _meshFilter = GetComponent<MeshFilter>();
 
         _ropeMesh = new Mesh
@@ -42,6 +42,7 @@ public class TubeRenderer : MonoBehaviour
         _vertices = new Vector3[positions.Length * _ringResolution];
         _triangles = new int[(_vertices.Length - _ringResolution) * 6];
 
+        InitializeMeshIfNeeded();
         GenerateMesh();
     }
 

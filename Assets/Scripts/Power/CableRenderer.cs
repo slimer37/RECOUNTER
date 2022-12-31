@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CableRenderer : MonoBehaviour
 {
-    [SerializeField, Required] LineRenderer _lineRenderer;
+    [SerializeField, Required] TubeRenderer _tubeRenderer;
+    [SerializeField, Required] Renderer _tubeMeshRenderer;
     [SerializeField] int _resolution;
     [SerializeField, Min(0)] float _aPrecision = 0.0001f;
     [SerializeField, Min(0.0001f)] float _aIntervalStep = 0.01f;
@@ -28,14 +29,13 @@ public class CableRenderer : MonoBehaviour
     void Awake()
     {
         var numPositions = 2 + _resolution;
-        _lineRenderer.positionCount = numPositions;
         _positions = new Vector3[numPositions];
-        _lineRenderer.SetPositions(_positions);
+        _tubeRenderer.SetPositions(_positions);
     }
 
     void SetLineColor(Color color)
     {
-        _lineRenderer.material.color = color;
+        _tubeMeshRenderer.material.color = color;
     }
 
     public void SetEndPositions(Vector3 start, Vector3 end)
@@ -95,7 +95,7 @@ public class CableRenderer : MonoBehaviour
             _positions[i] = pos;
         }
 
-        _lineRenderer.SetPositions(_positions);
+        _tubeRenderer.SetPositions(_positions);
     }
 
     Vector3 CalculateFloorWave(Vector3 start, Vector3 end, Vector3 point, float a)
