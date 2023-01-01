@@ -4,6 +4,11 @@ using UnityEngine.InputSystem;
 
 public class Box : Interactable
 {
+    [SerializeField] BoxFlaps _flaps;
+
+    [Header("Holding")]
+    [SerializeField] Item _boxItem;
+
     [Header("Items")]
     [SerializeField] int _capacity;
 
@@ -57,6 +62,8 @@ public class Box : Interactable
     {
         if (!CanInteract(e)) return BlankHud;
 
+        if (!_flaps.FlapsAreOpen) return _boxItem.GetHudInfo(e);
+
         var isStoringItem = e.RightHand.IsFull;
 
         if (isStoringItem && _contents.Count == _capacity)
@@ -91,8 +98,16 @@ public class Box : Interactable
         return hud;
     }
 
+    protected override bool CanInteract(Employee e) => !_flaps.Animating && (_flaps.FlapsAreOpen || !e.LeftHand.IsFull);
+
     protected override void OnInteract(Employee e)
     {
+        if (!_flaps.FlapsAreOpen)
+        {
+            _boxItem.Interact(e);
+            return;
+        }
+
         var isStoringItem = e.RightHand.IsFull;
 
         if (isStoringItem)
