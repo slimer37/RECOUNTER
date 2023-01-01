@@ -112,7 +112,7 @@ public class Hand : MonoBehaviour
 
         _originalLayers.Add(HeldObject.layer);
 
-        foreach (Transform child in HeldObject.transform)
+        foreach (var child in HeldObject.GetComponentsInChildren<Transform>())
         {
             _originalLayers.Add(child.gameObject.layer);
         }
@@ -152,7 +152,7 @@ public class Hand : MonoBehaviour
         HeldObject.layer = viewmodel ? _viewmodelLayer : _originalLayers[0];
 
         var i = 1;
-        foreach (Transform child in HeldObject.transform)
+        foreach (var child in HeldObject.GetComponentsInChildren<Transform>())
         {
             child.gameObject.layer = viewmodel ? _viewmodelLayer : _originalLayers[i++];
         }
