@@ -75,19 +75,43 @@ public class Hotbar : MonoBehaviour
         return true;
     }
 
+    public bool TryRemoveActiveItem(out Item item)
+    {
+        item = null;
+
+        if (!ActiveSlot.Item)
+            return false;
+
+        item = ActiveSlot.Item;
+
+        RemoveItemFromSlot(ActiveSlot);
+
+        return true;
+    }
+
     public void RemoveItem(Item item)
     {
         if (!item)
             throw new NullReferenceException();
 
+        var slot = slots.Find(s => s.Item == item);
+
+        if (!slot)
+            throw new ArgumentException("Item is not in the hotbar.");
+
+        RemoveItemFromSlot(slot);
+    }
+
+    void RemoveItemFromSlot(HotbarSlot slot)
+    {
+        var item = slot.Item;
+
         if (!items.Remove(item))
             throw new Exception($"Cannot remove '{item}' because it's not in the inventory.");
 
-        var index = slots.FindIndex(s => s.Item == item);
+        slot.Clear();
 
-        slots[index].Clear();
-
-        if (placer.Active == item)
+        if (ActiveSlot == slot)
             placer.StopHoldingItem();
     }
 
