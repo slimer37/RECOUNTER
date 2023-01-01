@@ -7,13 +7,14 @@ public class BusVolume : MonoBehaviour
     [SerializeField] string busPath = "bus:/";
     [SerializeField] string volumePrefKey = "MasterVol";
     [SerializeField] EventReference soundUpdateEvent;
+    [SerializeField] float defaultVolume;
 
     Bus bus;
 
     void Awake()
     {
         bus = RuntimeManager.GetBus(busPath);
-        bus.setVolume(PlayerPrefs.GetFloat(volumePrefKey));
+        bus.setVolume(PlayerPrefs.GetFloat(volumePrefKey, defaultVolume));
 
         PrefManager.OnFloatPrefChanged += OnFloatPrefChanged;
     }

@@ -2108,7 +2108,7 @@ MonoBehaviour:
   BoolChange:
     m_PersistentCalls:
       m_Calls: []
-  defaultFloat: 0
+  defaultFloat: 2
   FloatChange:
     m_PersistentCalls:
       m_Calls:

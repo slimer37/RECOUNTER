@@ -2135,6 +2135,7 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  defaultVolume: 1
 --- !u!1 &2899833472501647556
 GameObject:
   m_ObjectHideFlags: 0
