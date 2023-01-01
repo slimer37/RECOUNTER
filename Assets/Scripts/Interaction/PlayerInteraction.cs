@@ -90,7 +90,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (Physics.Raycast(cam.ViewportPointToRay(Vector2.one / 2), out var hit, range, interactableMask))
         {
-            currentHover = hit.transform;
+            currentHover = hit.collider.transform;
         }
 
         HandleInteraction(currentHover);
