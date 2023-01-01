@@ -29,6 +29,8 @@ public class PlayerInteraction : MonoBehaviour
     Interactable hovered;
     Interactable interactTarget;
 
+    Transform lastHoverTarget;
+
     Tween punch;
     Controls.PlayerActions playerControls;
 
@@ -110,8 +112,9 @@ public class PlayerInteraction : MonoBehaviour
 
     void HandleInteraction(Transform currentHover)
     {
-        if (hovered?.transform == currentHover) return;
+        if (lastHoverTarget == currentHover) return;
 
+        lastHoverTarget = currentHover;
         hovered?.OnHover(false);
 
         if (currentHover)
@@ -136,7 +139,7 @@ public class PlayerInteraction : MonoBehaviour
 
         // Punch when icon changes (except if it's the blank pointer).
         if (info.icon != Interactable.Icon.None && (forcePunch || iconImage.sprite != iconSprite || text.text != info.text))
-            punch.Restart();
+            { print("punch"); punch.Restart(); }
 
         text.text = info.text;
         iconImage.sprite = iconSprite;
