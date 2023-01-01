@@ -15,11 +15,11 @@ public class OctoPlacer : MonoBehaviour
     [SerializeField] Material _obstructedMat;
 
     [Header("Controls")]
-    [SerializeField] InputActionReference startPlaceButton;
-    [SerializeField] InputActionReference dropOrThrow;
-    [SerializeField] InputActionReference holdRotateButton;
-    [SerializeField] InputActionReference verticalAxis;
-    [SerializeField] InputActionReference lateralDelta;
+    [SerializeField] InputActionReference _placeAction;
+    [SerializeField] InputActionReference _chargeThrowAction;
+    [SerializeField] InputActionReference _holdRotateAction;
+    [SerializeField] InputActionReference _verticalAxisAction;
+    [SerializeField] InputActionReference _lateralMoveDelta;
 
     [Header("Throwing")]
     [SerializeField] float _timeToFullCharge;
@@ -85,16 +85,17 @@ public class OctoPlacer : MonoBehaviour
 
     void Awake()
     {
-        startPlaceButton.action.Enable();
-        startPlaceButton.action.performed += OnStartPlace;
+        _placeAction.action.Enable();
+        _placeAction.action.performed += OnStartPlace;
+        _placeAction.action.canceled += OnEndPlace;
 
-        dropOrThrow.action.Enable();
-        dropOrThrow.action.performed += OnDropOrThrow;
-        dropOrThrow.action.canceled += OnEndDropOrThrow;
+        _chargeThrowAction.action.Enable();
+        _chargeThrowAction.action.performed += OnChargeThrow;
+        _chargeThrowAction.action.canceled += OnThrow;
 
-        holdRotateButton.action.Enable();
-        verticalAxis.action.Enable();
-        lateralDelta.action.Enable();
+        _holdRotateAction.action.Enable();
+        _verticalAxisAction.action.Enable();
+        _lateralMoveDelta.action.Enable();
     }
 
     public void SetItem(Item item, bool canResetPosition)
@@ -119,22 +120,29 @@ public class OctoPlacer : MonoBehaviour
 
     void OnStartPlace(InputAction.CallbackContext ctx)
     {
-        if (!_active) return;
+        if (!_active || _isPlacing) return;
 
-        if (_isPlacing)
-            EndPlace();
-        else
-            InitializePlacement();
+        InitializePlacement();
     }
 
-    void OnDropOrThrow(InputAction.CallbackContext ctx)
+    void OnEndPlace(InputAction.CallbackContext ctx)
+    {
+        if (!_active || !_isPlacing) return;
+
+        DropItem();
+    }
+
+    void OnChargeThrow(InputAction.CallbackContext ctx)
     {
         if (!_active) return;
 
-        if (ctx.interaction is TapInteraction)
-            DropItem();
-        else if (!_isPlacing)
-            StartChargingThrow(0);
+        if (_isPlacing)
+        {
+            EndPlace();
+            return;
+        }
+
+        StartChargingThrow(0);
     }
 
     void StartChargingThrow(float initialTime)
@@ -146,14 +154,11 @@ public class OctoPlacer : MonoBehaviour
         _ghost.Hide();
     }
 
-    void OnEndDropOrThrow(InputAction.CallbackContext ctx)
+    void OnThrow(InputAction.CallbackContext ctx)
     {
-        if (!_active || ctx.interaction is not HoldInteraction) return;
+        if (!_active || !_isCharging) return;
 
-        if (_isPlacing)
-            DropItem();
-        else if (_isCharging)
-            ThrowHeldItem();
+        ThrowHeldItem();
     }
 
     void ThrowHeldItem()
@@ -191,11 +196,11 @@ public class OctoPlacer : MonoBehaviour
         var previousPos = _localPlacePosition;
         var previousRot = _localPlaceRotation;
 
-        HandleVertical(verticalAxis.action.ReadValue<float>());
+        HandleVertical(_verticalAxisAction.action.ReadValue<float>());
 
-        var delta = lateralDelta.action.ReadValue<Vector2>();
+        var delta = _lateralMoveDelta.action.ReadValue<Vector2>();
 
-        if (holdRotateButton.action.IsPressed())
+        if (_holdRotateAction.action.IsPressed())
             HandleRotation(delta);
         else
             HandleLateral(delta);

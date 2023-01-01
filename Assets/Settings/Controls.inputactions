@@ -215,7 +215,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Start Place",
+                    "name": "Place",
                     "type": "Button",
                     "id": "2e455372-520e-42e5-b474-83bb86d54f14",
                     "expectedControlType": "Button",
@@ -224,7 +224,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Drop/Throw",
+                    "name": "Throw",
                     "type": "Button",
                     "id": "c99b560e-2086-4a40-ab44-40037586da6d",
                     "expectedControlType": "Button",
@@ -270,7 +270,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard + Mouse",
-                    "action": "Start Place",
+                    "action": "Place",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -281,7 +281,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard + Mouse",
-                    "action": "Drop/Throw",
+                    "action": "Throw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

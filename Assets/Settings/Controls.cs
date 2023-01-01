@@ -237,7 +237,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Start Place"",
+                    ""name"": ""Place"",
                     ""type"": ""Button"",
                     ""id"": ""2e455372-520e-42e5-b474-83bb86d54f14"",
                     ""expectedControlType"": ""Button"",
@@ -246,7 +246,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Drop/Throw"",
+                    ""name"": ""Throw"",
                     ""type"": ""Button"",
                     ""id"": ""c99b560e-2086-4a40-ab44-40037586da6d"",
                     ""expectedControlType"": ""Button"",
@@ -292,7 +292,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard + Mouse"",
-                    ""action"": ""Start Place"",
+                    ""action"": ""Place"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -303,7 +303,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard + Mouse"",
-                    ""action"": ""Drop/Throw"",
+                    ""action"": ""Throw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -365,8 +365,8 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         // Placement
         m_Placement = asset.FindActionMap("Placement", throwIfNotFound: true);
         m_Placement_HoldRotate = m_Placement.FindAction("Hold Rotate", throwIfNotFound: true);
-        m_Placement_StartPlace = m_Placement.FindAction("Start Place", throwIfNotFound: true);
-        m_Placement_DropThrow = m_Placement.FindAction("Drop/Throw", throwIfNotFound: true);
+        m_Placement_Place = m_Placement.FindAction("Place", throwIfNotFound: true);
+        m_Placement_Throw = m_Placement.FindAction("Throw", throwIfNotFound: true);
         m_Placement_VerticalMove = m_Placement.FindAction("Vertical Move", throwIfNotFound: true);
         m_Placement_Lateral = m_Placement.FindAction("Lateral", throwIfNotFound: true);
     }
@@ -535,8 +535,8 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Placement;
     private IPlacementActions m_PlacementActionsCallbackInterface;
     private readonly InputAction m_Placement_HoldRotate;
-    private readonly InputAction m_Placement_StartPlace;
-    private readonly InputAction m_Placement_DropThrow;
+    private readonly InputAction m_Placement_Place;
+    private readonly InputAction m_Placement_Throw;
     private readonly InputAction m_Placement_VerticalMove;
     private readonly InputAction m_Placement_Lateral;
     public struct PlacementActions
@@ -544,8 +544,8 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         private @Controls m_Wrapper;
         public PlacementActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @HoldRotate => m_Wrapper.m_Placement_HoldRotate;
-        public InputAction @StartPlace => m_Wrapper.m_Placement_StartPlace;
-        public InputAction @DropThrow => m_Wrapper.m_Placement_DropThrow;
+        public InputAction @Place => m_Wrapper.m_Placement_Place;
+        public InputAction @Throw => m_Wrapper.m_Placement_Throw;
         public InputAction @VerticalMove => m_Wrapper.m_Placement_VerticalMove;
         public InputAction @Lateral => m_Wrapper.m_Placement_Lateral;
         public InputActionMap Get() { return m_Wrapper.m_Placement; }
@@ -560,12 +560,12 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @HoldRotate.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnHoldRotate;
                 @HoldRotate.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnHoldRotate;
                 @HoldRotate.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnHoldRotate;
-                @StartPlace.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnStartPlace;
-                @StartPlace.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnStartPlace;
-                @StartPlace.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnStartPlace;
-                @DropThrow.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnDropThrow;
-                @DropThrow.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnDropThrow;
-                @DropThrow.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnDropThrow;
+                @Place.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnPlace;
+                @Place.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnPlace;
+                @Place.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnPlace;
+                @Throw.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnThrow;
+                @Throw.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnThrow;
+                @Throw.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnThrow;
                 @VerticalMove.started -= m_Wrapper.m_PlacementActionsCallbackInterface.OnVerticalMove;
                 @VerticalMove.performed -= m_Wrapper.m_PlacementActionsCallbackInterface.OnVerticalMove;
                 @VerticalMove.canceled -= m_Wrapper.m_PlacementActionsCallbackInterface.OnVerticalMove;
@@ -579,12 +579,12 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @HoldRotate.started += instance.OnHoldRotate;
                 @HoldRotate.performed += instance.OnHoldRotate;
                 @HoldRotate.canceled += instance.OnHoldRotate;
-                @StartPlace.started += instance.OnStartPlace;
-                @StartPlace.performed += instance.OnStartPlace;
-                @StartPlace.canceled += instance.OnStartPlace;
-                @DropThrow.started += instance.OnDropThrow;
-                @DropThrow.performed += instance.OnDropThrow;
-                @DropThrow.canceled += instance.OnDropThrow;
+                @Place.started += instance.OnPlace;
+                @Place.performed += instance.OnPlace;
+                @Place.canceled += instance.OnPlace;
+                @Throw.started += instance.OnThrow;
+                @Throw.performed += instance.OnThrow;
+                @Throw.canceled += instance.OnThrow;
                 @VerticalMove.started += instance.OnVerticalMove;
                 @VerticalMove.performed += instance.OnVerticalMove;
                 @VerticalMove.canceled += instance.OnVerticalMove;
@@ -620,8 +620,8 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     public interface IPlacementActions
     {
         void OnHoldRotate(InputAction.CallbackContext context);
-        void OnStartPlace(InputAction.CallbackContext context);
-        void OnDropThrow(InputAction.CallbackContext context);
+        void OnPlace(InputAction.CallbackContext context);
+        void OnThrow(InputAction.CallbackContext context);
         void OnVerticalMove(InputAction.CallbackContext context);
         void OnLateral(InputAction.CallbackContext context);
     }
