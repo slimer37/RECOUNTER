@@ -14,13 +14,6 @@ public class OctoPlacer : MonoBehaviour
     [SerializeField] Material _freeMat;
     [SerializeField] Material _obstructedMat;
 
-    [Header("Controls")]
-    [SerializeField] InputActionReference _placeAction;
-    [SerializeField] InputActionReference _chargeThrowAction;
-    [SerializeField] InputActionReference _holdRotateAction;
-    [SerializeField] InputActionReference _verticalAxisAction;
-    [SerializeField] InputActionReference _lateralMoveDelta;
-
     [Header("Throwing")]
     [SerializeField] float _timeToFullCharge;
     [SerializeField] Vector3 _chargedPos;
@@ -77,6 +70,12 @@ public class OctoPlacer : MonoBehaviour
 
     public bool IsPlacing => _isPlacing;
 
+    Controls.PlacementActions _placementControls;
+
+    InputAction _holdRotateAction;
+    InputAction _verticalAxisAction;
+    InputAction _lateralMoveDelta;
+
     void OnDrawGizmosSelected()
     {
         Gizmos.matrix = _body.localToWorldMatrix;
@@ -85,18 +84,21 @@ public class OctoPlacer : MonoBehaviour
 
     void Awake()
     {
-        _placeAction.action.Enable();
-        _placeAction.action.performed += OnStartPlace;
-        _placeAction.action.canceled += OnEndPlace;
+        _placementControls = new Controls().Placement;
 
-        _chargeThrowAction.action.Enable();
-        _chargeThrowAction.action.performed += OnChargeThrow;
-        _chargeThrowAction.action.canceled += OnThrow;
+        _placementControls.Place.performed += OnStartPlace;
+        _placementControls.Place.canceled += OnEndPlace;
 
-        _holdRotateAction.action.Enable();
-        _verticalAxisAction.action.Enable();
-        _lateralMoveDelta.action.Enable();
+        _placementControls.Throw.performed += OnChargeThrow;
+        _placementControls.Throw.canceled += OnThrow;
+
+        _holdRotateAction = _placementControls.HoldRotate;
+        _verticalAxisAction = _placementControls.VerticalMove;
+        _lateralMoveDelta = _placementControls.Lateral;
     }
+
+    void OnEnable() => _placementControls.Enable();
+    void OnDisable() => _placementControls.Disable();
 
     public void SetItem(Item item, bool canResetPosition)
     {
@@ -142,15 +144,15 @@ public class OctoPlacer : MonoBehaviour
             return;
         }
 
-        StartChargingThrow(0);
+        StartChargingThrow();
     }
 
-    void StartChargingThrow(float initialTime)
+    void StartChargingThrow()
     {
         if (!_active.IsThrowable) return;
 
         _isCharging = true;
-        _chargeTime = initialTime;
+        _chargeTime = 0;
         _ghost.Hide();
     }
 
@@ -196,11 +198,11 @@ public class OctoPlacer : MonoBehaviour
         var previousPos = _localPlacePosition;
         var previousRot = _localPlaceRotation;
 
-        HandleVertical(_verticalAxisAction.action.ReadValue<float>());
+        HandleVertical(_verticalAxisAction.ReadValue<float>());
 
-        var delta = _lateralMoveDelta.action.ReadValue<Vector2>();
+        var delta = _lateralMoveDelta.ReadValue<Vector2>();
 
-        if (_holdRotateAction.action.IsPressed())
+        if (_holdRotateAction.IsPressed())
             HandleRotation(delta);
         else
             HandleLateral(delta);

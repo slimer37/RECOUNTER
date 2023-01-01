@@ -251,8 +251,8 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""id"": ""c99b560e-2086-4a40-ab44-40037586da6d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap,Hold"",
-                    ""initialStateCheck"": true
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Vertical Move"",
@@ -267,7 +267,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""name"": ""Lateral"",
                     ""type"": ""Value"",
                     ""id"": ""5ac4891a-f259-4fbf-909a-a1cb691d3829"",
-                    ""expectedControlType"": ""Delta"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
