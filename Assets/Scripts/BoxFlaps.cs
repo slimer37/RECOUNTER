@@ -16,10 +16,12 @@ public class BoxFlaps : Interactable
 
     [SerializeField] Flap[] upperFlaps;
     [SerializeField] float upperFlapDuration;
-    [SerializeField] Ease upperFlapEase;
+    [SerializeField] Ease upperFlapOpenEase;
+    [SerializeField] Ease upperFlapCloseEase;
     [SerializeField] Flap[] lowerFlaps;
     [SerializeField] float lowerFlapDuration;
-    [SerializeField] Ease lowerFlapEase;
+    [SerializeField] Ease lowerFlapOpenEase;
+    [SerializeField] Ease lowerFlapCloseEase;
     [SerializeField] float timeToNextFlapSet;
 
     Sequence sequence;
@@ -46,12 +48,16 @@ public class BoxFlaps : Interactable
 
         foreach (var flap in upperFlaps)
         {
-            sequence.Insert(open ? 0 : timeToNextFlapSet, flap.Animate(open, upperFlapDuration, upperFlapEase));
+            sequence.Insert(
+                open ? 0 : timeToNextFlapSet,
+                flap.Animate(open, upperFlapDuration, open ? upperFlapOpenEase : upperFlapCloseEase));
         }
 
         foreach (var flap in lowerFlaps)
         {
-            sequence.Insert(open ? timeToNextFlapSet : 0, flap.Animate(open, lowerFlapDuration, lowerFlapEase));
+            sequence.Insert(
+                open ? timeToNextFlapSet : 0,
+                flap.Animate(open, lowerFlapDuration, open ? lowerFlapOpenEase : lowerFlapCloseEase));
         }
     }
 

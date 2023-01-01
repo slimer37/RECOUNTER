@@ -19521,15 +19521,17 @@ MonoBehaviour:
     localRotationAmount: {x: 0, y: 0, z: -175}
   - transform: {fileID: 2023470055719560966}
     localRotationAmount: {x: 0, y: 0, z: -175}
-  upperFlapDuration: 0.5
-  upperFlapEase: 6
+  upperFlapDuration: 0.8
+  upperFlapOpenEase: 27
+  upperFlapCloseEase: 6
   lowerFlaps:
   - transform: {fileID: 3938938394384756281}
     localRotationAmount: {x: -175, y: 0, z: 0}
   - transform: {fileID: 735395931180175593}
     localRotationAmount: {x: -175, y: 0, z: 0}
-  lowerFlapDuration: 0.5
-  lowerFlapEase: 6
+  lowerFlapDuration: 0.7
+  lowerFlapOpenEase: 27
+  lowerFlapCloseEase: 6
   timeToNextFlapSet: 0.2
 --- !u!4 &1988429297
 Transform:
