@@ -18,6 +18,7 @@ public class Item : Interactable
     [SerializeField, ShowIf(nameof(overridesBounds))] Vector3 overrideCenter;
     [SerializeField, Min(0), ShowIf(nameof(overridesBounds))] Vector3 overrideSize;
 
+    Collider[] colliders;
     Hotbar containerHotbar;
 
     public Vector3 HoldPosShift => holdPosShift;
@@ -116,9 +117,15 @@ public class Item : Interactable
         if (!e.ItemHotbar.TryAddItem(this)) return;
 
         containerHotbar = e.ItemHotbar;
+        EnableColliders(false);
 
         if (rb)
             rb.isKinematic = true;
+    }
+
+    void Awake()
+    {
+        colliders = GetComponentsInChildren<Collider>();
     }
 
     public void Release()
@@ -128,6 +135,7 @@ public class Item : Interactable
         containerHotbar.RemoveItem(this);
 
         containerHotbar = null;
+        EnableColliders(true);
 
         if (rb)
         {
@@ -140,5 +148,13 @@ public class Item : Interactable
     {
         if (justReleased)
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+    }
+
+    void EnableColliders(bool enable)
+    {
+        foreach (var col in colliders)
+        {
+            col.enabled = enable;
+        }
     }
 }
