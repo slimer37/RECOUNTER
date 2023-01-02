@@ -44,6 +44,8 @@ public class Box : Interactable
 
     bool _isStoringItem;
 
+    bool _showSpinningPreview;
+
     void Awake()
     {
         _levelIndicator.gameObject.SetActive(false);
@@ -97,7 +99,7 @@ public class Box : Interactable
         var newDisplayItem = _contents[_selectedItemIndex].transform;
 
         if (_displayedItem == newDisplayItem) return;
-        
+
         if (_displayedItem)
         {
             _displayedItem.gameObject.RestoreHierarchyLayers();
@@ -113,15 +115,9 @@ public class Box : Interactable
 
     void Update()
     {
-        if (!_isHovered || !_displayedItem) return;
+        if (!_isHovered || !_displayedItem || !_showSpinningPreview) return;
 
-        if (_displayedItem.gameObject.activeSelf != !_isStoringItem)
-            _displayedItem.gameObject.SetActive(!_isStoringItem);
-
-        if (_isStoringItem)
-        {
-            return;
-        }
+        if (_isStoringItem) return;
 
         _displayedItem.position = transform.TransformPoint(_hoverPosition);
         _displayedItem.eulerAngles = _spinnerEuler;
@@ -130,9 +126,18 @@ public class Box : Interactable
 
     protected override HudInfo FormHud(Employee e)
     {
-        if (!_flaps.FlapsAreOpen) return _boxItem.GetHud(e);
+        if (!_flaps.FlapsAreOpen)
+        {
+            _showSpinningPreview = false;
+            _displayedItem?.gameObject.SetActive(false);
+
+            return _boxItem.GetHud(e);
+        }
 
         _isStoringItem = e.RightHand.IsFull;
+
+        _showSpinningPreview = !_isStoringItem;
+        _displayedItem?.gameObject.SetActive(_showSpinningPreview);
 
         if (_isStoringItem && _contents.Count == _capacity)
         {
