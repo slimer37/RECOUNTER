@@ -11,8 +11,13 @@ public static class LayerUtility
 	[RuntimeInitializeOnLoadMethod]
 	static void Init() => SceneManager.sceneLoaded += (_, _) => _originalLayers.Clear();
 
-	public static void SetHierarchyLayers(this GameObject gameObject, int layer)
+	public static bool HierarchyLayersAreSet(this GameObject gameObject) => _originalLayers.ContainsKey(gameObject);
+
+    public static void SetHierarchyLayers(this GameObject gameObject, int layer)
 	{
+		if (gameObject.HierarchyLayersAreSet())
+			throw new InvalidOperationException($"Cannot set layers for {gameObject.name}. Restore its layers before setting again.");
+
 		var hierarchy = gameObject.GetComponentsInChildren<Transform>();
 		var recordedLayers = new int[hierarchy.Length];
 
@@ -38,7 +43,7 @@ public static class LayerUtility
 
         for (int i = 0; i < hierarchy.Length; i++)
         {
-			hierarchy[i].gameObject.layer = recordedLayers[i];
+            hierarchy[i].gameObject.layer = recordedLayers[i];
         }
 
 		_originalLayers.Remove(gameObject);

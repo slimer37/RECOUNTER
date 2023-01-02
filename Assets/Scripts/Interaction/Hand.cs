@@ -138,6 +138,8 @@ public class Hand : MonoBehaviour
 
     void SetViewmodelLayer(bool viewmodel)
     {
+        if (viewmodel == HeldObject.HierarchyLayersAreSet()) return;
+
         if (viewmodel)
             HeldObject.SetHierarchyLayers(_viewmodelLayer);
         else
