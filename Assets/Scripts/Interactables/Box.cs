@@ -212,6 +212,8 @@ public class Box : Interactable
 
     void RetrieveItem(Hotbar hotbar)
     {
+        _displayedItem = null;
+
         var item = _contents[_selectedItemIndex];
 
         item.transform.position = transform.position;
