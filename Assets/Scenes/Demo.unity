@@ -28680,7 +28680,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9169784300745945104}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 3
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -28714,7 +28714,7 @@ MonoBehaviour:
   rend: {fileID: 8691993978187255925}
   isCylindrical: 0
   rb: {fileID: 9169784300745945107}
-  isThrowable: 1
+  isThrowable: 0
   holdPosShift: {x: -0.1, y: -0.5, z: 0.5}
   overridesHoldRot: 0
   holdRot: {x: 0, y: 0, z: 0}
