@@ -21,21 +21,14 @@ public class PowerInlet : Interactable
         Gizmos.DrawSphere(wireAttach.position, 0.05f);
     }
 
-    protected override bool CanInteract(Employee e)
-    {
-        return wire ? e.LeftHand == wire.Holder : !e.LeftHand.IsFull;
-    }
+    protected override bool CanInteract(Employee e) =>
+        wire ? e.LeftHand == wire.Holder : !e.LeftHand.IsFull;
 
-    public override HudInfo GetHudInfo(Employee e)
+    protected override HudInfo FormHud(Employee e) => new()
     {
-        return CanInteract(e)
-            ? new()
-            {
-                icon = wire ? Icon.StashPlug : Icon.Plug,
-                text = wire ? "Stash Plug" : "Grab Plug"
-            }
-            : BlankHud;
-    }
+        icon = wire ? Icon.StashPlug : Icon.Plug,
+        text = wire ? "Stash Plug" : "Grab Plug"
+    };
 
     protected override void OnInteract(Employee e)
     {

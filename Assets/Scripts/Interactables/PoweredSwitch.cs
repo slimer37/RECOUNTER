@@ -33,9 +33,7 @@ public class PoweredSwitch : Interactable
 
     protected override bool CanInteract(Employee e) => !isAnimating;
 
-    public override HudInfo GetHudInfo(Employee e) => CanInteract(e)
-        ? interactHud
-        : BlankHud;
+    protected override HudInfo FormHud(Employee e) => interactHud;
 
     protected override void OnInteract(Employee e)
     {

@@ -8,14 +8,11 @@ public class PaintingTest : Interactable
 
     Texture currentPainting;
 
-    public override HudInfo GetHudInfo(Employee e) =>
-        CanInteract(e) 
-        ? new()
-        {
-            icon = Icon.Hand,
-            text = "Start Painting"
-        }
-        : BlankHud;
+    protected override HudInfo FormHud(Employee e) => new()
+    {
+        icon = Icon.Hand,
+        text = "Start Painting"
+    };
 
     protected override bool CanInteract(Employee e) => !ArtCreator.SessionInProgress;
 

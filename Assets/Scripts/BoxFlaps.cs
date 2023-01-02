@@ -31,13 +31,11 @@ public class BoxFlaps : Interactable
 
     protected override bool CanInteract(Employee e) => !Animating;
 
-    public override HudInfo GetHudInfo(Employee e) => CanInteract(e)
-        ? new()
-        {
-            icon = Icon.Hand,
-            text = (FlapsAreOpen ? "Close" : "Open") + " flaps"
-        }
-        : BlankHud;
+    protected override HudInfo FormHud(Employee e) => new()
+    {
+        icon = Icon.Hand,
+        text = (FlapsAreOpen ? "Close" : "Open") + " flaps"
+    };
 
     protected override void OnInteract(Employee e)
     {

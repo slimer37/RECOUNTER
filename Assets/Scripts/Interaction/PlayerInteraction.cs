@@ -134,7 +134,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void UpdateUI(bool forcePunch = false)
     {
-        var info = hovered.GetHudInfo(employee);
+        var info = hovered.GetHud(employee);
         var iconSprite = iconSettings.GetSprite(info.icon);
 
         // Punch when icon changes (except if it's the blank pointer).

@@ -15,9 +15,11 @@ public class Door : Interactable
 
     protected override bool CanInteract(Employee e) => !IsInteractionInProgress;
 
-    public override HudInfo GetHudInfo(Employee e) => CanInteract(e)
-        ? new HudInfo { icon = Icon.Door, text = "Push or Pull" }
-        : BlankHud;
+    protected override HudInfo FormHud(Employee e) => new()
+    {
+        icon = Icon.Door,
+        text = "Push or Pull"
+    };
 
     [Button("Normalize Axes")]
     void NormalizeAxis()

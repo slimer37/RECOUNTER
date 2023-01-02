@@ -16,21 +16,14 @@ public class PowerOutlet : Interactable
         Gizmos.DrawSphere(plugPoint, 0.05f);
     }
 
-    protected override bool CanInteract(Employee e)
-    {
-        return !IsPluggedIn && e.LeftHand.ContainsParentComponent<Wire>(out _);
-    }
+    protected override bool CanInteract(Employee e) =>
+        !IsPluggedIn && e.LeftHand.ContainsParentComponent<Wire>(out _);
 
-    public override HudInfo GetHudInfo(Employee e)
+    protected override HudInfo FormHud(Employee e) => new()
     {
-        return CanInteract(e)
-            ? new()
-            {
-                icon = Icon.Outlet,
-                text = $"Plug Into {label}"
-            }
-            : BlankHud;
-    }
+        icon = Icon.Outlet,
+        text = $"Plug Into {label}"
+    };
 
     protected override void OnInteract(Employee e)
     {

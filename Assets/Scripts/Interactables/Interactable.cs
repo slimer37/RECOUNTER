@@ -40,8 +40,22 @@ public abstract class Interactable : MonoBehaviour
     /// <summary>
     /// Forms the HUD elements that should be shown while this object is hovered.
     /// </summary>
-    public virtual HudInfo GetHudInfo(Employee e) => CanInteract(e) ? DefaultInteractHud : BlankHud;
-    
+    public HudInfo GetHud(Employee e) => CanInteract(e)
+        ? FormHud(e)
+        : FormNonInteractHud(e);
+
+    /// <summary>
+    /// The HUD to show when CanInteract is true.
+    /// Always shown if CanInteract is not overriden.
+    /// </summary>
+    protected virtual HudInfo FormHud(Employee e) => DefaultInteractHud;
+
+    /// <summary>
+    /// The HUD to show when CanInteract is false.
+    /// Never shown if CanInteract is not overriden.
+    /// </summary>
+    protected virtual HudInfo FormNonInteractHud(Employee e) => BlankHud;
+
     /// <summary>
     /// Checks if an object can be interacted with.
     /// </summary>

@@ -127,21 +127,13 @@ public class Wire : Interactable
         Spark();
     }
 
-    protected override bool CanInteract(Employee e)
-    {
-        return IsAvailable && !e.LeftHand.IsFull;
-    }
+    protected override bool CanInteract(Employee e) => IsAvailable && !e.LeftHand.IsFull;
 
-    public override HudInfo GetHudInfo(Employee e)
+    protected override HudInfo FormHud(Employee e) => new()
     {
-        return CanInteract(e)
-            ? new()
-            {
-                icon = Outlet ? Icon.Unplug : Icon.Plug,
-                text = Outlet ? "Unplug" : "Grab Plug"
-            }
-            : BlankHud;
-    }
+        icon = Outlet ? Icon.Unplug : Icon.Plug,
+        text = Outlet ? "Unplug" : "Grab Plug"
+    };
 
     protected override void OnInteract(Employee e)
     {

@@ -58,11 +58,9 @@ public class Box : Interactable
         }
     }
 
-    public override HudInfo GetHudInfo(Employee e)
+    protected override HudInfo FormHud(Employee e)
     {
-        if (!CanInteract(e)) return BlankHud;
-
-        if (!_flaps.FlapsAreOpen) return _boxItem.GetHudInfo(e);
+        if (!_flaps.FlapsAreOpen) return _boxItem.GetHud(e);
 
         var isStoringItem = e.RightHand.IsFull;
 
