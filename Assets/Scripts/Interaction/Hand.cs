@@ -21,8 +21,6 @@ public class Hand : MonoBehaviour
 
     public bool IsFull => HeldObject;
 
-    readonly List<int> _originalLayers = new();
-
     public Vector3 HoldPosition { get; set; }
     public Quaternion HoldRot { get; set; }
 
@@ -108,15 +106,6 @@ public class Hand : MonoBehaviour
 
         HeldObject = obj.gameObject;
 
-        _originalLayers.Clear();
-
-        _originalLayers.Add(HeldObject.layer);
-
-        foreach (var child in HeldObject.GetComponentsInChildren<Transform>())
-        {
-            _originalLayers.Add(child.gameObject.layer);
-        }
-
         SetViewmodelLayer(true);
     }
 
@@ -149,13 +138,10 @@ public class Hand : MonoBehaviour
 
     void SetViewmodelLayer(bool viewmodel)
     {
-        HeldObject.layer = viewmodel ? _viewmodelLayer : _originalLayers[0];
-
-        var i = 1;
-        foreach (var child in HeldObject.GetComponentsInChildren<Transform>())
-        {
-            child.gameObject.layer = viewmodel ? _viewmodelLayer : _originalLayers[i++];
-        }
+        if (viewmodel)
+            HeldObject.SetHierarchyLayers(_viewmodelLayer);
+        else
+            HeldObject.RestoreHierarchyLayers();
     }
 
     void LateUpdate()
