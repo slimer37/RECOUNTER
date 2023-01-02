@@ -196,9 +196,9 @@ public class Box : Interactable
             RetrieveItem(e.ItemHotbar);
         }
 
-        ClampSelectedIndex();
-
         UpdateLevel();
+
+        UpdateSpinningItem();
     }
 
     void StoreItem(Item item)
@@ -206,6 +206,8 @@ public class Box : Interactable
         _contents.Add(item);
 
         item.gameObject.SetActive(false);
+
+        SelectLastAddedItem();
     }
 
     void RetrieveItem(Hotbar hotbar)
@@ -217,6 +219,8 @@ public class Box : Interactable
         hotbar.TryAddItem(item);
 
         _contents.RemoveAt(_selectedItemIndex);
+
+        ClampSelectedIndex();
     }
 
     void UpdateLevel()
@@ -228,9 +232,13 @@ public class Box : Interactable
         _levelIndicator.localEulerAngles = _randomRotation * Random.Range(0, _maxRotations);
     }
 
+    void SelectLastAddedItem()
+    {
+        _selectedItemIndex = _contents.Count - 1;
+    }
+
     void ClampSelectedIndex()
     {
         _selectedItemIndex = Mathf.Clamp(_selectedItemIndex, 0, _contents.Count - 1);
-        UpdateSpinningItem();
     }
 }
