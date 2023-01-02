@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,11 +24,25 @@ public class Box : Interactable
     [Header("Interface")]
     [SerializeField] InputAction _decreaseIndex;
     [SerializeField] InputAction _increaseIndex;
-    [SerializeField] string instructions;
+    [SerializeField] string _instructions;
+
+    [Header("Spinning Preview")]
+    [SerializeField] Vector3 _hoverPosition;
+    [SerializeField] Vector3 _startRot;
+    [SerializeField] Vector3 _spin;
+    [SerializeField, Layer] int _spinningItemLayer;
 
     List<Item> _contents;
 
     int _selectedItemIndex;
+
+    bool _isHovered;
+
+    Transform _displayedItem;
+
+    Vector3 _spinnerEuler;
+
+    bool _isStoringItem;
 
     void Awake()
     {
@@ -38,14 +53,13 @@ public class Box : Interactable
         _decreaseIndex.performed += DecreaseIndex;
     }
 
-    void IncreaseIndex(InputAction.CallbackContext obj) =>
-        _selectedItemIndex = (_selectedItemIndex + 1) % _contents.Count;
-
-    void DecreaseIndex(InputAction.CallbackContext obj) =>
-        _selectedItemIndex = (_contents.Count + _selectedItemIndex - 1) % _contents.Count;
+    void IncreaseIndex(InputAction.CallbackContext obj) => ChangeIndex(1);
+    void DecreaseIndex(InputAction.CallbackContext obj) => ChangeIndex(-1);
 
     public override void OnHover(bool hover)
     {
+        _isHovered = hover;
+
         if (hover)
         {
             _decreaseIndex.Enable();
@@ -55,21 +69,77 @@ public class Box : Interactable
         {
             _decreaseIndex.Disable();
             _increaseIndex.Disable();
+
+            _displayedItem?.gameObject.SetActive(false);
         }
+    }
+
+    void ChangeIndex(int inc)
+    {
+        if (_contents.Count == 0) return;
+
+        _selectedItemIndex = (_selectedItemIndex + inc) % _contents.Count;
+
+        if (_selectedItemIndex < 0)
+            _selectedItemIndex += _contents.Count;
+
+        UpdateSpinningItem();
+    }
+
+    void UpdateSpinningItem()
+    {
+        if (_contents.Count == 0)
+        {
+            _displayedItem = null;
+            return;
+        }
+
+        var newDisplayItem = _contents[_selectedItemIndex].transform;
+
+        if (_displayedItem == newDisplayItem) return;
+        
+        if (_displayedItem)
+        {
+            _displayedItem.gameObject.RestoreHierarchyLayers();
+            _displayedItem.gameObject.SetActive(false);
+        }
+
+        _displayedItem = newDisplayItem;
+
+        _spinnerEuler = _startRot;
+
+        _displayedItem.gameObject.SetHierarchyLayers(_spinningItemLayer);
+    }
+
+    void Update()
+    {
+        if (!_isHovered || !_displayedItem) return;
+
+        if (_displayedItem.gameObject.activeSelf != !_isStoringItem)
+            _displayedItem.gameObject.SetActive(!_isStoringItem);
+
+        if (_isStoringItem)
+        {
+            return;
+        }
+
+        _displayedItem.position = transform.TransformPoint(_hoverPosition);
+        _displayedItem.eulerAngles = _spinnerEuler;
+        _spinnerEuler += _spin * Time.deltaTime;
     }
 
     protected override HudInfo FormHud(Employee e)
     {
         if (!_flaps.FlapsAreOpen) return _boxItem.GetHud(e);
 
-        var isStoringItem = e.RightHand.IsFull;
+        _isStoringItem = e.RightHand.IsFull;
 
-        if (isStoringItem && _contents.Count == _capacity)
+        if (_isStoringItem && _contents.Count == _capacity)
         {
             return new() { icon = Icon.Invalid, text = "Box is full" };
         }
 
-        if (!isStoringItem && _contents.Count == 0)
+        if (!_isStoringItem && _contents.Count == 0)
         {
             return new() { icon = Icon.Invalid, text = "Box is empty" };
         }
@@ -79,7 +149,7 @@ public class Box : Interactable
         var spacesLeft = _capacity - _contents.Count;
         var spacesText = $"{spacesLeft} space" + (spacesLeft > 1 ? "s" : "");
 
-        if (isStoringItem)
+        if (_isStoringItem)
         {
             hud.text = $"Store {e.RightHand.HeldObject.name}\n{spacesText} left";
         }
@@ -90,7 +160,7 @@ public class Box : Interactable
         else
         {
             var index = _selectedItemIndex;
-            hud.text = $"Take {_contents[index].name}\n{index + 1}/{_contents.Count}\n" + instructions;
+            hud.text = $"Take {_contents[index].name}\n{index + 1}/{_contents.Count}\n" + _instructions;
         }
 
         return hud;
@@ -106,9 +176,7 @@ public class Box : Interactable
             return;
         }
 
-        var isStoringItem = e.RightHand.IsFull;
-
-        if (isStoringItem)
+        if (_isStoringItem)
         {
             if (_contents.Count == _capacity) return;
 
@@ -158,5 +226,6 @@ public class Box : Interactable
     void ClampSelectedIndex()
     {
         _selectedItemIndex = Mathf.Clamp(_selectedItemIndex, 0, _contents.Count - 1);
+        UpdateSpinningItem();
     }
 }
