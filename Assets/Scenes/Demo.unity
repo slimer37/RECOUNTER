@@ -16437,7 +16437,7 @@ GameObject:
   - component: {fileID: 1351297434}
   - component: {fileID: 1351297433}
   m_Layer: 0
-  m_Name: Obi Solver
+  m_Name: Wire Solver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16457,7 +16457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   solvers:
   - {fileID: 1351297434}
-  substeps: 4
+  substeps: 2
 --- !u!114 &1351297434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16474,11 +16474,11 @@ MonoBehaviour:
   m_Backend: 1
   parameters:
     mode: 0
-    interpolation: 1
+    interpolation: 0
     gravity: {x: 0, y: -9.81, z: 0}
     damping: 0.7
     maxAnisotropy: 3
-    sleepThreshold: 0.0005
+    sleepThreshold: 0
     collisionMargin: 0.02
     maxDepenetration: 10
     continuousCollisionDetection: 1
@@ -16491,17 +16491,17 @@ MonoBehaviour:
   worldAngularInertiaScale: 0
   distanceConstraintParameters:
     evaluationOrder: 0
-    iterations: 10
+    iterations: 15
     SORFactor: 1
     enabled: 1
   bendingConstraintParameters:
     evaluationOrder: 1
-    iterations: 10
+    iterations: 15
     SORFactor: 1
     enabled: 1
   particleCollisionConstraintParameters:
     evaluationOrder: 0
-    iterations: 5
+    iterations: 1
     SORFactor: 1
     enabled: 1
   particleFrictionConstraintParameters:
@@ -16511,7 +16511,7 @@ MonoBehaviour:
     enabled: 1
   collisionConstraintParameters:
     evaluationOrder: 0
-    iterations: 5
+    iterations: 1
     SORFactor: 1
     enabled: 1
   frictionConstraintParameters:
@@ -16523,22 +16523,22 @@ MonoBehaviour:
     evaluationOrder: 0
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   volumeConstraintParameters:
     evaluationOrder: 1
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   shapeMatchingConstraintParameters:
     evaluationOrder: 1
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   tetherConstraintParameters:
     evaluationOrder: 1
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   pinConstraintParameters:
     evaluationOrder: 1
     iterations: 1
@@ -16548,22 +16548,22 @@ MonoBehaviour:
     evaluationOrder: 1
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   densityConstraintParameters:
     evaluationOrder: 1
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   stretchShearConstraintParameters:
     evaluationOrder: 0
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   bendTwistConstraintParameters:
     evaluationOrder: 0
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   chainConstraintParameters:
     evaluationOrder: 0
     iterations: 1
