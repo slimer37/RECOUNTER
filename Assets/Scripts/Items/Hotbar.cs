@@ -10,6 +10,9 @@ public class Hotbar : MonoBehaviour
     [SerializeField] HotbarSlot slotPrefab;
     [SerializeField] Transform slotParent;
 
+    const string SlotSelectChars = "1234567890";
+    const string AltSlotSelectChars = "!@#$%^&*()";
+
     readonly List<HotbarSlot> slots = new();
 
     readonly List<Item> items = new();
@@ -50,13 +53,20 @@ public class Hotbar : MonoBehaviour
         }
     }
 
-    private void OnSwitchSlot(char input)
+    void OnSwitchSlot(char input)
     {
-        if (!int.TryParse(input.ToString(), out var slotNum)) return;
+        // Check number char set for slot index.
+        // Alternative char set used for if player is holding shift, i.e., ! -> 1 and @ -> 2
 
-        if (slotNum == 0 || slotNum > capacity) return;
+        int slotIndex = SlotSelectChars.IndexOf(input);
 
-        SetActiveSlot(slotNum - 1);
+        if (slotIndex < 0) slotIndex = AltSlotSelectChars.IndexOf(input);
+
+        if (slotIndex < 0) return;
+
+        if (slotIndex < 0 || slotIndex >= capacity) return;
+
+        SetActiveSlot(slotIndex);
     }
 
     public bool TryAddItem(Item item)
