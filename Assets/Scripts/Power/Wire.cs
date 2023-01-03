@@ -9,8 +9,6 @@ public class Wire : Interactable
 {
     [SerializeField] ObiRope _rope;
     [SerializeField] float _raycastHeight;
-    [SerializeField] float _plugDepth;
-    [SerializeField] float _cableOffset;
     [SerializeField] Vector3 _holdPosition;
     [SerializeField] Vector3 _holdRotation;
     [SerializeField] Transform _startAttachment;
@@ -82,7 +80,7 @@ public class Wire : Interactable
         _unplugSfxInstance.release();
     }
 
-    public void SetStart(PowerInlet inlet, Vector3 wireAttach, Vector3 outward, Vector3 plugUp, Hand hand)
+    public void SetStart(PowerInlet inlet, Vector3 wireAttach, Hand hand)
     {
         if (!hand)
             throw new ArgumentNullException(nameof(hand));
@@ -92,8 +90,10 @@ public class Wire : Interactable
 
         Inlet = inlet;
 
-        OrientPlug(wireAttach, outward, plugUp);
-        SetWireStart(wireAttach, outward);
+        _plug.position = wireAttach;
+        _plug.forward = Vector3.up;
+
+        SetWireStart(wireAttach);
 
         StartCarryingPlug(hand);
     }
@@ -219,7 +219,7 @@ public class Wire : Interactable
         _hand = null;
     }
 
-    void SetWireStart(Vector3 attachPoint, Vector3 outward)
+    void SetWireStart(Vector3 attachPoint)
     {
         _rope.Teleport(attachPoint, Quaternion.identity);
 
@@ -227,15 +227,8 @@ public class Wire : Interactable
 
         _rope.TeleportParticle(_rope.elements[0].particle1, attachPoint);
 
-        _wireStart = attachPoint + outward * _cableOffset;
+        _wireStart = attachPoint;
         _startAttachment.position = _wireStart;
-    }
-
-    void OrientPlug(Vector3 position, Vector3 direction, Vector3 up)
-    {
-        _plug.position = position;
-        _plug.forward = -direction;
-        _plug.rotation = Quaternion.LookRotation(-direction, up);
     }
 
     void DecideSpark()

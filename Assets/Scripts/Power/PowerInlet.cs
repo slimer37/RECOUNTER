@@ -44,8 +44,6 @@ public class PowerInlet : Interactable
             wire.SetStart(
                 this,
                 wireAttach.position,
-                wireAttach.forward,
-                wireAttach.up,
                 e.LeftHand);
 
             wire.Connected += OnPower;

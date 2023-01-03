@@ -5525,8 +5525,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rope: {fileID: 8994018814797735756}
   _raycastHeight: 5
-  _plugDepth: 0.125
-  _cableOffset: 0
   _holdPosition: {x: -0.2, y: 0, z: 0.5}
   _holdRotation: {x: -70, y: 20, z: 0}
   _startAttachment: {fileID: 7558469854659576756}
