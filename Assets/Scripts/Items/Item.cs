@@ -8,6 +8,7 @@ public class Item : Interactable
 
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
+    [SerializeField] Transform handPosition;
     [SerializeField, ShowIf(nameof(HasRigidbody))] bool isThrowable = true;
     [SerializeField] Vector3 holdPosShift;
     [SerializeField] bool overridesHoldRot;
@@ -20,6 +21,8 @@ public class Item : Interactable
 
     Collider[] colliders;
     Hotbar containerHotbar;
+
+    public Transform HandPosition => handPosition;
 
     public Vector3 HoldPosShift => holdPosShift;
     public Vector3 OriginShift => GetOriginShift();

@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using NaughtyAttributes;
-using UnityEngine.InputSystem.Interactions;
 
 public class OctoPlacer : MonoBehaviour
 {
@@ -115,6 +113,9 @@ public class OctoPlacer : MonoBehaviour
 
         hand.Hold(item, _adjustedHoldPos, _adjustedHoldRot);
 
+        if (item.HandPosition)
+            hand.SetHandViewmodel(item.HandPosition);
+
         if (!canResetPosition) return;
 
         _active.transform.SetPositionAndRotation(_body.position, _body.rotation);
@@ -144,6 +145,8 @@ public class OctoPlacer : MonoBehaviour
             return;
         }
 
+        hand.SetReleaseState(HandReleaseState.NoViewmodel);
+
         StartChargingThrow();
     }
 
@@ -159,6 +162,8 @@ public class OctoPlacer : MonoBehaviour
     void OnThrow(InputAction.CallbackContext ctx)
     {
         if (!_active || !_isCharging) return;
+
+        hand.SetReleaseState(HandReleaseState.None);
 
         ThrowHeldItem();
     }

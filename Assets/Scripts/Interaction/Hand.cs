@@ -1,6 +1,5 @@
 using UnityEngine;
 using NaughtyAttributes;
-using System.Collections.Generic;
 using System;
 
 public class Hand : MonoBehaviour
@@ -10,6 +9,7 @@ public class Hand : MonoBehaviour
     [SerializeField] Transform _followCamera;
     [SerializeField] Vector3 _defaultHoldPosition;
     [SerializeField] Vector3 _defaultHoldRotation;
+    [SerializeField] Transform _handViewmodelTarget;
 
     [Header("Breathing")]
     [SerializeField] float _breathingIntensity;
@@ -24,10 +24,21 @@ public class Hand : MonoBehaviour
     public Vector3 HoldPosition { get; set; }
     public Quaternion HoldRot { get; set; }
 
+    Vector3 _defaultHandPosition;
+    Vector3 _handVelocity;
+    Transform _handTarget;
+    Vector3 _handPositionOffset;
+    Quaternion _handRotationOffset;
+
     Vector3 _positionVelocity;
     float _rotationVelocity;
 
     public HandReleaseState CurrentReleaseState => _releaseState;
+
+    void Awake()
+    {
+        _defaultHandPosition = _handViewmodelTarget.localPosition;
+    }
 
     /// <summary>
     /// Checks for and retrieves (if it exists) a component on the item with the provided type.
@@ -109,6 +120,20 @@ public class Hand : MonoBehaviour
         SetViewmodelLayer(true);
     }
 
+    /// <summary>
+    /// Sets the follow target for the hand viewmodel.
+    /// </summary>
+    public void SetHandViewmodel(Transform handTarget) =>
+        SetHandViewmodel(handTarget, Vector3.zero, Quaternion.identity);
+
+    /// <inheritdoc cref="SetHandViewmodel(Transform)"/>
+    public void SetHandViewmodel(Transform handTarget, Vector3 positionOffset, Quaternion rotationOffset)
+    {
+        _handTarget = handTarget;
+        _handPositionOffset = positionOffset;
+        _handRotationOffset = rotationOffset;
+    }
+
     /// <inheritdoc cref="Hold(Component, Vector3, Quaternion)"/>
     public void Hold(Component obj) => Hold(obj, _defaultHoldPosition, Quaternion.Euler(_defaultHoldRotation));
 
@@ -131,6 +156,8 @@ public class Hand : MonoBehaviour
 
         HeldObject = null;
 
+        _handTarget = null;
+
         _releaseState = HandReleaseState.None;
 
         return HeldObject;
@@ -148,9 +175,27 @@ public class Hand : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!HeldObject) return;
+        if (HeldObject)
+        {
+            PullItemToHand();
+        }
 
-        PullItemToHand();
+        var showViewmodel = !_releaseState.HasFlag(HandReleaseState.NoViewmodel) && HeldObject && _handTarget;
+
+        if (showViewmodel)
+        {
+            _handViewmodelTarget.SetPositionAndRotation(
+                _handTarget.TransformPoint(_handPositionOffset),
+                _handTarget.rotation * _handRotationOffset);
+        }
+        else
+        {
+            _handViewmodelTarget.localPosition = Vector3.SmoothDamp(
+                _handViewmodelTarget.localPosition,
+                _defaultHandPosition,
+                ref _handVelocity,
+                _smoothing);
+        }
     }
 
     public void ManualUpdate() => LateUpdate();
@@ -217,7 +262,8 @@ public enum HandReleaseState
     FreeRotation = 2,
     ResetLayer = 4,
     WorldSpace = 8,
-    FreePositionAndRotation = FreePosition | FreeRotation,
-    InWorld = ResetLayer | WorldSpace,
-    All = FreePosition | FreeRotation | ResetLayer
+    NoViewmodel = 16,
+    FreePositionAndRotation = FreePosition | FreeRotation | NoViewmodel,
+    InWorld = ResetLayer | WorldSpace | NoViewmodel,
+    All = FreePosition | FreeRotation | ResetLayer | NoViewmodel
 }
