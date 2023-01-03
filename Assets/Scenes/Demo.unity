@@ -2458,7 +2458,6 @@ MonoBehaviour:
   _cursorImage: {fileID: 1200812864}
   _placeIcon: {fileID: 21300000, guid: f823c910bebc79e48b0eb659bd45b954, type: 3}
   _rotateIcon: {fileID: 21300000, guid: 141f55b40da731746a84d2dc184a5952, type: 3}
-  _defaultIcon: {fileID: 21300000, guid: 6a482d055e851fe4db099ee2a13e1db4, type: 3}
   _playerController: {fileID: 273294031}
   _playerInteraction: {fileID: 273294029}
   _camera: {fileID: 1065023558}

@@ -43,7 +43,6 @@ public class OctoPlacer : MonoBehaviour
     [SerializeField] Image _cursorImage;
     [SerializeField] Sprite _placeIcon;
     [SerializeField] Sprite _rotateIcon;
-    [SerializeField] Sprite _defaultIcon;
 
     [Header("Components")]
     [SerializeField] PlayerController _playerController;
@@ -257,14 +256,14 @@ public class OctoPlacer : MonoBehaviour
     void HandleLateral(Vector2 delta)
     {
         _localPlacePosition += _lateralSpeed * new Vector3(delta.x, 0, delta.y);
-        _cursorImage.sprite = _placeIcon;
+        _cursorImage.overrideSprite = _placeIcon;
         _cursorImage.transform.rotation = Quaternion.identity;
     }
 
     void HandleRotation(Vector2 delta)
     {
         _localPlaceRotation += delta.x * _rotateSpeed;
-        _cursorImage.sprite = _rotateIcon;
+        _cursorImage.overrideSprite = _rotateIcon;
         _cursorImage.transform.eulerAngles = -Vector3.forward * _localPlaceRotation;
     }
 
@@ -339,7 +338,7 @@ public class OctoPlacer : MonoBehaviour
 
         hand.SetReleaseState(HandReleaseState.None);
 
-        _cursorImage.sprite = _defaultIcon;
+        _cursorImage.overrideSprite = null;
 
         _cursorImage.transform.SetPositionAndRotation(
             new Vector2(Screen.width, Screen.height) / 2, Quaternion.identity
