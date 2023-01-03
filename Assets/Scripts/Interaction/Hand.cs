@@ -160,12 +160,6 @@ public class Hand : MonoBehaviour
         var targetPos = HoldPosition;
         var targetRot = HoldRot;
 
-        if (_releaseState == HandReleaseState.None)
-        {
-            var sin = _breathingIntensity * Mathf.Sin(Time.time * Mathf.PI * _breathingFrequency);
-            targetPos += Vector3.up * sin;
-        }
-
         if (!_releaseState.HasFlag(HandReleaseState.WorldSpace))
         {
             targetPos = _followCamera.TransformPoint(targetPos);
@@ -174,6 +168,9 @@ public class Hand : MonoBehaviour
 
         if (!_releaseState.HasFlag(HandReleaseState.FreePosition))
         {
+            var sin = _breathingIntensity * Mathf.Sin(Time.time * Mathf.PI * _breathingFrequency);
+            targetPos += Vector3.up * sin;
+
             SmoothDampPosition(
                 HeldObject.transform,
                 targetPos,
