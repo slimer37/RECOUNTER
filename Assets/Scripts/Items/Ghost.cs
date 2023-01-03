@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 internal class Ghost : MonoBehaviour
 {
@@ -6,13 +7,37 @@ internal class Ghost : MonoBehaviour
     [SerializeField] MeshRenderer _rend;
     [SerializeField] Material _mat;
 
+    [Header("Visibility")]
+    [SerializeField] InputAction _toggleVisibilityAction;
+    [SerializeField] Canvas _instructionCanvas;
+
+    bool _visibilityToggle = true;
+
+    bool _isActive;
+
     void Reset()
     {
         TryGetComponent(out _rend);
         TryGetComponent(out _filter);
     }
 
-    void Start() => gameObject.SetActive(false);
+    void OnEnable() => _toggleVisibilityAction.Enable();
+    void OnDisable() => _toggleVisibilityAction.Disable();
+
+    void Awake()
+    {
+        _toggleVisibilityAction.performed += ToggleVisibility;
+
+        SetupGhost(false);
+    }
+
+    void ToggleVisibility(InputAction.CallbackContext ctx)
+    {
+        if (!_isActive) return;
+
+        _visibilityToggle = !_visibilityToggle;
+        _rend.enabled = _visibilityToggle;
+    }
 
     public void CopyMesh(Component source)
     {
@@ -39,9 +64,21 @@ internal class Ghost : MonoBehaviour
 
     public void ShowAt(Vector3 position, Quaternion rotation)
     {
-        gameObject.SetActive(true);
+        if (!_isActive)
+            SetupGhost(true);
+
         transform.SetPositionAndRotation(position, rotation);
     }
 
-    public void Hide() => gameObject.SetActive(false);
+    public void Hide() => SetupGhost(false);
+
+    void SetupGhost(bool show)
+    {
+        _isActive = show;
+
+        _rend.enabled = show && _visibilityToggle;
+        _instructionCanvas.enabled = show;
+
+        if (!show) return;
+    }
 }
