@@ -613,7 +613,7 @@ Transform:
   - {fileID: 3897552679445936958}
   - {fileID: 667847264334465775}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8223059815233162498
 MeshFilter:
@@ -708,9 +708,9 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 8504262504139958393}
   isThrowable: 0
-  holdPosShift: {x: -0.1, y: -0.5, z: 0.5}
-  overridesHoldRot: 0
-  holdRot: {x: 0, y: 0, z: 0}
+  holdPosShift: {x: 0.3, y: -0.4, z: 0.1}
+  overridesHoldRot: 1
+  holdRot: {x: 0, y: -60, z: -10}
   overridesBounds: 0
   overrideCenter: {x: 0, y: 0, z: 0}
   overrideSize: {x: 0, y: 0, z: 0}
