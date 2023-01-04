@@ -2198,8 +2198,8 @@ MonoBehaviour:
   speedParam: Speed
   crouchedParam: Crouching
   <CanMove>k__BackingField: 1
-  walkSpeed: 1.5
-  sprintSpeed: 3.5
+  walkSpeed: 1.4
+  sprintSpeed: 4
   inputSmoothing: 0.1
   body: {fileID: 840553857}
   controller: {fileID: 840553853}
@@ -2219,7 +2219,7 @@ MonoBehaviour:
   <CanCrouch>k__BackingField: 1
   crouchedHeight: 1
   crouchedCamHeight: 1
-  crouchSpeed: 0.6
+  crouchSpeed: 0.4
   camHeightSmoothing: 0.1
   vcam: {fileID: 409238788}
   walkFov: 50
