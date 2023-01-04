@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Animation")]
     [SerializeField] Animator animator;
-    [SerializeField, AnimatorParam(nameof(animator))] string speedParam;
+    [SerializeField, AnimatorParam(nameof(animator))] string xSpeedParam;
+    [SerializeField, AnimatorParam(nameof(animator))] string ySpeedParam;
     [SerializeField, AnimatorParam(nameof(animator))] string crouchedParam;
 
     [field: Header("Moving")]
@@ -68,7 +69,8 @@ public class PlayerController : MonoBehaviour
     float defaultCamHeight;
     float camHeightVelocity;
 
-    int speedId;
+    int xSpeedId;
+    int ySpeedId;
 
     MoveState moveState = MoveState.Walking;
 
@@ -183,7 +185,9 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
-        animator.SetFloat(speedId, controller.velocity.magnitude);
+        var localControllerVelocity = transform.InverseTransformDirection(controller.velocity);
+        animator.SetFloat(xSpeedId, localControllerVelocity.x);
+        animator.SetFloat(ySpeedId, localControllerVelocity.z);
 
         var input = playerControls.Move.ReadValue<Vector2>();
 
@@ -225,7 +229,8 @@ public class PlayerController : MonoBehaviour
 
         RecordCameraAngles();
 
-        speedId = Animator.StringToHash(speedParam);
+        xSpeedId = Animator.StringToHash(xSpeedParam);
+        ySpeedId = Animator.StringToHash(ySpeedParam);
 
         defaultHeight = controller.height;
         defaultCamHeight = camTarget.localPosition.y;

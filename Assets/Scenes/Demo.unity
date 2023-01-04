@@ -2195,7 +2195,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 69736183}
-  speedParam: Speed
+  xSpeedParam: X Speed
+  ySpeedParam: Y Speed
   crouchedParam: Crouching
   <CanMove>k__BackingField: 1
   walkSpeed: 1.4
@@ -12267,7 +12268,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34232
+  m_Name: pb_Mesh210962
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -13490,7 +13491,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 838404644}
-  speedParam: Speed
+  xSpeedParam: X Speed
+  ySpeedParam: Y Speed
 --- !u!195 &838404649
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -13527,7 +13529,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 838404644}
   ragdollPrefab: {fileID: 269551269, guid: 53330b62eb8a421489dba33d6549bbad, type: 3}
-  speedParam: Speed
+  speedParam: 
 --- !u!114 &838404653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14041,7 +14043,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34144
+  m_Name: pb_Mesh210874
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -19537,7 +19539,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34932
+  m_Name: pb_Mesh211680
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
