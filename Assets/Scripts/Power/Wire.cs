@@ -12,7 +12,9 @@ public class Wire : Interactable
     [SerializeField] Vector3 _holdPosition;
     [SerializeField] Vector3 _holdRotation;
     [SerializeField] Transform _startAttachment;
-    [SerializeField] Transform _viewmodelPos;
+
+    [Header("Viewmodel")]
+    [SerializeField] ViewmodelPose _viewmodelPose;
 
     [Header("Plug")]
     [SerializeField] Transform _plug;
@@ -183,7 +185,7 @@ public class Wire : Interactable
         _hand = hand;
 
         hand.Hold(_plug, _holdPosition, Quaternion.Euler(_holdRotation));
-        hand.SetHandViewmodel(_viewmodelPos);
+        hand.SetHandViewmodel(_viewmodelPose);
 
         enabled = true;
 

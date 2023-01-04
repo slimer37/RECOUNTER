@@ -8,11 +8,13 @@ public class Item : Interactable
 
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
-    [SerializeField] Transform handPosition;
     [SerializeField, ShowIf(nameof(HasRigidbody))] bool isThrowable = true;
     [SerializeField] Vector3 holdPosShift;
     [SerializeField] bool overridesHoldRot;
     [SerializeField, ShowIf(nameof(overridesHoldRot))] Vector3 holdRot;
+
+    [field: Header("Viewmodel")]
+    [field: SerializeField] public ViewmodelPose ViewmodelPose { get; private set; }
 
     [Header("Bounds Override")]
     [SerializeField] bool overridesBounds;
@@ -21,8 +23,6 @@ public class Item : Interactable
 
     Collider[] colliders;
     Hotbar containerHotbar;
-
-    public Transform HandPosition => handPosition;
 
     public Vector3 HoldPosShift => holdPosShift;
     public Vector3 OriginShift => GetOriginShift();

@@ -112,8 +112,8 @@ public class OctoPlacer : MonoBehaviour
 
         hand.Hold(item, _adjustedHoldPos, _adjustedHoldRot);
 
-        if (item.HandPosition)
-            hand.SetHandViewmodel(item.HandPosition);
+        if (item.ViewmodelPose.IsValid)
+            hand.SetHandViewmodel(item.ViewmodelPose);
 
         if (!canResetPosition) return;
 

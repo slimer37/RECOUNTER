@@ -18,6 +18,11 @@ public class Hand : MonoBehaviour
     [SerializeField] Transform _handViewmodelTarget;
     [SerializeField] float _resetSpeed;
 
+    [Header("Closing")]
+    [SerializeField] Animator _viewmodelAnimator;
+    [SerializeField, AnimatorParam(nameof(_viewmodelAnimator))] string _handClosedParam;
+    [SerializeField, AnimatorParam(nameof(_viewmodelAnimator))] string _thumbCurlParam;
+
     [field: SerializeField, ReadOnly] public GameObject HeldObject { get; private set; }
 
     [ShowNonSerializedField] HandCarryStates _carryStates = HandCarryStates.None;
@@ -34,8 +39,6 @@ public class Hand : MonoBehaviour
     float _handRotationVelocity;
 
     Transform _handTarget;
-    Vector3 _handPositionOffset;
-    Quaternion _handRotationOffset;
 
     Vector3 _positionVelocity;
     float _rotationVelocity;
@@ -134,15 +137,12 @@ public class Hand : MonoBehaviour
     /// <summary>
     /// Sets the follow target for the hand viewmodel.
     /// </summary>
-    public void SetHandViewmodel(Transform handTarget) =>
-        SetHandViewmodel(handTarget, Vector3.zero, Quaternion.identity);
-
-    /// <inheritdoc cref="SetHandViewmodel(Transform)"/>
-    public void SetHandViewmodel(Transform handTarget, Vector3 positionOffset, Quaternion rotationOffset)
+    public void SetHandViewmodel(ViewmodelPose pose)
     {
-        _handTarget = handTarget;
-        _handPositionOffset = positionOffset;
-        _handRotationOffset = rotationOffset;
+        _handTarget = pose.target;
+
+        _viewmodelAnimator.SetFloat(_handClosedParam, pose.handClosedness);
+        _viewmodelAnimator.SetFloat(_thumbCurlParam, pose.thumbCurl);
     }
 
     /// <inheritdoc cref="Hold(Component, Vector3, Quaternion)"/>
@@ -198,8 +198,8 @@ public class Hand : MonoBehaviour
         if (showViewmodel)
         {
             _handViewmodelTarget.SetPositionAndRotation(
-                HeldObject.transform.TransformPoint(_handTarget.localPosition + _handPositionOffset),
-                HeldObject.transform.rotation * _handTarget.localRotation * _handRotationOffset);
+                HeldObject.transform.TransformPoint(_handTarget.localPosition),
+                HeldObject.transform.rotation * _handTarget.localRotation);
         }
         else
         {
@@ -267,6 +267,16 @@ public class Hand : MonoBehaviour
             transform.rotation = Quaternion.Slerp(currRot, targetRot, t);
         }
     }
+}
+
+[Serializable]
+public struct ViewmodelPose
+{
+    public Transform target;
+    public float handClosedness;
+    public float thumbCurl;
+
+    public bool IsValid => target;
 }
 
 [Flags]
