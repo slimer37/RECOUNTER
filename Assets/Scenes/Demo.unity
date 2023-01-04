@@ -125,6 +125,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &30864336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 30864337}
+  m_Layer: 7
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &30864337
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30864336}
+  m_LocalRotation: {x: -0.794636, y: -0.07105141, z: -0.023964789, w: 0.6024376}
+  m_LocalPosition: {x: -0.3107, y: 0.0056, z: 0.1958}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1914115716348566238}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -106.087, y: 9.875, z: -17.656006}
 --- !u!1 &31741656
 GameObject:
   m_ObjectHideFlags: 0
@@ -11814,6 +11845,37 @@ Canvas:
     type: 3}
   m_PrefabInstance: {fileID: 2899833472849838477}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &500059521
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 500059522}
+  m_Layer: 7
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &500059522
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500059521}
+  m_LocalRotation: {x: 0.12533806, y: -0.7369672, z: -0.60628664, w: 0.27126783}
+  m_LocalPosition: {x: 0.0621, y: -0.0858, z: -0.1313}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 749097177061512319}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -55.652, y: 257.963, z: -425.563}
 --- !u!1 &502027511
 GameObject:
   m_ObjectHideFlags: 0
@@ -27010,7 +27072,8 @@ Transform:
   m_LocalPosition: {x: 4.19, y: 1.2373735, z: 1.399}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 500059522}
   m_Father: {fileID: 50119778}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27219,6 +27282,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7897231333074040783}
+  - {fileID: 30864337}
   m_Father: {fileID: 50119778}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 74.216, z: 0}
@@ -28325,8 +28389,8 @@ MonoBehaviour:
   overridesHoldRot: 0
   holdRot: {x: 0, y: 0, z: 0}
   <ViewmodelPose>k__BackingField:
-    target: {fileID: 0}
-    handClosedness: 0
+    target: {fileID: 500059522}
+    handClosedness: 0.1
     thumbCurl: 0
   overridesBounds: 0
   overrideCenter: {x: 0, y: 0, z: 0}
@@ -29165,13 +29229,13 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 8972040311066535795}
   isThrowable: 1
-  holdPosShift: {x: 0, y: 0.1, z: 0}
+  holdPosShift: {x: -0.1, y: 0.1, z: 0}
   overridesHoldRot: 1
-  holdRot: {x: 35, y: 180, z: -5}
+  holdRot: {x: 35, y: 200, z: -5}
   <ViewmodelPose>k__BackingField:
-    target: {fileID: 0}
+    target: {fileID: 30864337}
     handClosedness: 0
-    thumbCurl: 0
+    thumbCurl: 0.4
   overridesBounds: 1
   overrideCenter: {x: -0.00007857382, y: -0.003448952, z: 0.000022754073}
   overrideSize: {x: 0.55969524, y: 0.09275477, z: 0.41356525}
