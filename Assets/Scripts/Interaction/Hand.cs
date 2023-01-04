@@ -193,6 +193,11 @@ public class Hand : MonoBehaviour
             PullItemToHand();
         }
 
+        HandleViewmodel();
+    }
+
+    void HandleViewmodel()
+    {
         var showViewmodel = !_carryStates.HasFlag(HandCarryStates.NoViewmodel) && HeldObject && _handTarget;
 
         if (showViewmodel)
