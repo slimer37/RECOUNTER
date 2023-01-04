@@ -198,8 +198,8 @@ public class Hand : MonoBehaviour
         if (showViewmodel)
         {
             _handViewmodelTarget.SetPositionAndRotation(
-                _handTarget.TransformPoint(_handPositionOffset),
-                _handTarget.rotation * _handRotationOffset);
+                HeldObject.transform.TransformPoint(_handTarget.localPosition + _handPositionOffset),
+                HeldObject.transform.rotation * _handTarget.localRotation * _handRotationOffset);
         }
         else
         {
