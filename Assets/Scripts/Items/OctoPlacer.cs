@@ -144,7 +144,7 @@ public class OctoPlacer : MonoBehaviour
             return;
         }
 
-        hand.SetReleaseState(HandReleaseState.NoViewmodel);
+        hand.SetCarryStates(HandCarryStates.NoViewmodel);
 
         StartChargingThrow();
     }
@@ -162,7 +162,7 @@ public class OctoPlacer : MonoBehaviour
     {
         if (!_active || !_isCharging) return;
 
-        hand.SetReleaseState(HandReleaseState.None);
+        hand.SetCarryStates(HandCarryStates.None);
 
         ThrowHeldItem();
     }
@@ -321,7 +321,7 @@ public class OctoPlacer : MonoBehaviour
 
         _ghost.Hide();
 
-        hand.SetReleaseState(HandReleaseState.InWorld);
+        hand.SetCarryStates(HandCarryStates.InWorld);
 
         _playerInteraction.enabled = false;
         _playerController.Suspend(true);
@@ -336,7 +336,7 @@ public class OctoPlacer : MonoBehaviour
 
         _ghost.Hide();
 
-        hand.SetReleaseState(HandReleaseState.None);
+        hand.SetCarryStates(HandCarryStates.None);
 
         _cursorImage.overrideSprite = null;
 

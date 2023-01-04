@@ -20,7 +20,7 @@ public class Hand : MonoBehaviour
 
     [field: SerializeField, ReadOnly] public GameObject HeldObject { get; private set; }
 
-    [ShowNonSerializedField] HandReleaseState _releaseState = HandReleaseState.None;
+    [ShowNonSerializedField] HandCarryStates _carryStates = HandCarryStates.None;
 
     public bool IsFull => HeldObject;
 
@@ -40,7 +40,7 @@ public class Hand : MonoBehaviour
     Vector3 _positionVelocity;
     float _rotationVelocity;
 
-    public HandReleaseState CurrentReleaseState => _releaseState;
+    public HandCarryStates CarryStates => _carryStates;
 
     void Awake()
     {
@@ -86,20 +86,20 @@ public class Hand : MonoBehaviour
     }
 
     /// <summary>
-    /// Releases the held item according to <paramref name="state"/>
+    /// Sets the item-holding state according to <paramref name="states"/>
     /// but prevents other items from occupying this hand.
     /// </summary>
     /// <remarks>You do not need to unrelease the item before clearing the hand.</remarks>
-    /// <param name="state">The new object release state.</param>
-    public void SetReleaseState(HandReleaseState state)
+    /// <param name="states">The new object release state.</param>
+    public void SetCarryStates(HandCarryStates states)
     {
         if (!HeldObject)
             throw new InvalidOperationException("Cannot set release state with no held item.");
 
-        var useViewmodelLayer = !state.HasFlag(HandReleaseState.ResetLayer);
+        var useViewmodelLayer = !states.HasFlag(HandCarryStates.ResetLayer);
         SetViewmodelLayer(useViewmodelLayer);
 
-        _releaseState = state;
+        _carryStates = states;
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public class Hand : MonoBehaviour
 
         _handTarget = null;
 
-        _releaseState = HandReleaseState.None;
+        _carryStates = HandCarryStates.None;
 
         _resetTime = 0;
 
@@ -193,7 +193,7 @@ public class Hand : MonoBehaviour
             PullItemToHand();
         }
 
-        var showViewmodel = !_releaseState.HasFlag(HandReleaseState.NoViewmodel) && HeldObject && _handTarget;
+        var showViewmodel = !_carryStates.HasFlag(HandCarryStates.NoViewmodel) && HeldObject && _handTarget;
 
         if (showViewmodel)
         {
@@ -220,13 +220,13 @@ public class Hand : MonoBehaviour
         var targetPos = HoldPosition;
         var targetRot = HoldRot;
 
-        if (!_releaseState.HasFlag(HandReleaseState.WorldSpace))
+        if (!_carryStates.HasFlag(HandCarryStates.WorldSpace))
         {
             targetPos = _followCamera.TransformPoint(targetPos);
             targetRot = _followCamera.transform.rotation * targetRot;
         }
 
-        if (!_releaseState.HasFlag(HandReleaseState.FreePosition))
+        if (!_carryStates.HasFlag(HandCarryStates.FreePosition))
         {
             var sin = _breathingIntensity * Mathf.Sin(Time.time * Mathf.PI * _breathingFrequency);
             targetPos += Vector3.up * sin;
@@ -238,7 +238,7 @@ public class Hand : MonoBehaviour
                 _smoothing);
         }
 
-        if (!_releaseState.HasFlag(HandReleaseState.FreeRotation))
+        if (!_carryStates.HasFlag(HandCarryStates.FreeRotation))
         {
             SmoothDampRotation(
                 HeldObject.transform,
@@ -270,7 +270,7 @@ public class Hand : MonoBehaviour
 }
 
 [Flags]
-public enum HandReleaseState
+public enum HandCarryStates
 {
     None = 0,
     FreePosition = 1,

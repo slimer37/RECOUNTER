@@ -156,7 +156,7 @@ public class Wire : Interactable
 
         StartCarryingPlug(hand);
 
-        hand.SetReleaseState(HandReleaseState.FreePositionAndRotation | HandReleaseState.ResetLayer);
+        hand.SetCarryStates(HandCarryStates.FreePositionAndRotation | HandCarryStates.ResetLayer);
 
         _currentTween = _plug
             .DOMove(_plug.position - _plug.forward * _plugOutOffset, _unplugTime)
@@ -173,7 +173,7 @@ public class Wire : Interactable
 
     void FinishDisconnect()
     {
-        _hand.SetReleaseState(HandReleaseState.None);
+        _hand.SetCarryStates(HandCarryStates.None);
     }
 
     void StartCarryingPlug(Hand hand)
