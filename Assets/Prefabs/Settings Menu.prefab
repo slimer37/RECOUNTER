@@ -2002,7 +2002,7 @@ MonoBehaviour:
   defaultValue: 2
   isInt: 0
   display: {fileID: 4719992541677055232}
-  format: 0.0
+  format: 0.000
 --- !u!1 &2899833472487858769
 GameObject:
   m_ObjectHideFlags: 0
