@@ -719,9 +719,10 @@ MonoBehaviour:
   _followCamera: {fileID: 2136512939}
   _defaultHoldPosition: {x: 0.2, y: -0.2, z: 0.7}
   _defaultHoldRotation: {x: 0, y: 180, z: 0}
-  _handViewmodelTarget: {fileID: 254109475}
   _breathingIntensity: 0.01
   _breathingFrequency: 0.8
+  _handViewmodelTarget: {fileID: 254109475}
+  _resetSpeed: 5
   <HeldObject>k__BackingField: {fileID: 0}
 --- !u!1 &211057642
 GameObject:
@@ -1823,7 +1824,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 254109474}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0.2, y: -0.2, z: 0.3}
+  m_LocalPosition: {x: 0.3, y: -0.5, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2565,7 +2566,7 @@ MonoBehaviour:
   rend: {fileID: 334750062}
   isCylindrical: 0
   rb: {fileID: 334750065}
-  handPosition: {fileID: 0}
+  handPosition: {fileID: 1767436441}
   isThrowable: 1
   holdPosShift: {x: 0, y: 0, z: 0}
   overridesHoldRot: 0
@@ -2655,7 +2656,8 @@ Transform:
   m_LocalPosition: {x: 4.49, y: 1.093, z: 0.243}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1767436441}
   m_Father: {fileID: 50119778}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 31.191, z: 0}
@@ -11547,7 +11549,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 420901015}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: -0.2, y: -0.2, z: 0.3}
+  m_LocalPosition: {x: -0.3, y: -0.5, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12265,7 +12267,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh405704
+  m_Name: pb_Mesh34232
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -14039,7 +14041,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh405616
+  m_Name: pb_Mesh34144
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -15437,9 +15439,10 @@ MonoBehaviour:
   _followCamera: {fileID: 2136512939}
   _defaultHoldPosition: {x: -0.2, y: -0.2, z: 0.7}
   _defaultHoldRotation: {x: 0, y: 180, z: 0}
-  _handViewmodelTarget: {fileID: 420901016}
   _breathingIntensity: 0.01
   _breathingFrequency: 0.8
+  _handViewmodelTarget: {fileID: 420901016}
+  _resetSpeed: 5
   <HeldObject>k__BackingField: {fileID: 0}
 --- !u!4 &1095714738
 Transform:
@@ -19497,13 +19500,44 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731100043}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1767436440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1767436441}
+  m_Layer: 7
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1767436441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767436440}
+  m_LocalRotation: {x: -0.12747008, y: -0.6955223, z: -0.63161707, w: -0.31789944}
+  m_LocalPosition: {x: 0.623, y: -0.556, z: -0.048}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 334750064}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -127.102005, y: -90, z: -106.33099}
 --- !u!43 &1782410337
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh406404
+  m_Name: pb_Mesh34932
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -26275,6 +26309,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -26286,7 +26335,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
         type: 3}
@@ -26322,6 +26371,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -5471901410102084090, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
         type: 3}

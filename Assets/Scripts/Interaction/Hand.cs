@@ -9,11 +9,14 @@ public class Hand : MonoBehaviour
     [SerializeField] Transform _followCamera;
     [SerializeField] Vector3 _defaultHoldPosition;
     [SerializeField] Vector3 _defaultHoldRotation;
-    [SerializeField] Transform _handViewmodelTarget;
 
     [Header("Breathing")]
     [SerializeField] float _breathingIntensity;
     [SerializeField] float _breathingFrequency;
+
+    [Header("Viewmodel")]
+    [SerializeField] Transform _handViewmodelTarget;
+    [SerializeField] float _resetSpeed;
 
     [field: SerializeField, ReadOnly] public GameObject HeldObject { get; private set; }
 
@@ -25,7 +28,11 @@ public class Hand : MonoBehaviour
     public Quaternion HoldRot { get; set; }
 
     Vector3 _defaultHandPosition;
-    Vector3 _handVelocity;
+    Quaternion _defaultHandRotation;
+
+    float _resetTime;
+    float _handRotationVelocity;
+
     Transform _handTarget;
     Vector3 _handPositionOffset;
     Quaternion _handRotationOffset;
@@ -37,7 +44,11 @@ public class Hand : MonoBehaviour
 
     void Awake()
     {
-        _defaultHandPosition = _handViewmodelTarget.localPosition;
+        _handViewmodelTarget.parent = null;
+        _defaultHandPosition = _followCamera.InverseTransformPoint(_handViewmodelTarget.position);
+        _defaultHandRotation = Quaternion.Inverse(_followCamera.rotation) * _handViewmodelTarget.rotation;
+
+        _resetTime = 1;
     }
 
     /// <summary>
@@ -160,6 +171,8 @@ public class Hand : MonoBehaviour
 
         _releaseState = HandReleaseState.None;
 
+        _resetTime = 0;
+
         return HeldObject;
     }
 
@@ -190,11 +203,13 @@ public class Hand : MonoBehaviour
         }
         else
         {
-            _handViewmodelTarget.localPosition = Vector3.SmoothDamp(
-                _handViewmodelTarget.localPosition,
-                _defaultHandPosition,
-                ref _handVelocity,
-                _smoothing);
+            if (_resetTime < 1)
+                _resetTime += Time.deltaTime * _resetSpeed;
+
+            _handViewmodelTarget.position =
+                Vector3.Lerp(_handViewmodelTarget.position, _followCamera.TransformPoint(_defaultHandPosition), _resetTime);
+
+            SmoothDampRotation(_handViewmodelTarget, _followCamera.rotation * _defaultHandRotation, ref _handRotationVelocity, _smoothing);
         }
     }
 
