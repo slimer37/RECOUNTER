@@ -166,6 +166,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2533871665567687221
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4592725572999091279}
+  m_Layer: 7
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4592725572999091279
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533871665567687221}
+  m_LocalRotation: {x: -0.19624887, y: -0.6705873, z: 0.04866186, w: 0.71374446}
+  m_LocalPosition: {x: -0.0189, y: -0.1701, z: -0.0652}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4981132329310889293}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -12.408, y: -88.615, z: 19.915}
 --- !u!1 &7001964284988248215
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,6 +482,7 @@ Transform:
   - {fileID: 6585447247438699199}
   - {fileID: 1878599165080156762}
   - {fileID: 2532311386940987739}
+  - {fileID: 4592725572999091279}
   m_Father: {fileID: 2078667360102736294}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -518,9 +550,13 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 1021192388112461268}
   isThrowable: 1
-  holdPosShift: {x: 0, y: 0, z: 0}
-  overridesHoldRot: 0
-  holdRot: {x: 0, y: 0, z: 0}
+  holdPosShift: {x: 0, y: 0, z: -0.2}
+  overridesHoldRot: 1
+  holdRot: {x: 0, y: 220, z: 0}
+  <ViewmodelPose>k__BackingField:
+    target: {fileID: 4592725572999091279}
+    handClosedness: 0
+    thumbCurl: 0
   overridesBounds: 0
   overrideCenter: {x: 0, y: 0, z: 0}
   overrideSize: {x: 0, y: 0, z: 0}

@@ -5532,7 +5532,7 @@ MonoBehaviour:
   _viewmodelPose:
     target: {fileID: 7571262358156050067}
     handClosedness: 0.4
-    thumbCurl: 0.2
+    thumbCurl: 0.35
   _plug: {fileID: 20759766754589477}
   _plugRigidbody: {fileID: 8443502763765869235}
   _plugAttachment: {fileID: 7920337501643952804}

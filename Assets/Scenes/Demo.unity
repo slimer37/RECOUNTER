@@ -2488,7 +2488,7 @@ MonoBehaviour:
   _defaultRot: 180
   _intersectHoldShift: {x: 0, y: -0.1, z: -0.4}
   _intersectHoldRotShift: {x: -10, y: -25, z: 0}
-  _holdPos: {x: 0.2, y: -0.2, z: 0.8}
+  _holdPos: {x: 0.3, y: -0.1, z: 0.8}
   _holdRot: {x: 0, y: 0, z: 0}
   _body: {fileID: 840553857}
   _cursorImage: {fileID: 1200812864}
@@ -2608,7 +2608,7 @@ MonoBehaviour:
   <ViewmodelPose>k__BackingField:
     target: {fileID: 1767436441}
     handClosedness: 0
-    thumbCurl: 0
+    thumbCurl: 0.4
   overridesBounds: 0
   overrideCenter: {x: 0, y: 0, z: 0}
   overrideSize: {x: 0, y: 0, z: 0}
@@ -15515,6 +15515,37 @@ Transform:
   m_Father: {fileID: 840553857}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1097128886
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1097128887}
+  m_Layer: 7
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1097128887
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097128886}
+  m_LocalRotation: {x: -0.466201, y: -0.042976376, z: -0.1183501, w: 0.8756728}
+  m_LocalPosition: {x: -0.125, y: -0.083, z: 0.07}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1142382807}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -55.756, y: 3.575, z: -17.285}
 --- !u!1 &1098218250 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5981722475187972325, guid: ec94afbe92d7fb64f80af2c194fea290,
@@ -16037,7 +16068,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 50e43394b2c25f94baf572e27f6bc2df,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1097128887}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 50e43394b2c25f94baf572e27f6bc2df,
         type: 3}
@@ -16090,9 +16125,9 @@ MonoBehaviour:
   overridesHoldRot: 1
   holdRot: {x: 10, y: 210, z: 0}
   <ViewmodelPose>k__BackingField:
-    target: {fileID: 0}
-    handClosedness: 0
-    thumbCurl: 0
+    target: {fileID: 1097128887}
+    handClosedness: 0.3
+    thumbCurl: 0.1
   overridesBounds: 0
   overrideCenter: {x: 0, y: 0, z: 0}
   overrideSize: {x: 0, y: 0, z: 0}
@@ -18740,6 +18775,68 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0556266, y: 0.17008877, z: 0.049385462}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1592468969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1592468970}
+  m_Layer: 7
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1592468970
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592468969}
+  m_LocalRotation: {x: 0.215337, y: -0.2758475, z: -0.06355596, w: 0.93461156}
+  m_LocalPosition: {x: -0.571, y: -0.457, z: -1.069}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2008331978}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 21.558, y: -35.721, z: -14.802}
+--- !u!1 &1598365234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1598365235}
+  m_Layer: 7
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1598365235
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598365234}
+  m_LocalRotation: {x: -0.012636073, y: -0.76655436, z: -0.579107, w: 0.27725416}
+  m_LocalPosition: {x: 0.0708, y: -0.1074, z: -0.1815}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8040567922078275103}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -63.488, y: -113.155, z: -42.53}
 --- !u!1 &1599188519
 GameObject:
   m_ObjectHideFlags: 0
@@ -19618,7 +19715,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh211680
+  m_Name: pb_Mesh34960
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -20484,9 +20581,9 @@ MonoBehaviour:
   overridesHoldRot: 1
   holdRot: {x: -120, y: 180, z: 20}
   <ViewmodelPose>k__BackingField:
-    target: {fileID: 0}
-    handClosedness: 0
-    thumbCurl: 0
+    target: {fileID: 1592468970}
+    handClosedness: 0.1
+    thumbCurl: 0.5
   overridesBounds: 0
   overrideCenter: {x: 0, y: 0, z: 0}
   overrideSize: {x: 0, y: 0, z: 0}
@@ -26368,7 +26465,8 @@ Transform:
   m_LocalPosition: {x: 4.635, y: 1.345, z: 0.308}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1592468970}
   m_Father: {fileID: 50119778}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -26625,6 +26723,37 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 835110416}
   m_SourcePrefab: {fileID: 100100000, guid: b3eeb1e24c75f1441a45bbf15d8d825d, type: 3}
+--- !u!1 &2093149472
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2093149473}
+  m_Layer: 7
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2093149473
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093149472}
+  m_LocalRotation: {x: -0.7928247, y: -0.089014694, z: -0.037590966, w: 0.6017411}
+  m_LocalPosition: {x: -0.2831, y: -0.0378, z: 0.1775}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6678217908996710818}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -106.087, y: 9.875, z: -20.25}
 --- !u!1 &2108651849 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7842732192952116574, guid: 871a872047b96994282110c3e6367de6,
@@ -26886,7 +27015,7 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 2146010319}
   isThrowable: 1
-  holdPosShift: {x: 0.1, y: 0.05, z: 0}
+  holdPosShift: {x: 0, y: -0.05, z: 0}
   overridesHoldRot: 1
   holdRot: {x: 0, y: 240, z: 0}
   <ViewmodelPose>k__BackingField:
@@ -28386,12 +28515,12 @@ MonoBehaviour:
   rb: {fileID: 6388072172700720962}
   isThrowable: 1
   holdPosShift: {x: 0, y: 0, z: 0}
-  overridesHoldRot: 0
-  holdRot: {x: 0, y: 0, z: 0}
+  overridesHoldRot: 1
+  holdRot: {x: -15, y: 0, z: 0}
   <ViewmodelPose>k__BackingField:
     target: {fileID: 500059522}
     handClosedness: 0.1
-    thumbCurl: 0
+    thumbCurl: 0.3
   overridesBounds: 0
   overrideCenter: {x: 0, y: 0, z: 0}
   overrideSize: {x: 0, y: 0, z: 0}
@@ -28514,6 +28643,7 @@ Transform:
   m_Children:
   - {fileID: 3495917317363103208}
   - {fileID: 3222627332201104292}
+  - {fileID: 2093149473}
   m_Father: {fileID: 50119778}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: -56.481, z: 0}
@@ -28581,13 +28711,13 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 6678217908996710820}
   isThrowable: 1
-  holdPosShift: {x: 0, y: 0.1, z: 0}
+  holdPosShift: {x: -0.2, y: 0, z: 0}
   overridesHoldRot: 1
-  holdRot: {x: 35, y: 180, z: -5}
+  holdRot: {x: 35, y: 200, z: -5}
   <ViewmodelPose>k__BackingField:
-    target: {fileID: 0}
+    target: {fileID: 2093149473}
     handClosedness: 0
-    thumbCurl: 0
+    thumbCurl: 0.4
   overridesBounds: 1
   overrideCenter: {x: 0.000000059604645, y: -0.04147716, z: 0}
   overrideSize: {x: 0.48814794, y: 0.10105404, z: 0.3902598}
@@ -28881,7 +29011,8 @@ Transform:
   m_LocalPosition: {x: 4.174, y: 1.224, z: 0.045}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1598365235}
   m_Father: {fileID: 50119778}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -28932,7 +29063,7 @@ MonoBehaviour:
   overridesHoldRot: 0
   holdRot: {x: 0, y: 0, z: 0}
   <ViewmodelPose>k__BackingField:
-    target: {fileID: 0}
+    target: {fileID: 1598365235}
     handClosedness: 0
     thumbCurl: 0
   overridesBounds: 0
@@ -29229,7 +29360,7 @@ MonoBehaviour:
   isCylindrical: 0
   rb: {fileID: 8972040311066535795}
   isThrowable: 1
-  holdPosShift: {x: -0.1, y: 0.1, z: 0}
+  holdPosShift: {x: -0.2, y: 0, z: 0}
   overridesHoldRot: 1
   holdRot: {x: 35, y: 200, z: -5}
   <ViewmodelPose>k__BackingField:
