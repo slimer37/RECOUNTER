@@ -722,7 +722,7 @@ MonoBehaviour:
   _breathingIntensity: 0.01
   _breathingFrequency: 0.8
   _handViewmodelTarget: {fileID: 254109475}
-  _resetSpeed: 5
+  _resetSpeed: 2
   <HeldObject>k__BackingField: {fileID: 0}
 --- !u!1 &211057642
 GameObject:
@@ -15442,7 +15442,7 @@ MonoBehaviour:
   _breathingIntensity: 0.01
   _breathingFrequency: 0.8
   _handViewmodelTarget: {fileID: 420901016}
-  _resetSpeed: 5
+  _resetSpeed: 2
   <HeldObject>k__BackingField: {fileID: 0}
 --- !u!4 &1095714738
 Transform:
