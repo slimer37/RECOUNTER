@@ -225,17 +225,24 @@ public class Hand : MonoBehaviour
         var targetPos = HoldPosition;
         var targetRot = HoldRot;
 
-        if (!_carryStates.HasFlag(HandCarryStates.WorldSpace))
+        var localSpace = !_carryStates.HasFlag(HandCarryStates.WorldSpace);
+        var controlPosition = !_carryStates.HasFlag(HandCarryStates.FreePosition);
+        var controlRotation = !_carryStates.HasFlag(HandCarryStates.FreeRotation);
+
+        if (localSpace)
         {
             targetPos = _followCamera.TransformPoint(targetPos);
             targetRot = _followCamera.transform.rotation * targetRot;
+
+            if (controlPosition)
+            {
+                var sin = _breathingIntensity * Mathf.Sin(Time.time * Mathf.PI * _breathingFrequency);
+                targetPos += Vector3.up * sin;
+            }
         }
 
-        if (!_carryStates.HasFlag(HandCarryStates.FreePosition))
+        if (controlPosition)
         {
-            var sin = _breathingIntensity * Mathf.Sin(Time.time * Mathf.PI * _breathingFrequency);
-            targetPos += Vector3.up * sin;
-
             SmoothDampPosition(
                 HeldObject.transform,
                 targetPos,
@@ -243,7 +250,7 @@ public class Hand : MonoBehaviour
                 _smoothing);
         }
 
-        if (!_carryStates.HasFlag(HandCarryStates.FreeRotation))
+        if (controlRotation)
         {
             SmoothDampRotation(
                 HeldObject.transform,
