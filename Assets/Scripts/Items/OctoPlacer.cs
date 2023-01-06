@@ -96,10 +96,9 @@ public class OctoPlacer : MonoBehaviour
         Pause.Paused += OnPause;
     }
 
-    void OnPause(bool pause)
-    {
-        enabled = !pause;
-    }
+    void OnPause(bool pause) => enabled = !pause;
+
+    void OnDestroy() => Pause.Paused -= OnPause;
 
     void OnEnable() => _placementControls.Enable();
     void OnDisable() => _placementControls.Disable();
