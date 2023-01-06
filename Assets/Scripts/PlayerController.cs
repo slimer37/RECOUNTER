@@ -264,7 +264,7 @@ public class PlayerController : MonoBehaviour
 
     void OnSuspend() => playerControls.Disable();
 
-    public void Suspend(bool suspend)
+    public void Suspend(bool suspend, bool affectCursor = false)
     {
         isSuspended = suspend;
 
@@ -272,6 +272,9 @@ public class PlayerController : MonoBehaviour
             OnSuspend();
         else
             OnResume();
+
+        if (affectCursor)
+            SetCursor(suspend);
     }
 
     enum MoveState

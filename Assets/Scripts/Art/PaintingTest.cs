@@ -21,10 +21,7 @@ public class PaintingTest : Interactable
         ArtCreator.BeginSession(currentPainting).Completed += OnCompleteSession;
 
         controller = e.Controller;
-        controller.Suspend(true);
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        controller.Suspend(true, true);
     }
 
     void OnCompleteSession(Texture result)
@@ -32,9 +29,6 @@ public class PaintingTest : Interactable
         currentPainting = result;
         rend.material.mainTexture = result;
 
-        controller.Suspend(false);
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        controller.Suspend(false, true);
     }
 }
