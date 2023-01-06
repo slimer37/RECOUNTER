@@ -92,6 +92,13 @@ public class OctoPlacer : MonoBehaviour
         _holdRotateAction = _placementControls.HoldRotate;
         _verticalAxisAction = _placementControls.VerticalMove;
         _lateralMoveDelta = _placementControls.Lateral;
+
+        Pause.Paused += OnPause;
+    }
+
+    void OnPause(bool pause)
+    {
+        enabled = !pause;
     }
 
     void OnEnable() => _placementControls.Enable();
