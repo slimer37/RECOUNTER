@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 public class Tablet : MonoBehaviour
 {
     [SerializeField] Canvas _canvas;
+    [SerializeField] CanvasGroup _canvasGroup;
+    [SerializeField] float _canvasFadeTime;
     [SerializeField] PlayerController _controller;
     [SerializeField] PlayerInteraction _interaction;
 
@@ -13,7 +15,7 @@ public class Tablet : MonoBehaviour
     [SerializeField] Canvas _messageCanvas;
     [SerializeField] CanvasGroup _messageUI;
     [SerializeField] float _messageExpiry;
-    [SerializeField] float _fadeSpeed;
+    [SerializeField] float _messageFadeTime;
 
     [Header("Physical Tablet")]
     [SerializeField] Transform _physicalTablet;
@@ -34,6 +36,7 @@ public class Tablet : MonoBehaviour
 
     void Awake()
     {
+        _canvas.enabled = false;
         _messageCanvas.enabled = false;
 
         _openTabletAction = new Controls().Player.OpenTablet;
@@ -48,7 +51,7 @@ public class Tablet : MonoBehaviour
 
     void OpenTablet()
     {
-        if (_currentTween.IsActive() && _currentTween.IsPlaying()) return;
+        if (Pause.IsPaused || _currentTween.IsActive() && _currentTween.IsPlaying()) return;
 
         CancelInvoke();
 
@@ -60,11 +63,7 @@ public class Tablet : MonoBehaviour
             return;
         }
 
-        GetFadeTween();
-
         _isUp = !_isUp;
-
-        //_canvas.enabled = _isUp;
 
         _currentTween = DOTween.Sequence()
             .Append(_physicalTablet.DOLocalMove(_isUp ? _raisedPosition : _loweredPosition, _raiseTime).SetEase(_ease))
@@ -72,29 +71,49 @@ public class Tablet : MonoBehaviour
 
         if (_isUp)
         {
-            ConfigurePlayerComponents(false);
+            ConfigurePlayerComponents(true);
+
+            _currentTween.OnComplete(() => ShowUI(true));
         }
         else
         {
-            _currentTween.OnComplete(() =>
-            {
-                ConfigurePlayerComponents(true);
-            });
+            ConfigurePlayerComponents(false);
+            ShowUI(false);
         }
     }
 
-    void ConfigurePlayerComponents(bool enabled)
+    void ConfigurePlayerComponents(bool tabletOpen)
     {
-        _controller.Suspend(!enabled);
-        _interaction.enabled = enabled;
-        _employee.ShowHud(enabled);
+        _controller.Suspend(tabletOpen, true);
+        _interaction.enabled = !tabletOpen;
+        _employee.ShowHud(!tabletOpen);
+    }
+
+    void ShowUI(bool show)
+    {
+        _canvas.enabled = true;
+
+        _canvasGroup.DOKill();
+
+        var tween = _canvasGroup.DOFade(show ? 1 : 0, _canvasFadeTime);
+
+        if (show)
+        {
+            // Reset message
+
+            _messageCanvas.enabled = false;
+            _messageUI.DOKill();
+
+            return;
+        }
+
+        tween.OnComplete(() => _canvas.enabled = false);
     }
 
     Tween GetFadeTween()
     {
         _messageUI.DOKill();
-        return _messageUI.DOFade(0, _fadeSpeed)
-            .SetSpeedBased()
+        return _messageUI.DOFade(0, _messageFadeTime)
             .OnComplete(() => _messageCanvas.enabled = false);
     }
 }
