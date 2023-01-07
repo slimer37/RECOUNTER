@@ -14,7 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _products:
   - _displayName: HELIX Ink Cartridge (Black)
-    _price: 5
+    _price: 21.5
     _description: A HELIX-brand ink cartridge, compatible with HELIX-brand printers.
     _prefab: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+      type: 3}
+  - _displayName: HELIX Ink Cartridge (Cyan)
+    _price: 21.5
+    _description: A HELIX-brand ink cartridge, compatible with HELIX-brand printers.
+    _prefab: {fileID: 512567626729996038, guid: dc81af96881cf514b9b7a920d2473b6d,
+      type: 3}
+  - _displayName: HELIX Ink Cartridge (Magenta)
+    _price: 21.5
+    _description: A HELIX-brand ink cartridge, compatible with HELIX-brand printers.
+    _prefab: {fileID: 9040807330283453647, guid: 6699989cd8d06f144aefa2bd4b20ab2d,
+      type: 3}
+  - _displayName: HELIX Ink Cartridge (Yellow)
+    _price: 21.5
+    _description: A HELIX-brand ink cartridge, compatible with HELIX-brand printers.
+    _prefab: {fileID: 6459496507234430767, guid: 2cf04be2e19745c49a3a9bc1c7aeaf5c,
+      type: 3}
+  - _displayName: Jar-Based Karate
+    _price: 1
+    _description: Imported from Australia.
+    _prefab: {fileID: 8754483279163226282, guid: e1c9ac1b00791254a8014ad48cf2a0a9,
+      type: 3}
+  - _displayName: Packaged Chicken Legs (6 ct)
+    _price: 4.5
+    _description: 
+    _prefab: {fileID: 8617354120888908823, guid: 8114e8dd193a8b44a9cd1aae96ed6dfe,
+      type: 3}
+  - _displayName: Packaged T-Bone Steak
+    _price: 19.4
+    _description: 
+    _prefab: {fileID: 6976599753602015295, guid: d43d6701c9c09e346a4151d33cbf470c,
       type: 3}
