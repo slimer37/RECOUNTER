@@ -17,7 +17,7 @@ namespace Recounter.Inventory
     public class Product
     {
         [SerializeField] string _displayName;
-        [SerializeField, AllowNesting, Label("Price ($)")] float _price;
+        [SerializeField, AllowNesting, Label("Price ($)"), Min(0.01f)] float _price = 1;
         [SerializeField, TextArea(3, 5)] string _description;
         [SerializeField, ShowAssetPreview] GameObject _prefab;
 

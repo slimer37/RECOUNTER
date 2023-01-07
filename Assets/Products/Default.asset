@@ -19,10 +19,10 @@ MonoBehaviour:
     _prefab: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
       type: 3}
   - _displayName: Test
-    _price: 0
+    _price: 1
     _description: Test description
     _prefab: {fileID: 0}
   - _displayName: Test 2
-    _price: 0
+    _price: 1
     _description: Test description 2
     _prefab: {fileID: 0}
