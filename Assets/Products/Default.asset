@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac2e2be45dfd2774ca7c2aa5575a58f6, type: 3}
+  m_Name: Default
+  m_EditorClassIdentifier: 
+  _products:
+  - _displayName: HELIX Ink Cartridge (Black)
+    _price: 5
+    _description: A HELIX-brand ink cartridge, compatible with HELIX-brand printers.
+    _prefab: {fileID: 7562777016537292917, guid: 3c1ac01ff2d72424a8f3c251c07ca820,
+      type: 3}
