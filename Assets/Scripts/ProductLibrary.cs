@@ -1,4 +1,5 @@
 ﻿using NaughtyAttributes;
+using Recounter.Thumbnails;
 using System;
 using System.Globalization;
 using UnityEngine;
@@ -20,6 +21,19 @@ namespace Recounter.Inventory
         [SerializeField, AllowNesting, Label("Price ($)"), Min(0.01f)] float _price = 1;
         [SerializeField, TextArea(3, 5)] string _description;
         [SerializeField, ShowAssetPreview] GameObject _prefab;
+
+        Texture2D _thumbnail;
+
+        public Texture2D Thumbnail
+        {
+            get
+            {
+                if (!_thumbnail)
+                    _thumbnail = ThumbnailCreator.CreateThumbnail(_prefab.transform);
+
+                return _thumbnail;
+            }
+        }
 
         static readonly CultureInfo EnUsCulture = new("en-US");
 

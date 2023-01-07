@@ -1,6 +1,7 @@
 ﻿using Recounter.Inventory;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Recounter.Tablet
 {
@@ -9,13 +10,13 @@ namespace Recounter.Tablet
         [SerializeField] ProductListingUI _listingUI;
         [SerializeField] TextMeshProUGUI _nameText;
         [SerializeField] TextMeshProUGUI _priceText;
-        [SerializeField] TextMeshProUGUI _descText;
+        [SerializeField] RawImage _image;
 
         public void InitializeToProduct(Product product)
         {
             _nameText.text = product.DisplayName;
             _priceText.text = product.FormattedPrice;
-            _descText.text = product.Description;
+            _image.texture = product.Thumbnail;
         }
     }
 }
