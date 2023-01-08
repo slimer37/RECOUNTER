@@ -50,6 +50,7 @@ namespace Recounter.Inventory.Editor
             _productPane = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
 
             _productPane.style.paddingLeft = 5;
+            _productPane.Q("unity-content-container").style.flexShrink = 1;
 
             splitView.Add(_productPane);
 
@@ -83,6 +84,8 @@ namespace Recounter.Inventory.Editor
 
         void ProductList_selectionChanged(IEnumerable<object> obj)
         {
+            _productPane.Clear();
+
             if (obj.First() is not Product product)
             {
                 _productPane.Add(new Label("Select a product to edit."));
@@ -91,34 +94,70 @@ namespace Recounter.Inventory.Editor
 
             var serializedObject = new SerializedObject(_selectedLibrary);
 
-            _productPane.Clear();
+            var nameProp = GetProductProperty(serializedObject, "_displayName");
+            var nameField = CreateTextField(nameProp, "");
 
-            var label = new Label(product.DisplayName);
+            nameField.style.unityFontStyleAndWeight = FontStyle.Bold;
+
+            var priceProp = GetProductProperty(serializedObject, "_price");
+            var priceField = CreatePriceField(priceProp, "Price");
+
+            var descProp = GetProductProperty(serializedObject, "_description");
+            var descField = CreateTextField(descProp, "Description");
+
+            descField.multiline = true;
+            descField.style.minHeight = 40;
+            descField.Q("unity-text-input").style.whiteSpace = WhiteSpace.Normal;
 
             var prefabProp = GetProductProperty(serializedObject, "_prefab");
+            var prefabField = CreatePrefabField(prefabProp);
 
-            var prefabField = new ObjectField("Prefab")
-            {
-                allowSceneObjects = false,
-                objectType = typeof(GameObject),
-                value = prefabProp.objectReferenceValue
-            };
+            prefabField.TrackPropertyValue(prefabProp, PrefabChanged);
 
-            prefabField.BindProperty(prefabProp);
+            _prefabImage = new() { image = AssetPreview.GetAssetPreview(prefabProp.objectReferenceValue) };
 
-            prefabField.TrackPropertyValue(prefabProp, UpdatePrefabImage);
+            // Construct layout
 
-            _prefabImage = new()
-            {
-                image = AssetPreview.GetAssetPreview(prefabProp.objectReferenceValue)
-            };
-
-            _productPane.Add(label);
+            _productPane.Add(nameField);
+            _productPane.Add(priceField);
+            _productPane.Add(descField);
             _productPane.Add(prefabField);
             _productPane.Add(_prefabImage);
         }
 
-        void UpdatePrefabImage(SerializedProperty prop)
+        PriceField CreatePriceField(SerializedProperty prop, string label)
+        {
+            var field = new PriceField(label);
+
+            field.BindProperty(prop);
+
+            return field;
+        }
+
+        TextField CreateTextField(SerializedProperty nameProp, string label)
+        {
+            var field = new TextField(label);
+
+            field.BindProperty(nameProp);
+
+            return field;
+        }
+
+        ObjectField CreatePrefabField(SerializedProperty prop)
+        {
+            var prefabField = new ObjectField("Prefab")
+            {
+                allowSceneObjects = false,
+                objectType = typeof(GameObject),
+                value = prop.objectReferenceValue
+            };
+
+            prefabField.BindProperty(prop);
+
+            return prefabField;
+        }
+
+        void PrefabChanged(SerializedProperty prop)
         {
             _prefabImage.image = AssetPreview.GetAssetPreview(prop.objectReferenceValue);
         }
@@ -127,5 +166,13 @@ namespace Recounter.Inventory.Editor
             .FindProperty("_products")
             .GetArrayElementAtIndex(_selectedIndex)
             .FindPropertyRelative(fieldName);
+
+        class PriceField : FloatField
+        {
+            public PriceField(string label) : base(label) { }
+
+            protected override float StringToValue(string str) => float.Parse(str.Replace("$", ""));
+            protected override string ValueToString(float v) => v.ToString("C");
+        }
     }
 }
