@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,6 +15,7 @@ namespace Recounter.Inventory.Editor
         [SerializeField] int _selectedIndex;
 
         VisualElement _productPane;
+        ToolbarSearchField _searchField;
 
         [OnOpenAsset]
         public static bool OpenAsset(int instanceID, int line)
@@ -47,6 +49,8 @@ namespace Recounter.Inventory.Editor
 
             _productPane = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
 
+            _productPane.style.paddingLeft = 5;
+
             splitView.Add(_productPane);
 
             Product[] products = _selectedLibrary.Products;
@@ -63,33 +67,65 @@ namespace Recounter.Inventory.Editor
             productList.bindItem = (item, index) => item.Q<Label>().text = products[index].DisplayName;
             productList.itemsSource = products;
 
+            productList.selectionChanged += _ => _selectedIndex = productList.selectedIndex;
             productList.selectionChanged += ProductList_selectionChanged;
 
             productList.selectedIndex = _selectedIndex;
 
-            productList.selectionChanged += _ => _selectedIndex = productList.selectedIndex;
+            _searchField = new ToolbarSearchField();
+
+            rootVisualElement.Add(_searchField);
 
             rootVisualElement.Add(splitView);
         }
 
-        void ProductList_selectionChanged(System.Collections.Generic.IEnumerable<object> obj)
-        {
-            var product = obj.First() as Product;
+        Image _prefabImage;
 
-            if (product == null)
+        void ProductList_selectionChanged(IEnumerable<object> obj)
+        {
+            if (obj.First() is not Product product)
             {
                 _productPane.Add(new Label("Select a product to edit."));
                 return;
             }
 
+            var serializedObject = new SerializedObject(_selectedLibrary);
+
             _productPane.Clear();
 
-            _productPane.Add(new Label(product.DisplayName));
-            var field = typeof(Product).GetField("_prefab", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var prefab = field.GetValue(product) as GameObject;
-            var image = new Image();
-            image.image = AssetPreview.GetAssetPreview(prefab);
-            _productPane.Add(image);
+            var label = new Label(product.DisplayName);
+
+            var prefabProp = GetProductProperty(serializedObject, "_prefab");
+
+            var prefabField = new ObjectField("Prefab")
+            {
+                allowSceneObjects = false,
+                objectType = typeof(GameObject),
+                value = prefabProp.objectReferenceValue
+            };
+
+            prefabField.BindProperty(prefabProp);
+
+            prefabField.TrackPropertyValue(prefabProp, UpdatePrefabImage);
+
+            _prefabImage = new()
+            {
+                image = AssetPreview.GetAssetPreview(prefabProp.objectReferenceValue)
+            };
+
+            _productPane.Add(label);
+            _productPane.Add(prefabField);
+            _productPane.Add(_prefabImage);
         }
+
+        void UpdatePrefabImage(SerializedProperty prop)
+        {
+            _prefabImage.image = AssetPreview.GetAssetPreview(prop.objectReferenceValue);
+        }
+
+        SerializedProperty GetProductProperty(SerializedObject serializedObject, string fieldName) => serializedObject
+            .FindProperty("_products")
+            .GetArrayElementAtIndex(_selectedIndex)
+            .FindPropertyRelative(fieldName);
     }
 }
