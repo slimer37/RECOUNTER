@@ -128,7 +128,7 @@ public class OctoPlacer : MonoBehaviour
 
     void OnStartPlace(InputAction.CallbackContext ctx)
     {
-        if (!_active || _isPlacing) return;
+        if (!_active || _isPlacing || _isCharging) return;
 
         InitializePlacement();
     }
