@@ -22,14 +22,14 @@ namespace Recounter.Inventory.Editor
         {
             if (EditorUtility.InstanceIDToObject(instanceID) is not ProductLibrary)
             {
-                return true;
+                return false;
             }
 
             var window = GetWindow<ProductLibraryEditor>("Product Library Editor");
             window.minSize = new Vector2(450, 200);
             window.maxSize = new Vector2(1920, 720);
 
-            return false;
+            return true;
         }
 
         void OnEnable()
