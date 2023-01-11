@@ -43,7 +43,6 @@ namespace Recounter.Inventory.Editor
             var splitView = new TwoPaneSplitView(0, 200, TwoPaneSplitViewOrientation.Horizontal);
 
             _productPane = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
-            _productPane.Add(new Label("Select a product to edit."));
 
             _productPane.style.paddingLeft = _productPane.style.paddingRight = 5;
             _productPane.Q("unity-content-container").style.flexShrink = 1;
@@ -78,10 +77,9 @@ namespace Recounter.Inventory.Editor
         {
             _productList = new()
             {
-                showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly
+                showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly,
+                showAddRemoveFooter = true
             };
-
-            var products = _selectedLibrary.Products;
 
             _productList.makeItem = () =>
             {
@@ -92,8 +90,11 @@ namespace Recounter.Inventory.Editor
                 return element;
             };
 
-            _productList.bindItem = (item, index) => item.Q<Label>().text = (_productList.itemsSource[index] as Product).DisplayName;
-            _productList.itemsSource = products;
+            var productsProp = new SerializedObject(_selectedLibrary).FindProperty("_products");
+
+            _productList.bindItem = (item, index) => item.Q<Label>().text = productsProp.GetArrayElementAtIndex(index).FindPropertyRelative("_displayName").stringValue;
+
+            _productList.BindProperty(productsProp);
 
             _productList.selectionChanged += _ => _selectedIndex = _productList.selectedIndex;
             _productList.selectionChanged += _ => UpdateProductSelection();
@@ -109,9 +110,16 @@ namespace Recounter.Inventory.Editor
         {
             _productPane.Clear();
 
-            if (_selectedIndex >= _selectedLibrary.Products.Length)
+            if (_productList.selectedIndex < 0)
             {
-                _selectedIndex = 0;
+                _productPane.Add(new Label("Select a product to edit."));
+                return;
+            }
+
+            var numProducts = _selectedLibrary.Products.Length;
+            if (_productList.selectedIndex == numProducts)
+            {
+                _productList.selectedIndex = numProducts - 1;
                 return;
             }
 
@@ -187,7 +195,7 @@ namespace Recounter.Inventory.Editor
 
         SerializedProperty GetProductProperty(SerializedObject serializedObject, string fieldName) => serializedObject
             .FindProperty("_products")
-            .GetArrayElementAtIndex(_selectedIndex)
+            .GetArrayElementAtIndex(_productList.selectedIndex)
             .FindPropertyRelative(fieldName);
 
         class PriceField : FloatField
