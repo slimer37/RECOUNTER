@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
@@ -15,7 +14,6 @@ namespace Recounter.Inventory.Editor
         [SerializeField] int _selectedIndex;
 
         VisualElement _productPane;
-        ToolbarSearchField _searchField;
         ListView _productList;
 
         [OnOpenAsset]
@@ -45,33 +43,35 @@ namespace Recounter.Inventory.Editor
             var splitView = new TwoPaneSplitView(0, 200, TwoPaneSplitViewOrientation.Horizontal);
 
             _productPane = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
+            _productPane.Add(new Label("Select a product to edit."));
 
             _productPane.style.paddingLeft = _productPane.style.paddingRight = 5;
             _productPane.Q("unity-content-container").style.flexShrink = 1;
 
-            _productList = CreateProductList();
+            CreateProductList();
 
-            splitView.Add(_productList);
+            var leftPane = new VisualElement();
+
+            var searchButton = new Button(Search)
+            {
+                text = "Search"
+            };
+
+            leftPane.Add(searchButton);
+            leftPane.Add(_productList);
+
+            splitView.Add(leftPane);
 
             splitView.Add(_productPane);
 
-            _searchField = new ToolbarSearchField();
-
-            _searchField.RegisterValueChangedCallback(Search);
-
-            rootVisualElement.Add(_searchField);
-
             rootVisualElement.Add(splitView);
         }
-
-        void Search(ChangeEvent<string> evt)
+        void Search()
         {
-            var query = evt.newValue.ToLowerInvariant();
-
-            var searchResults = _selectedLibrary.Products.Where(p => p.DisplayName.ToLowerInvariant().Contains(query));
-
-            _productList.itemsSource = searchResults.ToList();
-            _productList.Rebuild();
+            SearchPrompt.Open(_selectedLibrary, i =>
+            {
+                _productList.selectedIndex = i;
+            });
         }
 
         ListView CreateProductList()
@@ -96,7 +96,7 @@ namespace Recounter.Inventory.Editor
             _productList.itemsSource = products;
 
             _productList.selectionChanged += _ => _selectedIndex = _productList.selectedIndex;
-            _productList.selectionChanged += ProductList_selectionChanged;
+            _productList.selectionChanged += _ => UpdateProductSelection();
 
             _productList.selectedIndex = _selectedIndex;
 
@@ -105,13 +105,13 @@ namespace Recounter.Inventory.Editor
 
         Image _prefabImage;
 
-        void ProductList_selectionChanged(IEnumerable<object> obj)
+        void UpdateProductSelection()
         {
             _productPane.Clear();
 
-            if (obj.First() is not Product product)
+            if (_selectedIndex >= _selectedLibrary.Products.Length)
             {
-                _productPane.Add(new Label("Select a product to edit."));
+                _selectedIndex = 0;
                 return;
             }
 
@@ -196,6 +196,68 @@ namespace Recounter.Inventory.Editor
 
             protected override float StringToValue(string str) => base.StringToValue(str.Replace("$", ""));
             protected override string ValueToString(float v) => v.ToString("C");
+        }
+    }
+
+
+    public class SearchPrompt : EditorWindow
+    {
+        static ProductLibrary _library;
+        static Action<int> _selected;
+
+        public static void Open(ProductLibrary library, Action<int> selected)
+        {
+            _library = library;
+            _selected = selected;
+
+            var window = CreateInstance<SearchPrompt>();
+
+            var mouse = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
+            var rect = new Rect(mouse.x - 450, mouse.y + 10, 10, 10);
+            window.ShowAsDropDown(rect, new Vector2(500, 300));
+        }
+
+        string value;
+        Vector2 scroll;
+
+        void OnGUI()
+        {
+            EditorGUILayout.BeginHorizontal("Box");
+
+            EditorGUILayout.LabelField("Search: ", EditorStyles.boldLabel);
+
+            value = EditorGUILayout.TextField(value);
+
+            EditorGUILayout.EndHorizontal();
+
+            GetSearchResults();
+        }
+
+        void GetSearchResults()
+        {
+            if (string.IsNullOrWhiteSpace(value)) return;
+
+            EditorGUILayout.BeginVertical();
+
+            scroll = EditorGUILayout.BeginScrollView(scroll);
+
+            var compareType = StringComparison.InvariantCultureIgnoreCase;
+
+            for (var i = 0; i < _library.Products.Length; i++)
+            {
+                var product = _library.Products[i];
+
+                if (product.DisplayName.Contains(value, compareType))
+                {
+                    if (GUILayout.Button(product.DisplayName))
+                    {
+                        _selected.Invoke(i);
+                    }
+                }
+            }
+
+            EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
         }
     }
 }
