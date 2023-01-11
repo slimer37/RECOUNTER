@@ -171,7 +171,7 @@ namespace Recounter.Inventory.Editor
         {
             public PriceField(string label) : base(label) { }
 
-            protected override float StringToValue(string str) => float.Parse(str.Replace("$", ""));
+            protected override float StringToValue(string str) => base.StringToValue(str.Replace("$", ""));
             protected override string ValueToString(float v) => v.ToString("C");
         }
     }
