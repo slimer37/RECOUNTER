@@ -16,6 +16,7 @@ namespace Recounter.Inventory.Editor
 
         VisualElement _productPane;
         ToolbarSearchField _searchField;
+        ListView _productList;
 
         [OnOpenAsset]
         public static bool OpenAsset(int instanceID, int line)
@@ -43,20 +44,46 @@ namespace Recounter.Inventory.Editor
         {
             var splitView = new TwoPaneSplitView(0, 200, TwoPaneSplitViewOrientation.Horizontal);
 
-            var productList = new ListView();
-
-            splitView.Add(productList);
-
             _productPane = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
 
-            _productPane.style.paddingLeft = 5;
+            _productPane.style.paddingLeft = _productPane.style.paddingRight = 5;
             _productPane.Q("unity-content-container").style.flexShrink = 1;
+
+            _productList = CreateProductList();
+
+            splitView.Add(_productList);
 
             splitView.Add(_productPane);
 
-            Product[] products = _selectedLibrary.Products;
+            _searchField = new ToolbarSearchField();
 
-            productList.makeItem = () =>
+            _searchField.RegisterValueChangedCallback(Search);
+
+            rootVisualElement.Add(_searchField);
+
+            rootVisualElement.Add(splitView);
+        }
+
+        void Search(ChangeEvent<string> evt)
+        {
+            var query = evt.newValue.ToLowerInvariant();
+
+            var searchResults = _selectedLibrary.Products.Where(p => p.DisplayName.ToLowerInvariant().Contains(query));
+
+            _productList.itemsSource = searchResults.ToList();
+            _productList.Rebuild();
+        }
+
+        ListView CreateProductList()
+        {
+            _productList = new()
+            {
+                showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly
+            };
+
+            var products = _selectedLibrary.Products;
+
+            _productList.makeItem = () =>
             {
                 var element = new VisualElement();
                 element.Add(new Label());
@@ -65,19 +92,15 @@ namespace Recounter.Inventory.Editor
                 return element;
             };
 
-            productList.bindItem = (item, index) => item.Q<Label>().text = products[index].DisplayName;
-            productList.itemsSource = products;
+            _productList.bindItem = (item, index) => item.Q<Label>().text = (_productList.itemsSource[index] as Product).DisplayName;
+            _productList.itemsSource = products;
 
-            productList.selectionChanged += _ => _selectedIndex = productList.selectedIndex;
-            productList.selectionChanged += ProductList_selectionChanged;
+            _productList.selectionChanged += _ => _selectedIndex = _productList.selectedIndex;
+            _productList.selectionChanged += ProductList_selectionChanged;
 
-            productList.selectedIndex = _selectedIndex;
+            _productList.selectedIndex = _selectedIndex;
 
-            _searchField = new ToolbarSearchField();
-
-            rootVisualElement.Add(_searchField);
-
-            rootVisualElement.Add(splitView);
+            return _productList;
         }
 
         Image _prefabImage;
