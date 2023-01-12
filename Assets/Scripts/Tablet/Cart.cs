@@ -8,15 +8,10 @@ namespace Recounter.Tablet
     {
         [SerializeField] CartEntry _listItem;
         [SerializeField] Transform _listParent;
-        [SerializeField] Canvas _canvas;
 
         readonly List<CartEntry> _contents = new();
 
-        void Awake()
-        {
-            _listItem.gameObject.SetActive(false);
-            _canvas.enabled = false;
-        }
+        void Awake() => _listItem.gameObject.SetActive(false);
 
         public void Add(Product product, int quantity)
         {

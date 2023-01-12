@@ -7,7 +7,7 @@ namespace Recounter.Tablet
 {
     public class ProductListingUI : MonoBehaviour
     {
-        [SerializeField] Canvas _canvas;
+        [SerializeField] Page _page;
         [SerializeField] TextMeshProUGUI _name;
         [SerializeField] TextMeshProUGUI _price;
         [SerializeField] TextMeshProUGUI _description;
@@ -21,8 +21,6 @@ namespace Recounter.Tablet
 
         Product _focusedProduct;
 
-        void Awake() => Close();
-
         public void AddToCart()
         {
             _cart.Add(_focusedProduct, 1);
@@ -31,18 +29,11 @@ namespace Recounter.Tablet
             _addSuccessMessage.DOPunchScale(_punch, _duration);
         }
 
-        public void Close()
-        {
-            _canvas.enabled = false;
-            _turntable.enabled = false;
-        }
-
         public void Open(Product product)
         {
             _addSuccessMessage.gameObject.SetActive(false);
 
-            _turntable.enabled = true;
-            _canvas.enabled = true;
+            _page.Open();
 
             _focusedProduct = product;
 
