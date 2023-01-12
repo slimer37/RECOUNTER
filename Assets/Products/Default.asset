@@ -48,3 +48,8 @@ MonoBehaviour:
     _description: 
     _prefab: {fileID: 6976599753602015295, guid: d43d6701c9c09e346a4151d33cbf470c,
       type: 3}
+  - _displayName: Flaskeon Large Mug
+    _price: 5
+    _description: A large white mug.
+    _prefab: {fileID: 7976342567089669907, guid: 567bc5db8e8ee20419e759f59fd6efdc,
+      type: 3}
