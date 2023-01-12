@@ -41,5 +41,7 @@ namespace Recounter.Inventory
         public string Description => _description;
         public float Price => _price;
         public string FormattedPrice => _price.ToString("C", EnUsCulture);
+
+        public GameObject Prefab => _prefab;
     }
 }
