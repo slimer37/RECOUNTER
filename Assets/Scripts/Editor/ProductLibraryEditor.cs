@@ -42,7 +42,10 @@ namespace Recounter.Inventory.Editor
         {
             var splitView = new TwoPaneSplitView(0, 200, TwoPaneSplitViewOrientation.Horizontal);
 
+            splitView.style.marginTop = splitView.style.marginBottom = 5;
+
             _productPane = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
+            _productPane.Add(new Label("Select a product to edit."));
 
             _productPane.style.paddingLeft = _productPane.style.paddingRight = 5;
             _productPane.Q("unity-content-container").style.flexShrink = 1;
@@ -56,15 +59,33 @@ namespace Recounter.Inventory.Editor
                 text = "Search"
             };
 
+            leftPane.Add(CreateLabel("Products"));
             leftPane.Add(searchButton);
             leftPane.Add(_productList);
 
             splitView.Add(leftPane);
 
-            splitView.Add(_productPane);
+            var rightPane = new VisualElement();
+
+            rightPane.Add(CreateLabel("Edit"));
+            rightPane.Add(_productPane);
+
+            splitView.Add(rightPane);
 
             rootVisualElement.Add(splitView);
         }
+
+        Label CreateLabel(string text)
+        {
+            var label = new Label(text);
+
+            label.style.alignSelf = Align.Center;
+            label.style.marginBottom = 4;
+            label.style.fontSize = 14;
+
+            return label;
+        }
+
         void Search()
         {
             SearchPrompt.Open(_selectedLibrary, i =>
@@ -221,8 +242,8 @@ namespace Recounter.Inventory.Editor
             var window = CreateInstance<SearchPrompt>();
 
             var mouse = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
-            var rect = new Rect(mouse.x - 450, mouse.y + 10, 10, 10);
-            window.ShowAsDropDown(rect, new Vector2(500, 300));
+            var rect = new Rect(mouse.x - 150, mouse.y + 10, 10, 10);
+            window.ShowAsDropDown(rect, new Vector2(300, 300));
         }
 
         string value;
@@ -232,7 +253,7 @@ namespace Recounter.Inventory.Editor
         {
             EditorGUILayout.BeginHorizontal("Box");
 
-            EditorGUILayout.LabelField("Search: ", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Search: ", EditorStyles.boldLabel, GUILayout.Width(100));
 
             value = EditorGUILayout.TextField(value);
 
