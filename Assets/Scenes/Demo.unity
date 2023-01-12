@@ -13776,8 +13776,9 @@ MonoBehaviour:
   _description: {fileID: 1906382429}
   _turntable: {fileID: 889319241}
   _cart: {fileID: 1596466150}
-  _addSuccessMessage: {fileID: 1314424532}
-  _messageTimeout: 3
+  _addSuccessMessage: {fileID: 1314424533}
+  _punch: {x: 0.05, y: 0.05, z: 0}
+  _duration: 0.1
 --- !u!114 &630597249
 MonoBehaviour:
   m_ObjectHideFlags: 0

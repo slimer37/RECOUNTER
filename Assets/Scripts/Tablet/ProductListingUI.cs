@@ -1,4 +1,5 @@
-﻿using Recounter.Inventory;
+﻿using DG.Tweening;
+using Recounter.Inventory;
 using TMPro;
 using UnityEngine;
 
@@ -11,29 +12,23 @@ namespace Recounter.Tablet
         [SerializeField] TextMeshProUGUI _price;
         [SerializeField] TextMeshProUGUI _description;
         [SerializeField] ProductTurntable _turntable;
+
+        [Header("Adding To Cart")]
         [SerializeField] Cart _cart;
-        [SerializeField] GameObject _addSuccessMessage;
-        [SerializeField] float _messageTimeout;
+        [SerializeField] RectTransform _addSuccessMessage;
+        [SerializeField] Vector3 _punch;
+        [SerializeField] float _duration;
 
         Product _focusedProduct;
 
-        void Awake()
-        {
-            Close();
-        }
+        void Awake() => Close();
 
         public void AddToCart()
         {
             _cart.Add(_focusedProduct, 1);
-            _addSuccessMessage.SetActive(true);
-
-            CancelInvoke();
-            Invoke(nameof(HideMessage), _messageTimeout);
-        }
-
-        void HideMessage()
-        {
-            _addSuccessMessage.SetActive(false);
+            _addSuccessMessage.gameObject.SetActive(true);
+            _addSuccessMessage.DOComplete();
+            _addSuccessMessage.DOPunchScale(_punch, _duration);
         }
 
         public void Close()
@@ -44,8 +39,7 @@ namespace Recounter.Tablet
 
         public void Open(Product product)
         {
-            CancelInvoke();
-            HideMessage();
+            _addSuccessMessage.gameObject.SetActive(false);
 
             _turntable.enabled = true;
             _canvas.enabled = true;
