@@ -99,7 +99,8 @@ namespace Recounter.Inventory.Editor
             _productList = new()
             {
                 showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly,
-                showAddRemoveFooter = true
+                showAddRemoveFooter = true,
+                reorderable = false
             };
 
             _productList.makeItem = () =>
