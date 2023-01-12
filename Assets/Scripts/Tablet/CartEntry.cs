@@ -13,6 +13,10 @@ namespace Recounter.Tablet
         [SerializeField] RawImage _thumbnail;
         [SerializeField] Cart _cart;
 
+        [Header("Open Listing")]
+        [SerializeField] ProductListingUI _listingUI;
+        [SerializeField] Canvas _cartCanvas;
+
         int _quantity;
         Product _product;
 
@@ -41,6 +45,12 @@ namespace Recounter.Tablet
         {
             _cart.Remove(this);
             Destroy(gameObject);
+        }
+
+        public void OpenListing()
+        {
+            _listingUI.Open(_product);
+            _cartCanvas.enabled = false;
         }
     }
 }
