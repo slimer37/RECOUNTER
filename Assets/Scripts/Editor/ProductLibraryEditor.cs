@@ -113,7 +113,7 @@ namespace Recounter.Inventory.Editor
 
             var productsProp = new SerializedObject(_selectedLibrary).FindProperty("_products");
 
-            _productList.bindItem = (item, index) => item.Q<Label>().text = productsProp.GetArrayElementAtIndex(index).FindPropertyRelative("_displayName").stringValue;
+            _productList.bindItem = (item, index) => item.Q<Label>().BindProperty(productsProp.GetArrayElementAtIndex(index).FindPropertyRelative("_displayName"));
 
             _productList.BindProperty(productsProp);
 
