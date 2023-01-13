@@ -61,7 +61,7 @@ public class Credits : MonoBehaviour
 
     void Hide()
     {
-        if (!creditsRoll.IsPlaying()) return;
+        if (!canvas.enabled) return;
 
         group.DOKill();
         group.DOFade(0, fadeTime).OnComplete(End);
