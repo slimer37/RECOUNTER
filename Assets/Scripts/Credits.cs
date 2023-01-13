@@ -53,6 +53,8 @@ public class Credits : MonoBehaviour
 
     public void Roll()
     {
+        group.blocksRaycasts = true;
+
         canvas.enabled = true;
         group.DOKill();
         group.DOFade(1, fadeTime);
@@ -62,6 +64,8 @@ public class Credits : MonoBehaviour
     void Hide()
     {
         if (!canvas.enabled) return;
+
+        group.blocksRaycasts = false;
 
         group.DOKill();
         group.DOFade(0, fadeTime).OnComplete(End);
