@@ -15,15 +15,27 @@ namespace Recounter.Tablet
 
         [Header("Adding To Cart")]
         [SerializeField] Cart _cart;
+        [SerializeField] TMP_InputField _quantityField;
         [SerializeField] RectTransform _addSuccessMessage;
         [SerializeField] Vector3 _punch;
         [SerializeField] float _duration;
 
         Product _focusedProduct;
 
+        void Awake()
+        {
+            _quantityField.onEndEdit.AddListener(Clamp1);
+        }
+
+        void Clamp1(string input)
+        {
+            if (input == "0")
+                _quantityField.text = "1";
+        }
+
         public void AddToCart()
         {
-            _cart.Add(_focusedProduct, 1);
+            _cart.Add(_focusedProduct, int.Parse(_quantityField.text));
             _addSuccessMessage.gameObject.SetActive(true);
             _addSuccessMessage.DOComplete();
             _addSuccessMessage.DOPunchScale(_punch, _duration);
