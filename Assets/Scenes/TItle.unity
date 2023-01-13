@@ -2196,11 +2196,11 @@ MonoBehaviour:
     replacement: <i>$1</i>
   - regex: \*\*(.+)\*\*
     replacement: <b>$1</b>
-  - regex: '### (.+)'
+  - regex: '### ?(.+)'
     replacement: <style=h3>$1</style>
-  - regex: '## (.+)'
+  - regex: '## ?(.+)'
     replacement: <style=h2>$1</style>
-  - regex: '# (.+)'
+  - regex: '# ?(.+)'
     replacement: <font=Staatliches SDF><size=3em>$1</size></font>
 --- !u!1 &1030293803
 GameObject:

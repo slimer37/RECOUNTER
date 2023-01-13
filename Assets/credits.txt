@@ -4,30 +4,28 @@
 ## Made with
 
 Unity
-
 FMOD Studio by Firelight Technologies Pty Ltd.
-
 Blender
-
 Affinity Designer
 
-## Graphical Assets
-
-### Unsplash Photographers
+### Photos from Unsplash
 Elvira Syamsir
 James Day
 Joel Vodell
 Nick Nice
 
-## Editor Plugins
-
-DOTween by Daniele Giardini
-
-Gridbox Materials by Ciathyza
-
-NaughtyAttributes by Denis Risov
-
-ObiRope by Virtual Method
-
 ### Fonts from Google Fonts
 Abril Fatface * Amatic SC * Anton * Chango * Oswald * Pacifico * Roboto * Secular One
+
+*SFX from freesound.org*
+
+## Third-party
+
+AllSky by rpgwhitelock
+Discord SDK
+DOTween by Daniele Giardini
+Gridbox Materials by Ciathyza
+NaughtyAttributes by Denis Risov
+ObiRope by Virtual Method
+Runtime Preview Generator by yasirkula
+Steamworks.NET by Riley Labrecque
