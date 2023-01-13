@@ -1,40 +1,33 @@
-RECOUNTER by Alfred Roy M
+# RECOUNTER
+*by Alfred Roy M*
 
--- Made with
+## Made with
 
 Unity
-Blender
-Affinity Designer
 
 FMOD Studio by Firelight Technologies Pty Ltd.
 
--- Graphical Assets
+Blender
 
-Unsplash Photographers
+Affinity Designer
+
+## Graphical Assets
+
+### Unsplash Photographers
 Elvira Syamsir
 James Day
 Joel Vodell
 Nick Nice
 
-Fonts sourced from Google Fonts
-Abril Fatface
-Amatic SC
-Anton
-Chango
-Oswald
-Pacifico
-Roboto
-Secular One
+## Editor Plugins
 
--- Editor Plugins
+DOTween by Daniele Giardini
 
-Made my life so much easier!
+Gridbox Materials by Ciathyza
 
-DOTween
-Daniele Giardini
+NaughtyAttributes by Denis Risov
 
-Gridbox Materials
-Ciathyza
+ObiRope by Virtual Method
 
-NaughtyAttributes
-Denis Risov
+### Fonts from Google Fonts
+Abril Fatface * Amatic SC * Anton * Chango * Oswald * Pacifico * Roboto * Secular One
