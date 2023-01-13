@@ -19,8 +19,13 @@ public class RichPresence : MonoBehaviour
         discordClient = null;
         activityManager = null;
 
-        DontDestroyOnLoad(new GameObject("RPC Manager").AddComponent<RichPresence>());
+        SceneManager.sceneLoaded -= UpdateAllRPC;
 
+#if UNITY_EDITOR
+        if (!UnityEditor.EditorPrefs.GetBool("Enable RPC", false)) return;
+#endif
+
+        DontDestroyOnLoad(new GameObject("RPC Manager").AddComponent<RichPresence>());
         SceneManager.sceneLoaded += UpdateAllRPC;
     }
 
