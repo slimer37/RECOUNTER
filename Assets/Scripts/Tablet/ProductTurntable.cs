@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Recounter.Tablet
 {
-    public class ProductTurntable : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler
+    public class ProductTurntable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
         [SerializeField, Layer] int _layer;
 
@@ -104,7 +104,7 @@ namespace Recounter.Tablet
             _t += Time.deltaTime / _speedUpTime;
         }
 
-        public void OnPointerDown(PointerEventData eventData) => _freeze = true;
+        public void OnBeginDrag(PointerEventData eventData) => _freeze = true;
 
         public void OnDrag(PointerEventData eventData)
         {
