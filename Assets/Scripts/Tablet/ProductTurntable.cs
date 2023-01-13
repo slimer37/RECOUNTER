@@ -38,10 +38,7 @@ namespace Recounter.Tablet
         {
             _subject = Instantiate(product.Prefab, _rotator).transform;
 
-            foreach (var child in _subject.GetComponentsInChildren<Transform>())
-            {
-                child.gameObject.layer = _layer;
-            }
+            _subject.gameObject.SetHierarchyLayersWithoutRestore(_layer);
 
             _subject.localRotation = Quaternion.identity;
 

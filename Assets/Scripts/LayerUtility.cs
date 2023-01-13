@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public static class LayerUtility
 {
@@ -11,7 +10,17 @@ public static class LayerUtility
 	[RuntimeInitializeOnLoadMethod]
 	static void Init() => SceneManager.sceneLoaded += (_, _) => _originalLayers.Clear();
 
-	public static bool HierarchyLayersAreSet(this GameObject gameObject) => _originalLayers.ContainsKey(gameObject);
+	public static void SetHierarchyLayersWithoutRestore(this GameObject gameObject, int layer)
+	{
+        var hierarchy = gameObject.GetComponentsInChildren<Transform>();
+
+        foreach (var t in hierarchy)
+		{
+			t.gameObject.layer = layer;
+		}
+    }
+
+    public static bool HierarchyLayersAreSet(this GameObject gameObject) => _originalLayers.ContainsKey(gameObject);
 
     public static void SetHierarchyLayers(this GameObject gameObject, int layer)
 	{
