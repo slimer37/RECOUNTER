@@ -1,12 +1,11 @@
 ﻿using DG.Tweening;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HotbarSlot : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI text;
     [SerializeField] Image activeImage;
+    [SerializeField] RawImage itemThumb;
     [SerializeField] Vector3 punch;
     [SerializeField] float punchDuration;
 
@@ -30,7 +29,6 @@ public class HotbarSlot : MonoBehaviour
     public void SetSlotActive(bool active)
     {
         activeImage.enabled = active;
-        text.fontStyle = active ? FontStyles.Bold : FontStyles.Normal;
 
         if (!active || !punchTween.IsActive()) return;
         punchTween.Restart();
@@ -42,12 +40,13 @@ public class HotbarSlot : MonoBehaviour
             throw new System.NullReferenceException("Cannot assign null item to slot.");
 
         contents = item;
-        text.text = contents.gameObject.name;
+        itemThumb.enabled = true;
+        itemThumb.texture = item.Thumbnail;
     }
 
     public void Clear()
     {
         contents = null;
-        text.text = "";
+        itemThumb.enabled = false;
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using NaughtyAttributes;
+using Recounter.Thumbnails;
 
 public class Item : Interactable
 {
@@ -32,6 +33,10 @@ public class Item : Interactable
     public bool IsThrowable => rb && isThrowable;
     public bool HasRigidbody => rb;
 
+    public Texture2D Thumbnail => _thumbnail ??= ThumbnailCreator.CreateThumbnail(transform);
+
+    Texture2D _thumbnail;
+
     bool justReleased;
 
     void OnDrawGizmosSelected()
@@ -61,6 +66,11 @@ public class Item : Interactable
             Debug.LogWarning($"Cannot set {nameof(isThrowable)} if no rigidbody is selected.");
             isThrowable = false;
         }
+    }
+
+    void Awake()
+    {
+        colliders = GetComponentsInChildren<Collider>();
     }
 
     public void Throw(Vector3 force)
@@ -124,11 +134,6 @@ public class Item : Interactable
 
         if (rb)
             rb.isKinematic = true;
-    }
-
-    void Awake()
-    {
-        colliders = GetComponentsInChildren<Collider>();
     }
 
     public void Release()
