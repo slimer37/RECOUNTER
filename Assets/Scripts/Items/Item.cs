@@ -33,7 +33,8 @@ public class Item : Interactable
     public bool IsThrowable => rb && isThrowable;
     public bool HasRigidbody => rb;
 
-    public Texture2D Thumbnail => _thumbnail ??= ThumbnailCreator.CreateThumbnail(transform);
+    public Texture2D Thumbnail =>
+            _thumbnail ? _thumbnail : _thumbnail = ThumbnailCreator.CreateThumbnail(transform);
 
     Texture2D _thumbnail;
 
