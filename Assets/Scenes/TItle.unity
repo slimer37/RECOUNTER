@@ -2326,18 +2326,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _asset: {fileID: 4900000, guid: f3cb8eadf1a9a084989725f039359d66, type: 3}
   _text: {fileID: 634553809}
+  _options: 2
   _replacements:
-  - regex: \*[ ]
-    replacement: "\u2022 "
+  - regex: '[ ]\*[ ]'
+    replacement: " \u2022 "
   - regex: \*(.+)\*
     replacement: <i>$1</i>
   - regex: \*\*(.+)\*\*
     replacement: <b>$1</b>
-  - regex: '### ?(.+)'
+  - regex: ^### ?(.+)$
     replacement: <style=h3>$1</style>
-  - regex: '## ?(.+)'
+  - regex: ^## ?(.+)$
     replacement: <style=h2>$1</style>
-  - regex: '# ?(.+)'
+  - regex: ^# ?(.+)$
     replacement: <font=Staatliches SDF><size=3em>$1</size></font>
 --- !u!1 &1030293803
 GameObject:

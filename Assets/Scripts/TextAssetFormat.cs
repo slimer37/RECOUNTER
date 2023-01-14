@@ -17,12 +17,18 @@ namespace Recounter.UI
 
         [SerializeField] TextAsset _asset;
         [SerializeField] TMP_Text _text;
+        [SerializeField] RegexOptions _options;
         [SerializeField] RegexReplacement[] _replacements;
 
         [Button("Test Regex")]
         void Test() => print(FormatTextAsset());
 
-        void Awake() => _text.text = FormatTextAsset();
+        void Awake()
+        {
+            _text.text = FormatTextAsset();
+
+            _text.ForceMeshUpdate();
+        }
 
         string FormatTextAsset()
         {
@@ -30,7 +36,7 @@ namespace Recounter.UI
 
             foreach (var r in _replacements)
             {
-                formatted = Regex.Replace(formatted, r.regex, r.replacement);
+                formatted = Regex.Replace(formatted, r.regex, r.replacement, _options);
             }
 
             return formatted;
