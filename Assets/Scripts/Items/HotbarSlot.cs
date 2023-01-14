@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class HotbarSlot : MonoBehaviour
 {
-    [SerializeField] Image activeImage;
+    [SerializeField] Graphic[] activeGraphics;
     [SerializeField] RawImage itemThumb;
     [SerializeField] Vector3 punch;
     [SerializeField] float punchDuration;
@@ -28,7 +28,10 @@ public class HotbarSlot : MonoBehaviour
 
     public void SetSlotActive(bool active)
     {
-        activeImage.enabled = active;
+        foreach (var graphic in activeGraphics)
+        {
+            graphic.enabled = active;
+        }
 
         if (!active || !punchTween.IsActive()) return;
         punchTween.Restart();
