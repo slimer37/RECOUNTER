@@ -23,7 +23,10 @@ public class Credits : MonoBehaviour
         controls.Menu.Exit.performed += _ => Hide();
 
         group.alpha = 0;
+    }
 
+    void Start()
+    {
         var creditsHeight = credits.rect.height;
         var top = creditsHeight / 2 + screenHeight / 2;
         var bottom = -top;

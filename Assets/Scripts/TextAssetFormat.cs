@@ -3,6 +3,7 @@ using System;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Recounter.UI
 {
@@ -27,7 +28,7 @@ namespace Recounter.UI
         {
             _text.text = FormatTextAsset();
 
-            _text.ForceMeshUpdate();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_text.rectTransform);
         }
 
         string FormatTextAsset()
