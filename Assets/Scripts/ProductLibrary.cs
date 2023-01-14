@@ -22,18 +22,9 @@ namespace Recounter.Inventory
         [SerializeField, TextArea(3, 5)] string _description;
         [SerializeField] GameObject _prefab;
 
+        public Texture2D Thumbnail => _thumbnail ??= ThumbnailCreator.CreateThumbnail(_prefab.transform);
+
         Texture2D _thumbnail;
-
-        public Texture2D Thumbnail
-        {
-            get
-            {
-                if (!_thumbnail)
-                    _thumbnail = ThumbnailCreator.CreateThumbnail(_prefab.transform);
-
-                return _thumbnail;
-            }
-        }
 
         static readonly CultureInfo EnUsCulture = new("en-US");
 
