@@ -61,10 +61,10 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnDisable()
     {
-        ResetUI();
         playerControls.Disable();
 
         if (!hovered || !text || !iconImage) return;
+        ResetUI();
         HandleInteraction(null);
     }
 
