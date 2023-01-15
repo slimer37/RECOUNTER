@@ -232,7 +232,7 @@ public class Hand : MonoBehaviour
         if (localSpace)
         {
             targetPos = _followCamera.TransformPoint(targetPos);
-            targetRot = _followCamera.transform.rotation * targetRot;
+            targetRot = _followCamera.rotation * targetRot;
 
             if (controlPosition)
             {
@@ -273,7 +273,7 @@ public class Hand : MonoBehaviour
 
         if (delta > 0f)
         {
-            var t = Mathf.SmoothDampAngle(delta, 0, ref rotationVelocity, smoothing);
+            var t = Mathf.SmoothDamp(delta, 0, ref rotationVelocity, smoothing);
 
             t = 1f - (t / delta);
             transform.rotation = Quaternion.Slerp(currRot, targetRot, t);
