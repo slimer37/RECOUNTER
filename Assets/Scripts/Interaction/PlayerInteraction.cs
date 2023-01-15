@@ -34,6 +34,8 @@ public class PlayerInteraction : MonoBehaviour
     Tween punch;
     Controls.PlayerActions playerControls;
 
+    float targetAlpha;
+
     void Awake()
     {
         playerControls = new Controls().Player;
@@ -48,6 +50,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         text.text = "";
         iconImage.sprite = iconSettings.GetSprite(Interactable.Icon.None);
+        fadeReticle.alpha = 1;
     }
 
     void OnEnable()
@@ -58,7 +61,9 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnDisable()
     {
+        ResetUI();
         playerControls.Disable();
+
         if (!hovered || !text || !iconImage) return;
         HandleInteraction(null);
     }
@@ -98,16 +103,19 @@ public class PlayerInteraction : MonoBehaviour
         HandleInteraction(currentHover);
     }
 
+    void Update()
+    {
+        fadeReticle.alpha = Mathf.Lerp(fadeReticle.alpha, targetAlpha, fade * Time.deltaTime);
+    }
+
     void FixedUpdate()
     {
-        var alpha = 0;
+        targetAlpha = 0;
 
         if (Physics.CheckSphere(cam.transform.position, detectionRadius, interactableMask))
         {
-            alpha = 1;
+            targetAlpha = 1;
         }
-
-        fadeReticle.alpha = Mathf.Lerp(fadeReticle.alpha, alpha, fade * Time.fixedDeltaTime);
     }
 
     void HandleInteraction(Transform currentHover)
