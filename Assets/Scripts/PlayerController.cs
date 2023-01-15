@@ -74,17 +74,17 @@ public class PlayerController : MonoBehaviour
 
     MoveState moveState = MoveState.Walking;
 
-    public void ImpulseFootstep()
+    public bool ImpulseFootstep()
     {
-        if (!controller.isGrounded) return;
-
-        if (!BobbingEnabled) return;
+        if (isSuspended || !controller.isGrounded || !BobbingEnabled) return false;
 
         var isSprinting = moveState == MoveState.Sprinting;
 
         var impulse = isSprinting ? sprintImpulse : walkImpulse;
 
         impulse.GenerateImpulse();
+
+        return true;
     }
 
     void PlaySound(EventReference eventRef) => RuntimeManager.PlayOneShot(eventRef, body.position);

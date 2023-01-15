@@ -7,16 +7,11 @@ public class FootstepReceiver : MonoBehaviour
 
     [Header("Optional")]
     [SerializeField] PlayerController controller;
-    [SerializeField] CharacterController characterController;
 
     public void PlayFootstep()
     {
-        if (characterController && !characterController.isGrounded) return;
+        if (controller && !controller.ImpulseFootstep()) return;
 
         RuntimeManager.PlayOneShot(footstepSfx, transform.position);
-
-        if (!controller) return;
-
-        controller.ImpulseFootstep();
     }
 }

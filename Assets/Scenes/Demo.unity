@@ -377,7 +377,6 @@ MonoBehaviour:
       Data4: -299844080
     Path: event:/Footstep
   controller: {fileID: 273294031}
-  characterController: {fileID: 840553853}
 --- !u!1001 &70528171
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15514,7 +15513,6 @@ MonoBehaviour:
       Data4: -299844080
     Path: event:/Footstep
   controller: {fileID: 0}
-  characterController: {fileID: 0}
 --- !u!1 &840553850
 GameObject:
   m_ObjectHideFlags: 0
