@@ -14,6 +14,8 @@ namespace Recounter.Tablet
 
         Product _product;
 
+        public Product Product => _product;
+
         public void OpenListing() => _listingUI.Open(_product);
 
         public void InitializeToProduct(Product product)
