@@ -82,6 +82,8 @@ public class Hotbar : MonoBehaviour
 
         SetActiveSlot(activeIndex, false, true);
 
+        item.PickUp(this);
+
         return true;
     }
 

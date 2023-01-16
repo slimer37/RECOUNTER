@@ -128,9 +128,12 @@ public class Item : Interactable
 
     protected override void OnInteract(Employee e)
     {
-        if (!e.ItemHotbar.TryAddItem(this)) return;
-
-        containerHotbar = e.ItemHotbar;
+        e.ItemHotbar.TryAddItem(this);
+    }
+    
+    public void PickUp(Hotbar hotbar)
+    {
+        containerHotbar = hotbar;
         EnableColliders(false);
 
         if (rb)
