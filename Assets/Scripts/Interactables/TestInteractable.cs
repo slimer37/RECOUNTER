@@ -7,9 +7,12 @@ public class TestInteractable : Interactable
 
     void Awake()
     {
-        tween = transform.DOPunchScale(Vector3.one * 0.25f, 0.3f)
-            .Pause().SetAutoKill(false);
+        tween = transform.DOScale(Vector3.one * 1.25f, 0.3f)
+            .SetEase(Ease.OutBack)
+            .Pause()
+            .SetAutoKill(false);
     }
 
-    protected override void OnInteract(Employee e) => tween.Restart();
+    protected override void OnInteract(Employee e) => tween.PlayForward();
+    protected override void OnEndInteraction() => tween.PlayBackwards();
 }
