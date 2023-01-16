@@ -72,13 +72,12 @@ public class PlayerController : MonoBehaviour
     int xSpeedId;
     int ySpeedId;
 
-    MoveState moveState = MoveState.Walking;
+    bool isSprinting;
+    bool isCrouching;
 
     public bool ImpulseFootstep()
     {
         if (isSuspended || !controller.isGrounded || !BobbingEnabled) return false;
-
-        var isSprinting = moveState == MoveState.Sprinting;
 
         var impulse = isSprinting ? sprintImpulse : walkImpulse;
 
@@ -93,8 +92,6 @@ public class PlayerController : MonoBehaviour
     {
         if (Pause.IsPaused) return;
 
-        moveState = MoveState.Walking;
-
         ApplyGravity();
 
         HandleJump();
@@ -108,12 +105,10 @@ public class PlayerController : MonoBehaviour
 
     void HandleCrouching()
     {
-        if (!CanCrouch) return;
-
-        var isCrouching = playerControls.Crouch.IsPressed();
-
-        if (isCrouching)
-            moveState = MoveState.Crouching;
+        if (CanCrouch && !isSuspended)
+        {
+            isCrouching = playerControls.Crouch.IsPressed();
+        }
 
         var height = isCrouching ? crouchedHeight : defaultHeight;
         var goalCamHeight = isCrouching ? crouchedCamHeight : defaultCamHeight;
@@ -191,24 +186,18 @@ public class PlayerController : MonoBehaviour
 
         var input = playerControls.Move.ReadValue<Vector2>();
 
-        var isCrouching = moveState == MoveState.Crouching;
-
         // Sprinting only allowed when moving forward
-        var isSprinting = !isCrouching && playerControls.Sprint.IsPressed() && input.y > 0;
-
-        if (isSprinting)
-            moveState = MoveState.Sprinting;
+        isSprinting = !isCrouching && playerControls.Sprint.IsPressed() && input.y > 0;
 
         AnimateFov(isSprinting);
 
         if (!CanMove) return;
 
-        var speed = moveState switch
+        var speed = isCrouching switch
         {
-            MoveState.Walking => walkSpeed,
-            MoveState.Sprinting => sprintSpeed,
-            MoveState.Crouching => crouchSpeed,
-            _ => throw new System.Exception("Invalid move state.")
+            true => crouchSpeed,
+            false when isSprinting => sprintSpeed,
+            false => walkSpeed
         };
 
         smoothInput = Vector2.SmoothDamp(smoothInput, input * speed, ref smoothInputVelocity, inputSmoothing);
@@ -262,7 +251,13 @@ public class PlayerController : MonoBehaviour
         RecordCameraAngles();
     }
 
-    void OnSuspend() => playerControls.Disable();
+    void OnSuspend()
+    {
+        playerControls.Disable();
+
+        // Prevent weird crouch input polling.
+        playerControls.Crouch.Enable();
+    }
 
     public void Suspend(bool suspend, bool affectCursor = false)
     {
@@ -275,12 +270,5 @@ public class PlayerController : MonoBehaviour
 
         if (affectCursor)
             SetCursor(suspend);
-    }
-
-    enum MoveState
-    {
-        Walking,
-        Sprinting,
-        Crouching
     }
 }
