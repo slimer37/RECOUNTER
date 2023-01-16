@@ -40,6 +40,8 @@ public static class ArtCreator
     [RuntimeInitializeOnLoadMethod]
     static void Init()
     {
+        CurrentArtSession = null;
+
         Addressables.LoadAssetAsync<GameObject>("ArtCreator").Completed += h =>
         {
             artCreatorPrefab = h.Result;
