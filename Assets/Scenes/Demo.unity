@@ -14911,6 +14911,7 @@ MonoBehaviour:
   _searchButton: {fileID: 1697077963}
   _page: {fileID: 783372412}
   _emptySearchMessage: {fileID: 50855789}
+  _tablet: {fileID: 311280852}
 --- !u!114 &783372412
 MonoBehaviour:
   m_ObjectHideFlags: 0

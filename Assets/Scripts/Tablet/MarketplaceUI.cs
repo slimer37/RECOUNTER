@@ -16,6 +16,7 @@ namespace Recounter.Tablet
         [SerializeField] Button _searchButton;
         [SerializeField] Page _page;
         [SerializeField] GameObject _emptySearchMessage;
+        [SerializeField] Tablet _tablet;
 
         ProductListingTile[] tiles;
 
@@ -26,7 +27,21 @@ namespace Recounter.Tablet
 
             _searchField.onSubmit.AddListener(Search);
             _searchButton.onClick.AddListener(Search);
+
+            // Disable tablet while typing to prevent "T" putting down the tablet.
+            _searchField.onSelect.AddListener(_ => DisableTablet());
+            _searchField.onTextSelection.AddListener((_, _, _) => DisableTablet());
+
+            _searchField.onEndEdit.AddListener(_ => EnableTablet());
         }
+
+        void EnableTablet()
+        {
+            if (!_tablet) return;
+            _tablet.enabled = true;
+        }
+
+        void DisableTablet() => _tablet.enabled = false;
 
         void Search() => Search(_searchField.text);
 
