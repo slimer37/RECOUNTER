@@ -14,6 +14,7 @@ namespace Recounter.Tablet
         [Header("Searching")]
         [SerializeField] TMP_InputField _searchField;
         [SerializeField] Button _searchButton;
+        [SerializeField] Page _page;
 
         ProductListingTile[] tiles;
 
@@ -30,6 +31,8 @@ namespace Recounter.Tablet
 
         void Search(string query)
         {
+            _page.Open();
+
             query = query.ToLowerInvariant();
 
             foreach (var tile in tiles)
