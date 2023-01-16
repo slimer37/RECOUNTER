@@ -36,6 +36,8 @@ public class PlayerInteraction : MonoBehaviour
 
     float targetAlpha;
 
+    bool waitingToCancelInteract;
+
     void Awake()
     {
         playerControls = new Controls().Player;
@@ -44,6 +46,17 @@ public class PlayerInteraction : MonoBehaviour
 
         punch = iconImage.rectTransform.DOPunchScale(Vector3.one * punchAmount, punchDuration)
             .Pause().SetAutoKill(false);
+
+        Pause.Paused += OnPaused;
+    }
+
+    void OnPaused(bool paused)
+    {
+        if (paused || !waitingToCancelInteract) return;
+
+        CancelInteract();
+
+        waitingToCancelInteract = false;
     }
 
     void ResetUI()
@@ -70,13 +83,26 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnInteract(InputAction.CallbackContext context)
     {
-        if (!hovered) return;
+        if (!hovered || Pause.IsPaused) return;
 
         interactTarget = hovered;
         interactTarget.Interact(employee);
     }
 
     void OnInteractCancel(InputAction.CallbackContext context)
+    {
+        if (!interactTarget) return;
+
+        if (Pause.IsPaused)
+        {
+            waitingToCancelInteract = true;
+            return;
+        }
+
+        CancelInteract();
+    }
+    
+    void CancelInteract()
     {
         if (!interactTarget) return;
 
