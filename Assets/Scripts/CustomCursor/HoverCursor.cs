@@ -3,57 +3,58 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
-public class HoverCursor : MonoBehaviour
+namespace Recounter.Cursors
 {
-    [SerializeField] Texture2D _cursor;
-    [SerializeField] Vector2 _hotspot;
-
-    GameObject _lastHover;
-
-    bool _cursorActive;
-
-    void Update()
+    public class HoverCursor : MonoBehaviour
     {
-        var module = EventSystem.current.currentInputModule as InputSystemUIInputModule;
-        var result = module.GetLastRaycastResult(0).gameObject;
+        [SerializeField] CursorSet _cursorSet;
 
-        if (_lastHover == result) return;
+        GameObject _lastHover;
 
-        _lastHover = result;
+        bool _cursorActive;
 
-        if (!result)
+        void Update()
         {
-            Clear();
-            return;
+            var module = EventSystem.current.currentInputModule as InputSystemUIInputModule;
+            var result = module.GetLastRaycastResult(0).gameObject;
+
+            if (_lastHover == result) return;
+
+            _lastHover = result;
+
+            if (!result)
+            {
+                Clear();
+                return;
+            }
+
+            OnNewHoverGained(result);
         }
 
-        OnNewHoverGained(result);
-    }
-
-    void OnNewHoverGained(GameObject hover)
-    {
-        if (!hover.GetComponentInParent<Selectable>())
+        void OnNewHoverGained(GameObject hover)
         {
-            Clear();
-            return;
+            var target = hover.GetComponentInParent<Selectable>();
+            if (!target)
+            {
+                Clear();
+                return;
+            }
+
+            Use(target);
         }
 
-        Use();
-    }
+        void Use(Selectable target)
+        {
+            _cursorSet.UseAppropriateCursor(target);
+            _cursorActive = true;
+        }
 
-    void Use()
-    {
-        if (_cursorActive) return;
+        void Clear()
+        {
+            if (!_cursorActive) return;
 
-        Cursor.SetCursor(_cursor, _hotspot, CursorMode.Auto);
-        _cursorActive = true;
-    }
-
-    void Clear()
-    {
-        if (!_cursorActive) return;
-
-        Cursor.SetCursor(null, Vector2.one, CursorMode.Auto);
-        _cursorActive = false;
+            Cursor.SetCursor(null, Vector2.one, CursorMode.Auto);
+            _cursorActive = false;
+        }
     }
 }
