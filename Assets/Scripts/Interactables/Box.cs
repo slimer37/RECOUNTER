@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Recounter.Inventory;
 
 public class Box : Interactable
 {
@@ -53,6 +54,25 @@ public class Box : Interactable
 
         _increaseIndex.performed += IncreaseIndex;
         _decreaseIndex.performed += DecreaseIndex;
+    }
+
+    public void Fill(List<Item> items)
+    {
+        if (items.Count > _capacity)
+        {
+            throw new System.ArgumentOutOfRangeException(nameof(items), "Too many products to fill box.");
+        }
+
+        _contents.AddRange(items);
+
+        foreach (var item in items)
+        {
+            item.gameObject.SetActive(false);
+        }
+
+        UpdateLevel();
+        SelectLastAddedItem();
+        UpdateSpinningItem();
     }
 
     void IncreaseIndex(InputAction.CallbackContext obj) => ChangeIndex(1);
