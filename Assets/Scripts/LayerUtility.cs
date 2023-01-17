@@ -12,7 +12,7 @@ public static class LayerUtility
 
 	public static void SetHierarchyLayersWithoutRestore(this GameObject gameObject, int layer)
 	{
-        var hierarchy = gameObject.GetComponentsInChildren<Transform>();
+        var hierarchy = gameObject.GetComponentsInChildren<Transform>(true);
 
         foreach (var t in hierarchy)
 		{
@@ -27,7 +27,7 @@ public static class LayerUtility
 		if (gameObject.HierarchyLayersAreSet())
 			throw new InvalidOperationException($"Cannot set layers for {gameObject.name}. Restore its layers before setting again.");
 
-		var hierarchy = gameObject.GetComponentsInChildren<Transform>();
+		var hierarchy = gameObject.GetComponentsInChildren<Transform>(true);
 		var recordedLayers = new int[hierarchy.Length];
 
 		for (int i = 0; i < hierarchy.Length; i++)
