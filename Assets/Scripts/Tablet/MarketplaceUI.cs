@@ -20,7 +20,7 @@ namespace Recounter.Tablet
 
         ProductListingTile[] tiles;
 
-        void Awake()
+        void Start()
         {
             InitializeTiles();
             _listingTilePrefab.gameObject.SetActive(false);
