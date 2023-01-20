@@ -34355,7 +34355,7 @@ GameObject:
   - component: {fileID: 1096463370523228190}
   - component: {fileID: 6188272}
   m_Layer: 0
-  m_Name: tube elbow
+  m_Name: horn base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35126,7 +35126,7 @@ GameObject:
   - component: {fileID: 332696889355380779}
   - component: {fileID: 917633045}
   m_Layer: 0
-  m_Name: needle arm
+  m_Name: tone arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35729,7 +35729,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 816893769059112326}
-  m_Mesh: {fileID: -1692272782743170666, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
+  m_Mesh: {fileID: 8006785931418911602, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
 --- !u!1001 &4671305872911005763
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35888,7 +35888,7 @@ GameObject:
   - component: {fileID: 5233516834501389651}
   - component: {fileID: 2684939713333032934}
   m_Layer: 0
-  m_Name: needle
+  m_Name: sound box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36016,7 +36016,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4689473735263653202}
-  m_Mesh: {fileID: 4457907303671252679, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
+  m_Mesh: {fileID: 8905264437050766496, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
 --- !u!33 &5255743503585316198
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -36344,7 +36344,7 @@ GameObject:
   - component: {fileID: 8630712117383303737}
   - component: {fileID: 5098218736146361171}
   m_Layer: 0
-  m_Name: tube mount
+  m_Name: horn mount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36790,7 +36790,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7925445257695034968}
-  m_Mesh: {fileID: 6317097287088628136, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
+  m_Mesh: {fileID: 3121355660738098078, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
 --- !u!1 &8257579762943531928
 GameObject:
   m_ObjectHideFlags: 0
@@ -36869,7 +36869,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7036465074356649537}
-  m_Mesh: {fileID: -808383777637564407, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
+  m_Mesh: {fileID: 6422759134076156493, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
 --- !u!1 &8706093782682089575
 GameObject:
   m_ObjectHideFlags: 0
@@ -37002,4 +37002,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2691806262790506497}
-  m_Mesh: {fileID: -1622859695594586136, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
+  m_Mesh: {fileID: 2142437292719763829, guid: 05599e4c71f2bf7488347f2638f0c4c0, type: 3}
