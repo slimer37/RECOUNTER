@@ -1772,6 +1772,7 @@ GameObject:
   - component: {fileID: 2899833471974876015}
   - component: {fileID: 2899833471974876012}
   - component: {fileID: 2899833471974876013}
+  - component: {fileID: 4218138621295122589}
   m_Layer: 5
   m_Name: Reset
   m_TagString: Untagged
@@ -1881,31 +1882,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2899833471974876012}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2899833472374860106}
-        m_TargetAssemblyTypeName: SliderSetting, Assembly-CSharp
-        m_MethodName: ResetPref
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2899833472487858768}
-        m_TargetAssemblyTypeName: SliderSetting, Assembly-CSharp
-        m_MethodName: ResetPref
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &4218138621295122589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2899833471974875987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d3fb0592b3da6b42aed456417bc5c6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 2899833471974876013}
+  _settingGroup: {fileID: 455467363537558883}
 --- !u!1 &2899833472054876547
 GameObject:
   m_ObjectHideFlags: 0

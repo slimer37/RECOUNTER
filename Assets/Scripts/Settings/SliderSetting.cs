@@ -6,7 +6,7 @@ using TMPro;
 namespace Recounter.Settings
 {
     [RequireComponent(typeof(Slider))]
-    public class SliderSetting : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class SliderSetting : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPrefResetter
     {
         [SerializeField] string key;
         [SerializeField] float defaultValue;
