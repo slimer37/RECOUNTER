@@ -15,6 +15,8 @@ public class Pause : MonoBehaviour
     bool cursorVisible;
     CursorLockMode cursorLockState;
 
+    bool pausedByDefocus;
+
     public static bool IsPaused { get; private set; }
 
     void Awake()
@@ -39,10 +41,7 @@ public class Pause : MonoBehaviour
 
     void OnApplicationPause(bool pause)
     {
-        // Do nothing when application unpauses or the game is already paused
-        if (!pause || IsPaused) return;
-
-        SetPaused(true);
+        SetPaused(pause, true);
     }
 
     void HideAdditionalMenus()
@@ -51,25 +50,39 @@ public class Pause : MonoBehaviour
             menu.enabled = false;
     }
 
-    public void SetPaused(bool pause)
+    public void SetPaused(bool pause) => SetPaused(pause, false);
+
+    public void SetPaused(bool pause, bool applicationPause)
     {
-        if (IsPaused == pause) return;
+        var validPause = IsPaused != pause;
 
-        RuntimeManager.PauseAllEvents(pause);
+        if (validPause && applicationPause)
+        {
+            validPause &= pause || pausedByDefocus;
 
-        IsPaused = canvas.enabled = pause;
+            pausedByDefocus = pause;
+        }
 
-        if (!pause)
-            HideAdditionalMenus();
+        if (validPause)
+        {
+            IsPaused = canvas.enabled = pause;
 
-        Time.timeScale = pause ? 0 : 1;
+            if (!pause)
+                HideAdditionalMenus();
 
-        if (pause)
-            RecordCursor();
-        else
-            SetCursor();
+            Time.timeScale = pause ? 0 : 1;
 
-        Paused?.Invoke(pause);
+            if (pause)
+                RecordCursor();
+            else
+                SetCursor();
+
+            Paused?.Invoke(pause);
+        }
+
+        // Always call including when pause state does not change;
+        // Counteracts auto-unpause when game is re-focused
+        RuntimeManager.PauseAllEvents(IsPaused);
     }
 
     void RecordCursor()
