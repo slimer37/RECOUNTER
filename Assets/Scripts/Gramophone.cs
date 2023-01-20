@@ -14,10 +14,15 @@ namespace Recounter
         [SerializeField] Transform _record;
         [SerializeField] float _spinSpeed;
         [SerializeField] Vector3 _recordAxis = Vector3.up;
+        [Space]
         [SerializeField] Transform _needleArm;
         [SerializeField] Vector3 _needleRotAxis = Vector3.up;
         [SerializeField] float _needleRotAmount;
         [SerializeField] float _needleFreq;
+        [Space]
+        [SerializeField] Transform _crank;
+        [SerializeField] Vector3 _crankAxis;
+        [SerializeField] float _crankSpeed;
 
         [Header("FX")]
         [SerializeField] EventReference _music;
@@ -95,6 +100,8 @@ namespace Recounter
             _horn.localScale = _basisScale + _scaleAxis * _smoothVolume;
 
             _record.Rotate(_spinSpeed * Time.deltaTime * _recordAxis);
+
+            _crank.Rotate(_crankSpeed * Time.deltaTime * _crankAxis);
 
             _needleArm.localEulerAngles = _needleBaseRot + Mathf.PerlinNoise1D(Time.time * _needleFreq) * _needleRotAmount * _needleRotAxis;
 
