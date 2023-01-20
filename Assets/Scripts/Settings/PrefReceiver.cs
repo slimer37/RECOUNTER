@@ -2,66 +2,69 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PrefReceiver : MonoBehaviour, IPrefListener
+namespace Recounter.Settings
 {
-    enum PrefType
+    public class PrefReceiver : MonoBehaviour, IPrefListener
     {
-        String,
-        Int,
-        Float
-    }
-
-    [SerializeField] PrefType type;
-    [SerializeField] string key;
-
-    [SerializeField, ShowIf("type", PrefType.String)] string defaultString;
-    [SerializeField, ShowIf("type", PrefType.String)] UnityEvent<string> StringChange;
-
-    [SerializeField, ShowIf("type", PrefType.Int)] int defaultInt;
-    [SerializeField, ShowIf("type", PrefType.Int)] UnityEvent<int> IntChange;
-    [SerializeField, ShowIf("type", PrefType.Int)] UnityEvent<bool> BoolChange;
-
-    [SerializeField, ShowIf("type", PrefType.Float)] float defaultFloat;
-    [SerializeField, ShowIf("type", PrefType.Float)] UnityEvent<float> FloatChange;
-
-    void OnEnable() => PrefManager.SetCallbacks(this);
-    void OnDisable() => PrefManager.RemoveCallbacks(this);
-
-    bool GetBool() => PlayerPrefs.GetInt(key, defaultInt) > 0;
-
-    void Awake()
-    {
-        switch (type)
+        enum PrefType
         {
-            case PrefType.String:
-                StringChange?.Invoke(PlayerPrefs.GetString(key, defaultString));
-                break;
-            case PrefType.Int:
-                IntChange?.Invoke(PlayerPrefs.GetInt(key, defaultInt));
-                BoolChange?.Invoke(GetBool());
-                break;
-            case PrefType.Float:
-                FloatChange?.Invoke(PlayerPrefs.GetFloat(key, defaultFloat));
-                break;
+            String,
+            Int,
+            Float
         }
-    }
 
-    public void OnStringPrefChanged(string key, string value)
-    {
-        if (type != PrefType.String || this.key != key) return;
-        StringChange?.Invoke(value);
-    }
+        [SerializeField] PrefType type;
+        [SerializeField] string key;
 
-    public void OnIntPrefChanged(string key, int value)
-    {
-        if (type != PrefType.Int || this.key != key) return;
-        IntChange?.Invoke(value);
-        BoolChange?.Invoke(GetBool());
-    }
+        [SerializeField, ShowIf("type", PrefType.String)] string defaultString;
+        [SerializeField, ShowIf("type", PrefType.String)] UnityEvent<string> StringChange;
 
-    public void OnFloatPrefChanged(string key, float value)
-    {
-        if (type != PrefType.Float || this.key != key) return;
-        FloatChange?.Invoke(value);
+        [SerializeField, ShowIf("type", PrefType.Int)] int defaultInt;
+        [SerializeField, ShowIf("type", PrefType.Int)] UnityEvent<int> IntChange;
+        [SerializeField, ShowIf("type", PrefType.Int)] UnityEvent<bool> BoolChange;
+
+        [SerializeField, ShowIf("type", PrefType.Float)] float defaultFloat;
+        [SerializeField, ShowIf("type", PrefType.Float)] UnityEvent<float> FloatChange;
+
+        void OnEnable() => PrefManager.SetCallbacks(this);
+        void OnDisable() => PrefManager.RemoveCallbacks(this);
+
+        bool GetBool() => PlayerPrefs.GetInt(key, defaultInt) > 0;
+
+        void Awake()
+        {
+            switch (type)
+            {
+                case PrefType.String:
+                    StringChange?.Invoke(PlayerPrefs.GetString(key, defaultString));
+                    break;
+                case PrefType.Int:
+                    IntChange?.Invoke(PlayerPrefs.GetInt(key, defaultInt));
+                    BoolChange?.Invoke(GetBool());
+                    break;
+                case PrefType.Float:
+                    FloatChange?.Invoke(PlayerPrefs.GetFloat(key, defaultFloat));
+                    break;
+            }
+        }
+
+        public void OnStringPrefChanged(string key, string value)
+        {
+            if (type != PrefType.String || this.key != key) return;
+            StringChange?.Invoke(value);
+        }
+
+        public void OnIntPrefChanged(string key, int value)
+        {
+            if (type != PrefType.Int || this.key != key) return;
+            IntChange?.Invoke(value);
+            BoolChange?.Invoke(GetBool());
+        }
+
+        public void OnFloatPrefChanged(string key, float value)
+        {
+            if (type != PrefType.Float || this.key != key) return;
+            FloatChange?.Invoke(value);
+        }
     }
 }

@@ -2,31 +2,34 @@ using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
-public class BusVolume : MonoBehaviour
+namespace Recounter.Settings
 {
-    [SerializeField] string busPath = "bus:/";
-    [SerializeField] string volumePrefKey = "MasterVol";
-    [SerializeField] EventReference soundUpdateEvent;
-    [SerializeField] float defaultVolume;
-
-    Bus bus;
-
-    void Awake()
+    public class BusVolume : MonoBehaviour
     {
-        bus = RuntimeManager.GetBus(busPath);
-        bus.setVolume(PlayerPrefs.GetFloat(volumePrefKey, defaultVolume));
+        [SerializeField] string busPath = "bus:/";
+        [SerializeField] string volumePrefKey = "MasterVol";
+        [SerializeField] EventReference soundUpdateEvent;
+        [SerializeField] float defaultVolume;
 
-        PrefManager.OnFloatPrefChanged += OnFloatPrefChanged;
-    }
+        Bus bus;
 
-    void OnFloatPrefChanged(string key, float value)
-    {
-        if (key != volumePrefKey) return;
+        void Awake()
+        {
+            bus = RuntimeManager.GetBus(busPath);
+            bus.setVolume(PlayerPrefs.GetFloat(volumePrefKey, defaultVolume));
 
-        bus.setVolume(value);
+            PrefManager.OnFloatPrefChanged += OnFloatPrefChanged;
+        }
 
-        if (soundUpdateEvent.IsNull) return;
-        
-        RuntimeManager.PlayOneShot(soundUpdateEvent);
+        void OnFloatPrefChanged(string key, float value)
+        {
+            if (key != volumePrefKey) return;
+
+            bus.setVolume(value);
+
+            if (soundUpdateEvent.IsNull) return;
+
+            RuntimeManager.PlayOneShot(soundUpdateEvent);
+        }
     }
 }

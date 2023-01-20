@@ -1,21 +1,24 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Toggle))]
-public class ToggleSetting : MonoBehaviour
+namespace Recounter.Settings
 {
-    [SerializeField] string key;
-    [SerializeField] bool defaultValue;
-
-    void Awake()
+    [RequireComponent(typeof(Toggle))]
+    public class ToggleSetting : MonoBehaviour
     {
-        var toggle = GetComponent<Toggle>();
-        toggle.isOn = PlayerPrefs.GetInt(key, defaultValue ? 1 : 0) > 0;
-        toggle.onValueChanged.AddListener(OnToggle);
-    }
+        [SerializeField] string key;
+        [SerializeField] bool defaultValue;
 
-    void OnToggle(bool value)
-    {
-        PrefManager.SetInt(key, value ? 1 : 0);
+        void Awake()
+        {
+            var toggle = GetComponent<Toggle>();
+            toggle.isOn = PlayerPrefs.GetInt(key, defaultValue ? 1 : 0) > 0;
+            toggle.onValueChanged.AddListener(OnToggle);
+        }
+
+        void OnToggle(bool value)
+        {
+            PrefManager.SetInt(key, value ? 1 : 0);
+        }
     }
 }
