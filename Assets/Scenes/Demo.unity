@@ -34376,7 +34376,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543450652167490710}
   - component: {fileID: 822384552}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: gramophone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35791,7 +35791,7 @@ GameObject:
   - component: {fileID: 3322988126913464290}
   - component: {fileID: 4530010028311345831}
   - component: {fileID: 7408442566963873841}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: crank handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35818,7 +35818,7 @@ GameObject:
   - component: {fileID: 136409952843407644}
   - component: {fileID: 5093989320081339348}
   - component: {fileID: 5093989320081339349}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: crank
   m_TagString: Untagged
   m_Icon: {fileID: 0}

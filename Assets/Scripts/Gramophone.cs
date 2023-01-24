@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace Recounter
 {
-    public class Gramophone : MonoBehaviour
+    public class Gramophone : Interactable
     {
         [Header("Elements")]
         [SerializeField] Transform _horn;
@@ -40,6 +40,19 @@ namespace Recounter
         bool _isPlaying;
 
         Vector3 _needleBaseRot;
+
+        protected override void OnInteract(Employee e)
+        {
+            _isPlaying = !_isPlaying;
+
+            _musicInstance.setPaused(!_isPlaying);
+        }
+
+        protected override HudInfo FormHud(Employee e) => new()
+        {
+            icon = Icon.Hand,
+            text = _isPlaying ? "Stop" : "Start"
+        };
 
         void Awake()
         {
