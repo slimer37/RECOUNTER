@@ -23,6 +23,7 @@ namespace Recounter
         [SerializeField] Transform _crank;
         [SerializeField] Vector3 _crankAxis;
         [SerializeField] float _crankSpeed;
+        [SerializeField, Min(0.01f)] float _motionFadeTime = 1;
 
         [Header("FX")]
         [SerializeField] EventReference _music;
@@ -37,6 +38,8 @@ namespace Recounter
         float _velocity;
         float _smoothVolume;
 
+        float _motionFactor;
+
         bool _isPlaying;
 
         Vector3 _needleBaseRot;
@@ -48,10 +51,17 @@ namespace Recounter
             _musicInstance.setPaused(!_isPlaying);
         }
 
+        protected override bool CanInteract(Employee e) => _motionFactor == 0 || _motionFactor == 1;
+
         protected override HudInfo FormHud(Employee e) => new()
         {
             icon = Icon.Hand,
             text = _isPlaying ? "Stop" : "Start"
+        };
+
+        protected override HudInfo FormNonInteractHud(Employee e) => new()
+        {
+            icon = Icon.Invalid
         };
 
         void Awake()
@@ -105,7 +115,17 @@ namespace Recounter
 
         void Update()
         {
-            if (!_isPlaying) return;
+            _motionFactor += (_isPlaying ? 1 : -1) * Time.deltaTime / _motionFadeTime;
+
+            _motionFactor = Mathf.Clamp01(_motionFactor);
+
+            if (_motionFactor == 0) return;
+
+            _record.Rotate(_motionFactor * _spinSpeed * Time.deltaTime * _recordAxis);
+
+            _crank.Rotate(_motionFactor * _crankSpeed * Time.deltaTime * _crankAxis);
+
+            _needleArm.localEulerAngles = _needleBaseRot + _motionFactor * Mathf.PerlinNoise1D(Time.time * _needleFreq) * _needleRotAmount * _needleRotAxis;
 
             var volume = PollVolume();
 
@@ -113,11 +133,7 @@ namespace Recounter
 
             _horn.localScale = _basisScale + _scaleAxis * _smoothVolume;
 
-            _record.Rotate(_spinSpeed * Time.deltaTime * _recordAxis);
-
-            _crank.Rotate(_crankSpeed * Time.deltaTime * _crankAxis);
-
-            _needleArm.localEulerAngles = _needleBaseRot + Mathf.PerlinNoise1D(Time.time * _needleFreq) * _needleRotAmount * _needleRotAxis;
+            if (!_isPlaying) return;
 
             _musicInstance.getPlaybackState(out var playbackState);
 

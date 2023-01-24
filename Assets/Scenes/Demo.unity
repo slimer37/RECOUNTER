@@ -15738,6 +15738,7 @@ MonoBehaviour:
   _crank: {fileID: 4511307447854657211}
   _crankAxis: {x: -1, y: 0, z: 0}
   _crankSpeed: 90
+  _motionFadeTime: 0.5
   _music:
     Guid:
       Data1: -2096475526
