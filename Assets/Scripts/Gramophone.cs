@@ -68,6 +68,7 @@ namespace Recounter
 
         void OnDestroy()
         {
+            _musicInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
             _musicInstance.release();
         }
 
