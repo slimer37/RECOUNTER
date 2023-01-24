@@ -44,8 +44,17 @@ namespace Recounter
 
         Vector3 _needleBaseRot;
 
+        bool _initialized;
+
         protected override void OnInteract(Employee e)
         {
+            if (!_initialized)
+            {
+                BeginFirst();
+                _transitionTime = Time.deltaTime / _motionFadeTime;
+                return;
+            }
+
             _isPlaying = !_isPlaying;
         }
 
@@ -64,14 +73,22 @@ namespace Recounter
 
         void Awake()
         {
+            _needleBaseRot = _needleArm.localEulerAngles;
+            _horn.localScale = _basisScale;
+        }
+
+        void BeginFirst()
+        {
+            _initialized = true;
+
             _musicInstance = RuntimeManager.CreateInstance(_music);
             RuntimeManager.AttachInstanceToGameObject(_musicInstance, _horn);
             _musicInstance.start();
 
-            _needleBaseRot = _needleArm.localEulerAngles;
+            StartCoroutine(WaitToPlay());
         }
 
-        IEnumerator Start()
+        IEnumerator WaitToPlay()
         {
             PLAYBACK_STATE playbackState;
 
@@ -135,13 +152,13 @@ namespace Recounter
 
             _needleArm.localEulerAngles = _needleBaseRot + _transitionTime * Mathf.PerlinNoise1D(Time.time * _needleFreq) * _needleRotAmount * _needleRotAxis;
 
+            if (_transitionTime == 0) return;
+
             var volume = PollVolume();
 
             _smoothVolume = Mathf.SmoothDamp(_smoothVolume, volume, ref _velocity, _smoothing);
 
-            _horn.localScale = _basisScale + _scaleAxis * _smoothVolume;
-
-            if (!_isPlaying) return;
+            _horn.localScale = _basisScale + _scaleAxis * _smoothVolume * _transitionTime;
 
             _musicInstance.getPlaybackState(out var playbackState);
 
