@@ -2693,9 +2693,7 @@ MonoBehaviour:
   controller: {fileID: 840553853}
   <BobbingEnabled>k__BackingField: 1
   walkImpulse: {fileID: 1095713310}
-  walkImpulseInterval: 0.1
   sprintImpulse: {fileID: 240787178}
-  sprintImpulseInterval: 0
   <CanJump>k__BackingField: 0
   jumpForce: 4
   gravity: 10

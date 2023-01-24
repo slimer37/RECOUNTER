@@ -22,9 +22,7 @@ public class PlayerController : MonoBehaviour
     [field: Header("Footsteps/Bobbing")]
     [field: SerializeField] public bool BobbingEnabled { get; set; } = true;
     [SerializeField] CinemachineImpulseSource walkImpulse;
-    [SerializeField] float walkImpulseInterval;
     [SerializeField] CinemachineImpulseSource sprintImpulse;
-    [SerializeField] float sprintImpulseInterval;
 
     [field: Header("Jumping")]
     [field: SerializeField] public bool CanJump { get; set; } = true;
