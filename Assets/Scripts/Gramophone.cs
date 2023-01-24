@@ -38,7 +38,7 @@ namespace Recounter
         float _velocity;
         float _smoothVolume;
 
-        float _motionFactor;
+        float _transitionTime;
 
         bool _isPlaying;
 
@@ -47,11 +47,9 @@ namespace Recounter
         protected override void OnInteract(Employee e)
         {
             _isPlaying = !_isPlaying;
-
-            _musicInstance.setPaused(!_isPlaying);
         }
 
-        protected override bool CanInteract(Employee e) => _motionFactor == 0 || _motionFactor == 1;
+        protected override bool CanInteract(Employee e) => _transitionTime == 0 || _transitionTime == 1;
 
         protected override HudInfo FormHud(Employee e) => new()
         {
@@ -106,26 +104,36 @@ namespace Recounter
 
         float PollVolume()
         {
-            _musicDsp.getMeteringInfo(out var _meteringInfo, new IntPtr());
+            _musicDsp.getMeteringInfo(out var meteringInfo, IntPtr.Zero);
 
-            var playerOutput = _meteringInfo.peaklevel[0] + _meteringInfo.peaklevel[1];
+            var playerOutput = meteringInfo.peaklevel[0] + meteringInfo.peaklevel[1];
 
             return playerOutput;
         }
 
         void Update()
         {
-            _motionFactor += (_isPlaying ? 1 : -1) * Time.deltaTime / _motionFadeTime;
+            _transitionTime += (_isPlaying ? 1 : -1) * Time.deltaTime / _motionFadeTime;
 
-            _motionFactor = Mathf.Clamp01(_motionFactor);
+            _transitionTime = Mathf.Clamp01(_transitionTime);
 
-            if (_motionFactor == 0) return;
+            if (_transitionTime == 0)
+            {
+                _musicInstance.setPaused(true);
+                return;
+            }
+            else
+            {
+                _musicInstance.setPaused(false);
+            }
 
-            _record.Rotate(_motionFactor * _spinSpeed * Time.deltaTime * _recordAxis);
+            _musicInstance.setVolume(_transitionTime);
 
-            _crank.Rotate(_motionFactor * _crankSpeed * Time.deltaTime * _crankAxis);
+            _record.Rotate(_transitionTime * _spinSpeed * Time.deltaTime * _recordAxis);
 
-            _needleArm.localEulerAngles = _needleBaseRot + _motionFactor * Mathf.PerlinNoise1D(Time.time * _needleFreq) * _needleRotAmount * _needleRotAxis;
+            _crank.Rotate(_transitionTime * _crankSpeed * Time.deltaTime * _crankAxis);
+
+            _needleArm.localEulerAngles = _needleBaseRot + _transitionTime * Mathf.PerlinNoise1D(Time.time * _needleFreq) * _needleRotAmount * _needleRotAxis;
 
             var volume = PollVolume();
 
