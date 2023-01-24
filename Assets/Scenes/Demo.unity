@@ -2656,6 +2656,9 @@ MonoBehaviour:
   range: 2
   cam: {fileID: 1065023558}
   text: {fileID: 1925832153}
+  raycastMask:
+    serializedVersion: 2
+    m_Bits: 129
   interactableMask:
     serializedVersion: 2
     m_Bits: 128

@@ -11,6 +11,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] float range;
     [SerializeField] Camera cam;
     [SerializeField] TextMeshProUGUI text;
+    [SerializeField] LayerMask raycastMask;
     [SerializeField] LayerMask interactableMask;
 
     [Header("Fade Reticle")]
@@ -121,9 +122,12 @@ public class PlayerInteraction : MonoBehaviour
 
         Transform currentHover = null;
 
-        if (Physics.Raycast(cam.ViewportPointToRay(Vector2.one / 2), out var hit, range, interactableMask))
+        if (Physics.Raycast(cam.ViewportPointToRay(Vector2.one / 2), out var hit, range, raycastMask))
         {
-            currentHover = hit.collider.transform;
+            if (interactableMask == (interactableMask | (1 << hit.transform.gameObject.layer)))
+            {
+                currentHover = hit.collider.transform;
+            }
         }
 
         HandleInteraction(currentHover);
