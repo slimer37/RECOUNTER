@@ -232,6 +232,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaterialIndex: 2
-  MaxWobble: 0.15
-  WobbleSpeed: 2
-  Recovery: 5
+  MaxWobble: 0.5
+  WobbleSpeed: 3
+  Recovery: 3
