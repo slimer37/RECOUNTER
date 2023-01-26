@@ -14808,6 +14808,8 @@ MonoBehaviour:
   _deceleration: 1
   _closeAngle: 135
   _closingForce: 1
+  _door: {fileID: 326492565}
+  _doorFrame: {fileID: 1098218254}
 --- !u!59 &760947126
 HingeJoint:
   m_ObjectHideFlags: 0

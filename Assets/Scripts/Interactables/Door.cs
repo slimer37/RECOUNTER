@@ -11,6 +11,10 @@ public class Door : Interactable
     [SerializeField, Min(0)] float _closeAngle;
     [SerializeField] float _closingForce;
 
+    [Header("Colliders")]
+    [SerializeField] Collider _door;
+    [SerializeField] Collider _doorFrame;
+
     HingeJoint _hinge;
 
     protected override bool CanInteract(Employee e) => !IsInteractionInProgress;
@@ -36,6 +40,11 @@ public class Door : Interactable
     void Awake()
     {
         _hinge = GetComponent<HingeJoint>();
+
+        if (_door && _doorFrame)
+        {
+            Physics.IgnoreCollision(_door, _doorFrame);
+        }
     }
 
     void Update()
