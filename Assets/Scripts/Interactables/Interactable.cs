@@ -9,7 +9,7 @@ public abstract class Interactable : MonoBehaviour
     public enum Icon
     {
         None, Access, Door, Eye, Hand, Invalid, Pickup, Pull, Push,
-        Outlet, Plug, StashPlug, Unplug
+        Outlet, Plug, StashPlug, Unplug, Insert, Extract
     }
 
     [Serializable]

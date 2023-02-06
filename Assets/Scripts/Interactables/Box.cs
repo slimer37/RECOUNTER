@@ -171,19 +171,24 @@ public class Box : Interactable
 
         var hud = new HudInfo() { icon = Icon.Hand };
 
-        var spacesLeft = _capacity - _contents.Count;
-        var spacesText = $"{spacesLeft} space" + (spacesLeft > 1 ? "s" : "");
-
         if (_isStoringItem)
         {
+            hud.icon = Icon.Insert;
+
+            var spacesLeft = _capacity - _contents.Count;
+            var spacesText = $"{spacesLeft} space" + (spacesLeft > 1 ? "s" : "");
+
             hud.text = $"Store {e.RightHand.HeldObject.name}\n{spacesText} left";
         }
         else if (_contents.Count == 1)
         {
+            hud.icon = Icon.Extract;
             hud.text = $"Take {_contents[0].name}";
         }
         else
         {
+            hud.icon = Icon.Extract;
+
             var index = _selectedItemIndex;
             hud.text = $"Take {_contents[index].name}\n{index + 1}/{_contents.Count}\n" + _instructions;
         }
