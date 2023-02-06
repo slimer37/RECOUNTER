@@ -18,13 +18,20 @@ public class Slosh : MonoBehaviour
     int wobbleXId;
     int wobbleZId;
 
+    Renderer liquidRenderer;
+
     void Start()
     {
-        material = GetComponent<Renderer>().materials[materialIndex];
+        liquidRenderer = GetComponent<Renderer>();
+
+        material = liquidRenderer.materials[materialIndex];
+
         pulse = 2 * Mathf.PI * wobbleSpeed;
 
         wobbleXId = Shader.PropertyToID("_WobbleX");
         wobbleZId = Shader.PropertyToID("_WobbleZ");
+
+        RecordTransform();
     }
 
     void Update()
@@ -45,11 +52,19 @@ public class Slosh : MonoBehaviour
 
         wobbleVector = Vector3.Lerp(wobbleVector, Vector3.zero, Time.deltaTime * recovery);
 
-        var wobbleAmount = wobbleVector * Mathf.Sin(pulse * Time.time);
+        if (liquidRenderer.isVisible)
+        {
+            var wobbleAmount = wobbleVector * Mathf.Sin(pulse * Time.time);
 
-        material.SetFloat(wobbleXId, Vector3.Dot(wobbleAmount, transform.forward));
-        material.SetFloat(wobbleZId, Vector3.Dot(wobbleAmount, transform.right));
+            material.SetFloat(wobbleXId, Vector3.Dot(wobbleAmount, transform.forward));
+            material.SetFloat(wobbleZId, Vector3.Dot(wobbleAmount, transform.right));
+        }
 
+        RecordTransform();
+    }
+
+    void RecordTransform()
+    {
         lastPos = transform.position;
         lastRot = transform.rotation.eulerAngles;
     }
