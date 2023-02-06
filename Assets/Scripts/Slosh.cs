@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class Slosh : MonoBehaviour
 {
-    public int MaterialIndex = 0;
-    public float MaxWobble = 0.5f;
-    public float WobbleSpeed = 3f;
-    public float Recovery = 3f;
+    [SerializeField] int materialIndex = 0;
+    [SerializeField] float maxWobble = 0.5f;
+    [SerializeField] float wobbleSpeed = 3f;
+    [SerializeField] float recovery = 3f;
 
     float pulse;
 
@@ -20,8 +20,8 @@ public class Slosh : MonoBehaviour
 
     void Start()
     {
-        material = GetComponent<Renderer>().materials[MaterialIndex];
-        pulse = 2 * Mathf.PI * WobbleSpeed;
+        material = GetComponent<Renderer>().materials[materialIndex];
+        pulse = 2 * Mathf.PI * wobbleSpeed;
 
         wobbleXId = Shader.PropertyToID("_WobbleX");
         wobbleZId = Shader.PropertyToID("_WobbleZ");
@@ -38,12 +38,12 @@ public class Slosh : MonoBehaviour
 
         var deltaPosition = lastPos - transform.position;
 
-        // add clamped velocity to wobble
+        // Add clamped velocity to wobble
         wobbleVector += Vector3.ClampMagnitude(
-            MaxWobble * (deltaPosition + Time.deltaTime * angularVelocity),
-            MaxWobble);
+            maxWobble * (deltaPosition + Time.deltaTime * angularVelocity),
+            maxWobble);
 
-        wobbleVector = Vector3.Lerp(wobbleVector, Vector3.zero, Time.deltaTime * Recovery);
+        wobbleVector = Vector3.Lerp(wobbleVector, Vector3.zero, Time.deltaTime * recovery);
 
         var wobbleAmount = wobbleVector * Mathf.Sin(pulse * Time.time);
 

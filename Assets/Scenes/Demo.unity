@@ -36732,10 +36732,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8705c88789578745997d14bd21e35f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaterialIndex: 2
-  MaxWobble: 0.5
-  WobbleSpeed: 3
-  Recovery: 3
+  materialIndex: 2
+  maxWobble: 0.5
+  wobbleSpeed: 3
+  recovery: 3
 --- !u!4 &6652388109986955721
 Transform:
   m_ObjectHideFlags: 0
