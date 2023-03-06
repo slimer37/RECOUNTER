@@ -1,16 +1,14 @@
-using System.Collections;
 using UnityEngine;
 
-public class Customer : MonoBehaviour
+namespace Recounter.Customers
 {
-    [SerializeField] CustomerController controller;
-
-    IEnumerator Start()
+    public class Customer : StateMachine
     {
-        while (true)
+        [field: SerializeField] public CustomerController Controller { get; private set; }
+
+        void Start()
         {
-            controller.MoveTo(transform.position + (Vector3)Random.insideUnitCircle * 5);
-            yield return new WaitForSeconds(1.0f);
+            SetState(new WanderState(this));
         }
     }
 }

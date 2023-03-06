@@ -515,6 +515,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &69736185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12588,6 +12589,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
+    FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
@@ -16071,6 +16073,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &838404647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16083,7 +16086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52ba6832b47968943a9e79a696c54e2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 838404648}
+  <Controller>k__BackingField: {fileID: 838404648}
 --- !u!114 &838404648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21199,6 +21202,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1329421547 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -3901084231588198132, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
