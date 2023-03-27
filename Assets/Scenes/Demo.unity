@@ -851,9 +851,8 @@ GameObject:
   - component: {fileID: 76919650}
   - component: {fileID: 76919653}
   - component: {fileID: 76919652}
-  - component: {fileID: 76919651}
   - component: {fileID: 76919654}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -880,38 +879,6 @@ RectTransform:
   m_AnchoredPosition: {x: -169, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &76919651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76919649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c80937debdcf954408df9375b534e524, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cursor: {fileID: 493845505}
-  image: {fileID: 76919652}
-  button: {fileID: 76919654}
-  down:
-    m_Name: Down
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: a5140926-094e-42d6-806a-72752923f075
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 32e369fa-fd2c-4f02-97ff-bf0f74aaa26c
-      m_Path: <Mouse>/leftButton
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Down
-      m_Flags: 0
-    m_Flags: 0
 --- !u!114 &76919652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13633,7 +13600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -14967,7 +14934,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34550
+  m_Name: pb_Mesh34574
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -17428,7 +17395,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34428
+  m_Name: pb_Mesh34452
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -19557,6 +19524,7 @@ GameObject:
   - component: {fileID: 1093315541}
   - component: {fileID: 1093315544}
   - component: {fileID: 1093315543}
+  - component: {fileID: 1093315545}
   m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
@@ -19632,6 +19600,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1093315545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1093315540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &1095713308
 GameObject:
   m_ObjectHideFlags: 0
@@ -22302,8 +22287,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cursor: {fileID: 493845505}
   _sensitivity: 0.01
+  _raycaster: {fileID: 1093315545}
   _lookAction: {fileID: -1804023741120228779, guid: 6b2b7f58a9a709e4aa25edc1a22176d4,
     type: 3}
+  _click:
+    m_Name: Click
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 3d741613-cc14-47f3-952d-47d085064fe7
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 0f17729a-7b75-48da-bb10-c776b8afb68d
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Click
+      m_Flags: 0
+    m_Flags: 0
 --- !u!1 &1387346532
 GameObject:
   m_ObjectHideFlags: 0
@@ -26889,7 +26892,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh35762
+  m_Name: pb_Mesh35804
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
