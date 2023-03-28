@@ -76,7 +76,7 @@ namespace Recounter
 
         void MoveCursor(InputAction.CallbackContext ctx)
         {
-            _cursor.Translate(ctx.ReadValue<Vector2>() * _sensitivity);
+            _cursor.anchoredPosition += ctx.ReadValue<Vector2>() * _sensitivity;
 
             _pointerData.position = _camera.WorldToScreenPoint(_cursor.position);
 
