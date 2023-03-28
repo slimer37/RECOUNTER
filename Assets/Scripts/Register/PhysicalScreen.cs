@@ -64,6 +64,8 @@ namespace Recounter
         void MoveCursor(InputAction.CallbackContext ctx)
         {
             _cursor.Translate(ctx.ReadValue<Vector2>() * _sensitivity);
+
+            RaycastUI();
         }
 
         protected override void OnInteract(Employee e)
@@ -78,10 +80,8 @@ namespace Recounter
                 _lookAction.action.Disable();
         }
 
-        void Update()
+        void RaycastUI()
         {
-            if (!_inUse) return;
-
             var pointerData = new PointerEventData(EventSystem.current)
             {
                 position = _camera.WorldToScreenPoint(_cursor.position)
