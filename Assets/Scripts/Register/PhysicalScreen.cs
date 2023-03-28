@@ -53,6 +53,8 @@ namespace Recounter
             }
             else if (_pressTarget)
             {
+                EvaluateCursorEvents();
+
                 ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerUpHandler);
                 ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.endDragHandler);
 
@@ -118,7 +120,7 @@ namespace Recounter
         {
             if (_mouseDown && _pressTarget)
             {
-                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.dragHandler);
+                ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.dragHandler);
                 return;
             }
 
