@@ -92,6 +92,13 @@ namespace Recounter
 
             var newHover = _results.Count > 0 ? _results[0].gameObject : null;
 
+            var selectable = newHover.GetComponentInParent<Selectable>();
+
+            if (selectable)
+            {
+                newHover = selectable.gameObject;
+            }
+
             if (_hover && _hover != newHover)
             {
                 ExecuteEvents.Execute(_hover, pointerData, ExecuteEvents.pointerExitHandler);
