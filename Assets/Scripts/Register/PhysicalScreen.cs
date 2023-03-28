@@ -22,6 +22,8 @@ namespace Recounter
         GameObject _hover;
         GameObject _pressTarget;
 
+        PointerEventData _pointerData;
+
         List<RaycastResult> _results = new();
 
         void Awake()
@@ -34,24 +36,22 @@ namespace Recounter
 
         void Click(InputAction.CallbackContext ctx)
         {
-            var pointer = new PointerEventData(EventSystem.current);
-
             var press = ctx.ReadValueAsButton();
 
             if (press)
             {
                 if (!_hover) return;
 
-                ExecuteEvents.Execute(_hover, pointer, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.pointerDownHandler);
                 _pressTarget = _hover;
             }
             else if (_pressTarget)
             {
-                ExecuteEvents.Execute(_pressTarget, pointer, ExecuteEvents.pointerUpHandler);
+                ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerUpHandler);
 
                 if (_pressTarget != _hover) return;
 
-                ExecuteEvents.Execute(_pressTarget, pointer, ExecuteEvents.pointerClickHandler);
+                ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerClickHandler);
             }
         }
 
@@ -59,11 +59,15 @@ namespace Recounter
         {
             _lookAction.action.performed += MoveCursor;
             _camera = Camera.main;
+
+            _pointerData = new PointerEventData(EventSystem.current);
         }
 
         void MoveCursor(InputAction.CallbackContext ctx)
         {
             _cursor.Translate(ctx.ReadValue<Vector2>() * _sensitivity);
+
+            _pointerData.position = _camera.WorldToScreenPoint(_cursor.position);
 
             EvaluateCursorEvents();
         }
@@ -80,10 +84,10 @@ namespace Recounter
                 _lookAction.action.Disable();
         }
 
-        GameObject RaycastUI(PointerEventData pointerData)
+        GameObject RaycastUI()
         {
             _results.Clear();
-            _raycaster.Raycast(pointerData, _results);
+            _raycaster.Raycast(_pointerData, _results);
 
             var newHover = _results.Count > 0 ? _results[0].gameObject : null;
 
@@ -99,23 +103,18 @@ namespace Recounter
 
         void EvaluateCursorEvents()
         {
-            var pointerData = new PointerEventData(EventSystem.current)
-            {
-                position = _camera.WorldToScreenPoint(_cursor.position)
-            };
-
-            var newHover = RaycastUI(pointerData);
+            var newHover = RaycastUI();
 
             if (_hover && _hover != newHover)
             {
-                ExecuteEvents.Execute(_hover, pointerData, ExecuteEvents.pointerExitHandler);
+                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.pointerExitHandler);
             }
 
             _hover = newHover;
 
             if (_hover)
             {
-                ExecuteEvents.Execute(_hover, pointerData, ExecuteEvents.pointerEnterHandler);
+                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.pointerEnterHandler);
             }
         }
     }
