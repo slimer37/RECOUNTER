@@ -98,7 +98,9 @@ namespace Recounter
             _results.Clear();
             _raycaster.Raycast(_pointerData, _results);
 
-            var newHover = _results.Count > 0 ? _results[0].gameObject : null;
+            if (_results.Count == 0) return null;
+
+            var newHover = _results[0].gameObject;
 
             var selectable = newHover.GetComponentInParent<Selectable>();
 
