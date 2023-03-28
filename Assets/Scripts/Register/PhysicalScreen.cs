@@ -9,6 +9,7 @@ namespace Recounter
     public class PhysicalScreen : Interactable
     {
         [SerializeField] RectTransform _cursor;
+        [SerializeField] RectTransform _canvas;
         [SerializeField] float _sensitivity;
 
         [Header("Input")]
@@ -77,6 +78,11 @@ namespace Recounter
         void MoveCursor(InputAction.CallbackContext ctx)
         {
             _cursor.anchoredPosition += ctx.ReadValue<Vector2>() * _sensitivity;
+
+            _cursor.anchoredPosition = new Vector3(
+                Mathf.Clamp(_cursor.anchoredPosition.x, -_canvas.sizeDelta.x / 2, _canvas.sizeDelta.x / 2),
+                Mathf.Clamp(_cursor.anchoredPosition.y, -_canvas.sizeDelta.y / 2, _canvas.sizeDelta.y / 2)
+                );
 
             _pointerData.position = _camera.WorldToScreenPoint(_cursor.position);
 
