@@ -65,7 +65,7 @@ namespace Recounter
         {
             _cursor.Translate(ctx.ReadValue<Vector2>() * _sensitivity);
 
-            RaycastUI();
+            EvaluateCursorEvents();
         }
 
         protected override void OnInteract(Employee e)
@@ -80,13 +80,8 @@ namespace Recounter
                 _lookAction.action.Disable();
         }
 
-        void RaycastUI()
+        GameObject RaycastUI(PointerEventData pointerData)
         {
-            var pointerData = new PointerEventData(EventSystem.current)
-            {
-                position = _camera.WorldToScreenPoint(_cursor.position)
-            };
-
             _results.Clear();
             _raycaster.Raycast(pointerData, _results);
 
@@ -98,6 +93,18 @@ namespace Recounter
             {
                 newHover = selectable.gameObject;
             }
+
+            return newHover;
+        }
+
+        void EvaluateCursorEvents()
+        {
+            var pointerData = new PointerEventData(EventSystem.current)
+            {
+                position = _camera.WorldToScreenPoint(_cursor.position)
+            };
+
+            var newHover = RaycastUI(pointerData);
 
             if (_hover && _hover != newHover)
             {
