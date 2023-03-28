@@ -17,6 +17,8 @@ namespace Recounter
         [SerializeField] InputAction _click;
 
         bool _inUse;
+        bool _mouseDown;
+
         Camera _camera;
 
         GameObject _hover;
@@ -36,22 +38,29 @@ namespace Recounter
 
         void Click(InputAction.CallbackContext ctx)
         {
-            var press = ctx.ReadValueAsButton();
+            _mouseDown = ctx.ReadValueAsButton();
 
-            if (press)
+            if (_mouseDown)
             {
                 if (!_hover) return;
 
+                _pointerData.pointerPressRaycast = _pointerData.pointerCurrentRaycast;
+
                 ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.beginDragHandler);
+
                 _pressTarget = _hover;
             }
             else if (_pressTarget)
             {
                 ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerUpHandler);
+                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.endDragHandler);
 
                 if (_pressTarget != _hover) return;
 
                 ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerClickHandler);
+
+                _pressTarget = null;
             }
         }
 
@@ -98,11 +107,19 @@ namespace Recounter
                 newHover = selectable.gameObject;
             }
 
+            _pointerData.pointerCurrentRaycast = _results[0];
+
             return newHover;
         }
 
         void EvaluateCursorEvents()
         {
+            if (_mouseDown && _pressTarget)
+            {
+                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.dragHandler);
+                return;
+            }
+
             var newHover = RaycastUI();
 
             if (_hover && _hover != newHover)
