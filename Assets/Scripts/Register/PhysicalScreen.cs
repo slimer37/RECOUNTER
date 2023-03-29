@@ -98,6 +98,7 @@ namespace Recounter
 
             InputLayer.SuspendMovement(_inUse);
 
+            e.ShowHud(!_inUse);
         }
 
         GameObject RaycastUI()
