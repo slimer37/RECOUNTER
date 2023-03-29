@@ -14,8 +14,6 @@ namespace Recounter
 
         [Header("Input")]
         [SerializeField] GraphicRaycaster _raycaster;
-        [SerializeField] InputActionReference _lookAction;
-        [SerializeField] InputAction _click;
 
         bool _inUse;
         bool _mouseDown;
@@ -31,14 +29,18 @@ namespace Recounter
 
         void Awake()
         {
-            _click.started += Click;
-            _click.canceled += Click;
+            var click = InputLayer.Menu.Click;
 
-            _click.Enable();
+            click.started += Click;
+            click.canceled += Click;
+
+            InputLayer.Menu.MoveMouse.performed += MoveCursor;
         }
 
         void Click(InputAction.CallbackContext ctx)
         {
+            if (!_inUse) return;
+
             _mouseDown = ctx.ReadValueAsButton();
 
             if (_mouseDown)
@@ -69,7 +71,6 @@ namespace Recounter
 
         void Start()
         {
-            _lookAction.action.performed += MoveCursor;
             _camera = Camera.main;
 
             _pointerData = new PointerEventData(EventSystem.current);
@@ -77,6 +78,8 @@ namespace Recounter
 
         void MoveCursor(InputAction.CallbackContext ctx)
         {
+            if (!_inUse) return;
+
             _cursor.anchoredPosition += ctx.ReadValue<Vector2>() * _sensitivity;
 
             _cursor.anchoredPosition = new Vector3(
@@ -95,10 +98,6 @@ namespace Recounter
 
             InputLayer.SuspendMovement(_inUse);
 
-            if (_inUse)
-                _lookAction.action.Enable();
-            else
-                _lookAction.action.Disable();
         }
 
         GameObject RaycastUI()
