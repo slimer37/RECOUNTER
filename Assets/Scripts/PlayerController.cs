@@ -1,6 +1,7 @@
 using Cinemachine;
 using FMODUnity;
 using NaughtyAttributes;
+using Recounter;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -52,8 +53,6 @@ public class PlayerController : MonoBehaviour
     [Header("SFX")]
     [SerializeField] EventReference jumpSfx;
 
-    Controls.PlayerActions playerControls;
-
     Vector2 camRot;
     float fov;
     float yVelocity;
@@ -72,6 +71,8 @@ public class PlayerController : MonoBehaviour
 
     bool isSprinting;
     bool isCrouching;
+
+    Controls.MovementActions movementInput;
 
     public bool ImpulseFootstep()
     {
@@ -105,7 +106,7 @@ public class PlayerController : MonoBehaviour
     {
         if (CanCrouch && !isSuspended)
         {
-            isCrouching = playerControls.Crouch.IsPressed();
+            isCrouching = movementInput.Crouch.IsPressed();
         }
 
         var height = isCrouching ? crouchedHeight : defaultHeight;
@@ -127,7 +128,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!CanLookAround || isSuspended) return;
 
-        var look = playerControls.Look.ReadValue<Vector2>() * Sensitivity;
+        var look = movementInput.Look.ReadValue<Vector2>() * Sensitivity;
 
         camRot.y += look.x;
         camRot.x -= look.y;
@@ -148,7 +149,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!CanJump || !controller.isGrounded) return;
 
-        if (playerControls.Jump.WasPressedThisFrame())
+        if (movementInput.Jump.WasPressedThisFrame())
         {
             yVelocity = jumpForce;
             PlaySound(jumpSfx);
@@ -167,7 +168,7 @@ public class PlayerController : MonoBehaviour
 
         if (CanJump)
         {
-            var holdingJump = playerControls.Jump.IsPressed();
+            var holdingJump = movementInput.Jump.IsPressed();
 
             if (yVelocity > 0 && !holdingJump)
                 velocityChange *= lowJumpMultiplier;
@@ -182,10 +183,10 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat(xSpeedId, localControllerVelocity.x);
         animator.SetFloat(ySpeedId, localControllerVelocity.z);
 
-        var input = playerControls.Move.ReadValue<Vector2>();
+        var input = movementInput.Move.ReadValue<Vector2>();
 
         // Sprinting only allowed when moving forward
-        isSprinting = !isCrouching && playerControls.Sprint.IsPressed() && input.y > 0;
+        isSprinting = !isCrouching && movementInput.Sprint.IsPressed() && input.y > 0;
 
         AnimateFov(isSprinting);
 
@@ -206,13 +207,11 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        SetCursor(false);
+        InputLayer.SetCursor(false);
 
         fov = walkFov;
 
-        playerControls = new Controls().Player;
-
-        playerControls.Enable();
+        movementInput = InputLayer.Movement;
 
         RecordCameraAngles();
 
@@ -223,13 +222,7 @@ public class PlayerController : MonoBehaviour
         defaultCamHeight = camTarget.localPosition.y;
     }
 
-    void SetCursor(bool show)
-    {
-        Cursor.visible = show;
-        Cursor.lockState = show ? CursorLockMode.None : CursorLockMode.Locked;
-    }
-
-    void OnDestroy() => SetCursor(true);
+    void OnDestroy() => InputLayer.SetCursor(true);
 
     void RecordCameraAngles()
     {
@@ -240,33 +233,5 @@ public class PlayerController : MonoBehaviour
             camRot.x -= 360;
         else if (camRot.x < -90)
             camRot.x += 360;
-    }
-
-    void OnResume()
-    {
-        playerControls.Enable();
-
-        RecordCameraAngles();
-    }
-
-    void OnSuspend()
-    {
-        playerControls.Disable();
-
-        // Prevent weird crouch input polling.
-        playerControls.Crouch.Enable();
-    }
-
-    public void Suspend(bool suspend, bool affectCursor = false)
-    {
-        isSuspended = suspend;
-
-        if (suspend)
-            OnSuspend();
-        else
-            OnResume();
-
-        if (affectCursor)
-            SetCursor(suspend);
     }
 }

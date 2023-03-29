@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using Recounter;
 
 public class OctoPlacer : MonoBehaviour
 {
@@ -45,7 +46,6 @@ public class OctoPlacer : MonoBehaviour
     [SerializeField] Sprite _rotateIcon;
 
     [Header("Components")]
-    [SerializeField] PlayerController _playerController;
     [SerializeField] PlayerInteraction _playerInteraction;
     [SerializeField] Camera _camera;
 
@@ -81,7 +81,7 @@ public class OctoPlacer : MonoBehaviour
 
     void Awake()
     {
-        _placementControls = new Controls().Placement;
+        _placementControls = InputLayer.Placement;
 
         _placementControls.Place.performed += OnStartPlace;
         _placementControls.Place.canceled += OnEndPlace;
@@ -99,9 +99,6 @@ public class OctoPlacer : MonoBehaviour
     void OnPause(bool pause) => enabled = !pause;
 
     void OnDestroy() => Pause.Paused -= OnPause;
-
-    void OnEnable() => _placementControls.Enable();
-    void OnDisable() => _placementControls.Disable();
 
     public void SetItem(Item item, bool canResetPosition)
     {
@@ -330,13 +327,13 @@ public class OctoPlacer : MonoBehaviour
         hand.SetCarryStates(HandCarryStates.InWorld);
 
         _playerInteraction.enabled = false;
-        _playerController.Suspend(true);
+        InputLayer.SuspendMovement(true);
     }
 
     void EndPlace()
     {
         _playerInteraction.enabled = true;
-        _playerController.Suspend(false);
+        InputLayer.SuspendMovement(false);
 
         _isPlacing = false;
 

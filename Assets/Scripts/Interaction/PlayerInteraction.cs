@@ -1,3 +1,4 @@
+using Recounter;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -33,7 +34,6 @@ public class PlayerInteraction : MonoBehaviour
     Transform lastHoverTarget;
 
     Tween punch;
-    Controls.PlayerActions playerControls;
 
     float targetAlpha;
 
@@ -41,9 +41,9 @@ public class PlayerInteraction : MonoBehaviour
 
     void Awake()
     {
-        playerControls = new Controls().Player;
-        playerControls.Interact.performed += OnInteract;
-        playerControls.Interact.canceled += OnInteractCancel;
+        var interactAction = InputLayer.Interaction.Interact;
+        interactAction.performed += OnInteract;
+        interactAction.canceled += OnInteractCancel;
 
         punch = iconImage.rectTransform.DOPunchScale(Vector3.one * punchAmount, punchDuration)
             .Pause().SetAutoKill(false);
@@ -70,13 +70,10 @@ public class PlayerInteraction : MonoBehaviour
     void OnEnable()
     {
         ResetUI();
-        playerControls.Enable();
     }
 
     void OnDisable()
     {
-        playerControls.Disable();
-
         if (!hovered || !text || !iconImage) return;
         ResetUI();
         HandleInteraction(null);

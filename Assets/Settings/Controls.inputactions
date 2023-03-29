@@ -2,7 +2,7 @@
     "name": "Controls",
     "maps": [
         {
-            "name": "Player",
+            "name": "Movement",
             "id": "97713440-d051-4e5e-8956-9edb11fddaa2",
             "actions": [
                 {
@@ -42,15 +42,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interact",
-                    "type": "Button",
-                    "id": "1073556e-1566-4eec-a7ff-53eccb918781",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Crouch",
                     "type": "Button",
                     "id": "c831371f-d3d9-4e3c-ac5a-deb99e905126",
@@ -58,15 +49,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Open Tablet",
-                    "type": "Button",
-                    "id": "09b1183e-daa2-459e-96ac-170a671f04b7",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -160,34 +142,12 @@
                 },
                 {
                     "name": "",
-                    "id": "efb58022-976b-4ddf-90d2-b276a7c20002",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard + Mouse",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "9f5a3eaa-4483-4119-87a7-fd4e6d562b39",
                     "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard + Mouse",
                     "action": "Crouch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "23c2c340-ec48-4cb7-bcea-358198779b8b",
-                    "path": "<Keyboard>/t",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard + Mouse",
-                    "action": "Open Tablet",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -324,6 +284,62 @@
                     "processors": "",
                     "groups": "Keyboard + Mouse",
                     "action": "Lateral",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Interaction",
+            "id": "2898d6fe-56ff-4b15-b80f-7f6c404bd7c5",
+            "actions": [
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "86e28a7a-172d-4cfa-8f30-e0a128523697",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "486ce407-be97-429c-b0aa-5dc672b7993f",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Tablet",
+            "id": "b2193dab-721a-4bc5-a218-96c6818ca012",
+            "actions": [
+                {
+                    "name": "Open Tablet",
+                    "type": "Button",
+                    "id": "f4b2aec2-ed5c-4587-84f2-d60cad642797",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "18870e92-8ff9-4a44-b95c-893f7fbb53f3",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Open Tablet",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -41,15 +41,12 @@ namespace Recounter.Tablet
             _canvas.enabled = false;
             _messageCanvas.enabled = false;
 
-            _openTabletAction = new Controls().Player.OpenTablet;
+            _openTabletAction = InputLayer.Tablet.OpenTablet;
             _openTabletAction.performed += _ => OpenTablet();
 
             _loweredPosition = _physicalTablet.localPosition;
             _loweredRotation = _physicalTablet.eulerAngles;
         }
-
-        void OnEnable() => _openTabletAction.Enable();
-        void OnDisable() => _openTabletAction.Disable();
 
         void OpenTablet()
         {
@@ -86,7 +83,7 @@ namespace Recounter.Tablet
 
         void ConfigurePlayerComponents(bool tabletOpen)
         {
-            _controller.Suspend(tabletOpen, true);
+            InputLayer.SuspendMovement(tabletOpen, true);
             _interaction.enabled = !tabletOpen;
             _employee.ShowHud(!tabletOpen);
         }

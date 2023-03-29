@@ -93,7 +93,7 @@ namespace Recounter
         {
             _inUse = !_inUse;
 
-            e.Controller.Suspend(_inUse);
+            InputLayer.SuspendMovement(_inUse);
 
             if (_inUse)
                 _lookAction.action.Enable();

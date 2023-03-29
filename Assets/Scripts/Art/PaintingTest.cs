@@ -1,10 +1,9 @@
+using Recounter;
 using UnityEngine;
 
 public class PaintingTest : Interactable
 {
     [SerializeField] Renderer rend;
-
-    PlayerController controller;
 
     Texture currentPainting;
 
@@ -20,8 +19,7 @@ public class PaintingTest : Interactable
     {
         ArtCreator.BeginSession(currentPainting).Completed += OnCompleteSession;
 
-        controller = e.Controller;
-        controller.Suspend(true, true);
+        InputLayer.SuspendMovement(true, true);
     }
 
     void OnCompleteSession(Texture result)
@@ -29,6 +27,6 @@ public class PaintingTest : Interactable
         currentPainting = result;
         rend.material.mainTexture = result;
 
-        controller.Suspend(false, true);
+        InputLayer.SuspendMovement(false);
     }
 }
