@@ -13,8 +13,8 @@ namespace Recounter
         [SerializeField] float _sensitivity;
 
         [Header("Cursors")]
-        [SerializeField] Graphic _linkCursor;
         [SerializeField] Graphic _defaultCursor;
+        [SerializeField] Graphic _linkCursor;
 
         [Header("Input")]
         [SerializeField] GraphicRaycaster _raycaster;
