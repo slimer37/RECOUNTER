@@ -35,6 +35,21 @@ namespace Recounter
             click.canceled += Click;
 
             InputLayer.Menu.MoveMouse.performed += MoveCursor;
+            InputLayer.Menu.Exit.performed += Exit;
+        }
+
+        void Start()
+        {
+            _camera = Camera.main;
+
+            _pointerData = new PointerEventData(EventSystem.current);
+        }
+
+        void Exit(InputAction.CallbackContext ctx)
+        {
+            if (!_inUse) return;
+
+            ToggleActive();
         }
 
         void Click(InputAction.CallbackContext ctx)
@@ -69,13 +84,6 @@ namespace Recounter
             }
         }
 
-        void Start()
-        {
-            _camera = Camera.main;
-
-            _pointerData = new PointerEventData(EventSystem.current);
-        }
-
         void MoveCursor(InputAction.CallbackContext ctx)
         {
             if (!_inUse) return;
@@ -92,13 +100,20 @@ namespace Recounter
             EvaluateCursorEvents();
         }
 
-        protected override void OnInteract(Employee e)
+        void ToggleActive()
         {
             _inUse = !_inUse;
 
             InputLayer.Suspend(_inUse);
 
-            e.ShowHud(!_inUse);
+            LastInteractor.ShowHud(!_inUse);
+
+            Pause.SetEnabled(!_inUse);
+        }
+
+        protected override void OnInteract(Employee e)
+        {
+            ToggleActive();
         }
 
         GameObject RaycastUI()
