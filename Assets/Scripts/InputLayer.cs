@@ -23,7 +23,7 @@ namespace Recounter
             Interaction = _controls.Interaction;
             Tablet = _controls.Tablet;
 
-            EnableAllInput();
+            _controls.Enable();
         }
 
         public static void SetCursor(bool show)
@@ -47,24 +47,6 @@ namespace Recounter
             if (suspend && !affectCursor) return;
 
             SetCursor(suspend);
-        }
-
-        public static void EnableAllInput()
-        {
-            Menu.Enable();
-            Placement.Enable();
-            Movement.Enable();
-            Interaction.Enable();
-            Tablet.Enable();
-        }
-
-        public static void DisableAllInput()
-        {
-            Menu.Disable();
-            Placement.Disable();
-            Movement.Disable();
-            Interaction.Disable();
-            Tablet.Disable();
         }
     }
 }
