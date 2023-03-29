@@ -74,8 +74,12 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnDisable()
     {
-        if (!hovered || !text || !iconImage) return;
+        if (!text || !iconImage) return;
+
         ResetUI();
+
+        if (!!hovered) return;
+
         HandleInteraction(null);
     }
 
