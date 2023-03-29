@@ -5,6 +5,7 @@ public abstract class Interactable : MonoBehaviour
 {
     public bool IsInteractionInProgress { get; private set; }
     protected Employee Interactor { get; private set; }
+    protected Employee LastInteractor { get; private set; }
 
     public enum Icon
     {
@@ -71,7 +72,7 @@ public abstract class Interactable : MonoBehaviour
         if (!CanInteract(e)) return;
 
         IsInteractionInProgress = true;
-        Interactor = e;
+        LastInteractor = Interactor = e;
         OnInteract(e);
     }
 
