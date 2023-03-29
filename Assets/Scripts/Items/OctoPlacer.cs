@@ -328,6 +328,7 @@ public class OctoPlacer : MonoBehaviour
 
         _playerInteraction.enabled = false;
         InputLayer.SuspendMovement(true);
+        InputLayer.Movement.Crouch.Enable();
     }
 
     void EndPlace()
