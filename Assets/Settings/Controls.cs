@@ -205,6 +205,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""2dc06578-8cac-4c58-b00f-923788506ce0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -238,6 +247,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard + Mouse"",
                     ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d3f54dd-ff07-4e9e-9ec4-5fdebbbb94f4"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -439,6 +459,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Menu_Exit = m_Menu.FindAction("Exit", throwIfNotFound: true);
         m_Menu_MoveMouse = m_Menu.FindAction("Move Mouse", throwIfNotFound: true);
         m_Menu_Click = m_Menu.FindAction("Click", throwIfNotFound: true);
+        m_Menu_Pause = m_Menu.FindAction("Pause", throwIfNotFound: true);
         // Placement
         m_Placement = asset.FindActionMap("Placement", throwIfNotFound: true);
         m_Placement_HoldRotate = m_Placement.FindAction("Hold Rotate", throwIfNotFound: true);
@@ -594,6 +615,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Menu_Exit;
     private readonly InputAction m_Menu_MoveMouse;
     private readonly InputAction m_Menu_Click;
+    private readonly InputAction m_Menu_Pause;
     public struct MenuActions
     {
         private @Controls m_Wrapper;
@@ -601,6 +623,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Exit => m_Wrapper.m_Menu_Exit;
         public InputAction @MoveMouse => m_Wrapper.m_Menu_MoveMouse;
         public InputAction @Click => m_Wrapper.m_Menu_Click;
+        public InputAction @Pause => m_Wrapper.m_Menu_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Menu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -619,6 +642,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Click.started += instance.OnClick;
             @Click.performed += instance.OnClick;
             @Click.canceled += instance.OnClick;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IMenuActions instance)
@@ -632,6 +658,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Click.started -= instance.OnClick;
             @Click.performed -= instance.OnClick;
             @Click.canceled -= instance.OnClick;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IMenuActions instance)
@@ -841,6 +870,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnExit(InputAction.CallbackContext context);
         void OnMoveMouse(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IPlacementActions
     {

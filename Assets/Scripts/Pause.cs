@@ -1,3 +1,4 @@
+using Recounter;
 using FMODUnity;
 using System;
 using UnityEngine;
@@ -8,8 +9,6 @@ public class Pause : MonoBehaviour
     [SerializeField] Canvas canvas;
     [SerializeField] Canvas[] additionalMenus;
 
-    Controls controls;
-
     public static event Action<bool> Paused;
 
     bool cursorVisible;
@@ -19,24 +18,32 @@ public class Pause : MonoBehaviour
 
     public static bool IsPaused { get; private set; }
 
+    static Pause instance;
+
     void Awake()
     {
+        instance = this;
+
         IsPaused = false;
-
-        controls = new Controls();
-        controls.Menu.Exit.performed += _ => SetPaused(!IsPaused);
-        controls.Enable();
-
-#if UNITY_EDITOR
-        controls.Menu.Exit.ApplyBindingOverride("<Keyboard>/backquote", path: "<Keyboard>/escape");
-#endif
 
         canvas.enabled = false;
     }
 
-    void OnDestroy()
+    void OnExit(InputAction.CallbackContext obj)
     {
-        controls.Dispose();
+        SetPaused(!IsPaused);
+    }
+
+    public static void SetEnabled(bool enable) => instance.enabled = enable;
+
+    void OnEnable()
+    {
+        InputLayer.Menu.Exit.performed += OnExit;
+    }
+
+    void OnDisable()
+    {
+        InputLayer.Menu.Exit.performed -= OnExit;
     }
 
     void OnApplicationPause(bool pause)

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Recounter
 {
@@ -22,6 +23,10 @@ namespace Recounter
             Movement = _controls.Movement;
             Interaction = _controls.Interaction;
             Tablet = _controls.Tablet;
+
+#if UNITY_EDITOR
+            Menu.Exit.ApplyBindingOverride("<Keyboard>/backquote", path: "<Keyboard>/escape");
+#endif
 
             _controls.Enable();
         }
