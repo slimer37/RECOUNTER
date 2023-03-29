@@ -12,6 +12,10 @@ namespace Recounter
         [SerializeField] RectTransform _canvas;
         [SerializeField] float _sensitivity;
 
+        [Header("Cursors")]
+        [SerializeField] Graphic _linkCursor;
+        [SerializeField] Graphic _defaultCursor;
+
         [Header("Input")]
         [SerializeField] GraphicRaycaster _raycaster;
 
@@ -36,6 +40,9 @@ namespace Recounter
 
             InputLayer.Menu.MoveMouse.performed += MoveCursor;
             InputLayer.Menu.Exit.performed += Exit;
+
+            _linkCursor.enabled = false;
+            _defaultCursor.enabled = true;
         }
 
         void Start()
@@ -116,16 +123,18 @@ namespace Recounter
             ToggleActive();
         }
 
-        GameObject RaycastUI()
+        GameObject RaycastUI(out Selectable selectable)
         {
             _results.Clear();
             _raycaster.Raycast(_pointerData, _results);
+
+            selectable = null;
 
             if (_results.Count == 0) return null;
 
             var newHover = _results[0].gameObject;
 
-            var selectable = newHover.GetComponentInParent<Selectable>();
+            selectable = newHover.GetComponentInParent<Selectable>();
 
             if (selectable)
             {
@@ -145,11 +154,17 @@ namespace Recounter
                 return;
             }
 
-            var newHover = RaycastUI();
+            var newHover = RaycastUI(out var selectable);
 
-            if (_hover && _hover != newHover)
+            if (_hover != newHover)
             {
-                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.pointerExitHandler);
+                _linkCursor.enabled = selectable;
+                _defaultCursor.enabled = !selectable;
+
+                if (_hover)
+                {
+                    ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.pointerExitHandler);
+                }
             }
 
             _hover = newHover;
