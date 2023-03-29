@@ -19,7 +19,7 @@ public class PaintingTest : Interactable
     {
         ArtCreator.BeginSession(currentPainting).Completed += OnCompleteSession;
 
-        InputLayer.SuspendMovement(true, true);
+        InputLayer.Suspend(true, true);
     }
 
     void OnCompleteSession(Texture result)
@@ -27,6 +27,6 @@ public class PaintingTest : Interactable
         currentPainting = result;
         rend.material.mainTexture = result;
 
-        InputLayer.SuspendMovement(false);
+        InputLayer.Suspend(false);
     }
 }

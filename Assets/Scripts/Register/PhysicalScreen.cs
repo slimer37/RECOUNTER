@@ -96,7 +96,7 @@ namespace Recounter
         {
             _inUse = !_inUse;
 
-            InputLayer.SuspendMovement(_inUse);
+            InputLayer.Suspend(_inUse);
 
             e.ShowHud(!_inUse);
         }

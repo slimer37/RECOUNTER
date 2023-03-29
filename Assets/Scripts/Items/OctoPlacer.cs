@@ -327,14 +327,14 @@ public class OctoPlacer : MonoBehaviour
         hand.SetCarryStates(HandCarryStates.InWorld);
 
         _playerInteraction.enabled = false;
-        InputLayer.SuspendMovement(true);
+        InputLayer.Movement.Disable();
         InputLayer.Movement.Crouch.Enable();
     }
 
     void EndPlace()
     {
         _playerInteraction.enabled = true;
-        InputLayer.SuspendMovement(false);
+        InputLayer.Movement.Enable();
 
         _isPlacing = false;
 

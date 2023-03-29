@@ -32,15 +32,19 @@ namespace Recounter
             Cursor.lockState = show ? CursorLockMode.None : CursorLockMode.Locked;
         }
 
-        public static void SuspendMovement(bool suspend, bool affectCursor = false)
+        public static void Suspend(bool suspend, bool affectCursor = false)
         {
             if (suspend)
             {
                 Movement.Disable();
+                Placement.Disable();
+                Interaction.Disable();
             }
             else
             {
                 Movement.Enable();
+                Placement.Enable();
+                Interaction.Enable();
             }
 
             // Always hide cursor when re-enabling movement. Optional when disabling.
