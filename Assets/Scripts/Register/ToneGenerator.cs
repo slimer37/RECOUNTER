@@ -1,5 +1,6 @@
 using FMOD;
 using FMODUnity;
+using System.Collections;
 using UnityEngine;
 
 namespace Recounter
@@ -21,6 +22,7 @@ namespace Recounter
         [SerializeField] float decay = 0.2f;
         [SerializeField] float gain = -20f;
         [SerializeField] float frequency = 220f;
+        [SerializeField] float defaultBeepLength = 0.5f;
 
         Channel channel;
         DSP fader;
@@ -67,6 +69,22 @@ namespace Recounter
 
         public void Play() => play = true;
         public void Stop() => play = false;
+
+        public void Beep() => Beep(defaultBeepLength);
+
+        public void Beep(float length)
+        {
+            StopAllCoroutines();
+            StartCoroutine(TimedTone(length));
+        }
+
+        IEnumerator TimedTone(float length)
+        {
+            Play();
+            yield return new WaitForSeconds(attack);
+            yield return new WaitForSeconds(length);
+            Stop();
+        }
 
         void Update()
         {
