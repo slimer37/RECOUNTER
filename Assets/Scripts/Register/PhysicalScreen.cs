@@ -161,7 +161,6 @@ namespace Recounter
             if (_mouseDown && _pressTarget)
             {
                 ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.dragHandler);
-                return;
             }
 
             var newHover = RaycastUI(out var selectable);
