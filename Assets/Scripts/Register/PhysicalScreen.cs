@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,6 +12,11 @@ namespace Recounter
         [SerializeField] RectTransform _cursor;
         [SerializeField] RectTransform _canvas;
         [SerializeField] float _sensitivity;
+
+        [Header("Camera")]
+        [SerializeField] CinemachineVirtualCamera _vcam;
+        [SerializeField] RectTransform _follow;
+        [SerializeField] float _reduction;
 
         [Header("Cursors")]
         [SerializeField] Graphic _defaultCursor;
@@ -102,6 +108,8 @@ namespace Recounter
                 Mathf.Clamp(_cursor.anchoredPosition.y, -_canvas.sizeDelta.y / 2, _canvas.sizeDelta.y / 2)
                 );
 
+            _follow.anchoredPosition = _cursor.anchoredPosition / _reduction;
+
             _pointerData.position = _camera.WorldToScreenPoint(_cursor.position);
 
             EvaluateCursorEvents();
@@ -116,6 +124,8 @@ namespace Recounter
             LastInteractor.ShowHud(!_inUse);
 
             Pause.SetEnabled(!_inUse);
+
+            _vcam.enabled = _inUse;
         }
 
         protected override void OnInteract(Employee e)
