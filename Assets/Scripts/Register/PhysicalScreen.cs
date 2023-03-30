@@ -125,7 +125,7 @@ namespace Recounter
 
             Pause.SetEnabled(!_inUse);
 
-            _vcam.enabled = _inUse;
+            if (_vcam) _vcam.enabled = _inUse;
         }
 
         protected override void OnInteract(Employee e)
