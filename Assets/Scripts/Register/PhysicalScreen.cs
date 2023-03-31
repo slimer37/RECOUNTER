@@ -69,32 +69,7 @@ namespace Recounter
         {
             if (!_inUse) return;
 
-            _mouseDown = ctx.ReadValueAsButton();
-
-            if (_mouseDown)
-            {
-                if (!_hover) return;
-
-                _pointerData.pointerPressRaycast = _pointerData.pointerCurrentRaycast;
-
-                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.pointerDownHandler);
-                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.beginDragHandler);
-
-                _pressTarget = _hover;
-            }
-            else if (_pressTarget)
-            {
-                EvaluateCursorEvents();
-
-                ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerUpHandler);
-                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.endDragHandler);
-
-                if (_pressTarget != _hover) return;
-
-                ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerClickHandler);
-
-                _pressTarget = null;
-            }
+            DoClick(ctx.ReadValueAsButton());
         }
 
         void MoveCursor(InputAction.CallbackContext ctx)
@@ -126,6 +101,11 @@ namespace Recounter
             Pause.SetEnabled(!_inUse);
 
             if (_vcam) _vcam.enabled = _inUse;
+
+            if (!_inUse && _mouseDown)
+            {
+                DoClick(false, true);
+            }
         }
 
         protected override void OnInteract(Employee e)
@@ -154,6 +134,36 @@ namespace Recounter
             _pointerData.pointerCurrentRaycast = _results[0];
 
             return newHover;
+        }
+
+        void DoClick(bool press, bool denyClick = false)
+        {
+            _mouseDown = press;
+
+            if (_mouseDown)
+            {
+                if (!_hover) return;
+
+                _pointerData.pointerPressRaycast = _pointerData.pointerCurrentRaycast;
+
+                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.beginDragHandler);
+
+                _pressTarget = _hover;
+            }
+            else if (_pressTarget)
+            {
+                EvaluateCursorEvents();
+
+                ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerUpHandler);
+                ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.endDragHandler);
+
+                if (_pressTarget != _hover || denyClick) return;
+
+                ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerClickHandler);
+
+                _pressTarget = null;
+            }
         }
 
         void EvaluateCursorEvents()
