@@ -1,6 +1,5 @@
 using FMOD;
 using FMODUnity;
-using System.Collections;
 using UnityEngine;
 
 namespace Recounter
@@ -20,19 +19,16 @@ namespace Recounter
         [SerializeField] Waveform waveform;
         [SerializeField] float attack = 0;
         [SerializeField] float decay = 0.2f;
-        [SerializeField] float gain = -20f;
+        [SerializeField] float volume = 1.0f;
         [SerializeField] float frequency = 220f;
         [SerializeField] float defaultBeepLength = 0.5f;
 
         Channel channel;
-        DSP fader;
         DSP oscillator;
 
-        bool play;
-        bool paused;
-        float t;
+        int rate;
 
-        const int GAIN = (int)DSP_FADER.GAIN;
+        ulong lastFadePoint;
 
         void OnValidate()
         {
@@ -45,6 +41,8 @@ namespace Recounter
 
         void Awake()
         {
+            RuntimeManager.CoreSystem.getSoftwareFormat(out rate, out _, out _);
+
             RuntimeManager.CoreSystem.createDSPByType(DSP_TYPE.OSCILLATOR, out oscillator);
             RuntimeManager.CoreSystem.getMasterChannelGroup(out var master);
             RuntimeManager.CoreSystem.playDSP(oscillator, master, false, out channel);
@@ -52,13 +50,7 @@ namespace Recounter
             oscillator.setParameterInt((int)DSP_OSCILLATOR.TYPE, (int)waveform);
             oscillator.setParameterFloat((int)DSP_OSCILLATOR.RATE, frequency);
 
-            channel.getDSP(CHANNELCONTROL_DSP_INDEX.FADER, out fader);
-
-            paused = true;
-
             channel.setPaused(true);
-
-            fader.setParameterFloat(GAIN, -80f);
         }
 
         void OnDestroy()
@@ -67,51 +59,46 @@ namespace Recounter
             oscillator.release();
         }
 
-        public void Play() => play = true;
-        public void Stop() => play = false;
-
         public void Beep() => Beep(defaultBeepLength);
 
         public void Beep(float length)
         {
-            StopAllCoroutines();
-            StartCoroutine(TimedTone(length));
-        }
+            channel.setPaused(false);
 
-        IEnumerator TimedTone(float length)
-        {
-            Play();
-            yield return new WaitForSeconds(attack);
-            yield return new WaitForSeconds(length);
-            Stop();
-        }
+            channel.getDSPClock(out _, out var dspClock);
 
-        void Update()
-        {
-            if (play)
+            if (dspClock < lastFadePoint)
             {
-                t += Time.deltaTime / attack;
+                channel.removeFadePoints(dspClock, lastFadePoint);
 
-                if (paused)
+                float fadeVolume;
+
+                var elapsedDelay = dspClock - (lastFadePoint - rate * decay);
+
+                if (elapsedDelay < 0)
                 {
-                    channel.setPaused(false);
-                    paused = false;
+                    fadeVolume = volume;
                 }
+                else
+                {
+                    fadeVolume = (1 - elapsedDelay / (rate * decay)) * volume;
+                }
+
+                channel.addFadePoint(dspClock, fadeVolume);
             }
             else
             {
-                t -= Time.deltaTime / decay;
-
-                if (!paused && t < 0)
-                {
-                    channel.setPaused(true);
-                    paused = true;
-                }
+                channel.addFadePoint(dspClock, 0.0f);
             }
 
-            t = Mathf.Clamp01(t);
+            var start = dspClock + (ulong)(rate * attack);
+            var startDecay = start + (ulong)(rate * length);
+            lastFadePoint = startDecay + (ulong)(rate * decay);
 
-            fader.setParameterFloat(GAIN, Mathf.Lerp(-80f, gain, t));
+            channel.addFadePoint(start, volume);
+            channel.addFadePoint(startDecay, volume);
+
+            channel.addFadePoint(lastFadePoint, 0.0f);
         }
     }
 }

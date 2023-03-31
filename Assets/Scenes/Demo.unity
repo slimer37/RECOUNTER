@@ -15316,7 +15316,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34580
+  m_Name: pb_Mesh34610
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -17777,7 +17777,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34450
+  m_Name: pb_Mesh34480
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -19010,11 +19010,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveform: 0
-  attack: 0
-  decay: 0.2
-  gain: -20
+  attack: 0.01
+  decay: 0.02
+  volume: 0.2
   frequency: 440
-  defaultBeepLength: 0.05
+  defaultBeepLength: 0.08
 --- !u!1 &992569279
 GameObject:
   m_ObjectHideFlags: 0
@@ -27892,7 +27892,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh35860
+  m_Name: pb_Mesh35922
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
