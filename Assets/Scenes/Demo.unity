@@ -1228,6 +1228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveform: 0
+  mode: 0
   attack: 0
   decay: 0.01
   volume: 0.1
@@ -19045,6 +19046,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveform: 0
+  mode: 0
   attack: 0.01
   decay: 0.02
   volume: 0.2

@@ -17,6 +17,7 @@ namespace Recounter
         }
 
         [SerializeField] Waveform waveform;
+        [SerializeField] MODE mode;
         [SerializeField] float attack = 0;
         [SerializeField] float decay = 0.2f;
         [SerializeField] float volume = 1.0f;
@@ -49,6 +50,12 @@ namespace Recounter
 
             oscillator.setParameterInt((int)DSP_OSCILLATOR.TYPE, (int)waveform);
             oscillator.setParameterFloat((int)DSP_OSCILLATOR.RATE, frequency);
+
+            channel.setMode(mode);
+
+            VECTOR pos = RuntimeUtils.ToFMODVector(transform.position);
+            VECTOR vel = new VECTOR();
+            channel.set3DAttributes(ref pos, ref vel);
 
             channel.setPaused(true);
         }
