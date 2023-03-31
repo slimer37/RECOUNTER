@@ -1231,8 +1231,8 @@ MonoBehaviour:
   mode: 0
   attack: 0
   decay: 0.01
-  volume: 0.1
-  frequency: 1408.18
+  volume: 0.05
+  frequency: 704.09
   defaultBeepLength: 0.1
 --- !u!114 &176593179
 MonoBehaviour:
