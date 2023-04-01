@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 4525224419847609838}
   - component: {fileID: 4525224419847609833}
   - component: {fileID: 4525224419847609839}
+  - component: {fileID: -2380253883696662280}
   m_Layer: 7
   m_Name: packaged tbone
   m_TagString: Untagged
@@ -278,3 +279,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.55969524, y: 0.09275477, z: 0.41356525}
   m_Center: {x: -0.00007857382, y: -0.003448952, z: 0.000022754073}
+--- !u!114 &-2380253883696662280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6976599753602015295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 739ee7de6fc6c2c46b98012fab71ab46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 6

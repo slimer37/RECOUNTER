@@ -1,3 +1,4 @@
+using Recounter.Service;
 using System;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -145,29 +146,39 @@ namespace Recounter.Inventory.Editor
                 return;
             }
 
-            var serializedObject = new SerializedObject(_selectedLibrary);
+            var productSO = GetSelectedProduct();
 
-            var nameProp = GetProductProperty(serializedObject, "_displayName");
+            var nameProp = GetProperty(productSO, "_displayName");
             var nameField = CreateTextField(nameProp, "");
 
             nameField.style.unityFontStyleAndWeight = FontStyle.Bold;
 
-            var priceProp = GetProductProperty(serializedObject, "_price");
+            var priceProp = GetProperty(productSO, "_price");
             var priceField = CreatePriceField(priceProp, "Price");
 
-            var descProp = GetProductProperty(serializedObject, "_description");
+            var descProp = GetProperty(productSO, "_description");
             var descField = CreateTextField(descProp, "Description");
 
             descField.multiline = true;
             descField.style.minHeight = 40;
             descField.Q("unity-text-input").style.whiteSpace = WhiteSpace.Normal;
 
-            var prefabProp = GetProductProperty(serializedObject, "_prefab");
+            var prefabProp = GetProperty(productSO, "_prefab");
             var prefabField = CreatePrefabField(prefabProp);
 
             prefabField.TrackPropertyValue(prefabProp, PrefabChanged);
 
             _prefabImage = new() { image = AssetPreview.GetAssetPreview(prefabProp.objectReferenceValue) };
+
+            var addIdentifierButton = new Button(() => AssignIdentifier(
+                prefabProp.objectReferenceValue as GameObject,
+                _productList.selectedIndex))
+            {
+                text = "Attach Identifier"
+            };
+
+            addIdentifierButton.SetEnabled(prefabProp.objectReferenceValue is GameObject go
+                && (!go.TryGetComponent(out ProductIdentifier pi) || pi.id != _selectedIndex));
 
             // Construct layout
 
@@ -176,6 +187,17 @@ namespace Recounter.Inventory.Editor
             _productPane.Add(descField);
             _productPane.Add(prefabField);
             _productPane.Add(_prefabImage);
+            _productPane.Add(addIdentifierButton);
+        }
+
+        void AssignIdentifier(GameObject prefab, int id)
+        {
+            if (!prefab.TryGetComponent(out ProductIdentifier productIdentifier))
+            {
+                productIdentifier = prefab.AddComponent<ProductIdentifier>();
+            }
+
+            productIdentifier.id = id;
         }
 
         PriceField CreatePriceField(SerializedProperty prop, string label)
@@ -215,10 +237,10 @@ namespace Recounter.Inventory.Editor
             _prefabImage.image = AssetPreview.GetAssetPreview(prop.objectReferenceValue);
         }
 
-        SerializedProperty GetProductProperty(SerializedObject serializedObject, string fieldName) => serializedObject
-            .FindProperty("_products")
-            .GetArrayElementAtIndex(_productList.selectedIndex)
-            .FindPropertyRelative(fieldName);
+        SerializedProperty GetSelectedProduct() =>
+            new SerializedObject(_selectedLibrary).FindProperty("_products").GetArrayElementAtIndex(_productList.selectedIndex);
+
+        SerializedProperty GetProperty(SerializedProperty so, string fieldName) => so.FindPropertyRelative(fieldName);
 
         class PriceField : FloatField
         {
