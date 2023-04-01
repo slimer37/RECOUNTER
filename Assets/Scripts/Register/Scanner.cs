@@ -10,8 +10,15 @@ namespace Recounter
         [SerializeField] Light _light;
         [SerializeField] float _blinkTime;
 
+        void Awake()
+        {
+            _light.enabled = false;
+        }
+
         void OnTriggerEnter(Collider other)
         {
+            if (_light.enabled) return;
+
             if (other.TryGetComponent(out ProductIdentifier identifier))
             {
                 EnterProduct(Library.Products[identifier.id]);
