@@ -37,6 +37,12 @@ namespace Recounter
 
         List<RaycastResult> _results = new();
 
+        protected override HudInfo FormHud(Employee e) => new()
+        {
+            icon = Icon.Access,
+            text = "Access"
+        };
+
         void Awake()
         {
             var click = InputLayer.Menu.Click;
