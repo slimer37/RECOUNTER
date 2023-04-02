@@ -13,7 +13,6 @@ namespace Recounter.Service
         // Pay (Cash tender / card)
         // Receipt printing
 
-        [SerializeField] TMP_Text _totaling;
         [SerializeReference] ProductEntryModule _productEntryModule;
 
         [SerializeField] LineItemUI _lineItemPrefab;

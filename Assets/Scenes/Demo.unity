@@ -19454,7 +19454,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76329b89739a73b428c5f3844a39cf64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _totaling: {fileID: 0}
   _productEntryModule: {fileID: 176593179}
   _lineItemPrefab: {fileID: 1937245338}
   _listParent: {fileID: 1883622925}
