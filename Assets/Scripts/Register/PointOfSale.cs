@@ -16,6 +16,11 @@ namespace Recounter.Service
         [SerializeField] TMP_Text _totaling;
         [SerializeReference] ProductEntryModule _productEntryModule;
 
+        [SerializeField] LineItemUI _lineItemPrefab;
+        [SerializeField] Transform _listParent;
+
+        Transaction currentTransaction;
+
         void Awake()
         {
             _productEntryModule.ProductEntered += OnProductEntered;
@@ -23,12 +28,21 @@ namespace Recounter.Service
 
         void OnProductEntered(Product product)
         {
-            print("Entered " + product.DisplayName);
+            var lineItem = new LineItem(product);
+
+            if (currentTransaction == null)
+            {
+                currentTransaction = Transaction.Create(lineItem, CreateLineItemUI);
+            }
+            else
+            {
+                currentTransaction.Add(lineItem);
+            }
         }
 
-        public void Pay()
+        void CreateLineItemUI(LineItem lineItem)
         {
-
+            Instantiate(_lineItemPrefab, _listParent).PopulateInfo(lineItem);
         }
     }
 }
