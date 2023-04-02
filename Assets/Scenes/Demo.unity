@@ -19457,8 +19457,14 @@ MonoBehaviour:
   _totalInfo: {fileID: 1912229948}
   _totalFormat: 'Sub-total: {0:C}
 
+    {1}
 
-    Total: {1:C}'
+    Total: {2:C}'
+  _extraInfoFormat: '
+
+    <size=60%>Discount: {0:P2}</size>
+
+'
   _productEntryModule: {fileID: 176593179}
   _lineItemPrefab: {fileID: 1937245338}
   _listParent: {fileID: 1883622925}
