@@ -1,4 +1,5 @@
 using Cinemachine;
+using FMODUnity;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,6 +25,7 @@ namespace Recounter
 
         [Header("Input")]
         [SerializeField] GraphicRaycaster _raycaster;
+        [SerializeField] EventReference _beepSfx;
 
         bool _inUse;
         bool _mouseDown;
@@ -31,6 +33,8 @@ namespace Recounter
         Camera _camera;
 
         GameObject _hover;
+        Selectable _hoveredSelectable;
+
         GameObject _pressTarget;
 
         PointerEventData _pointerData;
@@ -170,6 +174,9 @@ namespace Recounter
 
                 ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerClickHandler);
 
+                if (_hoveredSelectable is Button)
+                    RuntimeManager.PlayOneShotAttached(_beepSfx, gameObject);
+
                 _pressTarget = null;
             }
         }
@@ -181,12 +188,12 @@ namespace Recounter
                 ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.dragHandler);
             }
 
-            var newHover = RaycastUI(out var selectable);
+            var newHover = RaycastUI(out _hoveredSelectable);
 
             if (_hover != newHover)
             {
-                _linkCursor.enabled = selectable;
-                _defaultCursor.enabled = !selectable;
+                _linkCursor.enabled = _hoveredSelectable;
+                _defaultCursor.enabled = !_hoveredSelectable;
 
                 if (_hover)
                 {
