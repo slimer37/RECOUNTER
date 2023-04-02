@@ -25,7 +25,7 @@ namespace Recounter.Service
         void QuantityChanged(int quantity)
         {
             _quantity.text = quantity.ToString();
-            _price.text = (_linkedLineItem.Product.Price * quantity).ToString("C");
+            _price.text = _linkedLineItem.Price.ToString("C");
         }
     }
 }

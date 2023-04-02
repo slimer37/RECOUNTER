@@ -8,9 +8,24 @@ namespace Recounter.Service
     {
         public IReadOnlyList<LineItem> LineItems => _lineItems.AsReadOnly();
 
-        List<LineItem> _lineItems = new();
+        readonly List<LineItem> _lineItems = new();
         
         Action<LineItem> LineItemAdded;
+        Action<float> TotalChanged;
+
+        public float Total { get; private set; }
+
+        float CalculateTotal()
+        {
+            var total = 0.0f;
+
+            foreach (var li in _lineItems)
+            {
+                total += li.Price;
+            }
+
+            return Total = total;
+        }
 
         bool ContainsProduct(Product product, out LineItem lineItem)
         {
@@ -33,6 +48,9 @@ namespace Recounter.Service
             if (ContainsProduct(newItem.Product, out var lineItem))
             {
                 lineItem.Quantity += newItem.Quantity;
+
+                TotalChanged?.Invoke(CalculateTotal());
+
                 return;
             }
 
@@ -43,13 +61,15 @@ namespace Recounter.Service
         {
             _lineItems.Add(lineItem);
             LineItemAdded?.Invoke(lineItem);
+            TotalChanged?.Invoke(CalculateTotal());
         }
 
-        public static Transaction Create(LineItem lineItem, Action<LineItem> lineItemCallback)
+        public static Transaction Create(LineItem lineItem, Action<LineItem> lineItemCallback, Action<float> totalChangeCallback)
         {
             var transaction = new Transaction
             {
-                LineItemAdded = lineItemCallback
+                LineItemAdded = lineItemCallback,
+                TotalChanged = totalChangeCallback
             };
 
             transaction.AddDirectly(lineItem);
@@ -60,7 +80,9 @@ namespace Recounter.Service
 
     public class LineItem
     {
-        public Product Product { get; private set; }
+        public readonly Product Product;
+
+        public float Price { get; private set; }
 
         public int Quantity
         {
@@ -68,6 +90,9 @@ namespace Recounter.Service
             set
             {
                 _quantity = value;
+
+                Price = Product.Price * _quantity;
+
                 QuantityChanged?.Invoke(_quantity);
             }
         }
@@ -79,7 +104,7 @@ namespace Recounter.Service
         public LineItem(Product product, int quantity = 1)
         {
             Product = product;
-            _quantity = quantity;
+            Quantity = quantity;
         }
     }
 }
