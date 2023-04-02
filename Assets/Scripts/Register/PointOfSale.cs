@@ -13,35 +13,55 @@ namespace Recounter.Service
         // Pay (Cash tender / card)
         // Receipt printing
 
+        [SerializeField] TMP_Text _totalInfo;
+        [SerializeField, TextArea, RequireSubstring("{0}", "{1}")] string _totalFormat;
+
         [SerializeReference] ProductEntryModule _productEntryModule;
 
         [SerializeField] LineItemUI _lineItemPrefab;
         [SerializeField] Transform _listParent;
 
-        Transaction currentTransaction;
+        Transaction _currentTransaction;
+
+        void OnValidate()
+        {
+            if (_totalInfo)
+            {
+                ResetTotal();
+            }
+        }
 
         void Awake()
         {
             _productEntryModule.ProductEntered += OnProductEntered;
+
+            ResetTotal();
         }
+
+        void ResetTotal() => UpdateTotal(0);
 
         void OnProductEntered(Product product)
         {
             var lineItem = new LineItem(product);
 
-            if (currentTransaction == null)
+            if (_currentTransaction == null)
             {
-                currentTransaction = Transaction.Create(lineItem, CreateLineItemUI);
+                _currentTransaction = Transaction.Create(lineItem, CreateLineItemUI, UpdateTotal);
             }
             else
             {
-                currentTransaction.Add(lineItem);
+                _currentTransaction.Add(lineItem);
             }
         }
 
         void CreateLineItemUI(LineItem lineItem)
         {
             Instantiate(_lineItemPrefab, _listParent).PopulateInfo(lineItem);
+        }
+
+        void UpdateTotal(float total)
+        {
+            _totalInfo.text = string.Format(_totalFormat, total, total);
         }
     }
 }
