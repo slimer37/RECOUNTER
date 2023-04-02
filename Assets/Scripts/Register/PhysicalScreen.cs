@@ -55,6 +55,8 @@ namespace Recounter
 
             _linkCursor.enabled = false;
             _defaultCursor.enabled = true;
+
+            _raycaster.enabled = false;
         }
 
         void Start()
