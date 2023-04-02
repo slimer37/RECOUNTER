@@ -13,20 +13,30 @@ namespace Recounter
         [SerializeField] Button _keyPrefab;
         [SerializeField] TMP_Text _keyText;
         [SerializeField] Transform _keyParent;
-        [SerializeField] Button _acceptButton;
-        [SerializeField] float _maxValue = 100000;
+        [SerializeField] Button _confirmButton;
+        [SerializeField] Button _cancelButton;
+        [SerializeField] float _defaultMaxValue = 100000;
 
         Action<float> _numberEntered;
         Action _canceled;
 
         float _value;
 
+        float _maxValue;
+
+        float _scale;
+
+        string _format;
+
         void Awake()
         {
             CreateKeypad();
             UpdateDisplay();
 
-            //Close();
+            Close();
+
+            _confirmButton.onClick.AddListener(Confirm);
+            _cancelButton.onClick.AddListener(Cancel);
         }
 
         void CreateKeypad()
@@ -84,20 +94,35 @@ namespace Recounter
             if (_value > _maxValue)
                 _value = _maxValue;
 
-            _field.text = _value.ToString("C");
+            _field.text = (_value * _scale).ToString(_format);
         }
 
-        public void PromptNumber(Action<float> action, Action cancel)
+        void ResetValue()
         {
+            _value = 0;
+            UpdateDisplay();
+        }
+
+        public void PromptNumber(Action<float> action, Action cancel, string format = "C") => PromptNumber(action, cancel, format, _defaultMaxValue);
+
+        public void PromptNumber(Action<float> action, Action cancel, string format, float maxValue, float scale = 1)
+        {
+            _maxValue = maxValue;
+
             Open();
 
             _numberEntered = action;
             _canceled = cancel;
+
+            _format = format;
+            _scale = scale;
+
+            ResetValue();
         }
 
-        public void Accept()
+        public void Confirm()
         {
-            _numberEntered?.Invoke(_value);
+            _numberEntered?.Invoke(_value * _scale);
             Close();
         }
 

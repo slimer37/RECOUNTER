@@ -1,6 +1,7 @@
 using Recounter.Inventory;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Recounter.Service
 {
@@ -15,23 +16,28 @@ namespace Recounter.Service
 
         [SerializeField] TMP_Text _totalInfo;
         [SerializeField, TextArea] string _totalFormat = "Sub-total: {0:C}\n\n{1}\n\nTotal: {2:C}";
-        [SerializeField, TextArea] string _extraInfoFormat = "Discount: {0:P2}";
+        [SerializeField, TextArea] string _extraInfoFormat = "Discount: {0}";
 
         [SerializeReference] ProductEntryModule _productEntryModule;
+        [SerializeReference] NumberEntry _numberEntry;
+        [SerializeReference] Button _discountFlatButton;
+        [SerializeReference] Button _discountPercentButton;
 
         [SerializeField] LineItemUI _lineItemPrefab;
         [SerializeField] Transform _listParent;
 
         Transaction _currentTransaction;
 
-        float _discount;
+        float _flatDiscount;
+        float _percentDiscount;
+
         float _total;
 
         void OnValidate()
         {
             if (_totalInfo)
             {
-                ResetTotal();
+                UpdateTotal();
             }
         }
 
@@ -39,10 +45,33 @@ namespace Recounter.Service
         {
             _productEntryModule.ProductEntered += OnProductEntered;
 
-            ResetTotal();
+            UpdateTotal();
+
+            _discountFlatButton.onClick.AddListener(DiscountFlat);
+            _discountPercentButton.onClick.AddListener(DiscountPercent);
         }
 
-        void ResetTotal() => UpdateTotal(0);
+        void DiscountFlat()
+        {
+            _numberEntry.PromptNumber(SetFlatDiscount, () => { });
+        }
+
+        void DiscountPercent()
+        {
+            _numberEntry.PromptNumber(SetPercentDiscount, () => { }, "P", 100, 0.01f);
+        }
+
+        void SetFlatDiscount(float d)
+        {
+            _flatDiscount = d;
+            UpdateTotal();
+        }
+
+        void SetPercentDiscount(float d)
+        {
+            _percentDiscount = d;
+            UpdateTotal();
+        }
 
         void OnProductEntered(Product product)
         {
@@ -63,15 +92,36 @@ namespace Recounter.Service
             Instantiate(_lineItemPrefab, _listParent).PopulateInfo(lineItem);
         }
 
+        void UpdateTotal() => UpdateTotal(_currentTransaction?.Total ?? 0);
+
         void UpdateTotal(float subtotal)
         {
-            _total = subtotal * (1 - _discount);
+            _total = subtotal;
+
+            var discountString = "";
+
+            if (_percentDiscount > 0)
+            {
+                discountString += _percentDiscount.ToString("P2");
+                _total *= 1 - _percentDiscount;
+            }
+
+            if (_flatDiscount > 0)
+            {
+                if (_percentDiscount > 0)
+                {
+                    discountString += " + ";
+                }
+
+                discountString += _flatDiscount.ToString("C");
+                _total -= _flatDiscount;
+            }
 
             var extraInfo = "";
 
-            if (_discount > 0)
+            if (!string.IsNullOrEmpty(discountString))
             {
-                extraInfo = string.Format(_extraInfoFormat, _discount);
+                extraInfo = string.Format(_extraInfoFormat, discountString);
             }
 
             _totalInfo.text = string.Format(_totalFormat, subtotal, extraInfo, _total);
