@@ -37,6 +37,7 @@ namespace Recounter
 
         GameObject _hover;
         Selectable _hoveredSelectable;
+        bool _hoverInteractable;
 
         GameObject _pressTarget;
 
@@ -144,12 +145,6 @@ namespace Recounter
             if (selectable)
             {
                 newHover = selectable.gameObject;
-
-                if (!selectable.IsInteractable())
-                {
-                    newHover = null;
-                    selectable = null;
-                }
             }
 
             _pointerData.pointerCurrentRaycast = _results[0];
@@ -183,7 +178,7 @@ namespace Recounter
 
                 ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerClickHandler);
 
-                if (_volumeSwitch.isOn && _hoveredSelectable is Button)
+                if (_volumeSwitch.isOn && _hoverInteractable && _hoveredSelectable is Button)
                     RuntimeManager.PlayOneShotAttached(_beepSfx, gameObject);
 
                 _pressTarget = null;
@@ -203,8 +198,9 @@ namespace Recounter
 
             if (_hover != newHover)
             {
-                _linkCursor.enabled = _hoveredSelectable;
-                _defaultCursor.enabled = !_hoveredSelectable;
+                _hoverInteractable = _hoveredSelectable && _hoveredSelectable.IsInteractable();
+                _linkCursor.enabled = _hoverInteractable;
+                _defaultCursor.enabled = !_hoverInteractable;
 
                 if (_hover)
                 {
