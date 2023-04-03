@@ -20,13 +20,15 @@ namespace Recounter
         Action<float> _numberEntered;
         Action _canceled;
 
-        float _value;
+        int _value;
 
-        float _maxValue;
+        int _maxValue;
 
         float _scale;
 
         string _format;
+
+        public float Output => _value * _scale;
 
         void Awake()
         {
@@ -64,7 +66,7 @@ namespace Recounter
         void EnterNumber(int input)
         {
             _value *= 10;
-            _value += input * 0.01f;
+            _value += input;
 
             UpdateDisplay();
         }
@@ -74,6 +76,7 @@ namespace Recounter
             _value *= 100;
             UpdateDisplay();
         }
+
         void Clear()
         {
             if (_value == _maxValue)
@@ -82,7 +85,7 @@ namespace Recounter
             }
             else
             {
-                _value -= _value % 0.1f;
+                _value -= _value % 10;
                 _value /= 10;
             }
 
@@ -94,7 +97,7 @@ namespace Recounter
             if (_value > _maxValue)
                 _value = _maxValue;
 
-            _field.text = (_value * _scale).ToString(_format);
+            _field.text = Output.ToString(_format);
         }
 
         void ResetValue()
@@ -105,24 +108,25 @@ namespace Recounter
 
         public void PromptNumber(Action<float> action, Action cancel, string format = "C") => PromptNumber(action, cancel, format, _defaultMaxValue);
 
-        public void PromptNumber(Action<float> action, Action cancel, string format, float maxValue, float scale = 1)
+        public void PromptNumber(Action<float> action, Action cancel, string format, float maxScaledValue, int digitOffset = 2)
         {
-            _maxValue = maxValue;
-
-            Open();
-
             _numberEntered = action;
             _canceled = cancel;
 
             _format = format;
-            _scale = scale;
+
+            _scale = 1 / Mathf.Pow(10, digitOffset);
+
+            _maxValue = Mathf.RoundToInt(maxScaledValue / _scale);
 
             ResetValue();
+
+            Open();
         }
 
         public void Confirm()
         {
-            _numberEntered?.Invoke(_value * _scale);
+            _numberEntered?.Invoke(Output);
             Close();
         }
 
