@@ -13,6 +13,8 @@ namespace Recounter.Service
         [SerializeField] Button _button;
         [SerializeField] LineItemEditor _editor;
 
+        public LineItem LinkedLineItem => _linkedLineItem;
+
         LineItem _linkedLineItem;
 
         void Awake()
@@ -20,7 +22,7 @@ namespace Recounter.Service
             _button.onClick.AddListener(Select);
         }
 
-        void Select()
+        public void Select()
         {
             _editor.Select(_linkedLineItem, Deselect);
             _focusGraphic.enabled = true;

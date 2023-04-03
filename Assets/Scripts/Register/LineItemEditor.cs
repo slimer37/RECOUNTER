@@ -10,6 +10,7 @@ namespace Recounter
         [SerializeField] NumberEntry _numEntry;
         [SerializeField] Button _changeQuantity;
         [SerializeField] Button _deleteButton;
+        [SerializeField] Transform _listParent;
 
         LineItem _target;
 
@@ -26,6 +27,8 @@ namespace Recounter
 
         public void Select(LineItem lineItem, Action switched)
         {
+            if (_target == lineItem) return;
+
             _changeQuantity.interactable = true;
             _deleteButton.interactable = true;
 
@@ -40,8 +43,29 @@ namespace Recounter
 
         void Delete()
         {
-            _target.Delete();
+            var transaction = _target.Transaction;
+            var oldTarget = _target;
+
             _target = null;
+
+            if (transaction.LineItems.Count > 0)
+            {
+                // Select last line item
+                var last = _listParent.GetChild(_listParent.childCount - 1).GetComponent<LineItemUI>();
+
+                if (last.LinkedLineItem != oldTarget)
+                {
+                    last.Select();
+                }
+                else
+                {
+                    _listParent.GetChild(_listParent.childCount - 2).GetComponent<LineItemUI>().Select();
+                }
+            }
+
+            oldTarget.Delete();
+
+            if (_target != null) return;
 
             _switchedSelection = null;
 
