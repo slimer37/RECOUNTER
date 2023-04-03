@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Recounter.Service
 {
-    public class Transaction
+    public class Transaction : IDisposable
     {
         public IReadOnlyList<LineItem> LineItems => _lineItems.AsReadOnly();
 
@@ -89,6 +89,14 @@ namespace Recounter.Service
             transaction.AddDirectly(lineItem);
 
             return transaction;
+        }
+
+        public void Dispose()
+        {
+            foreach (var item in _lineItems.ToArray())
+            {
+                item.Delete();
+            }
         }
     }
 

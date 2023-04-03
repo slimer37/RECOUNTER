@@ -1,5 +1,6 @@
 using Recounter.Inventory;
 using TMPro;
+using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +9,8 @@ namespace Recounter.Service
     public class PointOfSale : MonoBehaviour
     {
         // TODO:
-        // Scanning and Manually looking up items
-        // Totaling Sub-Total + Tax = Total
+        // Manually looking up items
+        // Tax
         // Holding orders
         // Pay (Cash tender / card)
         // Receipt printing
@@ -22,6 +23,7 @@ namespace Recounter.Service
         [SerializeReference] NumberEntry _numberEntry;
         [SerializeReference] Button _discountFlatButton;
         [SerializeReference] Button _discountPercentButton;
+        [SerializeReference] Button _voidButton;
 
         [SerializeField] LineItemUI _lineItemPrefab;
         [SerializeField] Transform _listParent;
@@ -47,10 +49,13 @@ namespace Recounter.Service
 
             UpdateTotal();
 
+            _voidButton.onClick.AddListener(VoidTransaction);
             _discountFlatButton.onClick.AddListener(DiscountFlat);
             _discountPercentButton.onClick.AddListener(DiscountPercent);
 
             _lineItemPrefab.gameObject.SetActive(false);
+
+            _voidButton.interactable = false;
         }
 
         void DiscountFlat()
@@ -81,12 +86,26 @@ namespace Recounter.Service
 
             if (_currentTransaction == null)
             {
-                _currentTransaction = Transaction.Create(lineItem, CreateLineItemUI, UpdateTotal);
+                BeginTransaction(lineItem);
             }
             else
             {
                 _currentTransaction.Add(lineItem);
             }
+        }
+
+        void BeginTransaction(LineItem initial)
+        {
+            _currentTransaction = Transaction.Create(initial, CreateLineItemUI, UpdateTotal);
+            _voidButton.interactable = true;
+        }
+
+        void VoidTransaction()
+        {
+            _currentTransaction.Dispose();
+            _currentTransaction = null;
+
+            _voidButton.interactable = false;
         }
 
         void CreateLineItemUI(LineItem lineItem)
