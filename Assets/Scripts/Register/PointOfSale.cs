@@ -49,6 +49,8 @@ namespace Recounter.Service
 
             _discountFlatButton.onClick.AddListener(DiscountFlat);
             _discountPercentButton.onClick.AddListener(DiscountPercent);
+
+            _lineItemPrefab.gameObject.SetActive(false);
         }
 
         void DiscountFlat()
@@ -89,7 +91,9 @@ namespace Recounter.Service
 
         void CreateLineItemUI(LineItem lineItem)
         {
-            Instantiate(_lineItemPrefab, _listParent).PopulateInfo(lineItem);
+            var clone = Instantiate(_lineItemPrefab, _listParent);
+            clone.PopulateInfo(lineItem);
+            clone.gameObject.SetActive(true);
         }
 
         void UpdateTotal() => UpdateTotal(_currentTransaction?.Total ?? 0);
