@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,9 +46,7 @@ namespace Recounter.Service
         {
             _linkedLineItem = lineItem;
 
-            _info.text = lineItem.Product.DisplayName;
-            _price.text = lineItem.Product.FormattedPrice;
-            _quantity.text = lineItem.Quantity.ToString();
+            UpdateDisplay();
 
             lineItem.Updated += UpdateDisplay;
             lineItem.Deleted += OnDelete;
@@ -57,6 +56,7 @@ namespace Recounter.Service
 
         void UpdateDisplay()
         {
+            _info.text = $"{_linkedLineItem.Product.DisplayName} @ {_linkedLineItem.UnitPrice:C}/pc";
             _quantity.text = _linkedLineItem.Quantity.ToString();
             _price.text = _linkedLineItem.Price.ToString("C");
         }

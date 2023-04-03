@@ -7,9 +7,13 @@ namespace Recounter.Service
     public class LineItemEditor : MonoBehaviour
     {
         [SerializeField] NumberEntry _numEntry;
-        [SerializeField] Button _changeQuantity;
-        [SerializeField] Button _deleteButton;
         [SerializeField] Transform _listParent;
+
+        [Header("Buttons")]
+        [SerializeField] CanvasGroup _buttonGroup;
+        [SerializeField] Button _changeQuantity;
+        [SerializeField] Button _changePrice;
+        [SerializeField] Button _deleteButton;
 
         LineItem _target;
 
@@ -17,11 +21,11 @@ namespace Recounter.Service
 
         void Awake()
         {
-            _changeQuantity.onClick.AddListener(ChangeQuantity);
+            _changeQuantity.onClick.AddListener(PromptChangeQuantity);
             _deleteButton.onClick.AddListener(Delete);
+            _changePrice.onClick.AddListener(PromptChangePrice);
 
-            _changeQuantity.interactable = false;
-            _deleteButton.interactable = false;
+            _buttonGroup.interactable = false;
         }
 
         public void Select(LineItem lineItem, Action switched)
@@ -41,13 +45,14 @@ namespace Recounter.Service
 
             _switchedSelection = switched;
 
-            _changeQuantity.interactable = true;
-            _deleteButton.interactable = true;
+            _buttonGroup.interactable = true;
         }
 
-        void ChangeQuantity() => _numEntry.PromptNumber(ChangeQuantity, () => { }, "0", 1000, 100);
-
+        void PromptChangeQuantity() => _numEntry.PromptNumber(ChangeQuantity, () => { }, "0", 1000, 100);
         void ChangeQuantity(float qty) => _target.Quantity = Mathf.RoundToInt(qty);
+
+        void PromptChangePrice() => _numEntry.PromptNumber(ChangePrice, () => { });
+        void ChangePrice(float overridePrice) => _target.OverrideUnitPrice(overridePrice);
 
         void Delete()
         {
@@ -84,8 +89,7 @@ namespace Recounter.Service
 
             if (_target != null) return;
 
-            _changeQuantity.interactable = false;
-            _deleteButton.interactable = false;
+            _buttonGroup.interactable = false;
         }
     }
 }

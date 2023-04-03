@@ -96,7 +96,13 @@ namespace Recounter.Service
     {
         public readonly Product Product;
 
+        public Transaction Transaction { get; set; }
         public float Price { get; private set; }
+
+
+        public event Action Updated;
+
+        public event Action Deleted;
 
         public int Quantity
         {
@@ -105,9 +111,7 @@ namespace Recounter.Service
             {
                 _quantity = value;
 
-                Price = Product.Price * _quantity;
-
-                Updated?.Invoke();
+                Update();
 
                 if (_quantity == 0)
                 {
@@ -116,13 +120,26 @@ namespace Recounter.Service
             }
         }
 
+        public float UnitPrice => _overrideUnitPrice ?? Product.Price;
+        public bool OverridingUnitPrice => _overrideUnitPrice != null;
+
         int _quantity;
 
-        public event Action Updated;
+        float? _overrideUnitPrice = null;
 
-        public event Action Deleted;
+        public void OverrideUnitPrice(float overrideUnitPrice)
+        {
+            _overrideUnitPrice = overrideUnitPrice;
+            Update();
+        }
 
-        public Transaction Transaction { get; set; }
+        void Update()
+        {
+            Price = UnitPrice * _quantity;
+            Updated?.Invoke();
+        }
+
+        public void ClearOverrideUnitPrice() => _overrideUnitPrice = null;
 
         public LineItem(Product product, int quantity = 1)
         {
