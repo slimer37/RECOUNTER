@@ -92,7 +92,7 @@ namespace Recounter.Service
         void CreateLineItemUI(LineItem lineItem)
         {
             var clone = Instantiate(_lineItemPrefab, _listParent);
-            clone.PopulateInfo(lineItem);
+            clone.Initialize(lineItem);
             clone.gameObject.SetActive(true);
         }
 
