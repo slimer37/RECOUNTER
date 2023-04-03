@@ -60,7 +60,16 @@ namespace Recounter.Service
         void AddDirectly(LineItem lineItem)
         {
             _lineItems.Add(lineItem);
+            lineItem.Transaction = this;
+
             LineItemAdded?.Invoke(lineItem);
+            TotalChanged?.Invoke(CalculateTotal());
+        }
+
+        public void Remove(LineItem lineItem)
+        {
+            _lineItems.Remove(lineItem);
+
             TotalChanged?.Invoke(CalculateTotal());
         }
 
@@ -94,6 +103,11 @@ namespace Recounter.Service
                 Price = Product.Price * _quantity;
 
                 QuantityChanged?.Invoke(_quantity);
+
+                if (_quantity == 0)
+                {
+                    Delete();
+                }
             }
         }
 
@@ -101,10 +115,20 @@ namespace Recounter.Service
 
         public event Action<int> QuantityChanged;
 
+        public event Action Deleted;
+
+        public Transaction Transaction { get; set; }
+
         public LineItem(Product product, int quantity = 1)
         {
             Product = product;
             Quantity = quantity;
+        }
+
+        public void Delete()
+        {
+            Transaction.Remove(this);
+            Deleted?.Invoke();
         }
     }
 }

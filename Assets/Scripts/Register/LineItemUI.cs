@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Recounter.Service
@@ -32,6 +31,14 @@ namespace Recounter.Service
             _focusGraphic.enabled = false;
         }
 
+        void OnDelete()
+        {
+            _linkedLineItem.QuantityChanged -= QuantityChanged;
+            _linkedLineItem.Deleted -= OnDelete;
+
+            Destroy(gameObject);
+        }
+
         public void Initialize(LineItem lineItem)
         {
             _linkedLineItem = lineItem;
@@ -41,6 +48,7 @@ namespace Recounter.Service
             _quantity.text = lineItem.Quantity.ToString();
 
             lineItem.QuantityChanged += QuantityChanged;
+            lineItem.Deleted += OnDelete;
 
             Select();
         }
