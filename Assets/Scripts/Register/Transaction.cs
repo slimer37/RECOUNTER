@@ -120,7 +120,8 @@ namespace Recounter.Service
             }
         }
 
-        public float UnitPrice => _overrideUnitPrice ?? Product.Price;
+        public float OriginalUnitPrice => Product.Price;
+        public float UnitPrice => _overrideUnitPrice ?? OriginalUnitPrice;
         public bool UnitPriceOverrideIsActive => _overrideUnitPrice != null;
 
         int _quantity;
@@ -129,6 +130,8 @@ namespace Recounter.Service
 
         public void OverrideUnitPrice(float overrideUnitPrice)
         {
+            if (overrideUnitPrice == OriginalUnitPrice) return;
+
             _overrideUnitPrice = overrideUnitPrice;
             Update();
         }

@@ -1,5 +1,4 @@
 using TMPro;
-using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,6 +56,12 @@ namespace Recounter.Service
         void UpdateDisplay()
         {
             _info.text = $"{_linkedLineItem.Product.DisplayName} @ {_linkedLineItem.UnitPrice:C}/pc";
+
+            if (_linkedLineItem.UnitPriceOverrideIsActive)
+            {
+                _info.text += "*";
+            }
+
             _quantity.text = _linkedLineItem.Quantity.ToString();
             _price.text = _linkedLineItem.Price.ToString("C");
         }

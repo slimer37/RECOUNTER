@@ -61,7 +61,8 @@ namespace Recounter.Service
         void ChangePrice(float overridePrice)
         {
             _target.OverrideUnitPrice(overridePrice);
-            _resetPrice.interactable = true;
+
+            _resetPrice.interactable = _target.UnitPriceOverrideIsActive;
         }
 
         void Delete()
