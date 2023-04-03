@@ -13,6 +13,7 @@ namespace Recounter.Service
         [SerializeField] CanvasGroup _buttonGroup;
         [SerializeField] Button _changeQuantity;
         [SerializeField] Button _changePrice;
+        [SerializeField] Button _resetPrice;
         [SerializeField] Button _deleteButton;
 
         LineItem _target;
@@ -24,7 +25,9 @@ namespace Recounter.Service
             _changeQuantity.onClick.AddListener(PromptChangeQuantity);
             _deleteButton.onClick.AddListener(Delete);
             _changePrice.onClick.AddListener(PromptChangePrice);
+            _resetPrice.onClick.AddListener(ResetPrice);
 
+            _resetPrice.interactable = false;
             _buttonGroup.interactable = false;
         }
 
@@ -45,6 +48,8 @@ namespace Recounter.Service
 
             _switchedSelection = switched;
 
+            _resetPrice.interactable = lineItem.UnitPriceOverrideIsActive;
+
             _buttonGroup.interactable = true;
         }
 
@@ -52,11 +57,22 @@ namespace Recounter.Service
         void ChangeQuantity(float qty) => _target.Quantity = Mathf.RoundToInt(qty);
 
         void PromptChangePrice() => _numEntry.PromptNumber(ChangePrice, () => { });
-        void ChangePrice(float overridePrice) => _target.OverrideUnitPrice(overridePrice);
+
+        void ChangePrice(float overridePrice)
+        {
+            _target.OverrideUnitPrice(overridePrice);
+            _resetPrice.interactable = true;
+        }
 
         void Delete()
         {
             _target.Delete();
+        }
+
+        void ResetPrice()
+        {
+            _target.ClearOverrideUnitPrice();
+            _resetPrice.interactable = false;
         }
 
         void UnsetTargetLineItem()

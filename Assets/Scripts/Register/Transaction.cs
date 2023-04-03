@@ -121,7 +121,7 @@ namespace Recounter.Service
         }
 
         public float UnitPrice => _overrideUnitPrice ?? Product.Price;
-        public bool OverridingUnitPrice => _overrideUnitPrice != null;
+        public bool UnitPriceOverrideIsActive => _overrideUnitPrice != null;
 
         int _quantity;
 
@@ -139,7 +139,11 @@ namespace Recounter.Service
             Updated?.Invoke();
         }
 
-        public void ClearOverrideUnitPrice() => _overrideUnitPrice = null;
+        public void ClearOverrideUnitPrice()
+        {
+            _overrideUnitPrice = null;
+            Update();
+        }
 
         public LineItem(Product product, int quantity = 1)
         {
