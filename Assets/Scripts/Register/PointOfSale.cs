@@ -24,6 +24,7 @@ namespace Recounter.Service
         [SerializeReference] Button _discountFlatButton;
         [SerializeReference] Button _discountPercentButton;
         [SerializeReference] Button _voidButton;
+        [SerializeReference] ConfirmationPrompt _confirmationPrompt;
 
         [SerializeField] LineItemUI _lineItemPrefab;
         [SerializeField] Transform _listParent;
@@ -49,7 +50,7 @@ namespace Recounter.Service
 
             UpdateTotal();
 
-            _voidButton.onClick.AddListener(VoidTransaction);
+            _voidButton.onClick.AddListener(PromptVoidTransaction);
             _discountFlatButton.onClick.AddListener(DiscountFlat);
             _discountPercentButton.onClick.AddListener(DiscountPercent);
 
@@ -93,6 +94,11 @@ namespace Recounter.Service
         {
             _currentTransaction = new Transaction(CreateLineItemUI, UpdateTotal);
             _voidButton.interactable = true;
+        }
+
+        void PromptVoidTransaction()
+        {
+            _confirmationPrompt.Prompt("Are you sure you want to void this transaction?", VoidTransaction);
         }
 
         void VoidTransaction()
