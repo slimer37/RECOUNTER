@@ -10,8 +10,8 @@ namespace Recounter.Service
 
         readonly List<LineItem> _lineItems = new();
         
-        Action<LineItem> LineItemAdded;
-        Action<float> TotalChanged;
+        readonly Action<LineItem> LineItemAdded;
+        readonly Action<float> TotalChanged;
 
         public float Total { get; private set; }
 
@@ -78,17 +78,10 @@ namespace Recounter.Service
             RecalculateTotal();
         }
 
-        public static Transaction Create(LineItem lineItem, Action<LineItem> lineItemCallback, Action<float> totalChangeCallback)
+        public Transaction(Action<LineItem> lineItemCallback, Action<float> totalChangeCallback)
         {
-            var transaction = new Transaction
-            {
-                LineItemAdded = lineItemCallback,
-                TotalChanged = totalChangeCallback
-            };
-
-            transaction.AddDirectly(lineItem);
-
-            return transaction;
+            LineItemAdded = lineItemCallback;
+            TotalChanged = totalChangeCallback;
         }
 
         public void Dispose()

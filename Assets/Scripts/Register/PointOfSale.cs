@@ -84,19 +84,14 @@ namespace Recounter.Service
         {
             var lineItem = new LineItem(product);
 
-            if (_currentTransaction == null)
-            {
-                BeginTransaction(lineItem);
-            }
-            else
-            {
-                _currentTransaction.Add(lineItem);
-            }
+            if (_currentTransaction == null) BeginTransaction();
+
+            _currentTransaction.Add(lineItem);
         }
 
-        void BeginTransaction(LineItem initial)
+        void BeginTransaction()
         {
-            _currentTransaction = Transaction.Create(initial, CreateLineItemUI, UpdateTotal);
+            _currentTransaction = new Transaction(CreateLineItemUI, UpdateTotal);
             _voidButton.interactable = true;
         }
 
