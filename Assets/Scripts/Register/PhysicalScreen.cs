@@ -25,7 +25,10 @@ namespace Recounter
 
         [Header("Input")]
         [SerializeField] GraphicRaycaster _raycaster;
+
+        [Header("Sounds")]
         [SerializeField] EventReference _beepSfx;
+        [SerializeField] Toggle _volumeSwitch;
 
         bool _inUse;
         bool _mouseDown;
@@ -180,7 +183,7 @@ namespace Recounter
 
                 ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerClickHandler);
 
-                if (_hoveredSelectable is Button)
+                if (_volumeSwitch.isOn && _hoveredSelectable is Button)
                     RuntimeManager.PlayOneShotAttached(_beepSfx, gameObject);
 
                 _pressTarget = null;
