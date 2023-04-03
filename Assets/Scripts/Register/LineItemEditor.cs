@@ -1,9 +1,8 @@
-using Recounter.Service;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Recounter
+namespace Recounter.Service
 {
     public class LineItemEditor : MonoBehaviour
     {
@@ -29,12 +28,21 @@ namespace Recounter
         {
             if (_target == lineItem) return;
 
-            _changeQuantity.interactable = true;
-            _deleteButton.interactable = true;
+            if (_target != null)
+            {
+                _target.Deleted -= UnsetTargetLineItem;
+            }
+
+            _target = lineItem;
+
+            _target.Deleted += UnsetTargetLineItem;
 
             _switchedSelection?.Invoke();
-            _target = lineItem;
+
             _switchedSelection = switched;
+
+            _changeQuantity.interactable = true;
+            _deleteButton.interactable = true;
         }
 
         void ChangeQuantity() => _numEntry.PromptNumber(ChangeQuantity, () => { }, "0", 1000, 100);
@@ -43,10 +51,21 @@ namespace Recounter
 
         void Delete()
         {
+            _target.Delete();
+        }
+
+        void UnsetTargetLineItem()
+        {
+            if (_target == null)
+            {
+                throw new NullReferenceException("Cannot unset null target line item.");
+            }
+
             var transaction = _target.Transaction;
             var oldTarget = _target;
 
             _target = null;
+            _switchedSelection = null;
 
             if (transaction.LineItems.Count > 0)
             {
@@ -63,11 +82,7 @@ namespace Recounter
                 }
             }
 
-            oldTarget.Delete();
-
             if (_target != null) return;
-
-            _switchedSelection = null;
 
             _changeQuantity.interactable = false;
             _deleteButton.interactable = false;
