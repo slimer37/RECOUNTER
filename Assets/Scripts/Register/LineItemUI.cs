@@ -35,7 +35,7 @@ namespace Recounter.Service
 
         void OnDelete()
         {
-            _linkedLineItem.QuantityChanged -= QuantityChanged;
+            _linkedLineItem.Updated -= UpdateDisplay;
             _linkedLineItem.Deleted -= OnDelete;
 
             Destroy(gameObject);
@@ -49,15 +49,15 @@ namespace Recounter.Service
             _price.text = lineItem.Product.FormattedPrice;
             _quantity.text = lineItem.Quantity.ToString();
 
-            lineItem.QuantityChanged += QuantityChanged;
+            lineItem.Updated += UpdateDisplay;
             lineItem.Deleted += OnDelete;
 
             Select();
         }
 
-        void QuantityChanged(int quantity)
+        void UpdateDisplay()
         {
-            _quantity.text = quantity.ToString();
+            _quantity.text = _linkedLineItem.Quantity.ToString();
             _price.text = _linkedLineItem.Price.ToString("C");
         }
     }

@@ -15,7 +15,7 @@ namespace Recounter.Service
 
         public float Total { get; private set; }
 
-        float CalculateTotal()
+        void RecalculateTotal()
         {
             var total = 0.0f;
 
@@ -24,7 +24,9 @@ namespace Recounter.Service
                 total += li.Price;
             }
 
-            return Total = total;
+            Total = total;
+
+            TotalChanged?.Invoke(total);
         }
 
         bool ContainsProduct(Product product, out LineItem lineItem)
@@ -48,9 +50,6 @@ namespace Recounter.Service
             if (ContainsProduct(newItem.Product, out var lineItem))
             {
                 lineItem.Quantity += newItem.Quantity;
-
-                TotalChanged?.Invoke(CalculateTotal());
-
                 return;
             }
 
@@ -60,17 +59,23 @@ namespace Recounter.Service
         void AddDirectly(LineItem lineItem)
         {
             _lineItems.Add(lineItem);
+
             lineItem.Transaction = this;
 
+            lineItem.Updated += RecalculateTotal;
+
             LineItemAdded?.Invoke(lineItem);
-            TotalChanged?.Invoke(CalculateTotal());
+
+            RecalculateTotal();
         }
 
         public void Remove(LineItem lineItem)
         {
             _lineItems.Remove(lineItem);
 
-            TotalChanged?.Invoke(CalculateTotal());
+            lineItem.Updated -= RecalculateTotal;
+
+            RecalculateTotal();
         }
 
         public static Transaction Create(LineItem lineItem, Action<LineItem> lineItemCallback, Action<float> totalChangeCallback)
@@ -102,7 +107,7 @@ namespace Recounter.Service
 
                 Price = Product.Price * _quantity;
 
-                QuantityChanged?.Invoke(_quantity);
+                Updated?.Invoke();
 
                 if (_quantity == 0)
                 {
@@ -113,7 +118,7 @@ namespace Recounter.Service
 
         int _quantity;
 
-        public event Action<int> QuantityChanged;
+        public event Action Updated;
 
         public event Action Deleted;
 
