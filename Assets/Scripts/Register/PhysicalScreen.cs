@@ -141,6 +141,12 @@ namespace Recounter
             if (selectable)
             {
                 newHover = selectable.gameObject;
+
+                if (!selectable.IsInteractable())
+                {
+                    newHover = null;
+                    selectable = null;
+                }
             }
 
             _pointerData.pointerCurrentRaycast = _results[0];
@@ -151,6 +157,8 @@ namespace Recounter
         void DoClick(bool press, bool denyClick = false)
         {
             _mouseDown = press;
+
+            EvaluateCursorEvents();
 
             if (_mouseDown)
             {
@@ -165,8 +173,6 @@ namespace Recounter
             }
             else if (_pressTarget)
             {
-                EvaluateCursorEvents();
-
                 ExecuteEvents.Execute(_pressTarget, _pointerData, ExecuteEvents.pointerUpHandler);
                 ExecuteEvents.Execute(_hover, _pointerData, ExecuteEvents.endDragHandler);
 
@@ -179,6 +185,8 @@ namespace Recounter
 
                 _pressTarget = null;
             }
+
+            EvaluateCursorEvents();
         }
 
         void EvaluateCursorEvents()
