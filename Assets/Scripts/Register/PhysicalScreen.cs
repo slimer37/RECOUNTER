@@ -48,10 +48,18 @@ namespace Recounter
 
         List<RaycastResult> _results = new();
 
+        protected override bool CanInteract(Employee e) => !e.RightHand.IsFull;
+
         protected override HudInfo FormHud(Employee e) => new()
         {
             icon = Icon.Access,
             text = "Access"
+        };
+
+        protected override HudInfo FormNonInteractHud(Employee e) => new()
+        {
+            icon = Icon.Invalid,
+            text = "Hands full"
         };
 
         void Awake()
@@ -140,7 +148,6 @@ namespace Recounter
 
         protected override void OnInteract(Employee e)
         {
-            print("interact by " + Interactor);
             ToggleActive();
         }
 
