@@ -43450,6 +43450,7 @@ GameObject:
   - component: {fileID: 3300118599690943141}
   - component: {fileID: 2107017290114005696}
   - component: {fileID: 3300118599690943142}
+  - component: {fileID: 3300118599690943143}
   m_Layer: 0
   m_Name: mouse
   m_TagString: Untagged
@@ -44429,6 +44430,27 @@ MonoBehaviour:
     target: {fileID: 94194719}
     handClosedness: 0.2
     thumbCurl: 1
+--- !u!65 &3300118599690943143
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986750870081146659}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.10655274, y: 0.056363657, z: 0.19237621}
+  m_Center: {x: -0.00000047683716, y: 0.028181829, z: 0}
 --- !u!1 &3316347587946419648
 GameObject:
   m_ObjectHideFlags: 0
@@ -45403,6 +45425,7 @@ GameObject:
   - component: {fileID: 7385172452614326622}
   - component: {fileID: 1842735113126507732}
   - component: {fileID: 420652557066807524}
+  - component: {fileID: 7385172452614326623}
   m_Layer: 0
   m_Name: keyboard
   m_TagString: Untagged
@@ -45624,6 +45647,27 @@ Transform:
   m_Father: {fileID: 543450652716479535}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: -3.046, z: 0}
+--- !u!65 &7385172452614326623
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6419773326181593630}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.33959025, y: 0.034407265, z: 0.1655871}
+  m_Center: {x: -0.00004862994, y: 0.017374653, z: 0.0005441308}
 --- !u!4 &7408442566963873840
 Transform:
   m_ObjectHideFlags: 0
