@@ -165,15 +165,17 @@ public class Hand : MonoBehaviour
 
         SetViewmodelLayer(false);
 
-        HeldObject = null;
-
         _handTarget = null;
 
         _carryStates = HandCarryStates.None;
 
         _resetTime = 0;
 
-        return HeldObject;
+        var temp = HeldObject;
+
+        HeldObject = null;
+
+        return temp;
     }
 
     void SetViewmodelLayer(bool viewmodel)
