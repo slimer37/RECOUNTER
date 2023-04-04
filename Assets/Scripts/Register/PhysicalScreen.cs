@@ -30,6 +30,9 @@ namespace Recounter
         [SerializeField] EventReference _beepSfx;
         [SerializeField] Toggle _volumeSwitch;
 
+        [Header("Fun Mouse")]
+        [SerializeField] PhysicalMouse _mouse;
+
         bool _inUse;
         bool _mouseDown;
 
@@ -104,6 +107,8 @@ namespace Recounter
             _pointerData.position = _camera.WorldToScreenPoint(_cursor.position);
 
             EvaluateCursorEvents();
+
+            _mouse.Move(_cursor.anchoredPosition);
         }
 
         void ToggleActive()
@@ -122,10 +127,20 @@ namespace Recounter
             {
                 DoClick(false, true);
             }
+
+            if (_inUse)
+            {
+                _mouse.StartUsing(LastInteractor.RightHand);
+            }
+            else
+            {
+                _mouse.StopUsing();
+            }
         }
 
         protected override void OnInteract(Employee e)
         {
+            print("interact by " + Interactor);
             ToggleActive();
         }
 
