@@ -17,6 +17,7 @@ public class Hand : MonoBehaviour
     [Header("Viewmodel")]
     [SerializeField] Transform _handViewmodelTarget;
     [SerializeField] float _resetSpeed;
+    [SerializeField] float _setSpeed;
 
     [Header("Closing")]
     [SerializeField] Animator _viewmodelAnimator;
@@ -36,6 +37,7 @@ public class Hand : MonoBehaviour
     Quaternion _defaultHandRotation;
 
     float _resetTime;
+    float _setTime;
     float _handRotationVelocity;
 
     Transform _handTarget;
@@ -141,6 +143,8 @@ public class Hand : MonoBehaviour
     {
         _handTarget = pose.target;
 
+        _setTime = 0;
+
         _viewmodelAnimator.SetFloat(_handClosedParam, pose.handClosedness);
         _viewmodelAnimator.SetFloat(_thumbCurlParam, pose.thumbCurl);
     }
@@ -151,6 +155,8 @@ public class Hand : MonoBehaviour
     public void ResetHandViewmodel()
     {
         _handTarget = null;
+
+        _resetTime = 0;
     }
 
     /// <inheritdoc cref="Hold(Component, Vector3, Quaternion)"/>
@@ -176,8 +182,6 @@ public class Hand : MonoBehaviour
         ResetHandViewmodel();
 
         _carryStates = HandCarryStates.None;
-
-        _resetTime = 0;
 
         var temp = HeldObject;
 
@@ -212,7 +216,12 @@ public class Hand : MonoBehaviour
 
         if (showViewmodel)
         {
-            _handViewmodelTarget.SetPositionAndRotation(_handTarget.position, _handTarget.rotation);
+            if (_setTime < 1)
+                _setTime += Time.deltaTime * _setSpeed;
+
+            _handViewmodelTarget.SetPositionAndRotation(
+                Vector3.Lerp(_handViewmodelTarget.position, _handTarget.position, _setTime),
+                _handTarget.rotation);
         }
         else
         {

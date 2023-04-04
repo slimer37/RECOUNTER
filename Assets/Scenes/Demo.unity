@@ -1248,6 +1248,7 @@ MonoBehaviour:
   _breathingFrequency: 0.8
   _handViewmodelTarget: {fileID: 254109475}
   _resetSpeed: 2
+  _setSpeed: 10
   _viewmodelAnimator: {fileID: 1316474485}
   _handClosedParam: Right Hand Closed
   _thumbCurlParam: Right Thumb Curl
@@ -22781,6 +22782,7 @@ MonoBehaviour:
   _breathingFrequency: 0.8
   _handViewmodelTarget: {fileID: 420901016}
   _resetSpeed: 2
+  _setSpeed: 10
   _viewmodelAnimator: {fileID: 1316474485}
   _handClosedParam: Left Hand Closed
   _thumbCurlParam: Left Thumb Curl
