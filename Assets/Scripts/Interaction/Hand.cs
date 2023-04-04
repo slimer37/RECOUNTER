@@ -145,6 +145,14 @@ public class Hand : MonoBehaviour
         _viewmodelAnimator.SetFloat(_thumbCurlParam, pose.thumbCurl);
     }
 
+    /// <summary>
+    /// Clears the follow target for the hand viewmodel.
+    /// </summary>
+    public void ResetHandViewmodel()
+    {
+        _handTarget = null;
+    }
+
     /// <inheritdoc cref="Hold(Component, Vector3, Quaternion)"/>
     public void Hold(Component obj) => Hold(obj, _defaultHoldPosition, Quaternion.Euler(_defaultHoldRotation));
 
@@ -165,7 +173,7 @@ public class Hand : MonoBehaviour
 
         SetViewmodelLayer(false);
 
-        _handTarget = null;
+        ResetHandViewmodel();
 
         _carryStates = HandCarryStates.None;
 
@@ -200,13 +208,11 @@ public class Hand : MonoBehaviour
 
     void HandleViewmodel()
     {
-        var showViewmodel = !_carryStates.HasFlag(HandCarryStates.NoViewmodel) && HeldObject && _handTarget;
+        var showViewmodel = !_carryStates.HasFlag(HandCarryStates.NoViewmodel) && _handTarget;
 
         if (showViewmodel)
         {
-            _handViewmodelTarget.SetPositionAndRotation(
-                HeldObject.transform.TransformPoint(_handTarget.localPosition),
-                HeldObject.transform.rotation * _handTarget.localRotation);
+            _handViewmodelTarget.SetPositionAndRotation(_handTarget.position, _handTarget.rotation);
         }
         else
         {

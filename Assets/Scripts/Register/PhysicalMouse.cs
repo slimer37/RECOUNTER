@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Recounter
@@ -22,8 +23,9 @@ namespace Recounter
 
         public void StartUsing(Hand hand)
         {
-            hand.Hold(transform);
-            hand.SetCarryStates(HandCarryStates.FreePosition | HandCarryStates.FreeRotation | HandCarryStates.ResetLayer);
+            if (hand.IsFull)
+                throw new ArgumentException("Cannot use mouse if hand is full.");
+
             hand.SetHandViewmodel(_handPose);
 
             _hand = hand;
@@ -40,9 +42,10 @@ namespace Recounter
 
         public void StopUsing()
         {
-            if (!_hand) return;
+            if (!_hand)
+                throw new InvalidOperationException("Mouse not in use.");
 
-            _hand.Clear();
+            _hand.ResetHandViewmodel();
             _hand = null;
         }
     }
