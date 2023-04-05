@@ -1,10 +1,13 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 namespace Recounter.Service
 {
     public class CashDrawer : Interactable
     {
+        [SerializeField] bool _openableByHand;
+
         [Header("Animation")]
         [SerializeField] Transform _drawer;
         [SerializeField] Vector3 _closedPosition;
@@ -13,6 +16,8 @@ namespace Recounter.Service
         [SerializeField] Ease _openEase;
         [SerializeField] float _closeTime;
         [SerializeField] Ease _closeEase;
+
+        public bool IsAnimating => _drawerTween.IsActive() && _drawerTween.IsPlaying();
 
         Tween _drawerTween;
 
@@ -29,11 +34,29 @@ namespace Recounter.Service
             icon = Icon.Invalid
         };
 
-        protected override bool CanInteract(Employee e) => !_drawerTween.IsActive() || !_drawerTween.IsPlaying();
+        protected override bool CanInteract(Employee e) => !IsAnimating && (_openableByHand || _isOpen);
 
         protected override void OnInteract(Employee e)
         {
-            _isOpen = !_isOpen;
+            SetOpen(!_isOpen);
+        }
+
+        public void Open() => SetOpen(true);
+
+        void SetOpen(bool open)
+        {
+            if (IsAnimating)
+            {
+                throw new InvalidOperationException("Drawer is animating.");
+            }
+
+            if (_isOpen == open)
+            {
+                Debug.LogWarning($"Drawer is already {(open ? "open" : "closed")}.");
+                return;
+            }
+
+            _isOpen = open;
 
             _drawerTween = _drawer.DOLocalMove(
                 _isOpen ? _openPosition : _closedPosition,
