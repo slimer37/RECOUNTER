@@ -1,6 +1,5 @@
 using Recounter.Inventory;
 using TMPro;
-using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,17 +14,22 @@ namespace Recounter.Service
         // Pay (Cash tender / card)
         // Receipt printing
 
+        [Header("Components")]
+        [SerializeReference] ProductEntryModule _productEntryModule;
+        [SerializeReference] NumberEntry _numberEntry;
+        [SerializeReference] ConfirmationPrompt _confirmationPrompt;
+
+        [Header("Transaction Operation Buttons")]
+        [SerializeReference] Button _discountFlatButton;
+        [SerializeReference] Button _discountPercentButton;
+        [SerializeReference] Button _voidButton;
+
+        [Header("UI")]
         [SerializeField] TMP_Text _totalInfo;
         [SerializeField, TextArea] string _totalFormat = "Sub-total: {0:C}\n\n{1}\n\nTotal: {2:C}";
         [SerializeField, TextArea] string _extraInfoFormat = "Discount: {0}";
 
-        [SerializeReference] ProductEntryModule _productEntryModule;
-        [SerializeReference] NumberEntry _numberEntry;
-        [SerializeReference] Button _discountFlatButton;
-        [SerializeReference] Button _discountPercentButton;
-        [SerializeReference] Button _voidButton;
-        [SerializeReference] ConfirmationPrompt _confirmationPrompt;
-
+        [Header("Line Item UI")]
         [SerializeField] LineItemUI _lineItemPrefab;
         [SerializeField] Transform _listParent;
 
