@@ -53,10 +53,10 @@ namespace Recounter.Service
             _buttonGroup.interactable = true;
         }
 
-        void PromptChangeQuantity() => _numEntry.PromptNumber(ChangeQuantity, () => { }, "0", 1000, 0);
+        void PromptChangeQuantity() => _numEntry.PromptNumber(ChangeQuantity, null, "0", 1000, 0);
         void ChangeQuantity(float qty) => _target.Quantity = Mathf.RoundToInt(qty);
 
-        void PromptChangePrice() => _numEntry.PromptNumber(ChangePrice, () => { });
+        void PromptChangePrice() => _numEntry.PromptNumber(ChangePrice);
 
         void ChangePrice(float overridePrice)
         {

@@ -106,7 +106,7 @@ namespace Recounter
             UpdateDisplay();
         }
 
-        public void PromptNumber(Action<float> action, Action cancel, string format = "C") => PromptNumber(action, cancel, format, _defaultMaxValue);
+        public void PromptNumber(Action<float> action, Action cancel = null, string format = "C") => PromptNumber(action, cancel, format, _defaultMaxValue);
 
         public void PromptNumber(Action<float> action, Action cancel, string format, float maxScaledValue, int digitOffset = 2)
         {

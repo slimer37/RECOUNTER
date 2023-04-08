@@ -65,12 +65,12 @@ namespace Recounter.Service
 
         void DiscountFlat()
         {
-            _numberEntry.PromptNumber(SetFlatDiscount, () => { });
+            _numberEntry.PromptNumber(SetFlatDiscount);
         }
 
         void DiscountPercent()
         {
-            _numberEntry.PromptNumber(SetPercentDiscount, () => { }, "P", 1, 4);
+            _numberEntry.PromptNumber(SetPercentDiscount, null, "P", 1, 4);
         }
 
         void SetFlatDiscount(float d)
