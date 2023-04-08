@@ -10,6 +10,10 @@ namespace Recounter
         [SerializeField] Vector3 _rotation;
         [SerializeField] float _holdThreshold = 0.15f;
 
+        [Header("Randomness")]
+        [SerializeField] Vector3 _randomizeRotation;
+        [SerializeField] Vector3 _randomizePosition;
+
         [Header("Lever Angle Calculation")]
         [SerializeField] Transform _lever;
         [SerializeField] float _leverLength = 0.203f;
@@ -65,8 +69,8 @@ namespace Recounter
 
             noteTransform.parent = transform;
 
-            var localPos = Vector3.up * (BankNote.Spacing * _notes.Count);
-            var localRot = _rotation;
+            var localPos = Vector3.up * (BankNote.Spacing * _notes.Count) + Randomize(_randomizePosition);
+            var localRot = _rotation + Randomize(_randomizeRotation);
 
             if (direct)
             {
@@ -124,6 +128,16 @@ namespace Recounter
             }
 
             _holding = false;
+        }
+
+        static Vector3 Randomize(Vector3 vector)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                vector[i] = Random.Range(-vector[i], vector[i]);
+            }
+
+            return vector;
         }
     }
 }

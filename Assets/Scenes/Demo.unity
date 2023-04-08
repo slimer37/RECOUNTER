@@ -4930,6 +4930,8 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _randomizeRotation: {x: 0, y: 2, z: 0}
+  _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 906317628}
   _leverLength: 0.203
   _leverRestOffset: 0
@@ -16554,6 +16556,8 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _randomizeRotation: {x: 0, y: 2, z: 0}
+  _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 1602898646}
   _leverLength: 0.203
   _leverRestOffset: 0
@@ -17200,6 +17204,8 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _randomizeRotation: {x: 0, y: 2, z: 0}
+  _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 1146129179}
   _leverLength: 0.203
   _leverRestOffset: 0
@@ -17966,6 +17972,8 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _randomizeRotation: {x: 0, y: 2, z: 0}
+  _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 1591255862}
   _leverLength: 0.203
   _leverRestOffset: 0
@@ -23139,6 +23147,8 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _randomizeRotation: {x: 0, y: 2, z: 0}
+  _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 535144295}
   _leverLength: 0.203
   _leverRestOffset: 0
