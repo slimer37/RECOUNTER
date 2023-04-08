@@ -8,7 +8,7 @@ namespace Recounter
     {
         [field: SerializeField] public float Value { get; private set; }
 
-        public const float Spacing = 0.01f;
+        public const float Spacing = 0.005f;
 
         readonly Stack<BankNote> _stackedNotes = new();
 
