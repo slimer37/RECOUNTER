@@ -48,7 +48,8 @@ public static class LayerUtility
         var hierarchy = gameObject.GetComponentsInChildren<Transform>();
 
 		if (hierarchy.Length != recordedLayers.Length)
-			throw new InvalidOperationException($"The hierarchy of {gameObject} changed since its layer was set.");
+			throw new InvalidOperationException($"The hierarchy of {gameObject} changed since its layer was set. " +
+				$"Actual: {hierarchy.Length} | Expected: {recordedLayers.Length}");
 
         for (int i = 0; i < hierarchy.Length; i++)
         {
