@@ -10,7 +10,7 @@ namespace Recounter
 
         public const float Spacing = 0.01f;
 
-        Stack<BankNote> _stackedNotes = new();
+        readonly Stack<BankNote> _stackedNotes = new();
 
         Collider _collider;
 
@@ -46,10 +46,10 @@ namespace Recounter
 
             _hand.Hold(this);
 
-            note.transform.DOLocalMove(Vector3.up * Spacing, 0.1f);
-            note.transform.DOLocalRotate(Vector3.up * Random.Range(-5f, 5f), 0.1f);
-
             _stackedNotes.Push(note);
+
+            note.transform.DOLocalMove(Vector3.up * (_stackedNotes.Count * Spacing), 0.1f);
+            note.transform.DOLocalRotate(Vector3.up * Random.Range(-5f, 5f), 0.1f);
         }
 
         public BankNote RetrieveFromStack()
