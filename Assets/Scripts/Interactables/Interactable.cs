@@ -84,8 +84,8 @@ public abstract class Interactable : MonoBehaviour
         if (!IsInteractionInProgress) return;
 
         IsInteractionInProgress = false;
-        Interactor = null;
         OnEndInteraction();
+        Interactor = null;
     }
 
     /// <summary>
