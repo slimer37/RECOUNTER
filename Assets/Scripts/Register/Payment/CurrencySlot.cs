@@ -1,4 +1,5 @@
 using DG.Tweening;
+using FMODUnity;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ namespace Recounter
         [SerializeField] float _moveTime;
         [SerializeField] Vector3 _rotation;
         [SerializeField] float _holdThreshold = 0.15f;
+
+        [Header("SFX")]
+        [SerializeField] EventReference _handleSfx;
 
         [Header("Randomness")]
         [SerializeField] Vector3 _randomizeRotation;
@@ -45,7 +49,7 @@ namespace Recounter
         {
             foreach (var note in GetComponentsInChildren<BankNote>())
             {
-                StoreNote(note);
+                StoreNote(note, true);
             }
 
             _lever.localEulerAngles = _leverAxis * GetClosedAngle();
@@ -81,6 +85,8 @@ namespace Recounter
 
             noteTransform.DOLocalMove(localPos, _moveTime);
             noteTransform.DOLocalRotate(localRot, _moveTime);
+
+            PlaySfx();
         }
 
         void GrabNote(Employee e)
@@ -89,7 +95,11 @@ namespace Recounter
 
             note.transform.DOKill();
             note.Interact(e);
+
+            PlaySfx();
         }
+
+        void PlaySfx() => RuntimeManager.PlayOneShotAttached(_handleSfx, gameObject);
 
         void Update()
         {

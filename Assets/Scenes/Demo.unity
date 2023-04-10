@@ -5204,6 +5204,13 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _handleSfx:
+    Guid:
+      Data1: 341012900
+      Data2: 1100547843
+      Data3: -1536045670
+      Data4: 2014589821
+    Path: event:/Handle Money
   _randomizeRotation: {x: 0, y: 2, z: 0}
   _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 906317628}
@@ -16844,6 +16851,13 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _handleSfx:
+    Guid:
+      Data1: 341012900
+      Data2: 1100547843
+      Data3: -1536045670
+      Data4: 2014589821
+    Path: event:/Handle Money
   _randomizeRotation: {x: 0, y: 2, z: 0}
   _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 1602898646}
@@ -17492,6 +17506,13 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _handleSfx:
+    Guid:
+      Data1: 341012900
+      Data2: 1100547843
+      Data3: -1536045670
+      Data4: 2014589821
+    Path: event:/Handle Money
   _randomizeRotation: {x: 0, y: 2, z: 0}
   _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 1146129179}
@@ -18260,6 +18281,13 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _handleSfx:
+    Guid:
+      Data1: 341012900
+      Data2: 1100547843
+      Data3: -1536045670
+      Data4: 2014589821
+    Path: event:/Handle Money
   _randomizeRotation: {x: 0, y: 2, z: 0}
   _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 1591255862}
@@ -23714,6 +23742,13 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _handleSfx:
+    Guid:
+      Data1: 341012900
+      Data2: 1100547843
+      Data3: -1536045670
+      Data4: 2014589821
+    Path: event:/Handle Money
   _randomizeRotation: {x: 0, y: 2, z: 0}
   _randomizePosition: {x: 0.01, y: 0, z: 0.01}
   _lever: {fileID: 535144295}
