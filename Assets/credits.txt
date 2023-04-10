@@ -9,18 +9,18 @@ Blender
 Affinity Designer
 
 ### Photos from Unsplash
-Elvira Syamsir
-James Day
-Joel Vodell
-Nick Nice
+Elvira Syamsir, James Day, Joel Vodell, Nick Nice
 
 ### Fonts from Google Fonts
 Abril Fatface * Amatic SC * Anton * Chango * Oswald * Pacifico * Roboto * Secular One
 
-*SFX from freesound.org*
+### SFX from freesound.org
+kyles, InspectorJ, Nox_Sound, Joe DeShon, kev_durr
 
 ## Third-party
 
+JSFXR
+Wikimedia
 AllSky by rpgwhitelock
 Discord SDK
 DOTween by Daniele Giardini
