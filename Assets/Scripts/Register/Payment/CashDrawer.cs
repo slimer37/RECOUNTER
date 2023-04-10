@@ -21,12 +21,12 @@ namespace Recounter.Service
 
         Tween _drawerTween;
 
-        bool _isOpen;
+        public bool IsOpen { get; private set; }
 
         protected override HudInfo FormHud(Employee e) => new()
         {
-            icon = _isOpen ? Icon.Push : Icon.Pull,
-            text = _isOpen ? "Close" : "Open"
+            icon = IsOpen ? Icon.Push : Icon.Pull,
+            text = IsOpen ? "Close" : "Open"
         };
 
         protected override HudInfo FormNonInteractHud(Employee e) => new()
@@ -34,11 +34,11 @@ namespace Recounter.Service
             icon = Icon.Invalid
         };
 
-        protected override bool CanInteract(Employee e) => !IsAnimating && (_openableByHand || _isOpen);
+        protected override bool CanInteract(Employee e) => !IsAnimating && (_openableByHand || IsOpen);
 
         protected override void OnInteract(Employee e)
         {
-            SetOpen(!_isOpen);
+            SetOpen(!IsOpen);
         }
 
         public void Open() => SetOpen(true);
@@ -50,18 +50,25 @@ namespace Recounter.Service
                 throw new InvalidOperationException("Drawer is animating.");
             }
 
-            if (_isOpen == open)
+            if (IsOpen == open)
             {
                 Debug.LogWarning($"Drawer is already {(open ? "open" : "closed")}.");
                 return;
             }
 
-            _isOpen = open;
-
             _drawerTween = _drawer.DOLocalMove(
-                _isOpen ? _openPosition : _closedPosition,
-                _isOpen ? _openTime : _closeTime)
-                .SetEase(_isOpen ? _openEase : _closeEase);
+                open ? _openPosition : _closedPosition,
+                open ? _openTime : _closeTime)
+                .SetEase(open ? _openEase : _closeEase);
+
+            if (open)
+            {
+                IsOpen = true;
+            }
+            else
+            {
+                _drawerTween.OnComplete(() => IsOpen = false);
+            }
         }
     }
 }
