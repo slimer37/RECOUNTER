@@ -41,7 +41,7 @@ namespace Recounter
         protected override HudInfo FormHud(Employee e) => new()
         {
             icon = Icon.Extract,
-            text = "Tap to take\nHold to insert"
+            text = "<sprite=0> Take\n<sprite=1> Insert"
         };
 
         float GetClosedAngle()
