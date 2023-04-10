@@ -53,7 +53,7 @@ namespace Recounter
         protected override HudInfo FormHud(Employee e) => new()
         {
             icon = Icon.Access,
-            text = "Access"
+            text = "Use Screen"
         };
 
         protected override HudInfo FormNonInteractHud(Employee e) => new()
