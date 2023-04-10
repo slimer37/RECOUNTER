@@ -15,14 +15,14 @@ namespace Recounter.Service
         // Receipt printing
 
         [Header("Components")]
-        [SerializeReference] ProductEntryModule _productEntryModule;
-        [SerializeReference] NumberEntry _numberEntry;
-        [SerializeReference] ConfirmationPrompt _confirmationPrompt;
+        [SerializeField] ProductEntryModule _productEntryModule;
+        [SerializeField] NumberEntry _numberEntry;
+        [SerializeField] ConfirmationPrompt _confirmationPrompt;
 
         [Header("Transaction Operation Buttons")]
-        [SerializeReference] Button _discountFlatButton;
-        [SerializeReference] Button _discountPercentButton;
-        [SerializeReference] Button _voidButton;
+        [SerializeField] Button _discountFlatButton;
+        [SerializeField] Button _discountPercentButton;
+        [SerializeField] Button _voidButton;
 
         [Header("UI")]
         [SerializeField] TMP_Text _totalInfo;
