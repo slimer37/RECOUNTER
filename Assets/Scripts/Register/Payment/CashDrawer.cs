@@ -1,4 +1,5 @@
 using DG.Tweening;
+using FMODUnity;
 using System;
 using UnityEngine;
 
@@ -16,6 +17,10 @@ namespace Recounter.Service
         [SerializeField] Ease _openEase;
         [SerializeField] float _closeTime;
         [SerializeField] Ease _closeEase;
+
+        [Header("SFX")]
+        [SerializeField] EventReference _openSfx;
+        [SerializeField] EventReference _closeSfx;
 
         public bool IsAnimating => _drawerTween.IsActive() && _drawerTween.IsPlaying();
 
@@ -64,10 +69,12 @@ namespace Recounter.Service
             if (open)
             {
                 IsOpen = true;
+                RuntimeManager.PlayOneShotAttached(_openSfx, _drawer.gameObject);
             }
             else
             {
                 _drawerTween.OnComplete(() => IsOpen = false);
+                RuntimeManager.PlayOneShotAttached(_closeSfx, _drawer.gameObject);
             }
         }
     }

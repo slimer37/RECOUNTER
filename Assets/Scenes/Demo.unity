@@ -15924,10 +15924,24 @@ MonoBehaviour:
   _drawer: {fileID: 561548631}
   _closedPosition: {x: 0, y: 0, z: 0}
   _openPosition: {x: 0, y: 0, z: 0.571}
-  _openTime: 1
-  _openEase: 9
-  _closeTime: 1
-  _closeEase: 4
+  _openTime: 1.4
+  _openEase: 8
+  _closeTime: 0.65
+  _closeEase: 2
+  _openSfx:
+    Guid:
+      Data1: -661989198
+      Data2: 1248182392
+      Data3: -69946452
+      Data4: -156510076
+    Path: event:/Cash Drawer Open
+  _closeSfx:
+    Guid:
+      Data1: -86884867
+      Data2: 1313476313
+      Data3: -1291116637
+      Data4: -616592579
+    Path: event:/Cash Drawer Close
 --- !u!1 &493845504
 GameObject:
   m_ObjectHideFlags: 0
