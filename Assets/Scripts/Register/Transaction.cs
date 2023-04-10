@@ -11,22 +11,52 @@ namespace Recounter.Service
         readonly List<LineItem> _lineItems = new();
         
         readonly Action<LineItem> _lineItemAdded;
-        readonly Action<float> _totalChanged;
+        readonly Action _changed;
 
+        public float Subtotal { get; private set; }
         public float Total { get; private set; }
+
+        public float PercentDiscount
+        {
+            get => _percentDiscount;
+            set
+            {
+                _percentDiscount = value;
+                RecalculateTotal();
+            }
+        }
+
+        float _percentDiscount;
+
+        public float FlatDiscount
+        {
+            get => _flatDiscount;
+            set
+            {
+                _flatDiscount = value;
+                RecalculateTotal();
+            }
+        }
+
+        float _flatDiscount;
 
         void RecalculateTotal()
         {
-            var total = 0.0f;
+            var subtotal = 0.0f;
 
             foreach (var li in _lineItems)
             {
-                total += li.Price;
+                subtotal += li.Price;
             }
 
-            Total = total;
+            Subtotal = subtotal;
 
-            _totalChanged.Invoke(total);
+            Total = Subtotal;
+
+            Total *= 1 - _percentDiscount;
+            Total -= _flatDiscount;
+
+            _changed.Invoke();
         }
 
         bool ContainsProduct(Product product, out LineItem lineItem)
@@ -78,10 +108,10 @@ namespace Recounter.Service
             RecalculateTotal();
         }
 
-        public Transaction(Action<LineItem> lineItemCallback, Action<float> totalChangeCallback)
+        public Transaction(Action<LineItem> lineItemCallback, Action changeCallback)
         {
             _lineItemAdded = lineItemCallback;
-            _totalChanged = totalChangeCallback;
+            _changed = changeCallback;
         }
 
         public void Void()

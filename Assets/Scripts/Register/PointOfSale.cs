@@ -39,17 +39,20 @@ namespace Recounter.Service
 
         Transaction _currentTransaction;
 
-        float _flatDiscount;
-        float _percentDiscount;
-
-        float _total;
-
         void OnValidate()
         {
             if (_totalInfo)
             {
                 UpdateTotal();
             }
+        }
+
+        void EnableTransactionButtons(bool enabled)
+        {
+            _voidButton.interactable = enabled;
+            _paymentButton.interactable = enabled;
+            _discountFlatButton.interactable = enabled;
+            _discountPercentButton.interactable = enabled;
         }
 
         void Awake()
@@ -66,14 +69,13 @@ namespace Recounter.Service
 
             _lineItemPrefab.gameObject.SetActive(false);
 
-            _voidButton.interactable = false;
-            _paymentButton.interactable = false;
+            EnableTransactionButtons(false);
         }
 
         void PayWithCash()
         {
-            _voidButton.interactable = false;
-            _paymentButton.interactable = false;
+            EnableTransactionButtons(false);
+
             _cashPayment.Initiate(FinishPayment);
         }
 
@@ -81,28 +83,6 @@ namespace Recounter.Service
         {
             // TODO: Continue transaction on customer side and do extra processing with transaction.
             VoidTransaction();
-        }
-
-        void DiscountFlat()
-        {
-            _numberEntry.PromptNumber(SetFlatDiscount);
-        }
-
-        void DiscountPercent()
-        {
-            _numberEntry.PromptNumber(SetPercentDiscount, null, "P", 1, 4);
-        }
-
-        void SetFlatDiscount(float d)
-        {
-            _flatDiscount = d;
-            UpdateTotal();
-        }
-
-        void SetPercentDiscount(float d)
-        {
-            _percentDiscount = d;
-            UpdateTotal();
         }
 
         void OnProductEntered(Product product)
@@ -117,8 +97,8 @@ namespace Recounter.Service
         void BeginTransaction()
         {
             _currentTransaction = new Transaction(CreateLineItemUI, UpdateTotal);
-            _voidButton.interactable = true;
-            _paymentButton.interactable = true;
+
+            EnableTransactionButtons(true);
         }
 
         void PromptVoidTransaction()
@@ -131,8 +111,7 @@ namespace Recounter.Service
             _currentTransaction.Void();
             _currentTransaction = null;
 
-            _voidButton.interactable = false;
-            _paymentButton.interactable = false;
+            EnableTransactionButtons(false);
         }
 
         void CreateLineItemUI(LineItem lineItem)
@@ -142,29 +121,30 @@ namespace Recounter.Service
             clone.gameObject.SetActive(true);
         }
 
-        void UpdateTotal() => UpdateTotal(_currentTransaction?.Total ?? 0);
+        void DiscountFlat() => _numberEntry.PromptNumber(d => _currentTransaction.FlatDiscount = d);
 
-        void UpdateTotal(float subtotal)
+        void DiscountPercent() => _numberEntry.PromptNumber(d => _currentTransaction.PercentDiscount = d, null, "P", 1, 4);
+
+        void UpdateTotal()
         {
-            _total = subtotal;
+            if (_currentTransaction == null)
+            {
+                _totalInfo.text = string.Format(_totalFormat, 0, "", 0);
+                return;
+            }
+
+            var percentDiscount = _currentTransaction.PercentDiscount;
+            var flatDiscount = _currentTransaction.FlatDiscount;
 
             var discountString = "";
 
-            if (_percentDiscount > 0)
-            {
-                discountString += _percentDiscount.ToString("P2");
-                _total *= 1 - _percentDiscount;
-            }
+            if (percentDiscount > 0) discountString += percentDiscount.ToString("P2");
 
-            if (_flatDiscount > 0)
+            if (flatDiscount > 0)
             {
-                if (_percentDiscount > 0)
-                {
-                    discountString += " + ";
-                }
+                if (percentDiscount > 0) discountString += " + ";
 
-                discountString += _flatDiscount.ToString("C");
-                _total -= _flatDiscount;
+                discountString += flatDiscount.ToString("C");
             }
 
             var extraInfo = "";
@@ -174,7 +154,7 @@ namespace Recounter.Service
                 extraInfo = string.Format(_extraInfoFormat, discountString);
             }
 
-            _totalInfo.text = string.Format(_totalFormat, subtotal, extraInfo, _total);
+            _totalInfo.text = string.Format(_totalFormat, _currentTransaction.Subtotal, extraInfo, _currentTransaction.Total);
         }
     }
 }
