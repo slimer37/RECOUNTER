@@ -10,8 +10,8 @@ namespace Recounter.Service
 
         readonly List<LineItem> _lineItems = new();
         
-        readonly Action<LineItem> LineItemAdded;
-        readonly Action<float> TotalChanged;
+        readonly Action<LineItem> _lineItemAdded;
+        readonly Action<float> _totalChanged;
 
         public float Total { get; private set; }
 
@@ -26,7 +26,7 @@ namespace Recounter.Service
 
             Total = total;
 
-            TotalChanged.Invoke(total);
+            _totalChanged.Invoke(total);
         }
 
         bool ContainsProduct(Product product, out LineItem lineItem)
@@ -64,7 +64,7 @@ namespace Recounter.Service
 
             lineItem.Updated += RecalculateTotal;
 
-            LineItemAdded.Invoke(lineItem);
+            _lineItemAdded.Invoke(lineItem);
 
             RecalculateTotal();
         }
@@ -80,8 +80,8 @@ namespace Recounter.Service
 
         public Transaction(Action<LineItem> lineItemCallback, Action<float> totalChangeCallback)
         {
-            LineItemAdded = lineItemCallback;
-            TotalChanged = totalChangeCallback;
+            _lineItemAdded = lineItemCallback;
+            _totalChanged = totalChangeCallback;
         }
 
         public void Void()
