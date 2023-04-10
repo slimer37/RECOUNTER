@@ -17,7 +17,7 @@ namespace Recounter.Service
         [Header("Components")]
         [SerializeField] ProductEntryModule _productEntryModule;
         [SerializeField] NumberEntry _numberEntry;
-        [SerializeField] ConfirmationPrompt _confirmationPrompt;
+        [SerializeField] DialogBox _confirmationPrompt;
 
         [Header("Transaction Operation Buttons")]
         [SerializeField] Button _discountFlatButton;
@@ -123,7 +123,7 @@ namespace Recounter.Service
 
         void PromptVoidTransaction()
         {
-            _confirmationPrompt.Prompt("Are you sure you want to void this transaction?", VoidTransaction);
+            _confirmationPrompt.PromptYesNo("Void", "Are you sure you want to void this transaction?", VoidTransaction);
         }
 
         void VoidTransaction()

@@ -5,15 +5,23 @@ using UnityEngine.UI;
 
 namespace Recounter
 {
-    public class ConfirmationPrompt : MonoBehaviour
+    public class DialogBox : MonoBehaviour
     {
         [SerializeField] TMP_Text _titleText;
         [SerializeField] TMP_Text _messageText;
+
+        [Header("Yes / No")]
+        [SerializeField] GameObject _twoButtonGroup;
         [SerializeField] Button _yes;
         [SerializeField] TMP_Text _yesText;
         [SerializeField] Button _no;
         [SerializeField] TMP_Text _noText;
         [SerializeField] CanvasGroup _group;
+
+        [Header("OK")]
+        [SerializeField] GameObject _okButtonGroup;
+        [SerializeField] Button _ok;
+        [SerializeField] TMP_Text _okText;
 
         Action _yesAction;
         Action _noAction;
@@ -21,6 +29,7 @@ namespace Recounter
         void Awake()
         {
             _yes.onClick.AddListener(Yes);
+            _ok.onClick.AddListener(Yes);
             _no.onClick.AddListener(No);
 
             Hide();
@@ -38,19 +47,30 @@ namespace Recounter
             Hide();
         }
 
-        public void Prompt(string message, Action yes, Action no = null, string yesLabel = "Yes", string noLabel = "No")
-            => Prompt("Confirm", message, yes, no, yesLabel, noLabel);
-
-        public void Prompt(string title, string message, Action yes, Action no = null, string yesLabel = "Yes", string noLabel = "No")
+        public void PromptOK(string title, string message, Action ok = null, string okLabel = "OK")
         {
+            _okText.text = okLabel;
+
+            ConfigureAndShow(false, title, message, ok, null);
+        }
+
+        public void PromptYesNo(string title, string message, Action yes, Action no = null, string yesLabel = "Yes", string noLabel = "No")
+        {
+            _yesText.text = yesLabel;
+            _noText.text = noLabel;
+
+            ConfigureAndShow(true, title, message, yes, no);
+        }
+
+        void ConfigureAndShow(bool twoButtons, string title, string message, Action yes, Action no)
+        {
+            _twoButtonGroup.SetActive(twoButtons);
+            _okButtonGroup.SetActive(!twoButtons);
+
             _titleText.text = title;
             _messageText.text = message;
-
             _yesAction = yes;
-            _yesText.text = yesLabel;
-
             _noAction = no;
-            _noText.text = noLabel;
 
             Show();
         }
@@ -62,7 +82,7 @@ namespace Recounter
             _group.blocksRaycasts = true;
         }
 
-        void Hide()
+        public void Hide()
         {
             _group.alpha = 0;
             _group.interactable = false;
