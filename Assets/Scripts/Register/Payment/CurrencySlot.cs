@@ -38,6 +38,12 @@ namespace Recounter
 
         float _leverClosedAngle;
 
+        protected override HudInfo FormHud(Employee e) => new()
+        {
+            icon = Icon.Extract,
+            text = "Tap to take\nHold to insert"
+        };
+
         float GetClosedAngle()
         {
             var baseHeight = transform.position.y + _notes.Count * BankNote.Spacing;
