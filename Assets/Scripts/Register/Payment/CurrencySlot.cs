@@ -10,6 +10,7 @@ namespace Recounter
         [SerializeField] float _moveTime;
         [SerializeField] Vector3 _rotation;
         [SerializeField] float _holdThreshold = 0.15f;
+        [SerializeField] int _capacity = 15;
 
         [Header("SFX")]
         [SerializeField] EventReference _handleSfx;
@@ -124,7 +125,7 @@ namespace Recounter
 
         void AttemptToStoreNote()
         {
-            if (Interactor.LeftHand.Contains<BankNote>(out var note))
+            if (_notes.Count < _capacity && Interactor.LeftHand.Contains<BankNote>(out var note))
             {
                 StoreNote(note.RetrieveFromStack());
                 _leverClosedAngle = GetClosedAngle();

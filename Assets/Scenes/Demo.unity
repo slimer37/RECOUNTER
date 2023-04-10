@@ -5204,6 +5204,7 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _capacity: 15
   _handleSfx:
     Guid:
       Data1: 341012900
@@ -16851,6 +16852,7 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _capacity: 15
   _handleSfx:
     Guid:
       Data1: 341012900
@@ -17506,6 +17508,7 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _capacity: 15
   _handleSfx:
     Guid:
       Data1: 341012900
@@ -18281,6 +18284,7 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _capacity: 15
   _handleSfx:
     Guid:
       Data1: 341012900
@@ -23742,6 +23746,7 @@ MonoBehaviour:
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
   _holdThreshold: 0.15
+  _capacity: 15
   _handleSfx:
     Guid:
       Data1: 341012900
