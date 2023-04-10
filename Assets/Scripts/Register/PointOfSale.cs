@@ -11,7 +11,7 @@ namespace Recounter.Service
         // Manually looking up items
         // Tax
         // Holding orders
-        // Pay (Cash tender / card)
+        // Card payment
         // Receipt printing
 
         [Header("Components")]
@@ -23,6 +23,10 @@ namespace Recounter.Service
         [SerializeField] Button _discountFlatButton;
         [SerializeField] Button _discountPercentButton;
         [SerializeField] Button _voidButton;
+
+        [Header("Payment")]
+        [SerializeField] PaymentMethod _cashPayment;
+        [SerializeField] Button _paymentButton;
 
         [Header("UI")]
         [SerializeField] TMP_Text _totalInfo;
@@ -58,9 +62,25 @@ namespace Recounter.Service
             _discountFlatButton.onClick.AddListener(DiscountFlat);
             _discountPercentButton.onClick.AddListener(DiscountPercent);
 
+            _paymentButton.onClick.AddListener(PayWithCash);
+
             _lineItemPrefab.gameObject.SetActive(false);
 
             _voidButton.interactable = false;
+            _paymentButton.interactable = false;
+        }
+
+        void PayWithCash()
+        {
+            _voidButton.interactable = false;
+            _paymentButton.interactable = false;
+            _cashPayment.Initiate(FinishPayment);
+        }
+
+        void FinishPayment()
+        {
+            // TODO: Continue transaction on customer side and do extra processing with transaction.
+            VoidTransaction();
         }
 
         void DiscountFlat()
@@ -98,6 +118,7 @@ namespace Recounter.Service
         {
             _currentTransaction = new Transaction(CreateLineItemUI, UpdateTotal);
             _voidButton.interactable = true;
+            _paymentButton.interactable = true;
         }
 
         void PromptVoidTransaction()
@@ -111,6 +132,7 @@ namespace Recounter.Service
             _currentTransaction = null;
 
             _voidButton.interactable = false;
+            _paymentButton.interactable = false;
         }
 
         void CreateLineItemUI(LineItem lineItem)
