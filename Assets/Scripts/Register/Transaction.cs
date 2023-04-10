@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Recounter.Service
 {
-    public class Transaction : IDisposable
+    public class Transaction
     {
         public IReadOnlyList<LineItem> LineItems => _lineItems.AsReadOnly();
 
@@ -12,8 +12,6 @@ namespace Recounter.Service
         
         readonly Action<LineItem> LineItemAdded;
         readonly Action<float> TotalChanged;
-
-        readonly Action Voided;
 
         public float Total { get; private set; }
 
@@ -86,7 +84,7 @@ namespace Recounter.Service
             TotalChanged = totalChangeCallback;
         }
 
-        public void Dispose()
+        public void Void()
         {
             foreach (var item in _lineItems.ToArray())
             {

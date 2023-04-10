@@ -128,7 +128,7 @@ namespace Recounter.Service
 
         void VoidTransaction()
         {
-            _currentTransaction.Dispose();
+            _currentTransaction.Void();
             _currentTransaction = null;
 
             _voidButton.interactable = false;
