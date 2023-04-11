@@ -96,11 +96,11 @@ MonoBehaviour:
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
-      m_Width: 95
-      m_Height: 95
+      m_Width: 256
+      m_Height: 256
       m_HorizontalBearingX: 0
-      m_HorizontalBearingY: 96.1
-      m_HorizontalAdvance: 104.3
+      m_HorizontalBearingY: 236
+      m_HorizontalAdvance: 256
     m_GlyphRect:
       m_X: 0
       m_Y: 0
@@ -112,11 +112,11 @@ MonoBehaviour:
     sprite: {fileID: -465704660, guid: 83b9be2bf616e8943996e573cb8d37a3, type: 3}
   - m_Index: 1
     m_Metrics:
-      m_Width: 124
-      m_Height: 122
+      m_Width: 256
+      m_Height: 256
       m_HorizontalBearingX: 0
-      m_HorizontalBearingY: 113.3
-      m_HorizontalAdvance: 126.3
+      m_HorizontalBearingY: 236
+      m_HorizontalAdvance: 256
     m_GlyphRect:
       m_X: 256
       m_Y: 0
