@@ -7,37 +7,37 @@ using UnityEngine.UI;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    [SerializeField] Employee employee;
+    [SerializeField] Employee _employee;
 
-    [SerializeField] float range;
-    [SerializeField] Camera cam;
-    [SerializeField] TextMeshProUGUI text;
-    [SerializeField] LayerMask raycastMask;
-    [SerializeField] LayerMask interactableMask;
+    [SerializeField] float _range;
+    [SerializeField] Camera _cam;
+    [SerializeField] TextMeshProUGUI _text;
+    [SerializeField] LayerMask _raycastMask;
+    [SerializeField] LayerMask _interactableMask;
 
     [Header("Fade Reticle")]
-    [SerializeField] float detectionRadius;
-    [SerializeField] float fade;
-    [SerializeField] CanvasGroup fadeReticle;
+    [SerializeField] float _detectionRadius;
+    [SerializeField] float _fade;
+    [SerializeField] CanvasGroup _fadeReticle;
 
     [Header("Animation")]
-    [SerializeField] float punchAmount;
-    [SerializeField] float punchDuration;
+    [SerializeField] float _punchAmount;
+    [SerializeField] float _punchDuration;
 
     [Header("Icons")]
-    [SerializeField] Image iconImage;
-    [SerializeField] InteractableIconSettings iconSettings;
+    [SerializeField] Image _iconImage;
+    [SerializeField] InteractableIconSettings _iconSettings;
 
-    Interactable hovered;
-    Interactable interactTarget;
+    Interactable _hovered;
+    Interactable _interactTarget;
 
-    Transform lastHoverTarget;
+    Transform _lastHoverTarget;
 
-    Tween punch;
+    Tween _punch;
 
-    float targetAlpha;
+    float _targetAlpha;
 
-    bool waitingToCancelInteract;
+    bool _waitingToCancelInteract;
 
     void Awake()
     {
@@ -45,7 +45,7 @@ public class PlayerInteraction : MonoBehaviour
         interactAction.performed += OnInteract;
         interactAction.canceled += OnInteractCancel;
 
-        punch = iconImage.rectTransform.DOPunchScale(Vector3.one * punchAmount, punchDuration)
+        _punch = _iconImage.rectTransform.DOPunchScale(Vector3.one * _punchAmount, _punchDuration)
             .Pause().SetAutoKill(false);
 
         Pause.Paused += OnPaused;
@@ -53,18 +53,18 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnPaused(bool paused)
     {
-        if (paused || !waitingToCancelInteract) return;
+        if (paused || !_waitingToCancelInteract) return;
 
         CancelInteract();
 
-        waitingToCancelInteract = false;
+        _waitingToCancelInteract = false;
     }
 
     void ResetUI()
     {
-        text.text = "";
-        iconImage.sprite = iconSettings.GetSprite(Interactable.Icon.None);
-        fadeReticle.alpha = 1;
+        _text.text = "";
+        _iconImage.sprite = _iconSettings.GetSprite(Interactable.Icon.None);
+        _fadeReticle.alpha = 1;
     }
 
     void OnEnable()
@@ -74,30 +74,30 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnDisable()
     {
-        if (!text || !iconImage) return;
+        if (!_text || !_iconImage) return;
 
         ResetUI();
 
-        if (!!hovered) return;
+        if (!!_hovered) return;
 
         HandleInteraction(null);
     }
 
     void OnInteract(InputAction.CallbackContext context)
     {
-        if (!hovered || Pause.IsPaused) return;
+        if (!_hovered || Pause.IsPaused) return;
 
-        interactTarget = hovered;
-        interactTarget.Interact(employee);
+        _interactTarget = _hovered;
+        _interactTarget.Interact(_employee);
     }
 
     void OnInteractCancel(InputAction.CallbackContext context)
     {
-        if (!interactTarget) return;
+        if (!_interactTarget) return;
 
         if (Pause.IsPaused)
         {
-            waitingToCancelInteract = true;
+            _waitingToCancelInteract = true;
             return;
         }
 
@@ -106,26 +106,26 @@ public class PlayerInteraction : MonoBehaviour
     
     void CancelInteract()
     {
-        if (!interactTarget) return;
+        if (!_interactTarget) return;
 
-        interactTarget.EndInteract();
-        interactTarget = null;
+        _interactTarget.EndInteract();
+        _interactTarget = null;
     }
 
     void LateUpdate()
     {
         if (Pause.IsPaused) return;
 
-        if (hovered)
+        if (_hovered)
         {
             UpdateUI();
         }
 
         Transform currentHover = null;
 
-        if (Physics.Raycast(cam.ViewportPointToRay(Vector2.one / 2), out var hit, range, raycastMask))
+        if (Physics.Raycast(_cam.ViewportPointToRay(Vector2.one / 2), out var hit, _range, _raycastMask))
         {
-            if (interactableMask == (interactableMask | (1 << hit.transform.gameObject.layer)))
+            if (_interactableMask == (_interactableMask | (1 << hit.transform.gameObject.layer)))
             {
                 currentHover = hit.collider.transform;
             }
@@ -136,36 +136,36 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
-        fadeReticle.alpha = Mathf.Lerp(fadeReticle.alpha, targetAlpha, fade * Time.deltaTime);
+        _fadeReticle.alpha = Mathf.Lerp(_fadeReticle.alpha, _targetAlpha, _fade * Time.deltaTime);
     }
 
     void FixedUpdate()
     {
-        targetAlpha = 0;
+        _targetAlpha = 0;
 
-        if (Physics.CheckSphere(cam.transform.position, detectionRadius, interactableMask))
+        if (Physics.CheckSphere(_cam.transform.position, _detectionRadius, _interactableMask))
         {
-            targetAlpha = 1;
+            _targetAlpha = 1;
         }
     }
 
     void HandleInteraction(Transform currentHover)
     {
-        if (lastHoverTarget == currentHover) return;
+        if (_lastHoverTarget == currentHover) return;
 
-        lastHoverTarget = currentHover;
-        hovered?.OnHover(false);
+        _lastHoverTarget = currentHover;
+        _hovered?.OnHover(false);
 
         if (currentHover)
         {
-            hovered = currentHover.GetComponentInParent<Interactable>();
-            hovered.OnHover(true);
+            _hovered = currentHover.GetComponentInParent<Interactable>();
+            _hovered.OnHover(true);
 
             UpdateUI(true);
         }
         else
         {
-            hovered = null;
+            _hovered = null;
 
             ResetUI();
         }
@@ -173,14 +173,14 @@ public class PlayerInteraction : MonoBehaviour
 
     void UpdateUI(bool forcePunch = false)
     {
-        var info = hovered.GetHud(employee);
-        var iconSprite = iconSettings.GetSprite(info.icon);
+        var info = _hovered.GetHud(_employee);
+        var iconSprite = _iconSettings.GetSprite(info.icon);
 
         // Punch when icon changes (except if it's the blank pointer).
-        if (info.icon != Interactable.Icon.None && (forcePunch || iconImage.sprite != iconSprite || text.text != info.text))
-            punch.Restart();
+        if (info.icon != Interactable.Icon.None && (forcePunch || _iconImage.sprite != iconSprite || _text.text != info.text))
+            _punch.Restart();
 
-        text.text = info.text;
-        iconImage.sprite = iconSprite;
+        _text.text = info.text;
+        _iconImage.sprite = iconSprite;
     }
 }
