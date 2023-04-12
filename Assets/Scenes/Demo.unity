@@ -4123,23 +4123,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59a382e3e6ff27e4b8f58995c6c87dff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  employee: {fileID: 840553860}
-  range: 2
-  cam: {fileID: 1065023558}
-  text: {fileID: 1925832153}
-  raycastMask:
+  _employee: {fileID: 840553860}
+  _range: 2
+  _cam: {fileID: 1065023558}
+  _text: {fileID: 1925832153}
+  _raycastMask:
     serializedVersion: 2
     m_Bits: 129
-  interactableMask:
+  _interactableMask:
     serializedVersion: 2
     m_Bits: 128
-  detectionRadius: 2
-  fade: 10
-  fadeReticle: {fileID: 966473368}
-  punchAmount: 0.1
-  punchDuration: 0.15
-  iconImage: {fileID: 1200812864}
-  iconSettings: {fileID: 11400000, guid: d7e7917419c8b234b830ac643627b749, type: 2}
+  _detectionRadius: 2
+  _fade: 10
+  _fadeReticle: {fileID: 966473368}
+  _punchAmount: 0.1
+  _punchDuration: 0.15
+  _iconImage: {fileID: 1200812864}
+  _iconSettings: {fileID: 11400000, guid: d7e7917419c8b234b830ac643627b749, type: 2}
 --- !u!114 &273294031
 MonoBehaviour:
   m_ObjectHideFlags: 0
