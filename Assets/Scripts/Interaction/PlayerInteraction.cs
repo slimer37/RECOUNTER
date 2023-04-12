@@ -78,7 +78,7 @@ public class PlayerInteraction : MonoBehaviour
 
         ResetUI();
 
-        if (!!_hovered) return;
+        if (!_hovered) return;
 
         HandleInteraction(null);
     }
