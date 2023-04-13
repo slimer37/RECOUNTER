@@ -3,10 +3,6 @@ using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour
 {
-    public bool IsInteractionInProgress { get; private set; }
-    protected Employee Interactor { get; private set; }
-    protected Employee LastInteractor { get; private set; }
-
     public enum Icon
     {
         None, Access, Door, Eye, Hand, Invalid, Pickup, Pull, Push,
@@ -19,6 +15,10 @@ public abstract class Interactable : MonoBehaviour
         public Icon icon;
         public string text;
     }
+
+    public bool IsInteractionInProgress { get; private set; }
+    protected Employee Interactor { get; private set; }
+    protected Employee LastInteractor { get; private set; }
 
     public static readonly HudInfo DefaultInteractHud = new() { icon = Icon.Access, text = "Interact" };
     public static readonly HudInfo BlankHud = new() { icon = Icon.None };
@@ -37,6 +37,12 @@ public abstract class Interactable : MonoBehaviour
         }
     }
 #endif
+
+    /// <summary>
+    /// Directly executes hover events.
+    /// </summary>
+    /// <param name="hover">True when entering hover, false when exiting.</param>
+    public virtual void OnHover(bool hover) { }
 
     /// <summary>
     /// Forms the HUD elements that should be shown while this object is hovered.
@@ -77,6 +83,15 @@ public abstract class Interactable : MonoBehaviour
     }
 
     /// <summary>
+    /// The main interaction method of an object. Called once on interaction.
+	/// </summary>
+	/// <remarks>
+	/// Will only be called if <see cref="CanInteract(Employee)"/> returns true.
+	/// </remarks>
+	/// <param name="e">The interacting player.</param>
+    protected virtual void OnInteract(Employee e) { }
+
+    /// <summary>
     /// Ends the interaction in progress.
     /// </summary>
     public void EndInteract()
@@ -89,25 +104,10 @@ public abstract class Interactable : MonoBehaviour
     }
 
     /// <summary>
-    /// The main interaction method of an object. Called once on interaction.
-	/// </summary>
-	/// <remarks>
-	/// Will only be called if <see cref="CanInteract(Employee)"/> returns true.
-	/// </remarks>
-	/// <param name="e">The interacting player.</param>
-    protected virtual void OnInteract(Employee e) { }
-
-    /// <summary>
     /// Called when the interact key is released.
     /// </summary>
     /// <remarks>
     /// Guaranteed to follow one call to <see cref="Interact(Employee)"/>.
     /// </remarks>
     protected virtual void OnEndInteraction() { }
-
-    /// <summary>
-    /// Directly executes hover events.
-    /// </summary>
-    /// <param name="hover">True when entering hover, false when exiting.</param>
-    public virtual void OnHover(bool hover) { }
 }
