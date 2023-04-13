@@ -98,7 +98,7 @@ public abstract class Interactable : MonoBehaviour
     protected virtual void OnInteract(Employee e) { }
 
     /// <summary>
-    /// Called when the interact key is released or the object loses hover while the key is held.
+    /// Called when the interact key is released.
     /// </summary>
     /// <remarks>
     /// Guaranteed to follow one call to <see cref="Interact(Employee)"/>.
