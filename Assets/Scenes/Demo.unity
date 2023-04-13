@@ -5203,7 +5203,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
-  _holdThreshold: 0.15
   _capacity: 15
   _handleSfx:
     Guid:
@@ -16851,7 +16850,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
-  _holdThreshold: 0.15
   _capacity: 15
   _handleSfx:
     Guid:
@@ -17507,7 +17505,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
-  _holdThreshold: 0.15
   _capacity: 15
   _handleSfx:
     Guid:
@@ -18283,7 +18280,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
-  _holdThreshold: 0.15
   _capacity: 15
   _handleSfx:
     Guid:
@@ -23745,7 +23741,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveTime: 0.2
   _rotation: {x: 0, y: 90, z: 0}
-  _holdThreshold: 0.15
   _capacity: 15
   _handleSfx:
     Guid:

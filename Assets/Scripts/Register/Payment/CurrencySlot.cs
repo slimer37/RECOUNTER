@@ -5,11 +5,10 @@ using UnityEngine;
 
 namespace Recounter
 {
-    public class CurrencySlot : Interactable
+    public class CurrencySlot : HoldInteractable
     {
         [SerializeField] float _moveTime;
         [SerializeField] Vector3 _rotation;
-        [SerializeField] float _holdThreshold = 0.15f;
         [SerializeField] int _capacity = 15;
 
         [Header("SFX")]
@@ -32,10 +31,6 @@ namespace Recounter
         [SerializeField] Ease _leverReturnEase;
 
         readonly Stack<BankNote> _notes = new();
-
-        float _holdTime;
-
-        bool _holding;
 
         float _leverClosedAngle;
 
@@ -62,14 +57,31 @@ namespace Recounter
             _lever.localEulerAngles = _leverAxis * GetClosedAngle();
         }
 
-        protected override void OnInteract(Employee e)
+        protected override void OnStartHold()
         {
             _lever.DOKill();
-
-            _holdTime = 0;
-            _holding = true;
-
             _leverClosedAngle = GetClosedAngle();
+        }
+
+        protected override void OnHoldInteract()
+        {
+            AttemptToStoreNote();
+        }
+
+        protected override void OnShortInteract()
+        {
+            if (_notes.Count == 0) return;
+
+            GrabNote(Interactor);
+        }
+
+        void AttemptToStoreNote()
+        {
+            if (_notes.Count < _capacity && Interactor.LeftHand.Contains<BankNote>(out var note))
+            {
+                StoreNote(note.RetrieveFromStack());
+                _leverClosedAngle = GetClosedAngle();
+            }
         }
 
         void StoreNote(BankNote note, bool direct = false)
@@ -108,43 +120,15 @@ namespace Recounter
 
         void PlaySfx() => RuntimeManager.PlayOneShotAttached(_handleSfx, gameObject);
 
-        void Update()
+        public override void PerFrameHeld(float normalizedTime)
         {
-            if (_holding)
-            {
-                _holdTime += Time.deltaTime;
-                _lever.localEulerAngles = _leverAxis * Mathf.LerpAngle(_leverClosedAngle, _leverOpenAngle, _holdTime / _holdThreshold);
-
-                if (_holdTime > _holdThreshold)
-                {
-                    AttemptToStoreNote();
-                    _holding = false;
-                }
-            }
+            _lever.localEulerAngles = _leverAxis * Mathf.LerpAngle(_leverClosedAngle, _leverOpenAngle, normalizedTime);
         }
 
-        void AttemptToStoreNote()
-        {
-            if (_notes.Count < _capacity && Interactor.LeftHand.Contains<BankNote>(out var note))
-            {
-                StoreNote(note.RetrieveFromStack());
-                _leverClosedAngle = GetClosedAngle();
-            }
-        }
-
-        protected override void OnEndInteraction()
+        protected override void OnReleaseHold()
         {
             _lever.DOLocalRotate(_leverAxis * _leverClosedAngle, _leverReturnTime)
                 .SetEase(_leverReturnEase);
-
-            if (!_holding) return;
-            
-            if (_notes.Count > 0)
-            {
-                GrabNote(Interactor);
-            }
-
-            _holding = false;
         }
 
         static Vector3 Randomize(Vector3 vector)
