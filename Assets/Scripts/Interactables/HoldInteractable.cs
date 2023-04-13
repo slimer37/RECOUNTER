@@ -14,15 +14,22 @@ namespace Recounter
         protected float ElapsedHoldTime { get; private set; }
         protected bool HoldInteractionInProgress { get; private set; }
 
-        protected virtual Icon HudIcon => Icon.Access;
+        protected virtual Icon PressIcon => Icon.Access;
         protected abstract string PressAction { get; }
+        protected virtual Icon HoldIcon => Icon.Access;
         protected abstract string HoldAction { get; }
 
-        protected override HudInfo FormHud(Employee e) => new()
+        protected override HudInfo FormHud(Employee e)
         {
-            icon = HudIcon,
-            text = $"<sprite name=\"Press\"> {PressAction}\n<sprite name=\"Hold\"> {HoldAction}"
-        };
+            var holding = HoldInteractionInProgress;
+
+            return new()
+            {
+                icon = holding ? HoldIcon : PressIcon,
+                text = $"<sprite name=\"Press\"> {PressAction}\n<sprite name=\"Hold\"> {HoldAction}",
+                fill = holding ? (ElapsedHoldTime / RequiredHoldTime) : null
+            };
+        }
 
         protected sealed override void OnInteract(Employee e)
         {

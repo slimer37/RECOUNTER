@@ -25,6 +25,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] float _punchDuration;
 
     [Header("Icons")]
+    [SerializeField] Image _fillBar;
     [SerializeField] Image _iconImage;
     [SerializeField] InteractableIconSettings _iconSettings;
 
@@ -65,6 +66,7 @@ public class PlayerInteraction : MonoBehaviour
         _text.text = "";
         _iconImage.sprite = _iconSettings.GetSprite(Interactable.Icon.None);
         _fadeReticle.alpha = 1;
+        _fillBar.fillAmount = 0;
     }
 
     void OnEnable()
@@ -175,6 +177,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         var info = _hovered.GetHud(_employee);
         var iconSprite = _iconSettings.GetSprite(info.icon);
+        var fill = info.fill ?? 0;
 
         // Punch when icon changes (except if it's the blank pointer).
         if (info.icon != Interactable.Icon.None && (forcePunch || _iconImage.sprite != iconSprite || _text.text != info.text))
@@ -182,5 +185,6 @@ public class PlayerInteraction : MonoBehaviour
 
         _text.text = info.text;
         _iconImage.sprite = iconSprite;
+        _fillBar.fillAmount = fill;
     }
 }

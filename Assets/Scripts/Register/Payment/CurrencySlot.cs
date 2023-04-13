@@ -34,8 +34,9 @@ namespace Recounter
 
         float _leverClosedAngle;
 
-        protected override Icon HudIcon => Icon.Insert;
+        protected override Icon PressIcon => Icon.Extract;
         protected override string PressAction => "Take";
+        protected override Icon HoldIcon => Icon.Insert;
         protected override string HoldAction => "Insert";
 
         float GetClosedAngle()

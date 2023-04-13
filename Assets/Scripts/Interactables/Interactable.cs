@@ -14,6 +14,7 @@ public abstract class Interactable : MonoBehaviour
     {
         public Icon icon;
         public string text;
+        public float? fill;
     }
 
     public bool IsInteractionInProgress { get; private set; }
