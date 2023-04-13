@@ -6,13 +6,13 @@ public class PlayerInteractionEditor : Editor
 {
     void OnSceneGUI()
     {
-        var cam = serializedObject.FindProperty("cam").objectReferenceValue;
+        var cam = serializedObject.FindProperty("_cam").objectReferenceValue;
 
         if (!cam) return;
 
         Handles.color = Color.cyan;
 
-        var range = serializedObject.FindProperty("range").floatValue;
+        var range = serializedObject.FindProperty("_range").floatValue;
         var camTransform = ((Camera)cam).transform;
 
         var arrowSize = Mathf.Min(0.5f, range);
