@@ -14,6 +14,16 @@ namespace Recounter
         protected float ElapsedHoldTime { get; private set; }
         protected bool HoldInteractionInProgress { get; private set; }
 
+        protected virtual Icon HudIcon => Icon.Access;
+        protected abstract string PressAction { get; }
+        protected abstract string HoldAction { get; }
+
+        protected override HudInfo FormHud(Employee e) => new()
+        {
+            icon = HudIcon,
+            text = $"<sprite name=\"Press\"> {PressAction}\n<sprite name=\"Hold\"> {HoldAction}"
+        };
+
         protected sealed override void OnInteract(Employee e)
         {
             ElapsedHoldTime = 0;

@@ -34,11 +34,9 @@ namespace Recounter
 
         float _leverClosedAngle;
 
-        protected override HudInfo FormHud(Employee e) => new()
-        {
-            icon = Icon.Extract,
-            text = "<sprite=0> Take\n<sprite=1> Insert"
-        };
+        protected override Icon HudIcon => Icon.Insert;
+        protected override string PressAction => "Take";
+        protected override string HoldAction => "Insert";
 
         float GetClosedAngle()
         {

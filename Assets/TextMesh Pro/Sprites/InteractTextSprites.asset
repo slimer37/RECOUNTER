@@ -85,14 +85,14 @@ MonoBehaviour:
     m_Unicode: 65534
     m_GlyphIndex: 0
     m_Scale: 1
-    m_Name: InteractTextSprites_0
-    m_HashCode: -941437446
+    m_Name: Press
+    m_HashCode: 93118823
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 1
     m_Scale: 1
-    m_Name: InteractTextSprites_1
-    m_HashCode: -941437445
+    m_Name: Hold
+    m_HashCode: 2554799
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
