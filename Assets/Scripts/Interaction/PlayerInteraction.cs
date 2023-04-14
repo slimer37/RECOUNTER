@@ -1,9 +1,6 @@
 using Recounter;
-using DG.Tweening;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -11,32 +8,14 @@ public class PlayerInteraction : MonoBehaviour
 
     [SerializeField] float _range;
     [SerializeField] Camera _cam;
-    [SerializeField] TextMeshProUGUI _text;
     [SerializeField] LayerMask _raycastMask;
     [SerializeField] LayerMask _interactableMask;
-
-    [Header("Fade Reticle")]
-    [SerializeField] float _detectionRadius;
-    [SerializeField] float _fade;
-    [SerializeField] CanvasGroup _fadeReticle;
-
-    [Header("Animation")]
-    [SerializeField] float _punchAmount;
-    [SerializeField] float _punchDuration;
-
-    [Header("Icons")]
-    [SerializeField] Image _fillBar;
-    [SerializeField] Image _iconImage;
-    [SerializeField] InteractableIconSettings _iconSettings;
+    [SerializeField] InteractionReticle _reticle;
 
     Interactable _hovered;
     Interactable _interactTarget;
 
     Transform _lastHoverTarget;
-
-    Tween _punch;
-
-    float _targetAlpha;
 
     bool _waitingToCancelInteract;
 
@@ -45,9 +24,6 @@ public class PlayerInteraction : MonoBehaviour
         var interactAction = InputLayer.Interaction.Interact;
         interactAction.performed += OnInteract;
         interactAction.canceled += OnInteractCancel;
-
-        _punch = _iconImage.rectTransform.DOPunchScale(Vector3.one * _punchAmount, _punchDuration)
-            .Pause().SetAutoKill(false);
 
         Pause.Paused += OnPaused;
     }
@@ -61,29 +37,7 @@ public class PlayerInteraction : MonoBehaviour
         _waitingToCancelInteract = false;
     }
 
-    void ResetUI()
-    {
-        _text.text = "";
-        _iconImage.sprite = _iconSettings.GetSprite(Interactable.Icon.None);
-        _fadeReticle.alpha = 1;
-        _fillBar.fillAmount = 0;
-    }
-
-    void OnEnable()
-    {
-        ResetUI();
-    }
-
-    void OnDisable()
-    {
-        if (!_text || !_iconImage) return;
-
-        ResetUI();
-
-        if (!_hovered) return;
-
-        HandleInteraction(null);
-    }
+    void OnDisable() => HandleHoverTarget(null);
 
     void OnInteract(InputAction.CallbackContext context)
     {
@@ -105,7 +59,7 @@ public class PlayerInteraction : MonoBehaviour
 
         CancelInteract();
     }
-    
+
     void CancelInteract()
     {
         if (!_interactTarget) return;
@@ -120,7 +74,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (_hovered)
         {
-            UpdateUI();
+            UpdateReticle();
         }
 
         Transform currentHover = null;
@@ -133,25 +87,14 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
 
-        HandleInteraction(currentHover);
+        HandleHoverTarget(currentHover);
     }
 
-    void Update()
-    {
-        _fadeReticle.alpha = Mathf.Lerp(_fadeReticle.alpha, _targetAlpha, _fade * Time.deltaTime);
-    }
+    void UpdateReticle(bool forcePunch = false) => _reticle.UpdateUI(_hovered.GetHud(_employee), forcePunch);
 
-    void FixedUpdate()
-    {
-        _targetAlpha = 0;
+    void ClearReticle() => _reticle.Clear();
 
-        if (Physics.CheckSphere(_cam.transform.position, _detectionRadius, _interactableMask))
-        {
-            _targetAlpha = 1;
-        }
-    }
-
-    void HandleInteraction(Transform currentHover)
+    void HandleHoverTarget(Transform currentHover)
     {
         if (_lastHoverTarget == currentHover) return;
 
@@ -163,28 +106,13 @@ public class PlayerInteraction : MonoBehaviour
             _hovered = currentHover.GetComponentInParent<Interactable>();
             _hovered.OnHover(true);
 
-            UpdateUI(true);
+            UpdateReticle(true);
         }
         else
         {
             _hovered = null;
 
-            ResetUI();
+            ClearReticle();
         }
-    }
-
-    void UpdateUI(bool forcePunch = false)
-    {
-        var info = _hovered.GetHud(_employee);
-        var iconSprite = _iconSettings.GetSprite(info.icon);
-        var fill = info.fill ?? 0;
-
-        // Punch when icon changes (except if it's the blank pointer).
-        if (info.icon != Interactable.Icon.None && (forcePunch || _iconImage.sprite != iconSprite || _text.text != info.text))
-            _punch.Restart();
-
-        _text.text = info.text;
-        _iconImage.sprite = iconSprite;
-        _fillBar.fillAmount = fill;
     }
 }

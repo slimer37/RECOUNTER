@@ -4126,21 +4126,13 @@ MonoBehaviour:
   _employee: {fileID: 840553860}
   _range: 2
   _cam: {fileID: 1065023558}
-  _text: {fileID: 1925832153}
   _raycastMask:
     serializedVersion: 2
     m_Bits: 129
   _interactableMask:
     serializedVersion: 2
     m_Bits: 128
-  _detectionRadius: 2
-  _fade: 10
-  _fadeReticle: {fileID: 966473368}
-  _punchAmount: 0.1
-  _punchDuration: 0.15
-  _fillBar: {fileID: 1974026323}
-  _iconImage: {fileID: 1200812864}
-  _iconSettings: {fileID: 11400000, guid: d7e7917419c8b234b830ac643627b749, type: 2}
+  _reticle: {fileID: 966473371}
 --- !u!114 &273294031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22389,6 +22381,7 @@ GameObject:
   - component: {fileID: 966473367}
   - component: {fileID: 966473370}
   - component: {fileID: 966473368}
+  - component: {fileID: 966473371}
   m_Layer: 5
   m_Name: Reticle
   m_TagString: Untagged
@@ -22453,6 +22446,31 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: -1
   m_TargetDisplay: 0
+--- !u!114 &966473371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966473366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad2c5481201b32e439f8322fbf7ffab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactableMask:
+    serializedVersion: 2
+    m_Bits: 128
+  _cam: {fileID: 1065023559}
+  _text: {fileID: 1925832153}
+  _detectionRadius: 2
+  _fade: 10
+  _fadeReticle: {fileID: 966473368}
+  _punchAmount: 0.1
+  _punchDuration: 0.15
+  _fillBar: {fileID: 1974026323}
+  _iconImage: {fileID: 1200812864}
+  _iconSettings: {fileID: 11400000, guid: d7e7917419c8b234b830ac643627b749, type: 2}
 --- !u!1 &971982990
 GameObject:
   m_ObjectHideFlags: 0
