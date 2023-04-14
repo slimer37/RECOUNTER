@@ -44,7 +44,6 @@ namespace Recounter
         }
 
         void OnEnable() => Clear();
-        void OnDisable() => Clear();
 
         void Update() => _fadeReticle.alpha = Mathf.Lerp(_fadeReticle.alpha, _targetAlpha, _fade * Time.deltaTime);
 
