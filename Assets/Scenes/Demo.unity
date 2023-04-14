@@ -4887,7 +4887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52bba4d117361c4780ea5c571152556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand: {fileID: 157413189}
+  _hand: {fileID: 157413189}
   _ghost: {fileID: 1233657121}
   _freeMat: {fileID: 2100000, guid: 0e27b5a3fe491174cb762e6c13aec700, type: 2}
   _obstructedMat: {fileID: 2100000, guid: 6c14ab0bcbcbfbd498b96a56e51ebd2b, type: 2}

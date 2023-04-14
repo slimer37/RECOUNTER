@@ -6,7 +6,7 @@ using Recounter;
 public class OctoPlacer : MonoBehaviour
 {
     [Header("Hand")]
-    [SerializeField] Hand hand;
+    [SerializeField] Hand _hand;
 
     [Header("Ghost")]
     [SerializeField] Ghost _ghost;
@@ -113,10 +113,10 @@ public class OctoPlacer : MonoBehaviour
 
         _ghost.CopyMesh(item);
 
-        hand.Hold(item, _adjustedHoldPos, _adjustedHoldRot);
+        _hand.Hold(item, _adjustedHoldPos, _adjustedHoldRot);
 
         if (item.ViewmodelPose.IsValid)
-            hand.SetHandViewmodel(item.ViewmodelPose);
+            _hand.SetHandViewmodel(item.ViewmodelPose);
 
         if (!canResetPosition) return;
 
@@ -147,7 +147,7 @@ public class OctoPlacer : MonoBehaviour
             return;
         }
 
-        hand.SetCarryStates(HandCarryStates.NoViewmodel);
+        _hand.SetCarryStates(HandCarryStates.NoViewmodel);
 
         StartChargingThrow();
     }
@@ -165,7 +165,7 @@ public class OctoPlacer : MonoBehaviour
     {
         if (!_active || !_isCharging) return;
 
-        hand.SetCarryStates(HandCarryStates.None);
+        _hand.SetCarryStates(HandCarryStates.None);
 
         ThrowHeldItem();
     }
@@ -187,7 +187,7 @@ public class OctoPlacer : MonoBehaviour
         var cameraLocalPos = Vector3.Slerp(_adjustedHoldPos, _chargedPos, _chargeTime);
         var cameraLocalRot = _adjustedHoldRot;
 
-        hand.UpdateHoldPositionAndRotation(cameraLocalPos, cameraLocalRot);
+        _hand.UpdateHoldPositionAndRotation(cameraLocalPos, cameraLocalRot);
     }
 
     void Update()
@@ -228,7 +228,7 @@ public class OctoPlacer : MonoBehaviour
 
         var placePos = GetWorldPlacePos();
 
-        hand.UpdateHoldPositionAndRotation(placePos, placeRot);
+        _hand.UpdateHoldPositionAndRotation(placePos, placeRot);
 
         _cursorImage.transform.position = _camera.WorldToScreenPoint(_active.transform.position);
     }
@@ -324,7 +324,7 @@ public class OctoPlacer : MonoBehaviour
 
         _ghost.Hide();
 
-        hand.SetCarryStates(HandCarryStates.InWorld);
+        _hand.SetCarryStates(HandCarryStates.InWorld);
 
         _playerInteraction.enabled = false;
         InputLayer.Movement.Disable();
@@ -340,7 +340,7 @@ public class OctoPlacer : MonoBehaviour
 
         _ghost.Hide();
 
-        hand.SetCarryStates(HandCarryStates.None);
+        _hand.SetCarryStates(HandCarryStates.None);
 
         _cursorImage.overrideSprite = null;
 
@@ -353,7 +353,7 @@ public class OctoPlacer : MonoBehaviour
     {
         EndPlace();
 
-        hand.Clear();
+        _hand.Clear();
 
         var temp = _active;
 
@@ -392,7 +392,7 @@ public class OctoPlacer : MonoBehaviour
             cameraLocalRot *= Quaternion.Euler(_intersectHoldRotShift);
         }
 
-        hand.UpdateHoldPositionAndRotation(cameraLocalPos, cameraLocalRot);
+        _hand.UpdateHoldPositionAndRotation(cameraLocalPos, cameraLocalRot);
     }
 
     void ShowPreviewGhost()
@@ -408,7 +408,7 @@ public class OctoPlacer : MonoBehaviour
 
         EndPlace();
 
-        hand.Clear();
+        _hand.Clear();
 
         _active.gameObject.SetActive(false);
 
