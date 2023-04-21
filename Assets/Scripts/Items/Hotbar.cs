@@ -1,3 +1,4 @@
+using Recounter;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.InputSystem;
 public class Hotbar : MonoBehaviour
 {
     [SerializeField] int capacity;
-    [SerializeField] OctoPlacer placer;
+    [SerializeField] Placer placer;
     [SerializeField] HotbarSlot slotPrefab;
     [SerializeField] Transform slotParent;
 
