@@ -21,7 +21,6 @@ namespace Recounter
         [SerializeField] Vector3 _throwDirection;
 
         [Header("Placing")]
-        [SerializeField] float _lateralSpeed;
         [SerializeField] LayerMask _obstacleMask;
         [SerializeField] LayerMask _lineOfSightMask;
         [SerializeField] Vector3 _placementRegionExtents;
@@ -264,7 +263,7 @@ namespace Recounter
 
         void HandleLateral(Vector2 delta)
         {
-            _localPlacePosition += _lateralSpeed * new Vector3(delta.x, 0, delta.y);
+            _placementMethod.HandleLateral(ref _localPlacePosition, delta);
             _cursorImage.overrideSprite = _placeIcon;
             _cursorImage.transform.rotation = Quaternion.identity;
         }

@@ -5,6 +5,7 @@ namespace Recounter
     public class PlacementMethod : MonoBehaviour
     {
         [SerializeField] float _verticalSpeed;
+        [SerializeField] float _lateralSpeed;
         [SerializeField] LayerMask _obstacleMask;
         [SerializeField] float _surfaceSeparation;
         [SerializeField] float _rotateSpeed;
@@ -24,6 +25,11 @@ namespace Recounter
         public void HandleRotation(ref Vector3 localPlaceRotation, Vector2 delta)
         {
             localPlaceRotation.y += delta.x * _rotateSpeed;
+        }
+
+        public void HandleLateral(ref Vector3 localPlacePosition, Vector2 delta)
+        {
+            localPlacePosition += _lateralSpeed * new Vector3(delta.x, 0, delta.y);
         }
 
         public void HandleVertical(ref Vector3 localPlacePosition, float rawScroll)

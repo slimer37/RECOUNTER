@@ -4896,7 +4896,6 @@ MonoBehaviour:
   _chargedPos: {x: 0, y: 0.1, z: 0.7}
   _throwForce: 5
   _throwDirection: {x: 0, y: 0.2, z: 1}
-  _lateralSpeed: 0.0025
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 193
@@ -4946,6 +4945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _verticalSpeed: 0.1
+  _lateralSpeed: 0.0025
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 193
