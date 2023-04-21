@@ -44,7 +44,7 @@ namespace Recounter
         [Header("Components")]
         [SerializeField] PlayerInteraction _playerInteraction;
         [SerializeField] Camera _camera;
-        [SerializeField] PlacementMethod _defaultMethod;
+        [SerializeField] OctoPlacement _defaultMethod;
 
         Vector3 _worldPlacePosition;
         Vector3 _worldPlaceRotation;
@@ -72,7 +72,7 @@ namespace Recounter
 
         PlacementMethod _placementMethod;
 
-        public void SetPlacementMethod(PlacementMethod placementMethod)
+        public void SetPlacementMethod(OctoPlacement placementMethod)
         {
             placementMethod.Initialize(this, _body, _camera);
             _placementMethod = placementMethod;
