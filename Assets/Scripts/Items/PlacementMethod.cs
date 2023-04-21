@@ -13,7 +13,7 @@ namespace Recounter
         Placer _placer;
         Transform _body;
 
-        public bool ItemIntersectsAtPosition(Vector3 localPosition, Quaternion rotation) =>
+        public bool IsItemPositionValid(Vector3 localPosition, Quaternion rotation) =>
             _placer.Active.WouldIntersectAt(_body.TransformPoint(localPosition), rotation, _obstacleMask);
 
         public void Initialize(Placer placer, Transform body)
@@ -41,7 +41,7 @@ namespace Recounter
             var dir = scrollDir * Vector3.up;
             var moveDelta = _verticalSpeed * dir;
 
-            if (ItemIntersectsAtPosition(localPlacePosition + moveDelta, _placer.Active.transform.rotation)
+            if (IsItemPositionValid(localPlacePosition + moveDelta, _placer.Active.transform.rotation)
                 && Physics.Raycast(localPlacePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
             {
                 var length = hit.distance - _placer.Active.SizeAlong(dir) + _surfaceSeparation;

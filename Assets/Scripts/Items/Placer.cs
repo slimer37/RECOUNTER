@@ -226,7 +226,7 @@ namespace Recounter
 
             var placeRot = GetWorldPlaceRot();
 
-            if (_placementMethod.ItemIntersectsAtPosition(_localPlacePosition, placeRot))
+            if (_placementMethod.IsItemPositionValid(_localPlacePosition, placeRot))
             {
                 _localPlacePosition = previousPos;
                 _localPlaceRotation = previousRot;
@@ -364,7 +364,7 @@ namespace Recounter
             _localPlacePosition = CalculateLocalStartPos();
 
             _startPlaceObstructed = IsLocalLineOfSightBlocked(_localPlacePosition)
-                || _placementMethod.ItemIntersectsAtPosition(
+                || _placementMethod.IsItemPositionValid(
                 _localPlacePosition,
                 Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot))
                 );
