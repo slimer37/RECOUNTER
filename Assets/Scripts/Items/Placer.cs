@@ -259,8 +259,6 @@ namespace Recounter
             return Physics.Raycast(camPos, dir, Vector3.Distance(camPos, worldPosition), _lineOfSightMask);
         }
 
-        bool IsLocalLineOfSightBlocked(Vector3 localPosition) => IsLineOfSightBlocked(_body.TransformPoint(localPosition));
-
         void HandleLateral(Vector2 delta)
         {
             _placementMethod.HandleLateral(ref _localPlacePosition, delta);
@@ -363,7 +361,7 @@ namespace Recounter
         {
             _localPlacePosition = CalculateLocalStartPos();
 
-            _startPlaceObstructed = IsLocalLineOfSightBlocked(_localPlacePosition)
+            _startPlaceObstructed = IsLineOfSightBlocked(GetWorldPlacePos())
                 || _placementMethod.IsItemPositionValid(
                 _localPlacePosition,
                 Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot))
