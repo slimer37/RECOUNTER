@@ -212,7 +212,9 @@ namespace Recounter
             var previousPos = _localPlacePosition;
             var previousRot = _localPlaceRotation;
 
-            _placementMethod.HandleVertical(ref _localPlacePosition, _verticalAxisAction.ReadValue<float>());
+            var rawScroll = _verticalAxisAction.ReadValue<float>();
+
+            _placementMethod.HandleVertical(ref _localPlacePosition, rawScroll);
 
             var delta = _lateralMoveDelta.ReadValue<Vector2>();
 
