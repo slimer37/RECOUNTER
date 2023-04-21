@@ -78,6 +78,11 @@ namespace Recounter
             _placementMethod = placementMethod;
         }
 
+        public void ResetPlacementMethod()
+        {
+            SetPlacementMethod(_defaultMethod);
+        }
+
         void OnDrawGizmosSelected()
         {
             Gizmos.matrix = _body.localToWorldMatrix;
@@ -100,7 +105,7 @@ namespace Recounter
 
             Pause.Paused += OnPause;
 
-            SetPlacementMethod(_defaultMethod);
+            ResetPlacementMethod();
         }
 
         void OnPause(bool pause) => enabled = !pause;
