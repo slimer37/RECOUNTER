@@ -361,11 +361,10 @@ namespace Recounter
         {
             _localPlacePosition = CalculateLocalStartPos();
 
+            var defaultPlaceRotation = Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot));
+
             _startPlaceObstructed = IsLineOfSightBlocked(GetWorldPlacePos())
-                || _placementMethod.IsItemPositionValid(
-                _localPlacePosition,
-                Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot))
-                );
+                || _placementMethod.IsItemPositionValid(_localPlacePosition, defaultPlaceRotation);
 
             var cameraLocalPos = _adjustedHoldPos;
             var cameraLocalRot = _adjustedHoldRot;
