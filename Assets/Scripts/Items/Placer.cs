@@ -123,7 +123,9 @@ namespace Recounter
             _hand.Hold(item, _adjustedHoldPos, _adjustedHoldRot);
 
             if (item.ViewmodelPose.IsValid)
+            {
                 _hand.SetHandViewmodel(item.ViewmodelPose);
+            }
 
             if (!canResetPosition) return;
 
@@ -219,9 +221,13 @@ namespace Recounter
             var delta = _lateralMoveDelta.ReadValue<Vector2>();
 
             if (_holdRotateAction.IsPressed())
+            {
                 HandleRotation(delta);
+            }
             else
+            {
                 HandleLateral(delta);
+            }
 
             RestrictPlacePosition(ref _worldPlacePosition);
 
@@ -282,8 +288,7 @@ namespace Recounter
 
         void InitializePlacement()
         {
-            if (_startPlaceObstructed)
-                return;
+            if (_startPlaceObstructed) return;
 
             _isPlacing = true;
 
