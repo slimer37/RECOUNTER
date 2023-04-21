@@ -2,6 +2,8 @@ using UnityEngine;
 
 namespace Recounter
 {
+    public enum PlacementCursor { None, Placement, Rotation }
+
     public class PlacementMethod : MonoBehaviour
     {
         [SerializeField] float _verticalSpeed;
@@ -36,17 +38,35 @@ namespace Recounter
             _camera = camera;
         }
 
-        public void HandleRotation(ref Vector3 placeRotation, Vector2 delta)
+        public void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
         {
-            placeRotation.y += delta.x * _rotateSpeed;
+            HandleVertical(ref placePosition, rawScroll);
+
+            cursor = PlacementCursor.Placement;
+
+            if (modifier)
+            {
+                HandleRotation(ref placeRotation, mouseDelta);
+
+                cursor = PlacementCursor.Rotation;
+            }
+            else
+            {
+                HandleLateral(ref placePosition, mouseDelta);
+            }
         }
 
-        public void HandleLateral(ref Vector3 placePosition, Vector2 delta)
+        void HandleLateral(ref Vector3 placePosition, Vector2 delta)
         {
             placePosition += _lateralSpeed * _body.TransformDirection(delta.x, 0, delta.y);
         }
 
-        public void HandleVertical(ref Vector3 placePosition, float rawScroll)
+        void HandleRotation(ref Vector3 placeRotation, Vector2 delta)
+        {
+            placeRotation.y += delta.x * _rotateSpeed;
+        }
+
+        void HandleVertical(ref Vector3 placePosition, float rawScroll)
         {
             if (rawScroll == 0) return;
 

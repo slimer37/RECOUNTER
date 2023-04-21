@@ -220,19 +220,10 @@ namespace Recounter
             var previousRot = _worldPlaceRotation;
 
             var rawScroll = _verticalAxisAction.ReadValue<float>();
+            var modifier = _holdRotateAction.IsPressed();
+            var mouseDelta = _lateralMoveDelta.ReadValue<Vector2>();
 
-            _placementMethod.HandleVertical(ref _worldPlacePosition, rawScroll);
-
-            var delta = _lateralMoveDelta.ReadValue<Vector2>();
-
-            if (_holdRotateAction.IsPressed())
-            {
-                HandleRotation(delta);
-            }
-            else
-            {
-                HandleLateral(delta);
-            }
+            _placementMethod.HandlePlacement(ref _worldPlacePosition, ref _worldPlaceRotation, modifier, mouseDelta, rawScroll, out var placementCursor);
 
             RestrictPlacePosition(ref _worldPlacePosition);
 
@@ -244,7 +235,7 @@ namespace Recounter
 
             _hand.UpdateHoldPositionAndRotation(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
 
-            _cursorImage.transform.position = _camera.WorldToScreenPoint(_active.transform.position);
+            ModifyCursor(placementCursor);
         }
 
         void LateUpdate()
@@ -262,18 +253,33 @@ namespace Recounter
             return Physics.Raycast(camPos, dir, Vector3.Distance(camPos, worldPosition), _lineOfSightMask);
         }
 
-        void HandleLateral(Vector2 delta)
+        void ModifyCursor(PlacementCursor placementCursor)
         {
-            _placementMethod.HandleLateral(ref _worldPlacePosition, delta);
-            _cursorImage.overrideSprite = _placeIcon;
-            _cursorImage.transform.rotation = Quaternion.identity;
-        }
+            if (placementCursor == PlacementCursor.None)
+            {
+                _cursorImage.overrideSprite = null;
+                _cursorImage.transform.SetPositionAndRotation(
+                    new Vector2(Screen.width, Screen.height) / 2, Quaternion.identity
+                );
+                return;
+            }
 
-        void HandleRotation(Vector2 delta)
-        {
-            _placementMethod.HandleRotation(ref _worldPlaceRotation, delta);
-            _cursorImage.overrideSprite = _rotateIcon;
-            _cursorImage.transform.eulerAngles = -Vector3.forward * _worldPlaceRotation.magnitude;
+            _cursorImage.transform.position = _camera.WorldToScreenPoint(_active.transform.position);
+
+            if (placementCursor == PlacementCursor.Placement)
+            {
+                _cursorImage.overrideSprite = _placeIcon;
+                _cursorImage.transform.rotation = Quaternion.identity;
+            }
+            else if (placementCursor == PlacementCursor.Rotation)
+            {
+                _cursorImage.overrideSprite = _rotateIcon;
+                _cursorImage.transform.eulerAngles = -Vector3.forward * _worldPlaceRotation.magnitude;
+            }
+            else
+            {
+                throw new System.ArgumentOutOfRangeException(nameof(placementCursor));
+            }
         }
 
         void RestrictPlacePosition(ref Vector3 worldPlacePos)
@@ -317,11 +323,7 @@ namespace Recounter
 
             _hand.SetCarryStates(HandCarryStates.None);
 
-            _cursorImage.overrideSprite = null;
-
-            _cursorImage.transform.SetPositionAndRotation(
-                new Vector2(Screen.width, Screen.height) / 2, Quaternion.identity
-                );
+            ModifyCursor(PlacementCursor.None);
         }
 
         Item PreReleaseItem()
