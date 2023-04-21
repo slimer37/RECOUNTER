@@ -15,7 +15,7 @@ namespace Recounter
         Transform _body;
         Camera _camera;
 
-        public Vector3 CalculateLocalStartPos()
+        public Vector3 GetInitialPlacementPosition()
         {
             var pitch = -_camera.transform.eulerAngles.x * Mathf.Deg2Rad;
             var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
@@ -23,11 +23,11 @@ namespace Recounter
             localStartPos += Vector3.forward * _placer.Active.SizeAlong(Vector3.forward);
             localStartPos += _body.InverseTransformPoint(_camera.transform.position);
 
-            return localStartPos;
+            return _body.TransformPoint(localStartPos);
         }
 
-        public bool IsItemPositionValid(Vector3 localPosition, Quaternion rotation) =>
-            _placer.Active.WouldIntersectAt(_body.TransformPoint(localPosition), rotation, _obstacleMask);
+        public bool IsItemPositionValid(Vector3 position, Quaternion rotation) =>
+            _placer.Active.WouldIntersectAt(position, rotation, _obstacleMask);
 
         public void Initialize(Placer placer, Transform body, Camera camera)
         {
@@ -36,17 +36,17 @@ namespace Recounter
             _camera = camera;
         }
 
-        public void HandleRotation(ref Vector3 localPlaceRotation, Vector2 delta)
+        public void HandleRotation(ref Vector3 placeRotation, Vector2 delta)
         {
-            localPlaceRotation.y += delta.x * _rotateSpeed;
+            placeRotation.y += delta.x * _rotateSpeed;
         }
 
-        public void HandleLateral(ref Vector3 localPlacePosition, Vector2 delta)
+        public void HandleLateral(ref Vector3 placePosition, Vector2 delta)
         {
-            localPlacePosition += _lateralSpeed * new Vector3(delta.x, 0, delta.y);
+            placePosition += _lateralSpeed * _body.TransformDirection(delta.x, 0, delta.y);
         }
 
-        public void HandleVertical(ref Vector3 localPlacePosition, float rawScroll)
+        public void HandleVertical(ref Vector3 placePosition, float rawScroll)
         {
             if (rawScroll == 0) return;
 
@@ -55,14 +55,14 @@ namespace Recounter
             var dir = scrollDir * Vector3.up;
             var moveDelta = _verticalSpeed * dir;
 
-            if (IsItemPositionValid(localPlacePosition + moveDelta, _placer.Active.transform.rotation)
-                && Physics.Raycast(localPlacePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
+            if (IsItemPositionValid(placePosition + moveDelta, _placer.Active.transform.rotation)
+                && Physics.Raycast(placePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
             {
                 var length = hit.distance - _placer.Active.SizeAlong(dir) + _surfaceSeparation;
                 moveDelta = length * dir;
             }
 
-            localPlacePosition += moveDelta;
+            placePosition += moveDelta;
         }
     }
 }

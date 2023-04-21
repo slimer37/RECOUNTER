@@ -46,8 +46,8 @@ namespace Recounter
         [SerializeField] Camera _camera;
         [SerializeField] PlacementMethod _defaultMethod;
 
-        Vector3 _localPlacePosition;
-        Vector3 _localPlaceRotation;
+        Vector3 _worldPlacePosition;
+        Vector3 _worldPlaceRotation;
 
         Vector3 _adjustedHoldPos;
         Quaternion _adjustedHoldRot;
@@ -116,7 +116,7 @@ namespace Recounter
             _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
             _adjustedHoldPos = _holdPos + _active.HoldPosShift;
 
-            _localPlaceRotation = Vector3.up * _defaultRot;
+            _worldPlaceRotation = _body.eulerAngles + Vector3.up * _defaultRot;
 
             _ghost.CopyMesh(item);
 
@@ -209,12 +209,12 @@ namespace Recounter
 
             if (!_isPlacing) return;
 
-            var previousPos = _localPlacePosition;
-            var previousRot = _localPlaceRotation;
+            var previousPos = _worldPlacePosition;
+            var previousRot = _worldPlaceRotation;
 
             var rawScroll = _verticalAxisAction.ReadValue<float>();
 
-            _placementMethod.HandleVertical(ref _localPlacePosition, rawScroll);
+            _placementMethod.HandleVertical(ref _worldPlacePosition, rawScroll);
 
             var delta = _lateralMoveDelta.ReadValue<Vector2>();
 
@@ -223,21 +223,15 @@ namespace Recounter
             else
                 HandleLateral(delta);
 
-            RestrictPlacePosition(ref _localPlacePosition);
+            RestrictPlacePosition(ref _worldPlacePosition);
 
-            var placeRot = GetWorldPlaceRot();
-
-            if (_placementMethod.IsItemPositionValid(_localPlacePosition, placeRot))
+            if (_placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation)))
             {
-                _localPlacePosition = previousPos;
-                _localPlaceRotation = previousRot;
-
-                placeRot = GetWorldPlaceRot();
+                _worldPlacePosition = previousPos;
+                _worldPlaceRotation = previousRot;
             }
 
-            var placePos = GetWorldPlacePos();
-
-            _hand.UpdateHoldPositionAndRotation(placePos, placeRot);
+            _hand.UpdateHoldPositionAndRotation(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
 
             _cursorImage.transform.position = _camera.WorldToScreenPoint(_active.transform.position);
         }
@@ -250,9 +244,6 @@ namespace Recounter
             ShowPreviewGhost();
         }
 
-        Vector3 GetWorldPlacePos() => _body.TransformPoint(_localPlacePosition);
-        Quaternion GetWorldPlaceRot() => Quaternion.Euler(_localPlaceRotation + _body.transform.eulerAngles);
-
         bool IsLineOfSightBlocked(Vector3 worldPosition)
         {
             var camPos = _camera.transform.position;
@@ -262,21 +253,21 @@ namespace Recounter
 
         void HandleLateral(Vector2 delta)
         {
-            _placementMethod.HandleLateral(ref _localPlacePosition, delta);
+            _placementMethod.HandleLateral(ref _worldPlacePosition, delta);
             _cursorImage.overrideSprite = _placeIcon;
             _cursorImage.transform.rotation = Quaternion.identity;
         }
 
         void HandleRotation(Vector2 delta)
         {
-            _placementMethod.HandleRotation(ref _localPlaceRotation, delta);
+            _placementMethod.HandleRotation(ref _worldPlaceRotation, delta);
             _cursorImage.overrideSprite = _rotateIcon;
-            _cursorImage.transform.eulerAngles = -Vector3.forward * _localPlaceRotation.magnitude;
+            _cursorImage.transform.eulerAngles = -Vector3.forward * _worldPlaceRotation.magnitude;
         }
 
-        void RestrictPlacePosition(ref Vector3 localPlacePos)
+        void RestrictPlacePosition(ref Vector3 worldPlacePos)
         {
-            var restrictedPos = localPlacePos;
+            var restrictedPos = _body.InverseTransformPoint(worldPlacePos);
             var center = _placementRegionCenter;
             var extents = _placementRegionExtents;
 
@@ -286,7 +277,7 @@ namespace Recounter
             restrictedPos.z = Mathf.Clamp(restrictedPos.z, -extents.z, extents.z);
             restrictedPos += center;
 
-            localPlacePos = restrictedPos;
+            worldPlacePos = _body.TransformPoint(restrictedPos);
         }
 
         void InitializePlacement()
@@ -340,21 +331,21 @@ namespace Recounter
         {
             if (_startPlaceObstructed) return;
 
-            _active.transform.SetPositionAndRotation(GetWorldPlacePos(), GetWorldPlaceRot());
+            _active.transform.SetPositionAndRotation(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
 
             PreReleaseItem().Release();
         }
 
         void KeepItemInHand()
         {
-            _localPlacePosition = _placementMethod.CalculateLocalStartPos();
+            _worldPlacePosition = _placementMethod.GetInitialPlacementPosition();
 
-            RestrictPlacePosition(ref _localPlacePosition);
+            RestrictPlacePosition(ref _worldPlacePosition);
 
-            var defaultPlaceRotation = Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot));
+            _worldPlaceRotation = _body.eulerAngles + Vector3.up * _defaultRot;
 
-            _startPlaceObstructed = IsLineOfSightBlocked(GetWorldPlacePos())
-                || _placementMethod.IsItemPositionValid(_localPlacePosition, defaultPlaceRotation);
+            _startPlaceObstructed = IsLineOfSightBlocked(_worldPlacePosition)
+                || _placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
 
             var cameraLocalPos = _adjustedHoldPos;
             var cameraLocalRot = _adjustedHoldRot;
@@ -370,9 +361,9 @@ namespace Recounter
 
         void ShowPreviewGhost()
         {
-            var ghostRot = Quaternion.Euler(_body.transform.eulerAngles + _localPlaceRotation);
+            var ghostRot = Quaternion.Euler(_worldPlaceRotation);
             var ghostMat = _startPlaceObstructed ? _obstructedMat : _freeMat;
-            _ghost.ShowAt(_body.TransformPoint(_localPlacePosition), ghostRot, ghostMat);
+            _ghost.ShowAt(_worldPlacePosition, ghostRot, ghostMat);
         }
 
         public void StopHoldingItem()
