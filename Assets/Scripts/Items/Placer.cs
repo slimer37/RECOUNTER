@@ -298,6 +298,8 @@ namespace Recounter
             localStartPos += Vector3.forward * _active.SizeAlong(Vector3.forward);
             localStartPos += _body.InverseTransformPoint(_camera.transform.position);
 
+            RestrictPlacePosition(ref localStartPos);
+
             return localStartPos;
         }
 
@@ -360,8 +362,6 @@ namespace Recounter
         void KeepItemInHand()
         {
             _localPlacePosition = CalculateLocalStartPos();
-
-            RestrictPlacePosition(ref _localPlacePosition);
 
             _startPlaceObstructed = IsLocalLineOfSightBlocked(_localPlacePosition)
                 || _placementMethod.ItemIntersectsAtPosition(
