@@ -4868,6 +4868,7 @@ GameObject:
   m_Component:
   - component: {fileID: 317501404}
   - component: {fileID: 317501403}
+  - component: {fileID: 317501405}
   m_Layer: 6
   m_Name: Octoplacer
   m_TagString: Untagged
@@ -4896,8 +4897,6 @@ MonoBehaviour:
   _throwForce: 5
   _throwDirection: {x: 0, y: 0.2, z: 1}
   _lateralSpeed: 0.0025
-  _verticalSpeed: 0.1
-  _surfaceSeparation: 0.01
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 193
@@ -4907,7 +4906,6 @@ MonoBehaviour:
   _placementRegionExtents: {x: 1, y: 1.4, z: 1}
   _placementRegionCenter: {x: 0, y: 1.5, z: 1.5}
   _startPlaceDistance: 0.5
-  _rotateSpeed: 0.8
   _defaultRot: 180
   _intersectHoldShift: {x: 0, y: -0.1, z: -0.4}
   _intersectHoldRotShift: {x: -10, y: -25, z: 0}
@@ -4919,6 +4917,7 @@ MonoBehaviour:
   _rotateIcon: {fileID: 21300000, guid: 141f55b40da731746a84d2dc184a5952, type: 3}
   _playerInteraction: {fileID: 273294029}
   _camera: {fileID: 1065023558}
+  _defaultMethod: {fileID: 317501405}
 --- !u!4 &317501404
 Transform:
   m_ObjectHideFlags: 0
@@ -4934,6 +4933,24 @@ Transform:
   m_Father: {fileID: 840553857}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &317501405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317501402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88d0864dcebb00843a638017b0169688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _verticalSpeed: 0.1
+  _obstacleMask:
+    serializedVersion: 2
+    m_Bits: 193
+  _surfaceSeparation: 0.01
+  _rotateSpeed: 0.8
 --- !u!1 &319221805
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,8 +22,6 @@ namespace Recounter
 
         [Header("Placing")]
         [SerializeField] float _lateralSpeed;
-        [SerializeField] float _verticalSpeed;
-        [SerializeField] float _surfaceSeparation;
         [SerializeField] LayerMask _obstacleMask;
         [SerializeField] LayerMask _lineOfSightMask;
         [SerializeField] Vector3 _placementRegionExtents;
@@ -31,7 +29,6 @@ namespace Recounter
         [SerializeField] float _startPlaceDistance;
 
         [Header("Rotation")]
-        [SerializeField] float _rotateSpeed;
         [SerializeField] float _defaultRot = 180f;
 
         [Header("Holding")]
@@ -49,9 +46,10 @@ namespace Recounter
         [Header("Components")]
         [SerializeField] PlayerInteraction _playerInteraction;
         [SerializeField] Camera _camera;
+        [SerializeField] PlacementMethod _defaultMethod;
 
         Vector3 _localPlacePosition;
-        float _localPlaceRotation;
+        Vector3 _localPlaceRotation;
 
         Vector3 _adjustedHoldPos;
         Quaternion _adjustedHoldRot;
@@ -74,6 +72,14 @@ namespace Recounter
         InputAction _verticalAxisAction;
         InputAction _lateralMoveDelta;
 
+        PlacementMethod _placementMethod;
+
+        public void SetPlacementMethod(PlacementMethod placementMethod)
+        {
+            placementMethod.Initialize(this, _body);
+            _placementMethod = placementMethod;
+        }
+
         void OnDrawGizmosSelected()
         {
             Gizmos.matrix = _body.localToWorldMatrix;
@@ -95,6 +101,8 @@ namespace Recounter
             _lateralMoveDelta = _placementControls.Lateral;
 
             Pause.Paused += OnPause;
+
+            SetPlacementMethod(_defaultMethod);
         }
 
         void OnPause(bool pause) => enabled = !pause;
@@ -110,7 +118,7 @@ namespace Recounter
             _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
             _adjustedHoldPos = _holdPos + _active.HoldPosShift;
 
-            _localPlaceRotation = _defaultRot;
+            _localPlaceRotation = Vector3.up * _defaultRot;
 
             _ghost.CopyMesh(item);
 
@@ -206,7 +214,7 @@ namespace Recounter
             var previousPos = _localPlacePosition;
             var previousRot = _localPlaceRotation;
 
-            HandleVertical(_verticalAxisAction.ReadValue<float>());
+            _placementMethod.HandleVertical(ref _localPlacePosition, _verticalAxisAction.ReadValue<float>());
 
             var delta = _lateralMoveDelta.ReadValue<Vector2>();
 
@@ -219,7 +227,7 @@ namespace Recounter
 
             var placeRot = GetWorldPlaceRot();
 
-            if (ItemIntersectsAtPosition(_localPlacePosition, placeRot))
+            if (_placementMethod.ItemIntersectsAtPosition(_localPlacePosition, placeRot))
             {
                 _localPlacePosition = previousPos;
                 _localPlaceRotation = previousRot;
@@ -243,10 +251,7 @@ namespace Recounter
         }
 
         Vector3 GetWorldPlacePos() => _body.TransformPoint(_localPlacePosition);
-        Quaternion GetWorldPlaceRot() => Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
-
-        bool ItemIntersectsAtPosition(Vector3 localPosition, Quaternion rotation) =>
-            _active.WouldIntersectAt(_body.TransformPoint(localPosition), rotation, _obstacleMask);
+        Quaternion GetWorldPlaceRot() => Quaternion.Euler(_localPlaceRotation + _body.transform.eulerAngles);
 
         bool IsLineOfSightBlocked(Vector3 worldPosition)
         {
@@ -266,28 +271,9 @@ namespace Recounter
 
         void HandleRotation(Vector2 delta)
         {
-            _localPlaceRotation += delta.x * _rotateSpeed;
+            _placementMethod.HandleRotation(ref _localPlaceRotation, delta);
             _cursorImage.overrideSprite = _rotateIcon;
-            _cursorImage.transform.eulerAngles = -Vector3.forward * _localPlaceRotation;
-        }
-
-        void HandleVertical(float rawScroll)
-        {
-            if (rawScroll == 0) return;
-
-            var scrollDir = rawScroll > 0 ? 1 : -1;
-
-            var dir = scrollDir * Vector3.up;
-            var moveDelta = _verticalSpeed * dir;
-
-            if (ItemIntersectsAtPosition(_localPlacePosition + moveDelta, _active.transform.rotation)
-                && Physics.Raycast(_localPlacePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
-            {
-                var length = hit.distance - _active.SizeAlong(dir) + _surfaceSeparation;
-                moveDelta = length * dir;
-            }
-
-            _localPlacePosition += moveDelta;
+            _cursorImage.transform.eulerAngles = -Vector3.forward * _localPlaceRotation.magnitude;
         }
 
         void RestrictPlacePosition(ref Vector3 localPlacePos)
@@ -379,7 +365,7 @@ namespace Recounter
             RestrictPlacePosition(ref _localPlacePosition);
 
             _startPlaceObstructed = IsLocalLineOfSightBlocked(_localPlacePosition)
-                || ItemIntersectsAtPosition(
+                || _placementMethod.ItemIntersectsAtPosition(
                 _localPlacePosition,
                 Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot))
                 );
@@ -398,7 +384,7 @@ namespace Recounter
 
         void ShowPreviewGhost()
         {
-            var ghostRot = Quaternion.Euler(0, _body.transform.eulerAngles.y + _localPlaceRotation, 0);
+            var ghostRot = Quaternion.Euler(_body.transform.eulerAngles + _localPlaceRotation);
             var ghostMat = _startPlaceObstructed ? _obstructedMat : _freeMat;
             _ghost.ShowAt(_body.TransformPoint(_localPlacePosition), ghostRot, ghostMat);
         }
