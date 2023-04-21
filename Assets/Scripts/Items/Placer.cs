@@ -25,7 +25,6 @@ namespace Recounter
         [SerializeField] LayerMask _lineOfSightMask;
         [SerializeField] Vector3 _placementRegionExtents;
         [SerializeField] Vector3 _placementRegionCenter;
-        [SerializeField] float _startPlaceDistance;
 
         [Header("Rotation")]
         [SerializeField] float _defaultRot = 180f;
@@ -75,7 +74,7 @@ namespace Recounter
 
         public void SetPlacementMethod(PlacementMethod placementMethod)
         {
-            placementMethod.Initialize(this, _body);
+            placementMethod.Initialize(this, _body, _camera);
             _placementMethod = placementMethod;
         }
 
@@ -288,19 +287,6 @@ namespace Recounter
             localPlacePos = restrictedPos;
         }
 
-        Vector3 CalculateLocalStartPos()
-        {
-            var pitch = -_camera.transform.eulerAngles.x * Mathf.Deg2Rad;
-            var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
-            localStartPos *= _startPlaceDistance;
-            localStartPos += Vector3.forward * _active.SizeAlong(Vector3.forward);
-            localStartPos += _body.InverseTransformPoint(_camera.transform.position);
-
-            RestrictPlacePosition(ref localStartPos);
-
-            return localStartPos;
-        }
-
         void InitializePlacement()
         {
             if (_startPlaceObstructed)
@@ -359,7 +345,9 @@ namespace Recounter
 
         void KeepItemInHand()
         {
-            _localPlacePosition = CalculateLocalStartPos();
+            _localPlacePosition = _placementMethod.CalculateLocalStartPos();
+
+            RestrictPlacePosition(ref _localPlacePosition);
 
             var defaultPlaceRotation = Quaternion.Euler(Vector3.up * (_body.eulerAngles.y + _defaultRot));
 

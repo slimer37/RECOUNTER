@@ -9,17 +9,31 @@ namespace Recounter
         [SerializeField] LayerMask _obstacleMask;
         [SerializeField] float _surfaceSeparation;
         [SerializeField] float _rotateSpeed;
+        [SerializeField] float _startPlaceDistance;
 
         Placer _placer;
         Transform _body;
+        Camera _camera;
+
+        public Vector3 CalculateLocalStartPos()
+        {
+            var pitch = -_camera.transform.eulerAngles.x * Mathf.Deg2Rad;
+            var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
+            localStartPos *= _startPlaceDistance;
+            localStartPos += Vector3.forward * _placer.Active.SizeAlong(Vector3.forward);
+            localStartPos += _body.InverseTransformPoint(_camera.transform.position);
+
+            return localStartPos;
+        }
 
         public bool IsItemPositionValid(Vector3 localPosition, Quaternion rotation) =>
             _placer.Active.WouldIntersectAt(_body.TransformPoint(localPosition), rotation, _obstacleMask);
 
-        public void Initialize(Placer placer, Transform body)
+        public void Initialize(Placer placer, Transform body, Camera camera)
         {
             _placer = placer;
             _body = body;
+            _camera = camera;
         }
 
         public void HandleRotation(ref Vector3 localPlaceRotation, Vector2 delta)
