@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Recounter
 {
-    public class OctoPlacement : PlacementMethod
+    public class OctoPlacement : MonoBehaviour, IPlacementMethod
     {
         [SerializeField] float _verticalSpeed;
         [SerializeField] float _lateralSpeed;
@@ -11,21 +11,32 @@ namespace Recounter
         [SerializeField] float _rotateSpeed;
         [SerializeField] float _startPlaceDistance;
 
-        public override Vector3 GetInitialPlacementPosition()
-        {
-            var pitch = -Camera.transform.eulerAngles.x * Mathf.Deg2Rad;
-            var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
-            localStartPos *= _startPlaceDistance;
-            localStartPos += Vector3.forward * Placer.Active.SizeAlong(Vector3.forward);
-            localStartPos += Body.InverseTransformPoint(Camera.transform.position);
+        Placer _placer;
+        Transform _body;
+        Transform _camera;
 
-            return Body.TransformPoint(localStartPos);
+        public void Initialize(Placer placer, Transform body, Transform camera)
+        {
+            _placer = placer;
+            _body = body;
+            _camera = camera;
         }
 
-        public override bool IsItemPositionValid(Vector3 position, Quaternion rotation) =>
-            Placer.Active.WouldIntersectAt(position, rotation, _obstacleMask);
+        public Vector3 GetInitialPlacementPosition()
+        {
+            var pitch = -_camera.eulerAngles.x * Mathf.Deg2Rad;
+            var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
+            localStartPos *= _startPlaceDistance;
+            localStartPos += Vector3.forward * _placer.Active.SizeAlong(Vector3.forward);
+            localStartPos += _body.InverseTransformPoint(_camera.position);
 
-        public override void HandlePlacement(
+            return _body.TransformPoint(localStartPos);
+        }
+
+        public bool IsItemPositionValid(Vector3 position, Quaternion rotation) =>
+            _placer.Active.WouldIntersectAt(position, rotation, _obstacleMask);
+
+        public void HandlePlacement(
             ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
         {
             HandleVertical(ref placePosition, rawScroll);
@@ -45,7 +56,7 @@ namespace Recounter
         }
 
         void HandleLateral(ref Vector3 placePosition, Vector2 delta) =>
-            placePosition += _lateralSpeed * Body.TransformDirection(delta.x, 0, delta.y);
+            placePosition += _lateralSpeed * _body.TransformDirection(delta.x, 0, delta.y);
 
         void HandleRotation(ref Vector3 placeRotation, Vector2 delta) =>
             placeRotation.y += delta.x * _rotateSpeed;
@@ -59,10 +70,10 @@ namespace Recounter
             var dir = scrollDir * Vector3.up;
             var moveDelta = _verticalSpeed * dir;
 
-            if (IsItemPositionValid(placePosition + moveDelta, Placer.Active.transform.rotation)
+            if (IsItemPositionValid(placePosition + moveDelta, _placer.Active.transform.rotation)
                 && Physics.Raycast(placePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
             {
-                var length = hit.distance - Placer.Active.SizeAlong(dir) + _surfaceSeparation;
+                var length = hit.distance - _placer.Active.SizeAlong(dir) + _surfaceSeparation;
                 moveDelta = length * dir;
             }
 

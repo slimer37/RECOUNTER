@@ -44,7 +44,8 @@ namespace Recounter
         [Header("Components")]
         [SerializeField] PlayerInteraction _playerInteraction;
         [SerializeField] Camera _camera;
-        [SerializeField] PlacementMethod _defaultMethod;
+
+        IPlacementMethod _defaultMethod;
 
         Vector3 _worldPlacePosition;
         Vector3 _worldPlaceRotation;
@@ -70,17 +71,27 @@ namespace Recounter
         InputAction _verticalAxisAction;
         InputAction _lateralMoveDelta;
 
-        PlacementMethod _placementMethod;
+        IPlacementMethod _placementMethod;
 
-        public void SetPlacementMethod(PlacementMethod placementMethod)
+        public void SetPlacementMethod(IPlacementMethod placementMethod)
         {
-            placementMethod.Initialize(this, _body, _camera);
+            placementMethod.Initialize(this, _body, _camera.transform);
             _placementMethod = placementMethod;
         }
 
         public void ResetPlacementMethod()
         {
             SetPlacementMethod(_defaultMethod);
+        }
+
+        void InitializeDefaultPlacementMethod()
+        {
+            if (!TryGetComponent(out _defaultMethod))
+            {
+                Debug.LogWarning("Could not find a default placement method attached to Placer.", this);
+            }
+
+            ResetPlacementMethod();
         }
 
         void OnDrawGizmosSelected()
@@ -105,7 +116,7 @@ namespace Recounter
 
             Pause.Paused += OnPause;
 
-            ResetPlacementMethod();
+            InitializeDefaultPlacementMethod();
         }
 
         void OnPause(bool pause) => enabled = !pause;
