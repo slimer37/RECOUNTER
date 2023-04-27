@@ -4870,7 +4870,7 @@ GameObject:
   - component: {fileID: 317501403}
   - component: {fileID: 317501405}
   m_Layer: 6
-  m_Name: Octoplacer
+  m_Name: Placer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20389,6 +20389,7 @@ MonoBehaviour:
   <Interaction>k__BackingField: {fileID: 273294029}
   <LeftHand>k__BackingField: {fileID: 1095714737}
   <RightHand>k__BackingField: {fileID: 157413189}
+  <Placer>k__BackingField: {fileID: 317501403}
   _hudCanvas: {fileID: 1070106081}
   _hudCanvasGroup: {fileID: 1070106083}
   _hudFadeTime: 0.2
