@@ -44,7 +44,7 @@ namespace Recounter
         [Header("Components")]
         [SerializeField] PlayerInteraction _playerInteraction;
         [SerializeField] Camera _camera;
-        [SerializeField] OctoPlacement _defaultMethod;
+        [SerializeField] PlacementMethod _defaultMethod;
 
         Vector3 _worldPlacePosition;
         Vector3 _worldPlaceRotation;
