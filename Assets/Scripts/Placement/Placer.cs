@@ -238,7 +238,7 @@ namespace Recounter
 
             RestrictPlacePosition(ref _worldPlacePosition);
 
-            if (_placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation)))
+            if (!_placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation)))
             {
                 _worldPlacePosition = previousPos;
                 _worldPlaceRotation = previousRot;
@@ -368,7 +368,7 @@ namespace Recounter
             _worldPlaceRotation = _body.eulerAngles + Vector3.up * _defaultRot;
 
             _startPlaceObstructed = IsLineOfSightBlocked(_worldPlacePosition)
-                || _placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
+                || !_placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
 
             var cameraLocalPos = _adjustedHoldPos;
             var cameraLocalRot = _adjustedHoldRot;

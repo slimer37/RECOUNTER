@@ -34,7 +34,7 @@ namespace Recounter
         }
 
         public bool IsItemPositionValid(Vector3 position, Quaternion rotation) =>
-            _placer.Active.WouldIntersectAt(position, rotation, _obstacleMask);
+            !_placer.Active.WouldIntersectAt(position, rotation, _obstacleMask);
 
         public void HandlePlacement(
             ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
