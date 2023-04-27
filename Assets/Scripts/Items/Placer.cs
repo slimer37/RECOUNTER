@@ -72,7 +72,7 @@ namespace Recounter
 
         PlacementMethod _placementMethod;
 
-        public void SetPlacementMethod(OctoPlacement placementMethod)
+        public void SetPlacementMethod(PlacementMethod placementMethod)
         {
             placementMethod.Initialize(this, _body, _camera);
             _placementMethod = placementMethod;
