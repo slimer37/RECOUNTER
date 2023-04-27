@@ -99,12 +99,12 @@ public class PlayerInteraction : MonoBehaviour
         if (_lastHoverTarget == currentHover) return;
 
         _lastHoverTarget = currentHover;
-        _hovered?.OnHover(false);
+        _hovered?.OnExitHover(_employee);
 
         if (currentHover)
         {
             _hovered = currentHover.GetComponentInParent<Interactable>();
-            _hovered.OnHover(true);
+            _hovered.OnEnterHover(_employee);
 
             UpdateReticle(true);
         }

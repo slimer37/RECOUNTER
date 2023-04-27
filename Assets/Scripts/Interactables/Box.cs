@@ -78,22 +78,22 @@ public class Box : Interactable
     void IncreaseIndex(InputAction.CallbackContext obj) => ChangeIndex(1);
     void DecreaseIndex(InputAction.CallbackContext obj) => ChangeIndex(-1);
 
-    public override void OnHover(bool hover)
+    public override void OnEnterHover(Employee e)
     {
-        _isHovered = hover;
+        _isHovered = true;
 
-        if (hover)
-        {
-            _decreaseIndex.Enable();
-            _increaseIndex.Enable();
-        }
-        else
-        {
-            _decreaseIndex.Disable();
-            _increaseIndex.Disable();
+        _decreaseIndex.Enable();
+        _increaseIndex.Enable();
+    }
 
-            _displayedItem?.gameObject.SetActive(false);
-        }
+    public override void OnExitHover(Employee e)
+    {
+        _isHovered = false;
+
+        _decreaseIndex.Disable();
+        _increaseIndex.Disable();
+
+        _displayedItem?.gameObject.SetActive(false);
     }
 
     void ChangeIndex(int inc)
