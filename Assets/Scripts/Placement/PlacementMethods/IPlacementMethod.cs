@@ -6,6 +6,8 @@ namespace Recounter
 
     public interface IPlacementMethod
     {
+        public bool ShouldForceGhost => true;
+
         public void SetUp(Placer placer, Transform body, Transform camera) { }
 
         public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles);

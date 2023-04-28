@@ -24,6 +24,8 @@ namespace Recounter
         Transform _body;
         Transform _camera;
 
+        public bool ShouldForceGhost => false;
+
         public void SetUp(Placer placer, Transform body, Transform camera)
         {
             _placer = placer;

@@ -361,7 +361,7 @@ namespace Recounter
         {
             var ghostRot = Quaternion.Euler(_worldPlaceRotation);
             var ghostMat = _startPlaceObstructed ? _obstructedMat : _freeMat;
-            _ghost.ShowAt(_worldPlacePosition, ghostRot, ghostMat);
+            _ghost.ShowAt(_worldPlacePosition, ghostRot, ghostMat, _placementMethod.ShouldForceGhost);
         }
 
         public void StopHoldingItem()

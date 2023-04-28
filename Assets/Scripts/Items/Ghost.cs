@@ -13,7 +13,9 @@ internal class Ghost : MonoBehaviour
 
     bool _visibilityToggle = true;
 
-    bool _isActive;
+    bool _canToggleVisibility;
+
+    Material _currentMaterial;
 
     void Reset()
     {
@@ -28,12 +30,12 @@ internal class Ghost : MonoBehaviour
     {
         _toggleVisibilityAction.performed += ToggleVisibility;
 
-        SetupGhost(false);
+        Hide();
     }
 
     void ToggleVisibility(InputAction.CallbackContext ctx)
     {
-        if (!_isActive) return;
+        if (!_canToggleVisibility) return;
 
         _visibilityToggle = !_visibilityToggle;
         _rend.enabled = _visibilityToggle;
@@ -49,6 +51,10 @@ internal class Ghost : MonoBehaviour
 
     void SetMaterial(Material material)
     {
+        if (_currentMaterial == material) return;
+
+        _currentMaterial = material;
+
         var materials = new Material[_filter.mesh.subMeshCount];
         for (var i = 0; i < materials.Length; i++)
             materials[i] = material;
@@ -56,29 +62,30 @@ internal class Ghost : MonoBehaviour
         _rend.materials = materials;
     }
 
-    public void ShowAt(Vector3 position, Quaternion rotation, Material material)
+    public void ShowAt(Vector3 position, Quaternion rotation, Material material, bool forceVisible)
     {
-        ShowAt(position, rotation);
+        ShowGhost(forceVisible);
+
+        transform.SetPositionAndRotation(position, rotation);
+
         SetMaterial(material);
     }
 
-    public void ShowAt(Vector3 position, Quaternion rotation)
+    public void Hide()
     {
-        if (!_isActive)
-            SetupGhost(true);
+        _canToggleVisibility = false;
 
-        transform.SetPositionAndRotation(position, rotation);
+        _instructionCanvas.enabled = false;
+
+        _rend.enabled = false;
     }
 
-    public void Hide() => SetupGhost(false);
-
-    void SetupGhost(bool show)
+    void ShowGhost(bool forceVisible = false)
     {
-        _isActive = show;
+        _canToggleVisibility = !forceVisible;
 
-        _rend.enabled = show && _visibilityToggle;
-        _instructionCanvas.enabled = show;
+        _instructionCanvas.enabled = _canToggleVisibility;
 
-        if (!show) return;
+        _rend.enabled = _visibilityToggle || forceVisible;
     }
 }
