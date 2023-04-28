@@ -153,7 +153,7 @@ namespace Recounter
         {
             if (!_active || !_isPlacing) return;
 
-            DropItem();
+            AttemptDropItem();
         }
 
         void OnChargeThrow(InputAction.CallbackContext ctx)
@@ -329,11 +329,16 @@ namespace Recounter
             return temp;
         }
 
-        void DropItem()
+        void AttemptDropItem()
         {
-            if (_startPlaceObstructed) return;
+            var rot = Quaternion.Euler(_worldPlaceRotation);
 
-            _active.transform.SetPositionAndRotation(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
+            if (!_placementMethod.IsItemPositionValid(_worldPlacePosition, rot))
+            {
+                EndPlace();
+                return;
+            }
+            _active.transform.SetPositionAndRotation(_worldPlacePosition, rot);
 
             PreReleaseItem().Release();
         }
