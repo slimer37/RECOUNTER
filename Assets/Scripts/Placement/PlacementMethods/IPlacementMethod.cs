@@ -8,7 +8,7 @@ namespace Recounter
     {
         public void Initialize(Placer placer, Transform body, Transform camera);
 
-        public Vector3 GetInitialPlacementPosition();
+        public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles);
 
         public bool IsItemPositionValid(Vector3 position, Quaternion rotation);
 

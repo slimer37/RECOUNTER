@@ -4902,7 +4902,6 @@ MonoBehaviour:
   _lineOfSightMask:
     serializedVersion: 2
     m_Bits: 129
-  _defaultRot: 180
   _intersectHoldShift: {x: 0, y: -0.1, z: -0.4}
   _intersectHoldRotShift: {x: -10, y: -25, z: 0}
   _holdPos: {x: 0.3, y: -0.1, z: 0.8}
@@ -4946,8 +4945,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 193
   _surfaceSeparation: 0.01
-  _rotateSpeed: 0.8
   _startPlaceDistance: 0.5
+  _defaultRot: 180
+  _rotateSpeed: 0.8
   _radius: 1
   _yExtent: 2
   _forwardCutoff: 0.4

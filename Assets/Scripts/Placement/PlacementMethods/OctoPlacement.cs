@@ -8,8 +8,11 @@ namespace Recounter
         [SerializeField] float _lateralSpeed;
         [SerializeField] LayerMask _obstacleMask;
         [SerializeField] float _surfaceSeparation;
-        [SerializeField] float _rotateSpeed;
         [SerializeField] float _startPlaceDistance;
+
+        [Header("Rotation")]
+        [SerializeField] float _defaultRot = 180f;
+        [SerializeField] float _rotateSpeed;
 
         [Header("Cylindrical Bounds")]
         [SerializeField] float _radius;
@@ -28,7 +31,7 @@ namespace Recounter
             _camera = camera;
         }
 
-        public Vector3 GetInitialPlacementPosition()
+        public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
         {
             var pitch = -_camera.eulerAngles.x * Mathf.Deg2Rad;
             var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
@@ -36,7 +39,9 @@ namespace Recounter
             localStartPos += Vector3.forward * _placer.Active.SizeAlong(Vector3.forward);
             localStartPos += _body.InverseTransformPoint(_camera.position);
 
-            return _body.TransformPoint(localStartPos);
+            position = _body.TransformPoint(localStartPos);
+
+            eulerAngles = _body.eulerAngles + Vector3.up * _defaultRot;
         }
 
         public bool IsItemPositionValid(Vector3 position, Quaternion rotation) =>

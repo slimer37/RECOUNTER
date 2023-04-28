@@ -24,9 +24,6 @@ namespace Recounter
         [SerializeField] LayerMask _obstacleMask;
         [SerializeField] LayerMask _lineOfSightMask;
 
-        [Header("Rotation")]
-        [SerializeField] float _defaultRot = 180f;
-
         [Header("Holding")]
         [SerializeField] Vector3 _intersectHoldShift;
         [SerializeField] Vector3 _intersectHoldRotShift;
@@ -125,8 +122,6 @@ namespace Recounter
 
             _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
             _adjustedHoldPos = _holdPos + _active.HoldPosShift;
-
-            _worldPlaceRotation = _body.eulerAngles + Vector3.up * _defaultRot;
 
             _ghost.CopyMesh(item);
 
@@ -345,9 +340,7 @@ namespace Recounter
 
         void KeepItemInHand()
         {
-            _worldPlacePosition = _placementMethod.GetInitialPlacementPosition();
-
-            _worldPlaceRotation = _body.eulerAngles + Vector3.up * _defaultRot;
+            _placementMethod.GetInitialPositionAndRotation(out _worldPlacePosition, out _worldPlaceRotation);
 
             _startPlaceObstructed = IsLineOfSightBlocked(_worldPlacePosition)
                 || !_placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
