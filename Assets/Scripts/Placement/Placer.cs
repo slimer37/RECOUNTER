@@ -70,7 +70,7 @@ namespace Recounter
 
         public void SetPlacementMethod(IPlacementMethod placementMethod)
         {
-            placementMethod.Initialize(this, _body, _camera.transform);
+            placementMethod.SetUp(this, _body, _camera.transform);
             _placementMethod = placementMethod;
         }
 

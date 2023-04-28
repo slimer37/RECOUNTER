@@ -24,7 +24,7 @@ namespace Recounter
         Transform _body;
         Transform _camera;
 
-        public void Initialize(Placer placer, Transform body, Transform camera)
+        public void SetUp(Placer placer, Transform body, Transform camera)
         {
             _placer = placer;
             _body = body;
