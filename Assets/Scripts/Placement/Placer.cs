@@ -23,8 +23,6 @@ namespace Recounter
         [Header("Placing")]
         [SerializeField] LayerMask _obstacleMask;
         [SerializeField] LayerMask _lineOfSightMask;
-        [SerializeField] Vector3 _placementRegionExtents;
-        [SerializeField] Vector3 _placementRegionCenter;
 
         [Header("Rotation")]
         [SerializeField] float _defaultRot = 180f;
@@ -81,6 +79,8 @@ namespace Recounter
 
         public void ResetPlacementMethod()
         {
+            if (_isPlacing) return;
+
             SetPlacementMethod(_defaultMethod);
         }
 
@@ -92,12 +92,6 @@ namespace Recounter
             }
 
             ResetPlacementMethod();
-        }
-
-        void OnDrawGizmosSelected()
-        {
-            Gizmos.matrix = _body.localToWorldMatrix;
-            Gizmos.DrawWireCube(_placementRegionCenter, _placementRegionExtents * 2);
         }
 
         void Awake()
@@ -236,8 +230,6 @@ namespace Recounter
 
             _placementMethod.HandlePlacement(ref _worldPlacePosition, ref _worldPlaceRotation, modifier, mouseDelta, rawScroll, out var placementCursor);
 
-            RestrictPlacePosition(ref _worldPlacePosition);
-
             if (!_placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation)))
             {
                 _worldPlacePosition = previousPos;
@@ -293,21 +285,6 @@ namespace Recounter
             }
         }
 
-        void RestrictPlacePosition(ref Vector3 worldPlacePos)
-        {
-            var restrictedPos = _body.InverseTransformPoint(worldPlacePos);
-            var center = _placementRegionCenter;
-            var extents = _placementRegionExtents;
-
-            restrictedPos -= center;
-            restrictedPos.x = Mathf.Clamp(restrictedPos.x, -extents.x, extents.x);
-            restrictedPos.y = Mathf.Clamp(restrictedPos.y, -extents.y, extents.y);
-            restrictedPos.z = Mathf.Clamp(restrictedPos.z, -extents.z, extents.z);
-            restrictedPos += center;
-
-            worldPlacePos = _body.TransformPoint(restrictedPos);
-        }
-
         void InitializePlacement()
         {
             if (_startPlaceObstructed) return;
@@ -335,6 +312,8 @@ namespace Recounter
             _hand.SetCarryStates(HandCarryStates.None);
 
             ModifyCursor(PlacementCursor.None);
+
+            ResetPlacementMethod();
         }
 
         Item PreReleaseItem()
@@ -362,8 +341,6 @@ namespace Recounter
         void KeepItemInHand()
         {
             _worldPlacePosition = _placementMethod.GetInitialPlacementPosition();
-
-            RestrictPlacePosition(ref _worldPlacePosition);
 
             _worldPlaceRotation = _body.eulerAngles + Vector3.up * _defaultRot;
 

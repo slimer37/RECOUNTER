@@ -4902,8 +4902,6 @@ MonoBehaviour:
   _lineOfSightMask:
     serializedVersion: 2
     m_Bits: 129
-  _placementRegionExtents: {x: 1, y: 1.4, z: 1}
-  _placementRegionCenter: {x: 0, y: 1.5, z: 1.5}
   _defaultRot: 180
   _intersectHoldShift: {x: 0, y: -0.1, z: -0.4}
   _intersectHoldRotShift: {x: -10, y: -25, z: 0}
@@ -4950,6 +4948,10 @@ MonoBehaviour:
   _surfaceSeparation: 0.01
   _rotateSpeed: 0.8
   _startPlaceDistance: 0.5
+  _radius: 1
+  _yExtent: 2
+  _forwardCutoff: 0.4
+  _offset: {x: 0, y: 0, z: 1.4}
 --- !u!1 &319221805
 GameObject:
   m_ObjectHideFlags: 0

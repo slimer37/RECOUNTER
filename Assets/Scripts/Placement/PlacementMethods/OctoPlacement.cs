@@ -11,6 +11,12 @@ namespace Recounter
         [SerializeField] float _rotateSpeed;
         [SerializeField] float _startPlaceDistance;
 
+        [Header("Cylindrical Bounds")]
+        [SerializeField] float _radius;
+        [SerializeField] float _yExtent;
+        [SerializeField] float _forwardCutoff;
+        [SerializeField] Vector3 _offset;
+
         Placer _placer;
         Transform _body;
         Transform _camera;
@@ -53,6 +59,28 @@ namespace Recounter
             {
                 HandleLateral(ref placePosition, mouseDelta);
             }
+
+            RestrictPlacePosition(ref placePosition);
+        }
+
+        void RestrictPlacePosition(ref Vector3 worldPlacePos)
+        {
+            var restrictedPos = _body.InverseTransformPoint(worldPlacePos);
+
+            restrictedPos.z = Mathf.Max(restrictedPos.z, _forwardCutoff);
+
+            restrictedPos -= _offset;
+
+            // Restrict position based on cylindrical bounds (ignoring height)
+
+            var temp = restrictedPos.y;
+            restrictedPos.y = 0;
+
+            restrictedPos = Vector3.ClampMagnitude(restrictedPos, _radius);
+
+            restrictedPos.y = Mathf.Clamp(temp, -_yExtent, _yExtent);
+
+            worldPlacePos = _body.TransformPoint(restrictedPos + _offset);
         }
 
         void HandleLateral(ref Vector3 placePosition, Vector2 delta) =>
