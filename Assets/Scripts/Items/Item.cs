@@ -113,7 +113,7 @@ public class Item : Interactable
         if (isCylindrical)
         {
             var radialComponent = new Vector2(localDirection.x, localDirection.z).magnitude;
-            return originShift + Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * localDirection.y;
+            return originShift + Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * Mathf.Abs(localDirection.y);
         }
         else
         {
