@@ -21,12 +21,14 @@ namespace Recounter
 
         IHoverHandler<T> _handler;
 
-        Func<Transform, T> _getComponent;
+        readonly Func<Transform, T> _getComponent;
 
         T _hoverTarget;
         Transform _lastHoverTarget;
 
         public T HoverTarget => _hoverTarget;
+
+        public QueryTriggerInteraction TriggerInteraction { get; set; } = QueryTriggerInteraction.UseGlobal;
 
         public HoverRaycaster(Camera camera, float range, LayerMask raycastMask, LayerMask interactableMask, GetComponentType getComponentType)
         {
@@ -49,13 +51,11 @@ namespace Recounter
             _handler = handler;
         }
 
-        public void SetGetComponentMethod(Func<Transform, T> func) => _getComponent = func;
-
         public void Raycast()
         {
             Transform currentHover = null;
 
-            if (Physics.Raycast(_camera.ViewportPointToRay(Vector2.one / 2), out var hit, _range, _raycastMask))
+            if (Physics.Raycast(_camera.ViewportPointToRay(Vector2.one / 2), out var hit, _range, _raycastMask, TriggerInteraction))
             {
                 if (_interactableMask == (_interactableMask | (1 << hit.transform.gameObject.layer)))
                 {

@@ -1,11 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using NaughtyAttributes;
+using UnityEngine.UI;
 
 namespace Recounter
 {
-    public class Placer : MonoBehaviour
+    public class Placer : MonoBehaviour, IHoverHandler<IPlacementMethod>
     {
         [Header("Hand")]
         [SerializeField] Hand _hand;
@@ -43,7 +42,7 @@ namespace Recounter
 
         [Header("Placement Methods")]
         [SerializeField] LayerMask _placementMethodMask;
-        [SerializeField, Layer] int _placementMethodLayer;
+        [SerializeField] LayerMask _placementMethodLayer;
         [SerializeField] float _placementMethodRange;
 
         IPlacementMethod _defaultMethod;
@@ -73,9 +72,9 @@ namespace Recounter
         InputAction _lateralMoveDelta;
 
         IPlacementMethod _placementMethod;
-
-        Transform _lastHover;
         IPlacementMethod _pendingMethod;
+
+        HoverRaycaster<IPlacementMethod> _raycaster;
 
         void SetPlacementMethod(IPlacementMethod placementMethod)
         {
@@ -123,6 +122,13 @@ namespace Recounter
             Pause.Paused += OnPause;
 
             InitializeDefaultPlacementMethod();
+
+            _raycaster = new(_camera, _placementMethodRange, _placementMethodMask, _placementMethodLayer, GetComponentType.Self)
+            {
+                TriggerInteraction = QueryTriggerInteraction.Collide
+            };
+
+            _raycaster.AssignCallbacks(this);
         }
 
         void OnPause(bool pause) => enabled = !pause;
@@ -231,33 +237,7 @@ namespace Recounter
 
             if (!_isPlacing)
             {
-                var ray = _camera.ViewportPointToRay(Vector2.one * 0.5f);
-                if (Physics.Raycast(ray, out var hit, _placementMethodRange, _placementMethodMask, QueryTriggerInteraction.Collide))
-                {
-                    if (_lastHover == hit.transform)
-                    {
-                        if (_pendingMethod != null)
-                        {
-                            SetPlacementMethod(_pendingMethod);
-                        }
-
-                        return;
-                    }
-
-                    _lastHover = hit.transform;
-
-                    var go = _lastHover.gameObject;
-
-                    if (go.layer == _placementMethodLayer && go.TryGetComponent(out _pendingMethod))
-                    {
-                        SetPlacementMethod(_pendingMethod);
-                    }
-                }
-                else
-                {
-                    ResetPlacementMethod();
-                }
-
+                _raycaster.Raycast();
                 return;
             }
 
@@ -420,6 +400,25 @@ namespace Recounter
             _active.gameObject.SetActive(false);
 
             _active = null;
+        }
+
+        public void HoverEnter(IPlacementMethod obj)
+        {
+            _pendingMethod = obj;
+            SetPlacementMethod(_pendingMethod);
+        }
+
+        public void HoverStay(IPlacementMethod obj)
+        {
+            if (_pendingMethod != null)
+            {
+                SetPlacementMethod(_pendingMethod);
+            }
+        }
+
+        public void HoverExit(IPlacementMethod obj)
+        {
+            ResetPlacementMethod();
         }
     }
 }

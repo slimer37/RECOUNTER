@@ -4915,7 +4915,9 @@ MonoBehaviour:
   _placementMethodMask:
     serializedVersion: 2
     m_Bits: 641
-  _placementMethodLayer: 9
+  _placementMethodLayer:
+    serializedVersion: 2
+    m_Bits: 512
   _placementMethodRange: 2
 --- !u!4 &317501404
 Transform:
