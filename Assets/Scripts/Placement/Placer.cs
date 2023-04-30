@@ -74,6 +74,9 @@ namespace Recounter
 
         IPlacementMethod _placementMethod;
 
+        Transform _lastHover;
+        IPlacementMethod _pendingMethod;
+
         void SetPlacementMethod(IPlacementMethod placementMethod)
         {
             if (_placementMethod == placementMethod) return;
@@ -231,10 +234,23 @@ namespace Recounter
                 var ray = _camera.ViewportPointToRay(Vector2.one * 0.5f);
                 if (Physics.Raycast(ray, out var hit, _placementMethodRange, _placementMethodMask, QueryTriggerInteraction.Collide))
                 {
-                    var go = hit.transform.gameObject;
-                    if (go.layer == _placementMethodLayer && go.TryGetComponent(out IPlacementMethod method))
+                    if (_lastHover == hit.transform)
                     {
-                        SetPlacementMethod(method);
+                        if (_pendingMethod != null)
+                        {
+                            SetPlacementMethod(_pendingMethod);
+                        }
+
+                        return;
+                    }
+
+                    _lastHover = hit.transform;
+
+                    var go = _lastHover.gameObject;
+
+                    if (go.layer == _placementMethodLayer && go.TryGetComponent(out _pendingMethod))
+                    {
+                        SetPlacementMethod(_pendingMethod);
                     }
                 }
                 else
