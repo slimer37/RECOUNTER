@@ -78,6 +78,12 @@ namespace Recounter
         {
             if (_placementMethod == placementMethod) return;
 
+            if (!placementMethod.Accepts(_active))
+            {
+                ResetPlacementMethod();
+                return;
+            }
+
             placementMethod.SetUp(this, _body, _camera.transform);
             _placementMethod = placementMethod;
         }

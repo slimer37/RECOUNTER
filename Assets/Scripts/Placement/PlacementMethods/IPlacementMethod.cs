@@ -8,6 +8,8 @@ namespace Recounter
     {
         public bool ShouldForceGhost => true;
 
+        public bool Accepts(Item item) => true;
+
         public void SetUp(Placer placer, Transform body, Transform camera) { }
 
         public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles);
