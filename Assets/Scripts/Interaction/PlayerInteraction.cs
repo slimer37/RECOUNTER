@@ -104,6 +104,13 @@ public class PlayerInteraction : MonoBehaviour
         if (currentHover)
         {
             _hovered = currentHover.GetComponentInParent<Interactable>();
+
+            if (!_hovered)
+            {
+                Debug.LogError("Couldn't find an interactable in the hovered object's ancestry.");
+                return;
+            }
+
             _hovered.OnEnterHover(_employee);
 
             UpdateReticle(true);
