@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using NaughtyAttributes;
 
 namespace Recounter
 {
@@ -20,7 +21,7 @@ namespace Recounter
         [SerializeField] float _throwForce;
         [SerializeField] Vector3 _throwDirection;
 
-        [Header("Placing")]
+        [Header("Masks")]
         [SerializeField] LayerMask _obstacleMask;
         [SerializeField] LayerMask _lineOfSightMask;
 
@@ -39,6 +40,11 @@ namespace Recounter
         [Header("Components")]
         [SerializeField] PlayerInteraction _playerInteraction;
         [SerializeField] Camera _camera;
+
+        [Header("Placement Methods")]
+        [SerializeField] LayerMask _placementMethodMask;
+        [SerializeField, Layer] int _placementMethodLayer;
+        [SerializeField] float _placementMethodRange;
 
         IPlacementMethod _defaultMethod;
 
@@ -68,16 +74,16 @@ namespace Recounter
 
         IPlacementMethod _placementMethod;
 
-        public void SetPlacementMethod(IPlacementMethod placementMethod)
+        void SetPlacementMethod(IPlacementMethod placementMethod)
         {
+            if (_placementMethod == placementMethod) return;
+
             placementMethod.SetUp(this, _body, _camera.transform);
             _placementMethod = placementMethod;
         }
 
-        public void ResetPlacementMethod()
+        void ResetPlacementMethod()
         {
-            if (_isPlacing) return;
-
             SetPlacementMethod(_defaultMethod);
         }
 
@@ -214,7 +220,24 @@ namespace Recounter
                 return;
             }
 
-            if (!_isPlacing) return;
+            if (!_isPlacing)
+            {
+                var ray = _camera.ViewportPointToRay(Vector2.one * 0.5f);
+                if (Physics.Raycast(ray, out var hit, _placementMethodRange, _placementMethodMask, QueryTriggerInteraction.Collide))
+                {
+                    var go = hit.transform.gameObject;
+                    if (go.layer == _placementMethodLayer && go.TryGetComponent(out IPlacementMethod method))
+                    {
+                        SetPlacementMethod(method);
+                    }
+                }
+                else
+                {
+                    ResetPlacementMethod();
+                }
+
+                return;
+            }
 
             var previousPos = _worldPlacePosition;
             var previousRot = _worldPlaceRotation;

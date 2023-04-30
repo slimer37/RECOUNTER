@@ -1,6 +1,5 @@
 using DG.Tweening;
 using UnityEngine;
-using Recounter;
 
 public class Employee : MonoBehaviour
 {
@@ -9,7 +8,6 @@ public class Employee : MonoBehaviour
     [field: SerializeField] public PlayerInteraction Interaction { get; private set; }
     [field: SerializeField] public Hand LeftHand { get; private set; }
     [field: SerializeField] public Hand RightHand { get; private set; }
-    [field: SerializeField] public Placer Placer { get; private set; }
 
     [Header("HUD")]
     [SerializeField] Canvas _hudCanvas;

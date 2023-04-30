@@ -4912,6 +4912,11 @@ MonoBehaviour:
   _rotateIcon: {fileID: 21300000, guid: 141f55b40da731746a84d2dc184a5952, type: 3}
   _playerInteraction: {fileID: 273294029}
   _camera: {fileID: 1065023558}
+  _placementMethodMask:
+    serializedVersion: 2
+    m_Bits: 641
+  _placementMethodLayer: 9
+  _placementMethodRange: 2
 --- !u!4 &317501404
 Transform:
   m_ObjectHideFlags: 0
@@ -20390,7 +20395,6 @@ MonoBehaviour:
   <Interaction>k__BackingField: {fileID: 273294029}
   <LeftHand>k__BackingField: {fileID: 1095714737}
   <RightHand>k__BackingField: {fileID: 157413189}
-  <Placer>k__BackingField: {fileID: 317501403}
   _hudCanvas: {fileID: 1070106081}
   _hudCanvasGroup: {fileID: 1070106083}
   _hudFadeTime: 0.2
