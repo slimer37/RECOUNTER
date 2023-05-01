@@ -39,7 +39,19 @@ public class PlayerInteraction : MonoBehaviour, IHoverHandler<Interactable>
         _waitingToCancelInteract = false;
     }
 
-    void OnDisable() => _raycaster.Clear();
+    void OnEnable()
+    {
+        _reticle.enabled = true;
+    }
+
+    void OnDisable()
+    {
+        _reticle.enabled = false;
+
+        if (_raycaster.HoverTarget) return;
+
+        _raycaster.Clear();
+    }
 
     void OnInteract(InputAction.CallbackContext context)
     {
