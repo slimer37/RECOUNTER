@@ -9,18 +9,18 @@ public class Item : Interactable
 
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
-    [SerializeField, ShowIf(nameof(HasRigidbody))] bool isThrowable = true;
+    [SerializeField, EnableIf(nameof(HasRigidbody)), AllowNesting] bool isThrowable = true;
     [SerializeField] Vector3 holdPosShift;
     [SerializeField] bool overridesHoldRot;
-    [SerializeField, ShowIf(nameof(overridesHoldRot))] Vector3 holdRot;
+    [SerializeField, EnableIf(nameof(overridesHoldRot)), AllowNesting] Vector3 holdRot;
 
     [field: Header("Viewmodel")]
     [field: SerializeField] public ViewmodelPose ViewmodelPose { get; private set; }
 
     [Header("Bounds Override")]
     [SerializeField] bool overridesBounds;
-    [SerializeField, ShowIf(nameof(overridesBounds))] Vector3 overrideCenter;
-    [SerializeField, Min(0), ShowIf(nameof(overridesBounds))] Vector3 overrideSize;
+    [SerializeField, EnableIf(nameof(overridesBounds)), AllowNesting] Vector3 overrideCenter;
+    [SerializeField, EnableIf(nameof(overridesBounds)), AllowNesting, Min(0)] Vector3 overrideSize;
 
     Collider[] colliders;
     Hotbar containerHotbar;
