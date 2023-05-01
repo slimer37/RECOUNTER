@@ -278,31 +278,22 @@ namespace Recounter
 
         void ModifyCursor(PlacementCursor placementCursor)
         {
-            if (placementCursor == PlacementCursor.None)
+            _cursorImage.overrideSprite = placementCursor switch
             {
-                _cursorImage.overrideSprite = null;
-                _cursorImage.transform.SetPositionAndRotation(
-                    new Vector2(Screen.width, Screen.height) / 2, Quaternion.identity
-                );
-                return;
-            }
+                PlacementCursor.Placement => _placeIcon,
+                PlacementCursor.Rotation => _rotateIcon,
+                PlacementCursor.None => null,
+                _ => throw new System.ArgumentOutOfRangeException(nameof(placementCursor))
+            };
 
-            _cursorImage.transform.position = _camera.WorldToScreenPoint(_active.transform.position);
+            var pos = new Vector2(Screen.width, Screen.height) / 2;
+            var rot = Quaternion.identity;
 
-            if (placementCursor == PlacementCursor.Placement)
-            {
-                _cursorImage.overrideSprite = _placeIcon;
-                _cursorImage.transform.rotation = Quaternion.identity;
-            }
-            else if (placementCursor == PlacementCursor.Rotation)
-            {
-                _cursorImage.overrideSprite = _rotateIcon;
-                _cursorImage.transform.eulerAngles = -Vector3.forward * _worldPlaceRotation.magnitude;
-            }
-            else
-            {
-                throw new System.ArgumentOutOfRangeException(nameof(placementCursor));
-            }
+            if (placementCursor != PlacementCursor.None) pos = _camera.WorldToScreenPoint(_active.transform.position);
+
+            if (placementCursor == PlacementCursor.Rotation) rot = Quaternion.Euler(-Vector3.forward * _worldPlaceRotation.magnitude);
+
+            _cursorImage.transform.SetPositionAndRotation(pos, rot);
         }
 
         void InitializePlacement()
