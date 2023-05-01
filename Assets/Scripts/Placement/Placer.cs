@@ -409,6 +409,7 @@ namespace Recounter
 
         public void HoverExit(IPlacementMethod obj)
         {
+            _pendingMethod = null;
             ResetPlacementMethod();
         }
     }
