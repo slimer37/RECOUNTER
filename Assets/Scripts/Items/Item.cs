@@ -42,16 +42,19 @@ public class Item : Interactable
 
     void OnDrawGizmosSelected()
     {
-        if (!rend) return;
-
         Gizmos.matrix = transform.localToWorldMatrix;
-        Gizmos.DrawWireCube(rend.localBounds.center, rend.localBounds.size);
 
-        if (!overridesBounds) return;
+        if (overridesBounds)
+        {
+            Gizmos.color = Color.red;
 
-        Gizmos.color = Color.red;
-
-        Gizmos.DrawWireCube(overrideCenter, overrideSize);
+            Gizmos.DrawWireCube(overrideCenter, overrideSize);
+        }
+        else if (rend)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(rend.localBounds.center, rend.localBounds.size);
+        }
     }
 
     void Reset()
