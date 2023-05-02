@@ -18,5 +18,7 @@ namespace Recounter
 
         public void HandlePlacement(
             ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor);
+
+        public void FinishPlacement(Item item) { }
     }
 }

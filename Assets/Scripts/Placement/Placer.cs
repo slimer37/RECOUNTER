@@ -349,9 +349,16 @@ namespace Recounter
                 EndPlace();
                 return;
             }
+
             _active.transform.SetPositionAndRotation(_worldPlacePosition, rot);
 
-            PreReleaseItem().Release();
+            var temp = _placementMethod;
+
+            var item = PreReleaseItem();
+
+            item.Release();
+
+            temp.FinishPlacement(item);
         }
 
         void KeepItemInHand()
