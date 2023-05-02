@@ -22,6 +22,8 @@ namespace Recounter
 
         Plane _placementPlane;
 
+        Vector3 _pivotPoint;
+
         void OnDrawGizmosSelected()
         {
             Gizmos.matrix = _initial.localToWorldMatrix;
@@ -56,7 +58,7 @@ namespace Recounter
 
             localX = Mathf.Clamp(localX, leftBound, rightBound);
 
-            return SpinRailPoint(_initial.position + RailDirection() * localX);
+            return _initial.position + RailDirection() * localX;
         }
 
         Vector3 SpinRailPoint(Vector3 point) =>
@@ -70,7 +72,9 @@ namespace Recounter
 
             _placementPlane.Raycast(ray, out var enter);
 
-            position = ConstrainToRail(ray.GetPoint(enter));
+            _pivotPoint = ConstrainToRail(ray.GetPoint(enter));
+
+            position = SpinRailPoint(_pivotPoint);
 
             eulerAngles = _initial.eulerAngles + (180f * (Facing() + 1) / 2) * Vector3.up + _rotationOffset;
         }
@@ -81,7 +85,11 @@ namespace Recounter
 
             delta *= _speed * (modifier ? _modifierFactor : 1f);
 
-            placePosition = ConstrainToRail(placePosition + delta);
+            _pivotPoint += delta;
+
+            _pivotPoint = ConstrainToRail(_pivotPoint);
+
+            placePosition = SpinRailPoint(_pivotPoint);
 
             cursor = PlacementCursor.Placement;
         }
