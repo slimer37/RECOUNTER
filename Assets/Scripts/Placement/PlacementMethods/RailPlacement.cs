@@ -11,6 +11,7 @@ namespace Recounter
         [SerializeField] float _modifierFactor;
         [SerializeField] float _extent;
         [SerializeField] float _yRotOffset;
+        [SerializeField] float _maxDistanceFromCamera;
         [SerializeField] LayerMask _obstacleMask;
 
         Placer _placer;
@@ -44,7 +45,12 @@ namespace Recounter
         {
             var localPoint = _initial.InverseTransformPoint(point);
 
-            localPoint.x = Mathf.Clamp(localPoint.x, -_extent, _extent);
+            var cameraPoint = _initial.InverseTransformPoint(_camera.transform.position);
+
+            var leftBound = Mathf.Max(-_extent, cameraPoint.x - _maxDistanceFromCamera);
+            var rightBound = Mathf.Min(_extent, cameraPoint.x + _maxDistanceFromCamera);
+
+            localPoint.x = Mathf.Clamp(localPoint.x, leftBound, rightBound);
 
             localPoint.y = _placer.Active.SizeAlong(Vector3.down);
 

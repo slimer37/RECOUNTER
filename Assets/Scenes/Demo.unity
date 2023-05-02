@@ -4006,6 +4006,7 @@ MonoBehaviour:
   _modifierFactor: 0.1
   _extent: 0.9
   _yRotOffset: -90
+  _maxDistanceFromCamera: 1
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 193
@@ -4028,8 +4029,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 0.4870683, z: 0.2}
-  m_Center: {x: 0, y: 0.3276711, z: 0}
+  m_Size: {x: 2, y: 0.4, z: 0.1}
+  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!1 &253818231
 GameObject:
   m_ObjectHideFlags: 0
@@ -17282,8 +17283,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 0.4870683, z: 0.2}
-  m_Center: {x: 0, y: 0.3276711, z: 0}
+  m_Size: {x: 2, y: 0.4, z: 0.1}
+  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!114 &551748575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17302,6 +17303,7 @@ MonoBehaviour:
   _modifierFactor: 0.1
   _extent: 0.9
   _yRotOffset: -90
+  _maxDistanceFromCamera: 1
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 193
