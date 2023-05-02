@@ -52,9 +52,7 @@ namespace Recounter
 
             localPoint.x = Mathf.Clamp(localPoint.x, leftBound, rightBound);
 
-            localPoint.y = _placer.Active.SizeAlong(Vector3.down);
-
-            localPoint.z = 0;
+            localPoint.y = localPoint.z = 0;
 
             return _initial.TransformPoint(localPoint);
         }
@@ -83,7 +81,10 @@ namespace Recounter
             cursor = PlacementCursor.Placement;
         }
 
-        public bool IsItemPositionValid(Vector3 position, Quaternion rotation) =>
-            !_placer.Active.WouldIntersectAt(position, rotation, _obstacleMask);
+        public bool IsItemPositionValid(Vector3 position, Quaternion rotation)
+        {
+            Debug.DrawRay(position, rotation * Vector3.forward, Color.red, 0.01f);
+            return !_placer.Active.WouldIntersectAt(position, rotation, _obstacleMask);
+        }
     }
 }

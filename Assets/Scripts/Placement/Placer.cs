@@ -364,7 +364,7 @@ namespace Recounter
         void KeepItemInHand()
         {
             _placementMethod.GetInitialPositionAndRotation(out _worldPlacePosition, out _worldPlaceRotation);
-
+            Debug.DrawRay(_worldPlacePosition, Vector3.up, Color.green);
             _startPlaceObstructed = IsLineOfSightBlocked(_worldPlacePosition)
                 || !_placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
 
