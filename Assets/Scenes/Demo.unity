@@ -3793,7 +3793,9 @@ MonoBehaviour:
   _speed: 0.001
   _modifierFactor: 0.1
   _extent: 0.9
-  _yRotOffset: -90
+  _rotationOffset: {x: 0, y: 0, z: 0}
+  _spin: 15
+  _rail: {fileID: 0}
   _maxDistanceFromCamera: 1
   _obstacleMask:
     serializedVersion: 2
@@ -16764,7 +16766,9 @@ MonoBehaviour:
   _speed: 0.001
   _modifierFactor: 0.1
   _extent: 0.9
-  _yRotOffset: -90
+  _rotationOffset: {x: 0, y: -90, z: 15}
+  _spin: 15
+  _rail: {fileID: 999967966}
   _maxDistanceFromCamera: 1
   _obstacleMask:
     serializedVersion: 2

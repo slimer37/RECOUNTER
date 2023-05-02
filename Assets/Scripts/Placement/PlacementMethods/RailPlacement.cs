@@ -10,7 +10,9 @@ namespace Recounter
         [SerializeField] float _speed;
         [SerializeField] float _modifierFactor;
         [SerializeField] float _extent;
-        [SerializeField] float _yRotOffset;
+        [SerializeField] Vector3 _rotationOffset;
+        [SerializeField] float _spin;
+        [SerializeField] Transform _rail;
         [SerializeField] float _maxDistanceFromCamera;
         [SerializeField] LayerMask _obstacleMask;
 
@@ -54,8 +56,11 @@ namespace Recounter
 
             localPoint.y = localPoint.z = 0;
 
-            return _initial.TransformPoint(localPoint);
+            return SpinRailPoint(_initial.TransformPoint(localPoint));
         }
+
+        Vector3 SpinRailPoint(Vector3 point) =>
+            _rail.position + Quaternion.Euler(_initial.right * _spin) * (point - _rail.position);
 
         public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
         {
@@ -67,7 +72,7 @@ namespace Recounter
 
             var facing = (Mathf.Sign(Vector3.Dot(_initial.forward, _camera.forward)) + 1) / 2;
 
-            eulerAngles = _initial.eulerAngles + (180f * facing + _yRotOffset) * Vector3.up;
+            eulerAngles = _initial.eulerAngles + (180f * facing) * Vector3.up + _rotationOffset;
         }
 
         public void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
