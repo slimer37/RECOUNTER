@@ -6,13 +6,13 @@ namespace Recounter
     public class RailPlacement : MonoBehaviour, IPlacementMethod
     {
         [SerializeField, Tag] string _filterTag;
-        [SerializeField] Transform _initial;
+        [SerializeField] float _hangAmount;
         [SerializeField] float _speed;
         [SerializeField] float _modifierFactor;
         [SerializeField] float _extent;
         [SerializeField] Vector3 _rotationOffset;
         [SerializeField] float _spin;
-        [SerializeField] Transform _rail;
+        [SerializeField] Transform _initial;
         [SerializeField] float _maxDistanceFromCamera;
         [SerializeField] LayerMask _obstacleMask;
 
@@ -43,24 +43,24 @@ namespace Recounter
             _camera = camera;
         }
 
+        Vector3 RailDirection() => _initial.right;
+
         Vector3 ConstrainToRail(Vector3 point)
         {
-            var localPoint = _initial.InverseTransformPoint(point);
+            var localX = Vector3.Dot(point - _initial.position, RailDirection());
 
-            var cameraPoint = _initial.InverseTransformPoint(_camera.transform.position);
+            var cameraX = Vector3.Dot(_camera.transform.position - _initial.position, RailDirection());
 
-            var leftBound = Mathf.Max(-_extent, cameraPoint.x - _maxDistanceFromCamera);
-            var rightBound = Mathf.Min(_extent, cameraPoint.x + _maxDistanceFromCamera);
+            var leftBound = Mathf.Max(-_extent, cameraX - _maxDistanceFromCamera);
+            var rightBound = Mathf.Min(_extent, cameraX + _maxDistanceFromCamera);
 
-            localPoint.x = Mathf.Clamp(localPoint.x, leftBound, rightBound);
+            localX = Mathf.Clamp(localX, leftBound, rightBound);
 
-            localPoint.y = localPoint.z = 0;
-
-            return SpinRailPoint(_initial.TransformPoint(localPoint));
+            return SpinRailPoint(_initial.position + RailDirection() * localX);
         }
 
         Vector3 SpinRailPoint(Vector3 point) =>
-            _rail.position + Quaternion.Euler(_initial.right * _spin * Facing()) * (point - _rail.position);
+            point + Quaternion.Euler(RailDirection() * _spin * Facing()) * Vector3.down * _hangAmount;
 
         float Facing() => Mathf.Sign(Vector3.Dot(_initial.forward, _camera.forward));
 
