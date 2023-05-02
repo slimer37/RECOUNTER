@@ -60,7 +60,9 @@ namespace Recounter
         }
 
         Vector3 SpinRailPoint(Vector3 point) =>
-            _rail.position + Quaternion.Euler(_initial.right * _spin) * (point - _rail.position);
+            _rail.position + Quaternion.Euler(_initial.right * _spin * Facing()) * (point - _rail.position);
+
+        float Facing() => Mathf.Sign(Vector3.Dot(_initial.forward, _camera.forward));
 
         public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
         {
@@ -70,9 +72,7 @@ namespace Recounter
 
             position = ConstrainToRail(ray.GetPoint(enter));
 
-            var facing = (Mathf.Sign(Vector3.Dot(_initial.forward, _camera.forward)) + 1) / 2;
-
-            eulerAngles = _initial.eulerAngles + (180f * facing) * Vector3.up + _rotationOffset;
+            eulerAngles = _initial.eulerAngles + (180f * (Facing() + 1) / 2) * Vector3.up + _rotationOffset;
         }
 
         public void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
