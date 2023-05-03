@@ -39,18 +39,19 @@ public class PlayerInteraction : MonoBehaviour, IHoverHandler<Interactable>
         _waitingToCancelInteract = false;
     }
 
-    void OnEnable()
+    public void Suspend(bool suspend)
     {
-        _reticle.enabled = true;
-    }
+        enabled = !suspend;
+        _reticle.EnableFade(!suspend);
 
-    void OnDisable()
-    {
-        _reticle.enabled = false;
-
-        if (_raycaster.HoverTarget) return;
-
-        _raycaster.Clear();
+        if (suspend && !_raycaster.HoverTarget)
+        {
+            _raycaster.Clear();
+        }
+        else
+        {
+            _reticle.Clear();
+        }
     }
 
     void OnInteract(InputAction.CallbackContext context)

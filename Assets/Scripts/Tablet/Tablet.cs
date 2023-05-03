@@ -84,7 +84,7 @@ namespace Recounter.Tablet
         void ConfigurePlayerComponents(bool tabletOpen)
         {
             InputLayer.Suspend(tabletOpen, true);
-            _interaction.enabled = !tabletOpen;
+            _interaction.Suspend(tabletOpen);
             _employee.ShowHud(!tabletOpen);
         }
 

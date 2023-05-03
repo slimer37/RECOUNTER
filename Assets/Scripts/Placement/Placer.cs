@@ -306,14 +306,14 @@ namespace Recounter
 
             _hand.SetCarryStates(HandCarryStates.InWorld);
 
-            _playerInteraction.enabled = false;
+            _playerInteraction.Suspend(true);
             InputLayer.Movement.Disable();
             InputLayer.Movement.Crouch.Enable();
         }
 
         void EndPlace()
         {
-            _playerInteraction.enabled = true;
+            _playerInteraction.Suspend(false);
             InputLayer.Movement.Enable();
 
             _isPlacing = false;
