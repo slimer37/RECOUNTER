@@ -5189,7 +5189,7 @@ MonoBehaviour:
   _camera: {fileID: 1065023558}
   _placementMethodMask:
     serializedVersion: 2
-    m_Bits: 641
+    m_Bits: 513
   _placementMethodLayer:
     serializedVersion: 2
     m_Bits: 512
