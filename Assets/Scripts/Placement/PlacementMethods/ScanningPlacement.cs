@@ -30,7 +30,6 @@ namespace Recounter
             if (_along < 0 && newAlong > 0 || _along > 0 && newAlong < 0)
             {
                 ItemScanned.Invoke(ActiveItem.transform);
-                print("Scan");
             }
 
             _along = newAlong;
