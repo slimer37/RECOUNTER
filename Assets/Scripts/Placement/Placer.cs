@@ -352,8 +352,6 @@ namespace Recounter
             var item = PreReleaseItem();
 
             item.Release();
-
-            _placementMethod.FinishPlacement(item);
         }
 
         void KeepItemInHand()
