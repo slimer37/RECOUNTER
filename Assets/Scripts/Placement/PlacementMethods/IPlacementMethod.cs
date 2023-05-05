@@ -4,20 +4,29 @@ namespace Recounter
 {
     public enum PlacementCursor { None, Placement, Rotation }
 
-    public interface IPlacementMethod
+    public abstract class PlacementMethod : MonoBehaviour
     {
-        public bool ShouldForceGhost => true;
+        protected Placer Placer { get; private set; }
+        protected Transform Body { get; private set; }
+        protected Transform Camera { get; private set; }
 
-        public bool Accepts(Item item) => true;
+        public virtual bool ShouldForceGhost() => true;
 
-        public void SetUp(Placer placer, Transform body, Transform camera) { }
+        public virtual bool Accepts(Item item) => true;
 
-        public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles);
+        public void SetUp(Placer placer, Transform body, Transform camera)
+        {
+            Placer = placer;
+            Body = body;
+            Camera = camera;
+        }
 
-        public bool IsItemPositionValid(Item item, Vector3 position, Quaternion rotation) =>
+        public abstract void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles);
+
+        public virtual bool IsItemPositionValid(Item item, Vector3 position, Quaternion rotation) =>
             !item.WouldIntersectAt(position, rotation);
 
-        public void HandlePlacement(
-            ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor);
+        public abstract void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier,
+            Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor);
     }
 }

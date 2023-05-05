@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Recounter
 {
-    public class Placer : MonoBehaviour, IHoverHandler<IPlacementMethod>
+    public class Placer : MonoBehaviour, IHoverHandler<PlacementMethod>
     {
         [Header("Hand")]
         [SerializeField] Hand _hand;
@@ -44,7 +44,7 @@ namespace Recounter
         [SerializeField] LayerMask _placementMethodLayer;
         [SerializeField] float _placementMethodRange;
 
-        IPlacementMethod _defaultMethod;
+        PlacementMethod _defaultMethod;
 
         Vector3 _worldPlacePosition;
         Vector3 _worldPlaceRotation;
@@ -70,12 +70,12 @@ namespace Recounter
         InputAction _verticalAxisAction;
         InputAction _lateralMoveDelta;
 
-        IPlacementMethod _placementMethod;
-        IPlacementMethod _pendingMethod;
+        PlacementMethod _placementMethod;
+        PlacementMethod _pendingMethod;
 
-        HoverRaycaster<IPlacementMethod> _raycaster;
+        HoverRaycaster<PlacementMethod> _raycaster;
 
-        void SetPlacementMethod(IPlacementMethod placementMethod)
+        void SetPlacementMethod(PlacementMethod placementMethod)
         {
             if (_placementMethod == placementMethod) return;
 
@@ -377,7 +377,7 @@ namespace Recounter
         {
             var ghostRot = Quaternion.Euler(_worldPlaceRotation);
             var ghostMat = _startPlaceObstructed ? _obstructedMat : _freeMat;
-            _ghost.ShowAt(_worldPlacePosition, ghostRot, ghostMat, _placementMethod.ShouldForceGhost);
+            _ghost.ShowAt(_worldPlacePosition, ghostRot, ghostMat, _placementMethod.ShouldForceGhost());
         }
 
         public void StopHoldingItem()
@@ -393,13 +393,13 @@ namespace Recounter
             _active = null;
         }
 
-        public void HoverEnter(IPlacementMethod obj)
+        public void HoverEnter(PlacementMethod obj)
         {
             _pendingMethod = obj;
             SetPlacementMethod(_pendingMethod);
         }
 
-        public void HoverStay(IPlacementMethod obj)
+        public void HoverStay(PlacementMethod obj)
         {
             if (_pendingMethod != null)
             {
@@ -407,7 +407,7 @@ namespace Recounter
             }
         }
 
-        public void HoverExit(IPlacementMethod obj)
+        public void HoverExit(PlacementMethod obj)
         {
             _pendingMethod = null;
             ResetPlacementMethod();

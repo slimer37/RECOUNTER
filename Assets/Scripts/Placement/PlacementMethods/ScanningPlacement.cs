@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Recounter
 {
-    public class ScanningPlacement : MonoBehaviour, IPlacementMethod
+    public class ScanningPlacement : PlacementMethod
     {
         [SerializeField] Transform _initial;
         [SerializeField] float _offset;
@@ -12,23 +12,17 @@ namespace Recounter
 
         public event Action<Transform> ItemScanned;
 
-        Placer _placer;
-
         float _along;
 
-        public void SetUp(Placer placer, Transform body, Transform camera)
+        public override void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
         {
-            _placer = placer;
-        }
-
-        public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
-        {
-            position = _initial.position - _initial.right * _offset + Vector3.up * _placer.Active.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
+            position = _initial.position - _initial.right * _offset + Vector3.up * Placer.Active.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
             eulerAngles = _initial.eulerAngles + _rotOffset;
             _along = -_offset;
         }
 
-        public void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
+        public override void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier,
+            Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
         {
             var posToInitial = placePosition + _initial.right * mouseDelta.x * _sensitivity - _initial.position;
 
@@ -36,14 +30,14 @@ namespace Recounter
 
             if (_along < 0 && newAlong > 0 || _along > 0 && newAlong < 0)
             {
-                ItemScanned.Invoke(_placer.Active.transform);
+                ItemScanned.Invoke(Placer.Active.transform);
                 print("Scan");
             }
 
             _along = newAlong;
 
             placePosition = _initial.position + _initial.right * _along;
-            placePosition += Vector3.up * _placer.Active.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
+            placePosition += Vector3.up * Placer.Active.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
 
             cursor = PlacementCursor.Placement;
         }

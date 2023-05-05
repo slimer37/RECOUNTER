@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Recounter
 {
-    public class RailPlacement : MonoBehaviour, IPlacementMethod
+    public class RailPlacement : PlacementMethod
     {
         [SerializeField, Tag] string _filterTag;
         [SerializeField] float _hangAmount;
@@ -14,9 +14,6 @@ namespace Recounter
         [SerializeField] float _spin;
         [SerializeField] Transform _initial;
         [SerializeField] float _maxDistanceFromCamera;
-
-        Transform _body;
-        Transform _camera;
 
         Plane _placementPlane;
 
@@ -34,13 +31,7 @@ namespace Recounter
             _placementPlane = new Plane(_initial.forward, _initial.position);
         }
 
-        public bool Accepts(Item item) => item.gameObject.CompareTag(_filterTag);
-
-        public void SetUp(Placer placer, Transform body, Transform camera)
-        {
-            _body = body;
-            _camera = camera;
-        }
+        public override bool Accepts(Item item) => item.gameObject.CompareTag(_filterTag);
 
         Vector3 RailDirection() => _initial.right;
 
@@ -48,7 +39,7 @@ namespace Recounter
         {
             var localX = Vector3.Dot(point - _initial.position, RailDirection());
 
-            var cameraX = Vector3.Dot(_camera.transform.position - _initial.position, RailDirection());
+            var cameraX = Vector3.Dot(Camera.position - _initial.position, RailDirection());
 
             var leftBound = Mathf.Max(-_extent, cameraX - _maxDistanceFromCamera);
             var rightBound = Mathf.Min(_extent, cameraX + _maxDistanceFromCamera);
@@ -61,11 +52,11 @@ namespace Recounter
         Vector3 SpinRailPoint(Vector3 point) =>
             point + Quaternion.Euler(RailDirection() * _spin * Facing()) * Vector3.down * _hangAmount;
 
-        float Facing() => Mathf.Sign(Vector3.Dot(_initial.forward, _camera.forward));
+        float Facing() => Mathf.Sign(Vector3.Dot(_initial.forward, Camera.forward));
 
-        public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
+        public override void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
         {
-            var ray = new Ray(_camera.position, _camera.forward);
+            var ray = new Ray(Camera.position, Camera.forward);
 
             _placementPlane.Raycast(ray, out var enter);
 
@@ -76,9 +67,9 @@ namespace Recounter
             eulerAngles = _initial.eulerAngles + (180f * (Facing() + 1) / 2) * Vector3.up + _rotationOffset;
         }
 
-        public void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
+        public override void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
         {
-            var delta = _body.TransformDirection(new Vector3(mouseDelta.x, 0, mouseDelta.y));
+            var delta = Body.TransformDirection(new Vector3(mouseDelta.x, 0, mouseDelta.y));
 
             delta *= _speed * (modifier ? _modifierFactor : 1f);
 

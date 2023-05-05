@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Recounter
 {
-    public class OctoPlacement : MonoBehaviour, IPlacementMethod
+    public class OctoPlacement : PlacementMethod
     {
         [SerializeField] float _verticalSpeed;
         [SerializeField] float _lateralSpeed;
@@ -20,37 +20,26 @@ namespace Recounter
         [SerializeField] float _forwardCutoff;
         [SerializeField] Vector3 _offset;
 
-        Placer _placer;
-        Transform _body;
-        Transform _camera;
+        public override bool ShouldForceGhost() => false;
 
-        public bool ShouldForceGhost => false;
-
-        public void SetUp(Placer placer, Transform body, Transform camera)
+        public override void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
         {
-            _placer = placer;
-            _body = body;
-            _camera = camera;
-        }
-
-        public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
-        {
-            var pitch = -_camera.eulerAngles.x * Mathf.Deg2Rad;
+            var pitch = -Camera.eulerAngles.x * Mathf.Deg2Rad;
             var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
             localStartPos *= _startPlaceDistance;
-            localStartPos += Vector3.forward * _placer.Active.SizeAlong(Vector3.forward);
-            localStartPos += _body.InverseTransformPoint(_camera.position);
+            localStartPos += Vector3.forward * Placer.Active.SizeAlong(Vector3.forward);
+            localStartPos += Body.InverseTransformPoint(Camera.position);
 
-            position = _body.TransformPoint(localStartPos);
+            position = Body.TransformPoint(localStartPos);
 
-            eulerAngles = _body.eulerAngles + Vector3.up * _defaultRot;
+            eulerAngles = Body.eulerAngles + Vector3.up * _defaultRot;
         }
 
-        public bool IsItemPositionValid(Item item, Vector3 position, Quaternion rotation) =>
+        public override bool IsItemPositionValid(Item item, Vector3 position, Quaternion rotation) =>
             !item.WouldIntersectAt(position, rotation, _obstacleMask);
 
-        public void HandlePlacement(
-            ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
+        public override void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier,
+            Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
         {
             HandleVertical(ref placePosition, rawScroll);
 
@@ -72,7 +61,7 @@ namespace Recounter
 
         void RestrictPlacePosition(ref Vector3 worldPlacePos)
         {
-            var restrictedPos = _body.InverseTransformPoint(worldPlacePos);
+            var restrictedPos = Body.InverseTransformPoint(worldPlacePos);
 
             restrictedPos.z = Mathf.Max(restrictedPos.z, _forwardCutoff);
 
@@ -87,11 +76,11 @@ namespace Recounter
 
             restrictedPos.y = Mathf.Clamp(temp, -_yExtent, _yExtent);
 
-            worldPlacePos = _body.TransformPoint(restrictedPos + _offset);
+            worldPlacePos = Body.TransformPoint(restrictedPos + _offset);
         }
 
         void HandleLateral(ref Vector3 placePosition, Vector2 delta) =>
-            placePosition += _lateralSpeed * _body.TransformDirection(delta.x, 0, delta.y);
+            placePosition += _lateralSpeed * Body.TransformDirection(delta.x, 0, delta.y);
 
         void HandleRotation(ref Vector3 placeRotation, Vector2 delta) =>
             placeRotation.y += delta.x * _rotateSpeed;
@@ -105,10 +94,10 @@ namespace Recounter
             var dir = scrollDir * Vector3.up;
             var moveDelta = _verticalSpeed * dir;
 
-            if (IsItemPositionValid(_placer.Active, placePosition + moveDelta, _placer.Active.transform.rotation)
+            if (IsItemPositionValid(Placer.Active, placePosition + moveDelta, Placer.Active.transform.rotation)
                 && Physics.Raycast(placePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
             {
-                var length = hit.distance - _placer.Active.SizeAlong(dir) + _surfaceSeparation;
+                var length = hit.distance - Placer.Active.SizeAlong(dir) + _surfaceSeparation;
                 moveDelta = length * dir;
             }
 
