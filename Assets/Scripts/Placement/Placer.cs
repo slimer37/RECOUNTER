@@ -73,7 +73,7 @@ namespace Recounter
         PlacementMethod _placementMethod;
         PlacementMethod _pendingMethod;
 
-        HoverRaycaster<PlacementMethod> _raycaster;
+        HoverRaycaster<PlacementMethod> _placementMethodRaycaster;
 
         void SetPlacementMethod(PlacementMethod placementMethod)
         {
@@ -122,12 +122,12 @@ namespace Recounter
 
             InitializeDefaultPlacementMethod();
 
-            _raycaster = new(_camera, _placementMethodRange, _placementMethodMask, _placementMethodLayer, GetComponentType.Self)
+            _placementMethodRaycaster = new(_camera, _placementMethodRange, _placementMethodMask, _placementMethodLayer, GetComponentType.Self)
             {
                 TriggerInteraction = QueryTriggerInteraction.Collide
             };
 
-            _raycaster.AssignCallbacks(this);
+            _placementMethodRaycaster.AssignCallbacks(this);
         }
 
         void OnPause(bool pause) => enabled = !pause;
@@ -236,7 +236,7 @@ namespace Recounter
 
             if (!_isPlacing)
             {
-                _raycaster.Raycast();
+                _placementMethodRaycaster.Raycast();
                 return;
             }
 
