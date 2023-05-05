@@ -22,7 +22,7 @@ namespace Recounter
 
         public override bool ShouldForceGhost() => false;
 
-        public override void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
+        public override void CalculateInitialPosition()
         {
             var pitch = -Camera.eulerAngles.x * Mathf.Deg2Rad;
             var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
@@ -30,38 +30,36 @@ namespace Recounter
             localStartPos += Vector3.forward * ActiveItem.SizeAlong(Vector3.forward);
             localStartPos += Body.InverseTransformPoint(Camera.position);
 
-            position = Body.TransformPoint(localStartPos);
+            PlacePosition = Body.TransformPoint(localStartPos);
 
-            eulerAngles = Body.eulerAngles + Vector3.up * _defaultRot;
+            PlaceEulerAngles = Body.eulerAngles + Vector3.up * _defaultRot;
         }
 
-        public override bool IsItemPositionValid(Item item, Vector3 position, Quaternion rotation) =>
-            !item.WouldIntersectAt(position, rotation, _obstacleMask);
+        public override bool IsPositionValid() => !ActiveItem.WouldIntersectAt(PlacePosition, PlaceRotation, _obstacleMask);
 
-        public override void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier,
-            Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
+        protected override void Move(bool modifier, Vector2 mouseDelta, float rawScroll)
         {
-            HandleVertical(ref placePosition, rawScroll);
+            HandleVertical(rawScroll);
 
-            cursor = PlacementCursor.Placement;
+            Cursor = PlacementCursor.Placement;
 
             if (modifier)
             {
-                HandleRotation(ref placeRotation, mouseDelta);
+                HandleRotation(mouseDelta);
 
-                cursor = PlacementCursor.Rotation;
+                Cursor = PlacementCursor.Rotation;
             }
             else
             {
-                HandleLateral(ref placePosition, mouseDelta);
+                HandleLateral(mouseDelta);
             }
 
-            RestrictPlacePosition(ref placePosition);
+            RestrictPlacePosition();
         }
 
-        void RestrictPlacePosition(ref Vector3 worldPlacePos)
+        void RestrictPlacePosition()
         {
-            var restrictedPos = Body.InverseTransformPoint(worldPlacePos);
+            var restrictedPos = Body.InverseTransformPoint(PlacePosition);
 
             restrictedPos.z = Mathf.Max(restrictedPos.z, _forwardCutoff);
 
@@ -76,16 +74,16 @@ namespace Recounter
 
             restrictedPos.y = Mathf.Clamp(temp, -_yExtent, _yExtent);
 
-            worldPlacePos = Body.TransformPoint(restrictedPos + _offset);
+            PlacePosition = Body.TransformPoint(restrictedPos + _offset);
         }
 
-        void HandleLateral(ref Vector3 placePosition, Vector2 delta) =>
-            placePosition += _lateralSpeed * Body.TransformDirection(delta.x, 0, delta.y);
+        void HandleLateral(Vector2 delta) =>
+            PlacePosition += _lateralSpeed * Body.TransformDirection(delta.x, 0, delta.y);
 
-        void HandleRotation(ref Vector3 placeRotation, Vector2 delta) =>
-            placeRotation.y += delta.x * _rotateSpeed;
+        void HandleRotation(Vector2 delta) =>
+            PlaceEulerAngles += Vector3.up * delta.x * _rotateSpeed;
 
-        void HandleVertical(ref Vector3 placePosition, float rawScroll)
+        void HandleVertical(float rawScroll)
         {
             if (rawScroll == 0) return;
 
@@ -94,14 +92,14 @@ namespace Recounter
             var dir = scrollDir * Vector3.up;
             var moveDelta = _verticalSpeed * dir;
 
-            if (IsItemPositionValid(ActiveItem, placePosition + moveDelta, ActiveItem.transform.rotation)
-                && Physics.Raycast(placePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
+            if (!ActiveItem.WouldIntersectAt(PlacePosition + moveDelta, ActiveItem.transform.rotation, _obstacleMask)
+                && Physics.Raycast(PlacePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
             {
                 var length = hit.distance - ActiveItem.SizeAlong(dir) + _surfaceSeparation;
                 moveDelta = length * dir;
             }
 
-            placePosition += moveDelta;
+            PlacePosition += moveDelta;
         }
     }
 }

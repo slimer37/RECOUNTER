@@ -6,9 +6,9 @@ namespace Recounter
 
     public abstract class PlacementMethod : MonoBehaviour
     {
-        public Vector3 PlacePosition { get; private set; }
-        public Vector3 PlaceEulerAngles { get; private set; }
-        public PlacementCursor Cursor { get; private set; } = PlacementCursor.Placement;
+        public Vector3 PlacePosition { get; protected set; }
+        public Vector3 PlaceEulerAngles { get; protected set; }
+        public PlacementCursor Cursor { get; protected set; } = PlacementCursor.Placement;
 
         public Quaternion PlaceRotation => Quaternion.Euler(PlaceEulerAngles);
 

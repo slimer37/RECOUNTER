@@ -54,7 +54,7 @@ namespace Recounter
 
         float Facing() => Mathf.Sign(Vector3.Dot(_initial.forward, Camera.forward));
 
-        public override void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
+        public override void CalculateInitialPosition()
         {
             var ray = new Ray(Camera.position, Camera.forward);
 
@@ -62,12 +62,12 @@ namespace Recounter
 
             _pivotPoint = ConstrainToRail(ray.GetPoint(enter));
 
-            position = SpinRailPoint(_pivotPoint);
+            PlacePosition = SpinRailPoint(_pivotPoint);
 
-            eulerAngles = _initial.eulerAngles + (180f * (Facing() + 1) / 2) * Vector3.up + _rotationOffset;
+            PlaceEulerAngles = _initial.eulerAngles + (180f * (Facing() + 1) / 2) * Vector3.up + _rotationOffset;
         }
 
-        public override void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
+        protected override void Move(bool modifier, Vector2 mouseDelta, float rawScroll)
         {
             var delta = Body.TransformDirection(new Vector3(mouseDelta.x, 0, mouseDelta.y));
 
@@ -77,9 +77,7 @@ namespace Recounter
 
             _pivotPoint = ConstrainToRail(_pivotPoint);
 
-            placePosition = SpinRailPoint(_pivotPoint);
-
-            cursor = PlacementCursor.Placement;
+            PlacePosition = SpinRailPoint(_pivotPoint);
         }
     }
 }

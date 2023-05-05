@@ -14,17 +14,16 @@ namespace Recounter
 
         float _along;
 
-        public override void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
+        public override void CalculateInitialPosition()
         {
-            position = _initial.position - _initial.right * _offset + Vector3.up * ActiveItem.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
-            eulerAngles = _initial.eulerAngles + _rotOffset;
+            PlacePosition = _initial.position - _initial.right * _offset + Vector3.up * ActiveItem.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
+            PlaceEulerAngles = _initial.eulerAngles + _rotOffset;
             _along = -_offset;
         }
 
-        public override void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier,
-            Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
+        protected override void Move(bool modifier, Vector2 mouseDelta, float rawScroll)
         {
-            var posToInitial = placePosition + _initial.right * mouseDelta.x * _sensitivity - _initial.position;
+            var posToInitial = PlacePosition + _initial.right * mouseDelta.x * _sensitivity - _initial.position;
 
             var newAlong = Mathf.Clamp(Vector3.Dot(posToInitial, _initial.right), -_offset, _offset);
 
@@ -36,12 +35,10 @@ namespace Recounter
 
             _along = newAlong;
 
-            placePosition = _initial.position + _initial.right * _along;
-            placePosition += Vector3.up * ActiveItem.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
-
-            cursor = PlacementCursor.Placement;
+            PlacePosition = _initial.position + _initial.right * _along;
+            PlacePosition += Vector3.up * ActiveItem.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
         }
 
-        public override bool AttemptRelease(Item item, Vector3 position, Quaternion rotation) => false;
+        public override bool AttemptRelease() => false;
     }
 }
