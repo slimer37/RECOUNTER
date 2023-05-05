@@ -28,5 +28,8 @@ namespace Recounter
 
         public abstract void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier,
             Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor);
+
+        public virtual bool AttemptRelease(Item item, Vector3 position, Quaternion rotation) =>
+            IsItemPositionValid(item, position, rotation);
     }
 }

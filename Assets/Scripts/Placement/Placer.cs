@@ -341,7 +341,7 @@ namespace Recounter
         {
             var rot = Quaternion.Euler(_worldPlaceRotation);
 
-            if (!_placementMethod.IsItemPositionValid(_active, _worldPlacePosition, rot))
+            if (!_placementMethod.AttemptRelease(_active, _worldPlacePosition, rot))
             {
                 EndPlace();
                 return;

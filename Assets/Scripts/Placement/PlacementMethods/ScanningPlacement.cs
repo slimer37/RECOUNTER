@@ -41,5 +41,7 @@ namespace Recounter
 
             cursor = PlacementCursor.Placement;
         }
+
+        public override bool AttemptRelease(Item item, Vector3 position, Quaternion rotation) => false;
     }
 }
