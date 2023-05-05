@@ -314,6 +314,8 @@ namespace Recounter
 
             _hand.SetCarryStates(HandCarryStates.None);
 
+            KeepItemInHand();
+
             ModifyCursor(PlacementCursor.None);
         }
 
