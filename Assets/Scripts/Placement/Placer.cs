@@ -58,7 +58,7 @@ namespace Recounter
         bool _isCharging;
         float _chargeTime = 0;
 
-        bool _startPlaceObstructed;
+        bool _initialPlaceObstructed;
 
         public Item Active => _active;
 
@@ -264,6 +264,7 @@ namespace Recounter
         {
             if (!_active || _isPlacing || _isCharging) return;
 
+            CheckInitialPlacementPosition();
             KeepItemInHand();
             ShowPreviewGhost();
         }
@@ -297,7 +298,7 @@ namespace Recounter
 
         void InitializePlacement()
         {
-            if (_startPlaceObstructed) return;
+            if (_initialPlaceObstructed) return;
 
             _isPlacing = true;
 
@@ -354,17 +355,22 @@ namespace Recounter
             item.Release();
         }
 
-        void KeepItemInHand()
+        void CheckInitialPlacementPosition()
         {
             _placementMethod.GetInitialPositionAndRotation(out _worldPlacePosition, out _worldPlaceRotation);
-            Debug.DrawRay(_worldPlacePosition, Vector3.up, Color.green);
-            _startPlaceObstructed = IsLineOfSightBlocked(_worldPlacePosition)
-                || !_placementMethod.IsItemPositionValid(_active, _worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
 
+            Debug.DrawRay(_worldPlacePosition, Vector3.up, Color.green);
+
+            _initialPlaceObstructed = IsLineOfSightBlocked(_worldPlacePosition)
+                || !_placementMethod.IsItemPositionValid(_active, _worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
+        }
+
+        void KeepItemInHand()
+        {
             var cameraLocalPos = _adjustedHoldPos;
             var cameraLocalRot = _adjustedHoldRot;
 
-            if (_startPlaceObstructed)
+            if (_initialPlaceObstructed)
             {
                 cameraLocalPos += _intersectHoldShift;
                 cameraLocalRot *= Quaternion.Euler(_intersectHoldRotShift);
@@ -376,7 +382,7 @@ namespace Recounter
         void ShowPreviewGhost()
         {
             var ghostRot = Quaternion.Euler(_worldPlaceRotation);
-            var ghostMat = _startPlaceObstructed ? _obstructedMat : _freeMat;
+            var ghostMat = _initialPlaceObstructed ? _obstructedMat : _freeMat;
             _ghost.ShowAt(_worldPlacePosition, ghostRot, ghostMat, _placementMethod.ShouldForceGhost());
         }
 
