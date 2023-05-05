@@ -27,7 +27,7 @@ namespace Recounter
             var pitch = -Camera.eulerAngles.x * Mathf.Deg2Rad;
             var localStartPos = Vector3.forward + Mathf.Tan(pitch) * Vector3.up;
             localStartPos *= _startPlaceDistance;
-            localStartPos += Vector3.forward * Placer.Active.SizeAlong(Vector3.forward);
+            localStartPos += Vector3.forward * ActiveItem.SizeAlong(Vector3.forward);
             localStartPos += Body.InverseTransformPoint(Camera.position);
 
             position = Body.TransformPoint(localStartPos);
@@ -94,10 +94,10 @@ namespace Recounter
             var dir = scrollDir * Vector3.up;
             var moveDelta = _verticalSpeed * dir;
 
-            if (IsItemPositionValid(Placer.Active, placePosition + moveDelta, Placer.Active.transform.rotation)
+            if (IsItemPositionValid(ActiveItem, placePosition + moveDelta, ActiveItem.transform.rotation)
                 && Physics.Raycast(placePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
             {
-                var length = hit.distance - Placer.Active.SizeAlong(dir) + _surfaceSeparation;
+                var length = hit.distance - ActiveItem.SizeAlong(dir) + _surfaceSeparation;
                 moveDelta = length * dir;
             }
 

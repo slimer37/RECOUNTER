@@ -16,7 +16,7 @@ namespace Recounter
 
         public override void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles)
         {
-            position = _initial.position - _initial.right * _offset + Vector3.up * Placer.Active.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
+            position = _initial.position - _initial.right * _offset + Vector3.up * ActiveItem.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
             eulerAngles = _initial.eulerAngles + _rotOffset;
             _along = -_offset;
         }
@@ -30,14 +30,14 @@ namespace Recounter
 
             if (_along < 0 && newAlong > 0 || _along > 0 && newAlong < 0)
             {
-                ItemScanned.Invoke(Placer.Active.transform);
+                ItemScanned.Invoke(ActiveItem.transform);
                 print("Scan");
             }
 
             _along = newAlong;
 
             placePosition = _initial.position + _initial.right * _along;
-            placePosition += Vector3.up * Placer.Active.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
+            placePosition += Vector3.up * ActiveItem.SizeAlong(Quaternion.Euler(_rotOffset) * Vector3.down);
 
             cursor = PlacementCursor.Placement;
         }

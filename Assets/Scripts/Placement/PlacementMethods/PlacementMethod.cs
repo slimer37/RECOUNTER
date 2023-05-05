@@ -10,6 +10,8 @@ namespace Recounter
         protected Transform Body { get; private set; }
         protected Transform Camera { get; private set; }
 
+        protected Item ActiveItem => Placer.Active;
+
         public virtual bool ShouldForceGhost() => true;
 
         public virtual bool Accepts(Item item) => true;
