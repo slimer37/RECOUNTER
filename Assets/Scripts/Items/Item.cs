@@ -40,6 +40,8 @@ public class Item : Interactable
 
     bool justReleased;
 
+    public static LayerMask DefaultIntersectionMask;
+
     void OnDrawGizmosSelected()
     {
         Gizmos.matrix = transform.localToWorldMatrix;
@@ -74,6 +76,11 @@ public class Item : Interactable
 
     void Awake()
     {
+        if (DefaultIntersectionMask == default)
+        {
+            DefaultIntersectionMask = LayerMask.GetMask("Default", "Interactable", "Player");
+        }
+
         colliders = GetComponentsInChildren<Collider>();
     }
 
@@ -89,8 +96,13 @@ public class Item : Interactable
     Vector3 GetOriginShift() => overridesBounds ?
         overrideCenter : rend.localBounds.center;
 
+    public bool IsIntersecting() => IsIntersecting(DefaultIntersectionMask);
+
     public bool IsIntersecting(LayerMask mask) =>
         WouldIntersectAt(transform.position, transform.rotation, mask);
+
+    public bool WouldIntersectAt(Vector3 position, Quaternion rotation) =>
+        WouldIntersectAt(position, rotation, DefaultIntersectionMask);
 
     public bool WouldIntersectAt(Vector3 position, Quaternion rotation, LayerMask mask)
     {

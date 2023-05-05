@@ -3961,9 +3961,6 @@ MonoBehaviour:
   _spin: 15
   _initial: {fileID: 1890228822}
   _maxDistanceFromCamera: 1
-  _obstacleMask:
-    serializedVersion: 2
-    m_Bits: 193
 --- !u!65 &250148252
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5171,9 +5168,6 @@ MonoBehaviour:
   _chargedPos: {x: 0, y: 0.1, z: 0.7}
   _throwForce: 5
   _throwDirection: {x: 0, y: 0.2, z: 1}
-  _obstacleMask:
-    serializedVersion: 2
-    m_Bits: 193
   _lineOfSightMask:
     serializedVersion: 2
     m_Bits: 129
@@ -17060,9 +17054,6 @@ MonoBehaviour:
   _spin: 15
   _initial: {fileID: 208003823}
   _maxDistanceFromCamera: 1
-  _obstacleMask:
-    serializedVersion: 2
-    m_Bits: 193
 --- !u!1 &561078431 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2064657913759450448, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
@@ -27153,9 +27144,6 @@ MonoBehaviour:
   _spin: 15
   _initial: {fileID: 195580783}
   _maxDistanceFromCamera: 1
-  _obstacleMask:
-    serializedVersion: 2
-    m_Bits: 193
 --- !u!65 &1186200718
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -28434,9 +28422,6 @@ MonoBehaviour:
   _offset: 0.2
   _sensitivity: 0.001
   _rotOffset: {x: 15, y: 180, z: 0}
-  _obstacle:
-    serializedVersion: 2
-    m_Bits: 193
 --- !u!65 &1305054516
 BoxCollider:
   m_ObjectHideFlags: 0

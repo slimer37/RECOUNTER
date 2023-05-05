@@ -14,9 +14,7 @@ namespace Recounter
         [SerializeField] float _spin;
         [SerializeField] Transform _initial;
         [SerializeField] float _maxDistanceFromCamera;
-        [SerializeField] LayerMask _obstacleMask;
 
-        Placer _placer;
         Transform _body;
         Transform _camera;
 
@@ -40,7 +38,6 @@ namespace Recounter
 
         public void SetUp(Placer placer, Transform body, Transform camera)
         {
-            _placer = placer;
             _body = body;
             _camera = camera;
         }
@@ -93,8 +90,5 @@ namespace Recounter
 
             cursor = PlacementCursor.Placement;
         }
-
-        public bool IsItemPositionValid(Vector3 position, Quaternion rotation) =>
-            !_placer.Active.WouldIntersectAt(position, rotation, _obstacleMask);
     }
 }

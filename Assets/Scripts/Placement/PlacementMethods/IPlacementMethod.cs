@@ -14,7 +14,8 @@ namespace Recounter
 
         public void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles);
 
-        public bool IsItemPositionValid(Vector3 position, Quaternion rotation);
+        public bool IsItemPositionValid(Item item, Vector3 position, Quaternion rotation) =>
+            !item.WouldIntersectAt(position, rotation);
 
         public void HandlePlacement(
             ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor);

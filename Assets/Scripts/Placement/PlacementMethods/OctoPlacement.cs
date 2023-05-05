@@ -46,8 +46,8 @@ namespace Recounter
             eulerAngles = _body.eulerAngles + Vector3.up * _defaultRot;
         }
 
-        public bool IsItemPositionValid(Vector3 position, Quaternion rotation) =>
-            !_placer.Active.WouldIntersectAt(position, rotation, _obstacleMask);
+        public bool IsItemPositionValid(Item item, Vector3 position, Quaternion rotation) =>
+            !item.WouldIntersectAt(position, rotation, _obstacleMask);
 
         public void HandlePlacement(
             ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier, Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor)
@@ -105,7 +105,7 @@ namespace Recounter
             var dir = scrollDir * Vector3.up;
             var moveDelta = _verticalSpeed * dir;
 
-            if (IsItemPositionValid(placePosition + moveDelta, _placer.Active.transform.rotation)
+            if (IsItemPositionValid(_placer.Active, placePosition + moveDelta, _placer.Active.transform.rotation)
                 && Physics.Raycast(placePosition, dir, out var hit, _verticalSpeed, _obstacleMask))
             {
                 var length = hit.distance - _placer.Active.SizeAlong(dir) + _surfaceSeparation;

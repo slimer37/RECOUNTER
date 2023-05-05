@@ -21,7 +21,6 @@ namespace Recounter
         [SerializeField] Vector3 _throwDirection;
 
         [Header("Masks")]
-        [SerializeField] LayerMask _obstacleMask;
         [SerializeField] LayerMask _lineOfSightMask;
 
         [Header("Holding")]
@@ -209,7 +208,7 @@ namespace Recounter
         {
             _isCharging = false;
 
-            if (IsLineOfSightBlocked(_active.transform.position) || _active.IsIntersecting(_obstacleMask))
+            if (IsLineOfSightBlocked(_active.transform.position) || _active.IsIntersecting())
                 return;
 
             PreReleaseItem().Throw(_chargeTime * _throwForce * _camera.transform.TransformDirection(_throwDirection));
@@ -250,7 +249,7 @@ namespace Recounter
 
             _placementMethod.HandlePlacement(ref _worldPlacePosition, ref _worldPlaceRotation, modifier, mouseDelta, rawScroll, out var placementCursor);
 
-            if (!_placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation)))
+            if (!_placementMethod.IsItemPositionValid(_active, _worldPlacePosition, Quaternion.Euler(_worldPlaceRotation)))
             {
                 _worldPlacePosition = previousPos;
                 _worldPlaceRotation = previousRot;
@@ -342,7 +341,7 @@ namespace Recounter
         {
             var rot = Quaternion.Euler(_worldPlaceRotation);
 
-            if (!_placementMethod.IsItemPositionValid(_worldPlacePosition, rot))
+            if (!_placementMethod.IsItemPositionValid(_active, _worldPlacePosition, rot))
             {
                 EndPlace();
                 return;
@@ -362,7 +361,7 @@ namespace Recounter
             _placementMethod.GetInitialPositionAndRotation(out _worldPlacePosition, out _worldPlaceRotation);
             Debug.DrawRay(_worldPlacePosition, Vector3.up, Color.green);
             _startPlaceObstructed = IsLineOfSightBlocked(_worldPlacePosition)
-                || !_placementMethod.IsItemPositionValid(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
+                || !_placementMethod.IsItemPositionValid(_active, _worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
 
             var cameraLocalPos = _adjustedHoldPos;
             var cameraLocalRot = _adjustedHoldRot;

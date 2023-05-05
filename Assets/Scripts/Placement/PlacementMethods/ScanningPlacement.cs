@@ -9,7 +9,6 @@ namespace Recounter
         [SerializeField] float _offset;
         [SerializeField] float _sensitivity;
         [SerializeField] Vector3 _rotOffset;
-        [SerializeField] LayerMask _obstacle;
 
         public event Action<Transform> ItemScanned;
 
@@ -48,7 +47,5 @@ namespace Recounter
 
             cursor = PlacementCursor.Placement;
         }
-
-        public bool IsItemPositionValid(Vector3 position, Quaternion rotation) => !_placer.Active.WouldIntersectAt(position, rotation, _obstacle);
     }
 }
