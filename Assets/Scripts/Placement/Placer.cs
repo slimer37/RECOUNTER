@@ -323,8 +323,6 @@ namespace Recounter
             _hand.SetCarryStates(HandCarryStates.None);
 
             ModifyCursor(PlacementCursor.None);
-
-            ResetPlacementMethod();
         }
 
         Item PreReleaseItem()
@@ -352,13 +350,11 @@ namespace Recounter
 
             _active.transform.SetPositionAndRotation(_worldPlacePosition, rot);
 
-            var temp = _placementMethod;
-
             var item = PreReleaseItem();
 
             item.Release();
 
-            temp.FinishPlacement(item);
+            _placementMethod.FinishPlacement(item);
         }
 
         void KeepItemInHand()
