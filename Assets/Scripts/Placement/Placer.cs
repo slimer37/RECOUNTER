@@ -46,9 +46,6 @@ namespace Recounter
 
         PlacementMethod _defaultMethod;
 
-        Vector3 _worldPlacePosition;
-        Vector3 _worldPlaceRotation;
-
         Vector3 _adjustedHoldPos;
         Quaternion _adjustedHoldRot;
 
@@ -240,24 +237,15 @@ namespace Recounter
                 return;
             }
 
-            var previousPos = _worldPlacePosition;
-            var previousRot = _worldPlaceRotation;
-
             var rawScroll = _verticalAxisAction.ReadValue<float>();
             var modifier = _holdRotateAction.IsPressed();
             var mouseDelta = _lateralMoveDelta.ReadValue<Vector2>();
 
-            _placementMethod.HandlePlacement(ref _worldPlacePosition, ref _worldPlaceRotation, modifier, mouseDelta, rawScroll, out var placementCursor);
+            _placementMethod.HandlePlacement(modifier, mouseDelta, rawScroll);
 
-            if (!_placementMethod.IsItemPositionValid(_active, _worldPlacePosition, Quaternion.Euler(_worldPlaceRotation)))
-            {
-                _worldPlacePosition = previousPos;
-                _worldPlaceRotation = previousRot;
-            }
+            _hand.UpdateHoldPositionAndRotation(_placementMethod.PlacePosition, _placementMethod.PlaceRotation);
 
-            _hand.UpdateHoldPositionAndRotation(_worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
-
-            ModifyCursor(placementCursor);
+            ModifyCursor(_placementMethod.Cursor);
         }
 
         void LateUpdate()
@@ -291,7 +279,11 @@ namespace Recounter
 
             if (placementCursor != PlacementCursor.None) pos = _camera.WorldToScreenPoint(_active.transform.position);
 
-            if (placementCursor == PlacementCursor.Rotation) rot = Quaternion.Euler(-Vector3.forward * _worldPlaceRotation.magnitude);
+            if (placementCursor == PlacementCursor.Rotation)
+            {
+                var rotationMagnitude = _placementMethod.PlaceEulerAngles.magnitude;
+                rot = Quaternion.Euler(-Vector3.forward * rotationMagnitude);
+            }
 
             _cursorImage.transform.SetPositionAndRotation(pos, rot);
         }
@@ -340,15 +332,17 @@ namespace Recounter
 
         void AttemptDropItem()
         {
-            var rot = Quaternion.Euler(_worldPlaceRotation);
-
-            if (!_placementMethod.AttemptRelease(_active, _worldPlacePosition, rot))
+            if (!_placementMethod.AttemptRelease())
             {
                 EndPlace();
                 return;
+
             }
 
-            _active.transform.SetPositionAndRotation(_worldPlacePosition, rot);
+            var pos = _placementMethod.PlacePosition;
+            var rot = _placementMethod.PlaceRotation;
+
+            _active.transform.SetPositionAndRotation(pos, rot);
 
             var item = PreReleaseItem();
 
@@ -357,12 +351,9 @@ namespace Recounter
 
         void CheckInitialPlacementPosition()
         {
-            _placementMethod.GetInitialPositionAndRotation(out _worldPlacePosition, out _worldPlaceRotation);
+            _placementMethod.CalculateInitialPosition();
 
-            Debug.DrawRay(_worldPlacePosition, Vector3.up, Color.green);
-
-            _initialPlaceObstructed = IsLineOfSightBlocked(_worldPlacePosition)
-                || !_placementMethod.IsItemPositionValid(_active, _worldPlacePosition, Quaternion.Euler(_worldPlaceRotation));
+            _initialPlaceObstructed = IsLineOfSightBlocked(_placementMethod.PlacePosition) || !_placementMethod.IsPositionValid();
         }
 
         void KeepItemInHand()
@@ -381,9 +372,9 @@ namespace Recounter
 
         void ShowPreviewGhost()
         {
-            var ghostRot = Quaternion.Euler(_worldPlaceRotation);
+            var ghostRot = _placementMethod.PlaceRotation;
             var ghostMat = _initialPlaceObstructed ? _obstructedMat : _freeMat;
-            _ghost.ShowAt(_worldPlacePosition, ghostRot, ghostMat, _placementMethod.ShouldForceGhost());
+            _ghost.ShowAt(_placementMethod.PlacePosition, ghostRot, ghostMat, _placementMethod.ShouldForceGhost());
         }
 
         public void StopHoldingItem()

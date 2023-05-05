@@ -6,11 +6,19 @@ namespace Recounter
 
     public abstract class PlacementMethod : MonoBehaviour
     {
+        public Vector3 PlacePosition { get; private set; }
+        public Vector3 PlaceEulerAngles { get; private set; }
+        public PlacementCursor Cursor { get; private set; } = PlacementCursor.Placement;
+
+        public Quaternion PlaceRotation => Quaternion.Euler(PlaceEulerAngles);
+
         protected Placer Placer { get; private set; }
         protected Transform Body { get; private set; }
         protected Transform Camera { get; private set; }
 
         protected Item ActiveItem => Placer.Active;
+
+        protected virtual bool BlockedPlacement => true;
 
         public virtual bool ShouldForceGhost() => true;
 
@@ -23,15 +31,28 @@ namespace Recounter
             Camera = camera;
         }
 
-        public abstract void GetInitialPositionAndRotation(out Vector3 position, out Vector3 eulerAngles);
+        public abstract void CalculateInitialPosition();
 
-        public virtual bool IsItemPositionValid(Item item, Vector3 position, Quaternion rotation) =>
-            !item.WouldIntersectAt(position, rotation);
+        public virtual bool IsPositionValid() => !ActiveItem.WouldIntersectAt(PlacePosition, PlaceRotation);
 
-        public abstract void HandlePlacement(ref Vector3 placePosition, ref Vector3 placeRotation, bool modifier,
-            Vector2 mouseDelta, float rawScroll, out PlacementCursor cursor);
+        protected abstract void Move(bool modifier, Vector2 mouseDelta, float rawScroll);
 
-        public virtual bool AttemptRelease(Item item, Vector3 position, Quaternion rotation) =>
-            IsItemPositionValid(item, position, rotation);
+        public void HandlePlacement(bool modifier, Vector2 mouseDelta, float rawScroll)
+        {
+            var previousPos = PlacePosition;
+            var previousRot = PlaceEulerAngles;
+
+            Move(modifier, mouseDelta, rawScroll);
+
+            if (!BlockedPlacement) return;
+
+            if (!IsPositionValid())
+            {
+                PlacePosition = previousPos;
+                PlaceEulerAngles = previousRot;
+            }
+        }
+
+        public virtual bool AttemptRelease() => IsPositionValid();
     }
 }
