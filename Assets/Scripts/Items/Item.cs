@@ -9,18 +9,18 @@ public class Item : Interactable
 
     [Header("Optional")]
     [SerializeField] Rigidbody rb;
-    [SerializeField, ShowIf(nameof(HasRigidbody))] bool isThrowable = true;
+    [SerializeField, EnableIf(nameof(HasRigidbody)), AllowNesting] bool isThrowable = true;
     [SerializeField] Vector3 holdPosShift;
     [SerializeField] bool overridesHoldRot;
-    [SerializeField, ShowIf(nameof(overridesHoldRot))] Vector3 holdRot;
+    [SerializeField, EnableIf(nameof(overridesHoldRot)), AllowNesting] Vector3 holdRot;
 
     [field: Header("Viewmodel")]
     [field: SerializeField] public ViewmodelPose ViewmodelPose { get; private set; }
 
     [Header("Bounds Override")]
     [SerializeField] bool overridesBounds;
-    [SerializeField, ShowIf(nameof(overridesBounds))] Vector3 overrideCenter;
-    [SerializeField, Min(0), ShowIf(nameof(overridesBounds))] Vector3 overrideSize;
+    [SerializeField, EnableIf(nameof(overridesBounds)), AllowNesting] Vector3 overrideCenter;
+    [SerializeField, EnableIf(nameof(overridesBounds)), AllowNesting, Min(0)] Vector3 overrideSize;
 
     Collider[] colliders;
     Hotbar containerHotbar;
@@ -40,18 +40,23 @@ public class Item : Interactable
 
     bool justReleased;
 
+    public static LayerMask DefaultIntersectionMask;
+
     void OnDrawGizmosSelected()
     {
-        if (!rend) return;
-
         Gizmos.matrix = transform.localToWorldMatrix;
-        Gizmos.DrawWireCube(rend.localBounds.center, rend.localBounds.size);
 
-        if (!overridesBounds) return;
+        if (overridesBounds)
+        {
+            Gizmos.color = Color.red;
 
-        Gizmos.color = Color.red;
-
-        Gizmos.DrawWireCube(overrideCenter, overrideSize);
+            Gizmos.DrawWireCube(overrideCenter, overrideSize);
+        }
+        else if (rend)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(rend.localBounds.center, rend.localBounds.size);
+        }
     }
 
     void Reset()
@@ -71,6 +76,11 @@ public class Item : Interactable
 
     void Awake()
     {
+        if (DefaultIntersectionMask == default)
+        {
+            DefaultIntersectionMask = LayerMask.GetMask("Default", "Interactable", "Player");
+        }
+
         colliders = GetComponentsInChildren<Collider>();
     }
 
@@ -86,8 +96,13 @@ public class Item : Interactable
     Vector3 GetOriginShift() => overridesBounds ?
         overrideCenter : rend.localBounds.center;
 
+    public bool IsIntersecting() => IsIntersecting(DefaultIntersectionMask);
+
     public bool IsIntersecting(LayerMask mask) =>
         WouldIntersectAt(transform.position, transform.rotation, mask);
+
+    public bool WouldIntersectAt(Vector3 position, Quaternion rotation) =>
+        WouldIntersectAt(position, rotation, DefaultIntersectionMask);
 
     public bool WouldIntersectAt(Vector3 position, Quaternion rotation, LayerMask mask)
     {
@@ -113,7 +128,7 @@ public class Item : Interactable
         if (isCylindrical)
         {
             var radialComponent = new Vector2(localDirection.x, localDirection.z).magnitude;
-            return originShift + Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * localDirection.y;
+            return originShift + Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * Mathf.Abs(localDirection.y);
         }
         else
         {

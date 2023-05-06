@@ -40,10 +40,14 @@ public abstract class Interactable : MonoBehaviour
 #endif
 
     /// <summary>
-    /// Directly executes hover events.
+    /// Called on entering hover.
     /// </summary>
-    /// <param name="hover">True when entering hover, false when exiting.</param>
-    public virtual void OnHover(bool hover) { }
+    public virtual void OnEnterHover(Employee e) { }
+
+    /// <summary>
+    /// Called on exiting hover.
+    /// </summary>
+    public virtual void OnExitHover(Employee e) { }
 
     /// <summary>
     /// Forms the HUD elements that should be shown while this object is hovered.

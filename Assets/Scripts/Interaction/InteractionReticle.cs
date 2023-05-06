@@ -29,26 +29,38 @@ namespace Recounter
 
         float _targetAlpha;
 
+        bool _canFade = true;
+
         void Awake()
         {
             _punch = _iconImage.rectTransform.DOPunchScale(Vector3.one * _punchAmount, _punchDuration)
                 .Pause().SetAutoKill(false);
+
+            Clear();
         }
 
         public void Clear()
         {
             _text.text = "";
             _iconImage.sprite = _iconSettings.GetSprite(Interactable.Icon.None);
-            _fadeReticle.alpha = 1;
             _fillBar.fillAmount = 0;
         }
 
-        void OnEnable() => Clear();
+        public void EnableFade(bool canFade)
+        {
+            _canFade = canFade;
+
+            if (_canFade) return;
+
+            _targetAlpha = 1;
+        }
 
         void Update() => _fadeReticle.alpha = Mathf.Lerp(_fadeReticle.alpha, _targetAlpha, _fade * Time.deltaTime);
 
         void FixedUpdate()
         {
+            if (!_canFade) return;
+
             _targetAlpha = 0;
 
             if (Physics.CheckSphere(_cam.position, _detectionRadius, _interactableMask))

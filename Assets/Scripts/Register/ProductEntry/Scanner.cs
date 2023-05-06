@@ -10,15 +10,18 @@ namespace Recounter
         [SerializeField] Light _light;
         [SerializeField] float _blinkTime;
         [SerializeField] EventReference _beep;
+        [SerializeField] ScanningPlacement _scanningPlacement;
+        [SerializeField] bool _enableCooldown = true;
 
         void Awake()
         {
             _light.enabled = false;
+            _scanningPlacement.ItemScanned += Scan;
         }
 
-        void OnTriggerEnter(Collider other)
+        void Scan(Transform other)
         {
-            if (_light.enabled) return;
+            if (_enableCooldown && _light.enabled) return;
 
             if (other.TryGetComponent(out ProductIdentifier identifier))
             {

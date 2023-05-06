@@ -2,7 +2,7 @@ using Recounter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInteraction : MonoBehaviour
+public class PlayerInteraction : MonoBehaviour, IHoverHandler<Interactable>
 {
     [SerializeField] Employee _employee;
 
@@ -12,12 +12,11 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] LayerMask _interactableMask;
     [SerializeField] InteractionReticle _reticle;
 
-    Interactable _hovered;
     Interactable _interactTarget;
 
-    Transform _lastHoverTarget;
-
     bool _waitingToCancelInteract;
+
+    HoverRaycaster<Interactable> _raycaster;
 
     void Awake()
     {
@@ -26,6 +25,9 @@ public class PlayerInteraction : MonoBehaviour
         interactAction.canceled += OnInteractCancel;
 
         Pause.Paused += OnPaused;
+
+        _raycaster = new(_cam, _range, _raycastMask, _interactableMask, GetComponentType.InParent);
+        _raycaster.AssignCallbacks(this);
     }
 
     void OnPaused(bool paused)
@@ -37,13 +39,26 @@ public class PlayerInteraction : MonoBehaviour
         _waitingToCancelInteract = false;
     }
 
-    void OnDisable() => HandleHoverTarget(null);
+    public void Suspend(bool suspend)
+    {
+        enabled = !suspend;
+        _reticle.EnableFade(!suspend);
+
+        if (suspend && !_raycaster.HoverTarget)
+        {
+            _raycaster.Clear();
+        }
+        else
+        {
+            _reticle.Clear();
+        }
+    }
 
     void OnInteract(InputAction.CallbackContext context)
     {
-        if (!_hovered || Pause.IsPaused) return;
+        if (!_raycaster.HoverTarget || Pause.IsPaused) return;
 
-        _interactTarget = _hovered;
+        _interactTarget = _raycaster.HoverTarget;
         _interactTarget.Interact(_employee);
     }
 
@@ -72,47 +87,26 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Pause.IsPaused) return;
 
-        if (_hovered)
-        {
-            UpdateReticle();
-        }
-
-        Transform currentHover = null;
-
-        if (Physics.Raycast(_cam.ViewportPointToRay(Vector2.one / 2), out var hit, _range, _raycastMask))
-        {
-            if (_interactableMask == (_interactableMask | (1 << hit.transform.gameObject.layer)))
-            {
-                currentHover = hit.collider.transform;
-            }
-        }
-
-        HandleHoverTarget(currentHover);
+        _raycaster.Raycast();
     }
 
-    void UpdateReticle(bool forcePunch = false) => _reticle.UpdateUI(_hovered.GetHud(_employee), forcePunch);
+    void UpdateReticle(bool forcePunch = false) => _reticle.UpdateUI(_raycaster.HoverTarget.GetHud(_employee), forcePunch);
 
-    void ClearReticle() => _reticle.Clear();
-
-    void HandleHoverTarget(Transform currentHover)
+    public void HoverEnter(Interactable obj)
     {
-        if (_lastHoverTarget == currentHover) return;
+        obj.OnEnterHover(_employee);
 
-        _lastHoverTarget = currentHover;
-        _hovered?.OnHover(false);
+        UpdateReticle(true);
+    }
 
-        if (currentHover)
-        {
-            _hovered = currentHover.GetComponentInParent<Interactable>();
-            _hovered.OnHover(true);
+    public void HoverStay(Interactable obj)
+    {
+        UpdateReticle();
+    }
 
-            UpdateReticle(true);
-        }
-        else
-        {
-            _hovered = null;
-
-            ClearReticle();
-        }
+    public void HoverExit(Interactable obj)
+    {
+        obj.OnExitHover(_employee);
+        _reticle.Clear();
     }
 }
