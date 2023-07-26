@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Recounter.Items;
+using TMPro;
 using UnityEngine;
 
 public class Employee : MonoBehaviour
@@ -14,6 +15,12 @@ public class Employee : MonoBehaviour
     [SerializeField] Canvas _hudCanvas;
     [SerializeField] CanvasGroup _hudCanvasGroup;
     [SerializeField] float _hudFadeTime;
+    [SerializeField] TextMeshProUGUI _message;
+
+    void Awake()
+    {
+        _message.alpha = 0;
+    }
 
     public bool HandsAreFree => !(LeftHand.IsFull || RightHand.IsFull);
 
@@ -28,5 +35,20 @@ public class Employee : MonoBehaviour
         if (enabled) return;
 
         tween.OnComplete(() => _hudCanvas.enabled = false);
+    }
+    
+    public void ShowMessage(string message, float duration = 3, float fadeTime = 0.5f)
+    {
+        _message.text = message;
+        _message.alpha = 1;
+
+        _message.DOKill();
+        _message.DOFade(0, fadeTime).SetDelay(duration);
+    }
+
+    public void ClearMessage()
+    {
+        _message.DOKill();
+        _message.alpha = 0;
     }
 }

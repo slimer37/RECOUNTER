@@ -6,6 +6,8 @@ namespace Recounter.Tablet
 {
     public class Tablet : MonoBehaviour
     {
+        [SerializeField] Employee _employee;
+
         [SerializeField] Canvas _canvas;
         [SerializeField] CanvasGroup _canvasGroup;
         [SerializeField] float _canvasFadeTime;
@@ -13,11 +15,9 @@ namespace Recounter.Tablet
         [SerializeField] PlayerInteraction _interaction;
 
         [Header("Hands Full Check")]
-        [SerializeField] Employee _employee;
-        [SerializeField] Canvas _messageCanvas;
-        [SerializeField] CanvasGroup _messageUI;
         [SerializeField] float _messageExpiry;
         [SerializeField] float _messageFadeTime;
+        [SerializeField] string _handsFullMessage;
 
         [Header("Physical Tablet")]
         [SerializeField] Transform _physicalTablet;
@@ -39,7 +39,6 @@ namespace Recounter.Tablet
         void Awake()
         {
             _canvas.enabled = false;
-            _messageCanvas.enabled = false;
 
             _openTabletAction = InputLayer.Tablet.OpenTablet;
             _openTabletAction.performed += _ => OpenTablet();
@@ -56,9 +55,7 @@ namespace Recounter.Tablet
 
             if (!_employee.HandsAreFree)
             {
-                _messageCanvas.enabled = true;
-                _messageUI.alpha = 1;
-                GetFadeTween().SetDelay(_messageExpiry);
+                _employee.ShowMessage(_handsFullMessage, _messageExpiry, _messageFadeTime);
                 return;
             }
 
@@ -99,21 +96,12 @@ namespace Recounter.Tablet
             if (show)
             {
                 // Reset message
-
-                _messageCanvas.enabled = false;
-                _messageUI.DOKill();
+                _employee.ClearMessage();
 
                 return;
             }
 
             tween.OnComplete(() => _canvas.enabled = false);
-        }
-
-        Tween GetFadeTween()
-        {
-            _messageUI.DOKill();
-            return _messageUI.DOFade(0, _messageFadeTime)
-                .OnComplete(() => _messageCanvas.enabled = false);
         }
     }
 }
