@@ -3,13 +3,14 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Recounter.Inventory;
+using Recounter.Items;
 
 public class Box : Interactable
 {
     [SerializeField] BoxFlaps _flaps;
 
     [Header("Holding")]
-    [SerializeField] Item _boxItem;
+    [SerializeField] Placeable _boxItem;
 
     [Header("Items")]
     [SerializeField] int _capacity;
@@ -56,7 +57,7 @@ public class Box : Interactable
         _decreaseIndex.performed += DecreaseIndex;
     }
 
-    public void Fill(List<Item> items)
+    public void Fill(List<Placeable> items)
     {
         if (items.Count > _capacity)
         {

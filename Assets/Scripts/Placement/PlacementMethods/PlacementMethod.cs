@@ -1,3 +1,4 @@
+using Recounter.Items;
 using UnityEngine;
 
 namespace Recounter
@@ -16,13 +17,13 @@ namespace Recounter
         protected Transform Body { get; private set; }
         protected Transform Camera { get; private set; }
 
-        protected Item ActiveItem => Placer.Active;
+        protected Placeable ActiveItem => Placer.Active;
 
         protected virtual bool BlockedPlacement => true;
 
         public virtual bool ShouldForceGhost() => true;
 
-        public virtual bool Accepts(Item item) => true;
+        public virtual bool Accepts(Placeable item) => true;
 
         public void SetUp(Placer placer, Transform body, Transform camera)
         {

@@ -1,4 +1,5 @@
 using Recounter;
+using Recounter.Items;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -83,7 +84,7 @@ public class Hotbar : MonoBehaviour
 
         SetActiveSlot(activeIndex, false, true);
 
-        item.PickUp(this);
+        item.PostPickUp(this);
 
         return true;
     }
@@ -142,7 +143,9 @@ public class Hotbar : MonoBehaviour
 
         var item = slots[index].Item;
 
-        if (item)
-            placer.SetItem(item, canResetPosition);
+        if (item is Placeable placeable)
+        {
+            placer.SetItem(placeable, canResetPosition);
+        }
     }
 }

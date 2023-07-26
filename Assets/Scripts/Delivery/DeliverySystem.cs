@@ -1,4 +1,5 @@
 ﻿using Recounter.Inventory;
+using Recounter.Items;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,12 +14,12 @@ namespace Recounter.Delivery
         {
             var box = Instantiate(_boxPrefab, _spawn.position, Quaternion.identity).GetComponentInChildren<Box>();
 
-            var items = new List<Item>();
+            var items = new List<Placeable>();
 
             foreach (var product in shipment.Products)
             {
                 var instance = Instantiate(product.Prefab);
-                items.Add(instance.GetComponent<Item>());
+                items.Add(instance.GetComponent<Placeable>());
             }
 
             box.Fill(items);

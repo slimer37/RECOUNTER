@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using Recounter.Items;
 using UnityEngine;
 
 namespace Recounter
@@ -31,7 +32,7 @@ namespace Recounter
             _placementPlane = new Plane(_initial.forward, _initial.position);
         }
 
-        public override bool Accepts(Item item) => item.gameObject.CompareTag(_filterTag);
+        public override bool Accepts(Placeable item) => item.gameObject.CompareTag(_filterTag);
 
         Vector3 RailDirection() => _initial.right;
 

@@ -1,3 +1,4 @@
+using Recounter.Items;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -49,7 +50,7 @@ namespace Recounter
         Vector3 _adjustedHoldPos;
         Quaternion _adjustedHoldRot;
 
-        Item _active;
+        Placeable _active;
         bool _isPlacing;
 
         bool _isCharging;
@@ -57,7 +58,7 @@ namespace Recounter
 
         bool _initialPlaceObstructed;
 
-        public Item Active => _active;
+        public Placeable Active => _active;
 
         public bool IsPlacing => _isPlacing;
 
@@ -131,7 +132,7 @@ namespace Recounter
 
         void OnDestroy() => Pause.Paused -= OnPause;
 
-        public void SetItem(Item item, bool canResetPosition)
+        public void SetItem(Placeable item, bool canResetPosition)
         {
             _active = item;
 
@@ -319,7 +320,7 @@ namespace Recounter
             ModifyCursor(PlacementCursor.None);
         }
 
-        Item PreReleaseItem()
+        Placeable PreReleaseItem()
         {
             EndPlace();
 
