@@ -15,7 +15,7 @@ public class Item : Interactable
     [SerializeField, EnableIf(nameof(overridesHoldRot)), AllowNesting] Vector3 holdRot;
 
     [field: Header("Viewmodel")]
-    [field: SerializeField] public ViewmodelPose ViewmodelPose { get; private set; }
+    [field: SerializeField] public Hand.ViewmodelPose ViewmodelPose { get; private set; }
 
     [Header("Bounds Override")]
     [SerializeField] bool overridesBounds;

@@ -14,7 +14,7 @@ public class Wire : Interactable
     [SerializeField] Transform _startAttachment;
 
     [Header("Viewmodel")]
-    [SerializeField] ViewmodelPose _viewmodelPose;
+    [SerializeField] Hand.ViewmodelPose _viewmodelPose;
 
     [Header("Plug")]
     [SerializeField] Transform _plug;
@@ -158,7 +158,7 @@ public class Wire : Interactable
 
         StartCarryingPlug(hand);
 
-        hand.SetCarryStates(HandCarryStates.FreePositionAndRotation | HandCarryStates.ResetLayer);
+        hand.SetCarryStates(Hand.CarryStates.FreePositionAndRotation | Hand.CarryStates.ResetLayer);
 
         _currentTween = _plug
             .DOMove(_plug.position - _plug.forward * _plugOutOffset, _unplugTime)
@@ -175,7 +175,7 @@ public class Wire : Interactable
 
     void FinishDisconnect()
     {
-        _hand.SetCarryStates(HandCarryStates.None);
+        _hand.SetCarryStates(Hand.CarryStates.None);
     }
 
     void StartCarryingPlug(Hand hand)

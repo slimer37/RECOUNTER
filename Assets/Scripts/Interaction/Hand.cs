@@ -26,7 +26,7 @@ public class Hand : MonoBehaviour
 
     [field: SerializeField, ReadOnly] public GameObject HeldObject { get; private set; }
 
-    [ShowNonSerializedField] HandCarryStates _carryStates = HandCarryStates.None;
+    [ShowNonSerializedField] CarryStates _carryStates = CarryStates.None;
 
     public bool IsFull => HeldObject;
 
@@ -45,7 +45,7 @@ public class Hand : MonoBehaviour
     Vector3 _positionVelocity;
     float _rotationVelocity;
 
-    public HandCarryStates CarryStates => _carryStates;
+    public CarryStates CurrentCarryStates => _carryStates;
 
     void Awake()
     {
@@ -96,12 +96,12 @@ public class Hand : MonoBehaviour
     /// </summary>
     /// <remarks>You do not need to unrelease the item before clearing the hand.</remarks>
     /// <param name="states">The new object release state.</param>
-    public void SetCarryStates(HandCarryStates states)
+    public void SetCarryStates(CarryStates states)
     {
         if (!HeldObject)
             throw new InvalidOperationException("Cannot set release state with no held item.");
 
-        var useViewmodelLayer = !states.HasFlag(HandCarryStates.ResetLayer);
+        var useViewmodelLayer = !states.HasFlag(CarryStates.ResetLayer);
         SetViewmodelLayer(useViewmodelLayer);
 
         _carryStates = states;
@@ -181,7 +181,7 @@ public class Hand : MonoBehaviour
 
         ResetHandViewmodel();
 
-        _carryStates = HandCarryStates.None;
+        _carryStates = CarryStates.None;
 
         var temp = HeldObject;
 
@@ -212,7 +212,7 @@ public class Hand : MonoBehaviour
 
     void HandleViewmodel()
     {
-        var showViewmodel = !_carryStates.HasFlag(HandCarryStates.NoViewmodel) && _handTarget;
+        var showViewmodel = !_carryStates.HasFlag(CarryStates.NoViewmodel) && _handTarget;
 
         if (showViewmodel)
         {
@@ -242,9 +242,9 @@ public class Hand : MonoBehaviour
         var targetPos = HoldPosition;
         var targetRot = HoldRot;
 
-        var localSpace = !_carryStates.HasFlag(HandCarryStates.WorldSpace);
-        var controlPosition = !_carryStates.HasFlag(HandCarryStates.FreePosition);
-        var controlRotation = !_carryStates.HasFlag(HandCarryStates.FreeRotation);
+        var localSpace = !_carryStates.HasFlag(CarryStates.WorldSpace);
+        var controlPosition = !_carryStates.HasFlag(CarryStates.FreePosition);
+        var controlRotation = !_carryStates.HasFlag(CarryStates.FreeRotation);
 
         if (localSpace)
         {
@@ -296,28 +296,28 @@ public class Hand : MonoBehaviour
             transform.rotation = Quaternion.Slerp(currRot, targetRot, t);
         }
     }
-}
 
-[Serializable]
-public struct ViewmodelPose
-{
-    public Transform target;
-    public float handClosedness;
-    public float thumbCurl;
+    [Serializable]
+    public struct ViewmodelPose
+    {
+        public Transform target;
+        public float handClosedness;
+        public float thumbCurl;
 
-    public bool IsValid => target;
-}
+        public bool IsValid => target;
+    }
 
-[Flags]
-public enum HandCarryStates
-{
-    None = 0,
-    FreePosition = 1,
-    FreeRotation = 2,
-    ResetLayer = 4,
-    WorldSpace = 8,
-    NoViewmodel = 16,
-    FreePositionAndRotation = FreePosition | FreeRotation | NoViewmodel,
-    InWorld = ResetLayer | WorldSpace | NoViewmodel,
-    All = FreePosition | FreeRotation | ResetLayer | NoViewmodel
+    [Flags]
+    public enum CarryStates
+    {
+        None = 0,
+        FreePosition = 1,
+        FreeRotation = 2,
+        ResetLayer = 4,
+        WorldSpace = 8,
+        NoViewmodel = 16,
+        FreePositionAndRotation = FreePosition | FreeRotation | NoViewmodel,
+        InWorld = ResetLayer | WorldSpace | NoViewmodel,
+        All = FreePosition | FreeRotation | ResetLayer | NoViewmodel
+    }
 }

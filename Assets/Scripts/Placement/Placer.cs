@@ -178,7 +178,7 @@ namespace Recounter
                 return;
             }
 
-            _hand.SetCarryStates(HandCarryStates.NoViewmodel);
+            _hand.SetCarryStates(Hand.CarryStates.NoViewmodel);
 
             StartChargingThrow();
         }
@@ -196,7 +196,7 @@ namespace Recounter
         {
             if (!_active || !_isCharging) return;
 
-            _hand.SetCarryStates(HandCarryStates.None);
+            _hand.SetCarryStates(Hand.CarryStates.None);
 
             ThrowHeldItem();
         }
@@ -296,7 +296,7 @@ namespace Recounter
 
             _ghost.Hide();
 
-            _hand.SetCarryStates(HandCarryStates.InWorld);
+            _hand.SetCarryStates(Hand.CarryStates.InWorld);
 
             _playerInteraction.Suspend(true);
             InputLayer.Movement.Disable();
@@ -312,7 +312,7 @@ namespace Recounter
 
             _ghost.Hide();
 
-            _hand.SetCarryStates(HandCarryStates.None);
+            _hand.SetCarryStates(Hand.CarryStates.None);
 
             KeepItemInHand();
 

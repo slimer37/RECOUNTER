@@ -8,7 +8,7 @@ namespace Recounter
         [SerializeField] Transform _mouse;
         [SerializeField] float _mouseMovementScale;
         [SerializeField] float _mouseRotationScale;
-        [SerializeField] ViewmodelPose _handPose;
+        [SerializeField] Hand.ViewmodelPose _handPose;
 
         Vector3 _mouseBasePosition;
         float _mouseBaseRotation;
