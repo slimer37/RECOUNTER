@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using Recounter.Thumbnails;
 using UnityEngine;
 
@@ -8,13 +9,22 @@ namespace Recounter.Items
         [field: Header("Item")]
         [field: SerializeField] public Hand.ViewmodelPose ViewmodelPose { get; private set; }
 
+        [Header("Holding Transform")]
+        [SerializeField] Vector3 holdPosShift;
+        [SerializeField] bool overridesHoldRot;
+        [SerializeField, EnableIf(nameof(overridesHoldRot)), AllowNesting] Vector3 holdRot;
+
+        public Vector3 HoldPosShift => holdPosShift;
+        public Quaternion? OverrideHoldRotation => overridesHoldRot ? Quaternion.Euler(holdRot) : null;
+
         public Texture2D Thumbnail =>
                 _thumbnail ? _thumbnail : _thumbnail = ThumbnailCreator.CreateThumbnail(transform);
 
-        Texture2D _thumbnail;
-        Hotbar _containerHotbar;
-
         public bool IsHeld => _containerHotbar;
+
+        Texture2D _thumbnail;
+
+        Hotbar _containerHotbar;
 
         protected override void OnInteract(Employee e)
         {
@@ -37,7 +47,5 @@ namespace Recounter.Items
         }
 
         protected virtual void OnRelease() { }
-
-        public static implicit operator bool(Item item) => item != null;
     }
 }

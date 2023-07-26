@@ -132,27 +132,14 @@ namespace Recounter
 
         void OnDestroy() => Pause.Paused -= OnPause;
 
-        public void SetItem(Placeable item, bool canResetPosition)
+        public void SetItem(Placeable item)
         {
             _active = item;
-
-            _active.gameObject.SetActive(true);
 
             _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
             _adjustedHoldPos = _holdPos + _active.HoldPosShift;
 
             _ghost.CopyMesh(item);
-
-            _hand.Hold(item, _adjustedHoldPos, _adjustedHoldRot);
-
-            if (item.ViewmodelPose.IsValid)
-            {
-                _hand.SetHandViewmodel(item.ViewmodelPose);
-            }
-
-            if (!canResetPosition) return;
-
-            _active.transform.SetPositionAndRotation(_body.position, _body.rotation);
         }
 
         void OnStartPlace(InputAction.CallbackContext ctx)
@@ -385,10 +372,6 @@ namespace Recounter
             if (!_active) return;
 
             EndPlace();
-
-            _hand.Clear();
-
-            _active.gameObject.SetActive(false);
 
             _active = null;
         }

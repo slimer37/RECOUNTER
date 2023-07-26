@@ -11,9 +11,6 @@ namespace Recounter.Items
         [Header("Optional")]
         [SerializeField] Rigidbody rb;
         [SerializeField, EnableIf(nameof(HasRigidbody)), AllowNesting] bool isThrowable = true;
-        [SerializeField] Vector3 holdPosShift;
-        [SerializeField] bool overridesHoldRot;
-        [SerializeField, EnableIf(nameof(overridesHoldRot)), AllowNesting] Vector3 holdRot;
 
         [Header("Bounds Override")]
         [SerializeField] bool overridesBounds;
@@ -22,9 +19,7 @@ namespace Recounter.Items
 
         Collider[] colliders;
 
-        public Vector3 HoldPosShift => holdPosShift;
         public Vector3 OriginShift => GetOriginShift();
-        public Quaternion? OverrideHoldRotation => overridesHoldRot ? Quaternion.Euler(holdRot) : null;
 
         public bool IsThrowable => rb && isThrowable;
         public bool HasRigidbody => rb;
