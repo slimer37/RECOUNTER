@@ -120,12 +120,10 @@ namespace Recounter
 
             InitializeDefaultPlacementMethod();
 
-            _placementMethodRaycaster = new(_camera, _placementMethodRange, _placementMethodMask, _placementMethodLayer, GetComponentType.Self)
+            _placementMethodRaycaster = new(_camera, _placementMethodRange, _placementMethodMask, _placementMethodLayer, GetComponentType.Self, this)
             {
                 TriggerInteraction = QueryTriggerInteraction.Collide
             };
-
-            _placementMethodRaycaster.AssignCallbacks(this);
         }
 
         void OnPause(bool pause) => enabled = !pause;

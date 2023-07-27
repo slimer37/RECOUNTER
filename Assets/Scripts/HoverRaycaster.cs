@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace Recounter
 {
-    public enum GetComponentType { InParent, Self, InChildren }
-
     public interface IHoverHandler<T> where T : class
     {
         public void HoverEnter(T obj);
@@ -30,24 +28,15 @@ namespace Recounter
 
         public QueryTriggerInteraction TriggerInteraction { get; set; } = QueryTriggerInteraction.UseGlobal;
 
-        public HoverRaycaster(Camera camera, float range, LayerMask raycastMask, LayerMask interactableMask, GetComponentType getComponentType)
+        public HoverRaycaster(Camera camera, float range, LayerMask raycastMask, LayerMask interactableMask, GetComponentType getComponentType, IHoverHandler<T> handler)
         {
             _camera = camera;
             _range = range;
             _raycastMask = raycastMask;
             _interactableMask = interactableMask;
 
-            _getComponent = getComponentType switch
-            {
-                GetComponentType.InParent => t => t.GetComponentInParent<T>(),
-                GetComponentType.Self => t => t.GetComponent<T>(),
-                GetComponentType.InChildren => t => t.GetComponentInChildren<T>(),
-                _ => throw new ArgumentOutOfRangeException(nameof(getComponentType))
-            };
-        }
+            _getComponent = getComponentType.GetMethod<T>();
 
-        public void AssignCallbacks(IHoverHandler<T> handler)
-        {
             _handler = handler;
         }
 

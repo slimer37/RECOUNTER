@@ -26,8 +26,7 @@ public class PlayerInteraction : MonoBehaviour, IHoverHandler<Interactable>
 
         Pause.Paused += OnPaused;
 
-        _raycaster = new(_cam, _range, _raycastMask, _interactableMask, GetComponentType.InParent);
-        _raycaster.AssignCallbacks(this);
+        _raycaster = new(_cam, _range, _raycastMask, _interactableMask, GetComponentType.InParent, this);
     }
 
     void OnPaused(bool paused)
