@@ -22561,11 +22561,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62214b1b5e56e61489268ddba6008043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  capacity: 5
-  placer: {fileID: 317501403}
-  holder: {fileID: 0}
-  slotPrefab: {fileID: 1353271330}
-  slotParent: {fileID: 1496458286}
+  _capacity: 5
+  _placer: {fileID: 317501403}
+  _slotPrefab: {fileID: 1353271330}
+  _slotParent: {fileID: 1496458286}
 --- !u!114 &1496458288
 MonoBehaviour:
   m_ObjectHideFlags: 0

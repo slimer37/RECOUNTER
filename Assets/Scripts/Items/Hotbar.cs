@@ -7,22 +7,21 @@ namespace Recounter.Items
 {
     public class Hotbar : MonoBehaviour
     {
-        [SerializeField] int capacity;
-        [SerializeField] Placer placer;
-        [SerializeField] Holder holder;
-        [SerializeField] HotbarSlot slotPrefab;
-        [SerializeField] Transform slotParent;
+        [SerializeField] int _capacity;
+        [SerializeField] Placer _placer;
+        [SerializeField] HotbarSlot _slotPrefab;
+        [SerializeField] Transform _slotParent;
 
         const string SlotSelectChars = "1234567890";
         const string AltSlotSelectChars = "!@#$%^&*()";
 
-        readonly List<HotbarSlot> slots = new();
+        readonly List<HotbarSlot> _slots = new();
 
-        readonly List<Item> items = new();
+        readonly List<Item> _items = new();
 
-        int activeIndex;
+        int _activeIndex;
 
-        HotbarSlot ActiveSlot => slots[activeIndex];
+        HotbarSlot ActiveSlot => _slots[_activeIndex];
 
         public bool IsActiveSlotFull => ActiveSlot.Item;
 
@@ -31,15 +30,15 @@ namespace Recounter.Items
 
         void Awake()
         {
-            slotPrefab.gameObject.SetActive(true);
+            _slotPrefab.gameObject.SetActive(true);
 
-            for (var i = 0; i < capacity; i++)
+            for (var i = 0; i < _capacity; i++)
             {
-                var slot = Instantiate(slotPrefab, slotParent);
-                slots.Add(slot);
+                var slot = Instantiate(_slotPrefab, _slotParent);
+                _slots.Add(slot);
             }
 
-            slotPrefab.gameObject.SetActive(false);
+            _slotPrefab.gameObject.SetActive(false);
 
             SetActiveSlot(0, force: true);
         }
@@ -53,8 +52,8 @@ namespace Recounter.Items
 
             if (scroll != 0)
             {
-                var newIndex = activeIndex + (scroll > 0 ? -1 : 1);
-                newIndex = Mathf.Clamp(newIndex, 0, capacity - 1);
+                var newIndex = _activeIndex + (scroll > 0 ? -1 : 1);
+                newIndex = Mathf.Clamp(newIndex, 0, _capacity - 1);
                 SetActiveSlot(newIndex);
             }
         }
@@ -70,7 +69,7 @@ namespace Recounter.Items
 
             if (slotIndex < 0) return;
 
-            if (slotIndex < 0 || slotIndex >= capacity) return;
+            if (slotIndex < 0 || slotIndex >= _capacity) return;
 
             SetActiveSlot(slotIndex);
         }
@@ -80,13 +79,13 @@ namespace Recounter.Items
             if (!item)
                 throw new NullReferenceException();
 
-            if (ActiveSlot.Item || items.Count == capacity) return false;
+            if (ActiveSlot.Item || _items.Count == _capacity) return false;
 
-            slots[activeIndex].AssignItem(item);
+            _slots[_activeIndex].AssignItem(item);
 
-            items.Add(item);
+            _items.Add(item);
 
-            SetActiveSlot(activeIndex, false, true);
+            SetActiveSlot(_activeIndex, false, true);
 
             item.PostPickUp(this);
 
@@ -112,7 +111,7 @@ namespace Recounter.Items
             if (!item)
                 throw new NullReferenceException();
 
-            var slot = slots.Find(s => s.Item == item);
+            var slot = _slots.Find(s => s.Item == item);
 
             if (!slot)
                 throw new ArgumentException("Item is not in the hotbar.");
@@ -124,37 +123,37 @@ namespace Recounter.Items
         {
             var item = slot.Item;
 
-            if (!items.Remove(item))
+            if (!_items.Remove(item))
                 throw new Exception($"Cannot remove '{item}' because it's not in the inventory.");
 
             slot.Clear();
 
             if (ActiveSlot == slot)
-                placer.StopHoldingItem();
+                _placer.StopHoldingItem();
         }
 
         void SetActiveSlot(int index, bool canResetPosition = true, bool force = false)
         {
-            if (!force && (activeIndex == index || placer.IsPlacing || Pause.IsPaused)) return;
+            if (!force && (_activeIndex == index || _placer.IsPlacing || Pause.IsPaused)) return;
 
-            if (activeIndex != index)
+            if (_activeIndex != index)
             {
-                var previouslyActiveSlot = slots[activeIndex];
+                var previouslyActiveSlot = _slots[_activeIndex];
 
                 previouslyActiveSlot.SetSlotActive(false);
 
                 if (previouslyActiveSlot.Item)
                 {
-                    placer.StopHoldingItem();
+                    _placer.StopHoldingItem();
                     ItemPutAway?.Invoke(previouslyActiveSlot.Item);
                 }
             }
 
-            slots[index].SetSlotActive(true);
+            _slots[index].SetSlotActive(true);
 
-            activeIndex = index;
+            _activeIndex = index;
 
-            var activeItem = slots[index].Item;
+            var activeItem = _slots[index].Item;
 
             if (activeItem)
             {
@@ -162,7 +161,7 @@ namespace Recounter.Items
 
                 if (activeItem is Placeable placeable)
                 {
-                    placer.SetItem(placeable);
+                    _placer.SetItem(placeable);
                 }
             }
         }
