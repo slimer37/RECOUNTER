@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 31741656}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.48948613, y: -0.20751949, z: -0.1211793, w: 0.838245}
   m_LocalPosition: {x: -0.216, y: -0.041, z: 0.057}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7348319751372103081}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -60.565, y: -27.81, z: 0}
 --- !u!1001 &7093381189393201730
 PrefabInstance:
@@ -251,20 +251,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143550ab6e7decd40af0afd0f7329b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rend: {fileID: 8480653297296516806}
-  isCylindrical: 0
-  rb: {fileID: 2146010319}
-  isThrowable: 1
-  holdPosShift: {x: 0, y: -0.05, z: 0}
-  overridesHoldRot: 1
-  holdRot: {x: 0, y: 240, z: 0}
   <ViewmodelPose>k__BackingField:
     target: {fileID: 31741657}
     handClosedness: 1
     thumbCurl: 0.9
-  overridesBounds: 0
-  overrideCenter: {x: 0, y: 0, z: 0}
-  overrideSize: {x: 0, y: 0, z: 0}
+  _holdPosShift: {x: 0, y: -0.05, z: 0}
+  _overridesHoldRot: 1
+  _holdRot: {x: 0, y: 240, z: 0}
+  _rend: {fileID: 8480653297296516806}
+  _isCylindrical: 0
+  _rb: {fileID: 2146010319}
+  _isThrowable: 1
+  _overridesBounds: 0
+  _overrideCenter: {x: 0, y: 0, z: 0}
+  _overrideSize: {x: 0, y: 0, z: 0}
 --- !u!114 &-6291883955127448476
 MonoBehaviour:
   m_ObjectHideFlags: 0

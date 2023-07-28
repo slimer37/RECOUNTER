@@ -5619,16 +5619,16 @@ MonoBehaviour:
     target: {fileID: 1767436441}
     handClosedness: 0
     thumbCurl: 0.4
-  holdPosShift: {x: 0, y: 0, z: 0}
-  overridesHoldRot: 0
-  holdRot: {x: 0, y: 0, z: 0}
-  rend: {fileID: 334750062}
-  isCylindrical: 0
-  rb: {fileID: 334750065}
-  isThrowable: 1
-  overridesBounds: 0
-  overrideCenter: {x: 0, y: 0, z: 0}
-  overrideSize: {x: 0, y: 0, z: 0}
+  _holdPosShift: {x: 0, y: 0, z: 0}
+  _overridesHoldRot: 0
+  _holdRot: {x: 0, y: 0, z: 0}
+  _rend: {fileID: 334750062}
+  _isCylindrical: 0
+  _rb: {fileID: 334750065}
+  _isThrowable: 1
+  _overridesBounds: 0
+  _overrideCenter: {x: 0, y: 0, z: 0}
+  _overrideSize: {x: 0, y: 0, z: 0}
 --- !u!65 &334750061
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13073,16 +13073,16 @@ MonoBehaviour:
     target: {fileID: 0}
     handClosedness: 0
     thumbCurl: 0
-  holdPosShift: {x: 0, y: 0, z: 0}
-  overridesHoldRot: 0
-  holdRot: {x: 0, y: 0, z: 0}
-  rend: {fileID: 872607850}
-  isCylindrical: 0
-  rb: {fileID: 872607852}
-  isThrowable: 1
-  overridesBounds: 0
-  overrideCenter: {x: 0, y: 0, z: 0}
-  overrideSize: {x: 0, y: 0, z: 0}
+  _holdPosShift: {x: 0, y: 0, z: 0}
+  _overridesHoldRot: 0
+  _holdRot: {x: 0, y: 0, z: 0}
+  _rend: {fileID: 872607850}
+  _isCylindrical: 0
+  _rb: {fileID: 872607852}
+  _isThrowable: 1
+  _overridesBounds: 0
+  _overrideCenter: {x: 0, y: 0, z: 0}
+  _overrideSize: {x: 0, y: 0, z: 0}
 --- !u!54 &872607852
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -17547,16 +17547,16 @@ MonoBehaviour:
     target: {fileID: 1097128887}
     handClosedness: 0.3
     thumbCurl: 0.1
-  holdPosShift: {x: 0, y: 0, z: 0}
-  overridesHoldRot: 1
-  holdRot: {x: 10, y: 210, z: 0}
-  rend: {fileID: 1142382809}
-  isCylindrical: 0
-  rb: {fileID: 1142382811}
-  isThrowable: 1
-  overridesBounds: 0
-  overrideCenter: {x: 0, y: 0, z: 0}
-  overrideSize: {x: 0, y: 0, z: 0}
+  _holdPosShift: {x: 0, y: 0, z: 0}
+  _overridesHoldRot: 1
+  _holdRot: {x: 10, y: 210, z: 0}
+  _rend: {fileID: 1142382809}
+  _isCylindrical: 0
+  _rb: {fileID: 1142382811}
+  _isThrowable: 1
+  _overridesBounds: 0
+  _overrideCenter: {x: 0, y: 0, z: 0}
+  _overrideSize: {x: 0, y: 0, z: 0}
 --- !u!54 &1142382811
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -29778,16 +29778,16 @@ MonoBehaviour:
     target: {fileID: 1592468970}
     handClosedness: 0.1
     thumbCurl: 0.5
-  holdPosShift: {x: 0, y: 0, z: 0}
-  overridesHoldRot: 1
-  holdRot: {x: -120, y: 180, z: 20}
-  rend: {fileID: 2008331976}
-  isCylindrical: 0
-  rb: {fileID: 2008331972}
-  isThrowable: 1
-  overridesBounds: 0
-  overrideCenter: {x: 0, y: 0, z: 0}
-  overrideSize: {x: 0, y: 0, z: 0}
+  _holdPosShift: {x: 0, y: 0, z: 0}
+  _overridesHoldRot: 1
+  _holdRot: {x: -120, y: 180, z: 20}
+  _rend: {fileID: 2008331976}
+  _isCylindrical: 0
+  _rb: {fileID: 2008331972}
+  _isThrowable: 1
+  _overridesBounds: 0
+  _overrideCenter: {x: 0, y: 0, z: 0}
+  _overrideSize: {x: 0, y: 0, z: 0}
 --- !u!64 &2008331974
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -41380,16 +41380,16 @@ MonoBehaviour:
     target: {fileID: 500059522}
     handClosedness: 0.1
     thumbCurl: 0.3
-  holdPosShift: {x: 0, y: 0, z: 0}
-  overridesHoldRot: 1
-  holdRot: {x: -15, y: 0, z: 0}
-  rend: {fileID: 1694746379359014693}
-  isCylindrical: 1
-  rb: {fileID: 6388072172700720962}
-  isThrowable: 1
-  overridesBounds: 0
-  overrideCenter: {x: 0, y: 0, z: 0}
-  overrideSize: {x: 0, y: 0, z: 0}
+  _holdPosShift: {x: 0, y: 0, z: 0}
+  _overridesHoldRot: 1
+  _holdRot: {x: -15, y: 0, z: 0}
+  _rend: {fileID: 1694746379359014693}
+  _isCylindrical: 1
+  _rb: {fileID: 6388072172700720962}
+  _isThrowable: 1
+  _overridesBounds: 0
+  _overrideCenter: {x: 0, y: 0, z: 0}
+  _overrideSize: {x: 0, y: 0, z: 0}
 --- !u!54 &6388072172700720962
 Rigidbody:
   m_ObjectHideFlags: 0

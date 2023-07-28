@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1938381647928174648}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.047097936, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6403989583160762436}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4279680777655216412
 MeshFilter:
@@ -106,13 +106,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4778253795974793546}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.794636, y: -0.07105141, z: -0.023964789, w: 0.6024376}
   m_LocalPosition: {x: -0.3107, y: 0.0056, z: 0.1958}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6403989583160762436}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -106.087, y: 9.875, z: -17.656006}
 --- !u!1 &6976599753602015295
 GameObject:
@@ -143,6 +143,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6976599753602015295}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.603321, z: -0, w: 0.7974985}
   m_LocalPosition: {x: 4.312, y: 1.06, z: 2.311}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -151,7 +152,6 @@ Transform:
   - {fileID: 3447327997422325077}
   - {fileID: 4778253795974793547}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 74.216, z: 0}
 --- !u!33 &7618370458380412858
 MeshFilter:
@@ -217,20 +217,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143550ab6e7decd40af0afd0f7329b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rend: {fileID: 4525224419847609832}
-  isCylindrical: 0
-  rb: {fileID: 4525224419847609833}
-  isThrowable: 1
-  holdPosShift: {x: -0.2, y: 0, z: 0}
-  overridesHoldRot: 1
-  holdRot: {x: 35, y: 200, z: -5}
   <ViewmodelPose>k__BackingField:
     target: {fileID: 4778253795974793547}
     handClosedness: 0
     thumbCurl: 0.4
-  overridesBounds: 1
-  overrideCenter: {x: -0.00007857382, y: -0.003448952, z: 0.000022754073}
-  overrideSize: {x: 0.55969524, y: 0.09275477, z: 0.41356525}
+  _holdPosShift: {x: -0.2, y: 0, z: 0}
+  _overridesHoldRot: 1
+  _holdRot: {x: 35, y: 200, z: -5}
+  _rend: {fileID: 4525224419847609832}
+  _isCylindrical: 0
+  _rb: {fileID: 4525224419847609833}
+  _isThrowable: 1
+  _overridesBounds: 1
+  _overrideCenter: {x: -0.00007857382, y: -0.003448952, z: 0.000022754073}
+  _overrideSize: {x: 0.55969524, y: 0.09275477, z: 0.41356525}
 --- !u!54 &4525224419847609833
 Rigidbody:
   m_ObjectHideFlags: 0

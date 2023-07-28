@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2349289732836934018}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.058682486, y: 0, z: -0, w: 0.9982767}
   m_LocalPosition: {x: 0.15699172, y: -0.051863834, z: -0.0000000052428377}
   m_LocalScale: {x: 1, y: 0.99999994, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2038679613298151704}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &88470754282286538
 MeshFilter:
@@ -106,13 +106,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4676728182212386202}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.7928247, y: -0.089014694, z: -0.037590966, w: 0.6017411}
   m_LocalPosition: {x: -0.2831, y: -0.0378, z: 0.1775}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2038679613298151704}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -106.087, y: 9.875, z: -20.25}
 --- !u!1 &5605366583954577033
 GameObject:
@@ -139,13 +139,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5605366583954577033}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.000000018421398, y: 0.9982767, z: -0.058682483, w: 0.0000003133755}
   m_LocalPosition: {x: -0.16839927, y: -0.051863834, z: -0.0000000052428377}
   m_LocalScale: {x: 1, y: 0.99999994, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2038679613298151704}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5669648653501702580
 MeshFilter:
@@ -226,6 +226,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8617354120888908823}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.4731705, z: -0, w: 0.8809709}
   m_LocalPosition: {x: 4.549, y: 1.0927341, z: 1.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -235,7 +236,6 @@ Transform:
   - {fileID: 7808680988508091166}
   - {fileID: 4676728182212386203}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: -56.481, z: 0}
 --- !u!33 &1178748596299983235
 MeshFilter:
@@ -322,20 +322,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143550ab6e7decd40af0afd0f7329b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rend: {fileID: 5091139947082824359}
-  isCylindrical: 0
-  rb: {fileID: 2038679613298151710}
-  isThrowable: 1
-  holdPosShift: {x: -0.2, y: 0, z: 0}
-  overridesHoldRot: 1
-  holdRot: {x: 35, y: 200, z: -5}
   <ViewmodelPose>k__BackingField:
     target: {fileID: 4676728182212386203}
     handClosedness: 0
     thumbCurl: 0.4
-  overridesBounds: 1
-  overrideCenter: {x: 0.000000059604645, y: -0.04147716, z: 0}
-  overrideSize: {x: 0.48814794, y: 0.10105404, z: 0.3902598}
+  _holdPosShift: {x: -0.2, y: 0, z: 0}
+  _overridesHoldRot: 1
+  _holdRot: {x: 35, y: 200, z: -5}
+  _rend: {fileID: 5091139947082824359}
+  _isCylindrical: 0
+  _rb: {fileID: 2038679613298151710}
+  _isThrowable: 1
+  _overridesBounds: 1
+  _overrideCenter: {x: 0.000000059604645, y: -0.04147716, z: 0}
+  _overrideSize: {x: 0.48814794, y: 0.10105404, z: 0.3902598}
 --- !u!54 &2038679613298151710
 Rigidbody:
   m_ObjectHideFlags: 0

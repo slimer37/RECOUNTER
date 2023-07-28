@@ -10,12 +10,12 @@ namespace Recounter.Items
         [field: SerializeField] public Hand.ViewmodelPose ViewmodelPose { get; private set; }
 
         [Header("Holding Transform")]
-        [SerializeField] Vector3 holdPosShift;
-        [SerializeField] bool overridesHoldRot;
-        [SerializeField, EnableIf(nameof(overridesHoldRot)), AllowNesting] Vector3 holdRot;
+        [SerializeField] Vector3 _holdPosShift;
+        [SerializeField] bool _overridesHoldRot;
+        [SerializeField, EnableIf(nameof(_overridesHoldRot)), AllowNesting] Vector3 _holdRot;
 
-        public Vector3 HoldPosShift => holdPosShift;
-        public Quaternion? OverrideHoldRotation => overridesHoldRot ? Quaternion.Euler(holdRot) : null;
+        public Vector3 HoldPosShift => _holdPosShift;
+        public Quaternion? OverrideHoldRotation => _overridesHoldRot ? Quaternion.Euler(_holdRot) : null;
 
         public Texture2D Thumbnail =>
                 _thumbnail ? _thumbnail : _thumbnail = ThumbnailCreator.CreateThumbnail(transform);

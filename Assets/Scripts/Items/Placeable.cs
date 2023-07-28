@@ -5,24 +5,24 @@ namespace Recounter.Items
 {
     public class Placeable : Item
     {
-        [SerializeField] Renderer rend;
-        [SerializeField] bool isCylindrical;
+        [SerializeField] Renderer _rend;
+        [SerializeField] bool _isCylindrical;
 
         [Header("Optional")]
-        [SerializeField] Rigidbody rb;
-        [SerializeField, EnableIf(nameof(HasRigidbody)), AllowNesting] bool isThrowable = true;
+        [SerializeField] Rigidbody _rb;
+        [SerializeField, EnableIf(nameof(HasRigidbody)), AllowNesting] bool _isThrowable = true;
 
         [Header("Bounds Override")]
-        [SerializeField] bool overridesBounds;
-        [SerializeField, EnableIf(nameof(overridesBounds)), AllowNesting] Vector3 overrideCenter;
-        [SerializeField, EnableIf(nameof(overridesBounds)), AllowNesting, Min(0)] Vector3 overrideSize;
+        [SerializeField] bool _overridesBounds;
+        [SerializeField, EnableIf(nameof(_overridesBounds)), AllowNesting] Vector3 _overrideCenter;
+        [SerializeField, EnableIf(nameof(_overridesBounds)), AllowNesting, Min(0)] Vector3 _overrideSize;
 
-        Collider[] colliders;
+        Collider[] _colliders;
 
         public Vector3 OriginShift => GetOriginShift();
 
-        public bool IsThrowable => rb && isThrowable;
-        public bool HasRigidbody => rb;
+        public bool IsThrowable => _rb && _isThrowable;
+        public bool HasRigidbody => _rb;
 
         bool _justReleased;
 
@@ -32,31 +32,31 @@ namespace Recounter.Items
         {
             Gizmos.matrix = transform.localToWorldMatrix;
 
-            if (overridesBounds)
+            if (_overridesBounds)
             {
                 Gizmos.color = Color.red;
 
-                Gizmos.DrawWireCube(overrideCenter, overrideSize);
+                Gizmos.DrawWireCube(_overrideCenter, _overrideSize);
             }
-            else if (rend)
+            else if (_rend)
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawWireCube(rend.localBounds.center, rend.localBounds.size);
+                Gizmos.DrawWireCube(_rend.localBounds.center, _rend.localBounds.size);
             }
         }
 
         void Reset()
         {
-            TryGetComponent(out rend);
-            TryGetComponent(out rb);
+            TryGetComponent(out _rend);
+            TryGetComponent(out _rb);
         }
 
         void OnValidate()
         {
-            if (!rb && isThrowable)
+            if (!_rb && _isThrowable)
             {
-                Debug.LogWarning($"Cannot set {nameof(isThrowable)} if no rigidbody is selected.");
-                isThrowable = false;
+                Debug.LogWarning($"Cannot set {nameof(_isThrowable)} if no rigidbody is selected.", this);
+                _isThrowable = false;
             }
         }
 
@@ -67,20 +67,20 @@ namespace Recounter.Items
                 DefaultIntersectionMask = LayerMask.GetMask("Default", "Interactable", "Player");
             }
 
-            colliders = GetComponentsInChildren<Collider>();
+            _colliders = GetComponentsInChildren<Collider>();
         }
 
         public void Throw(Vector3 force)
         {
             Release();
-            rb.AddForce(force, ForceMode.Impulse);
+            _rb.AddForce(force, ForceMode.Impulse);
         }
 
-        Vector3 GetScaledExtents() => overridesBounds ?
-            overrideSize / 2 : Vector3.Scale(transform.lossyScale, rend.localBounds.extents);
+        Vector3 GetScaledExtents() => _overridesBounds ?
+            _overrideSize / 2 : Vector3.Scale(transform.lossyScale, _rend.localBounds.extents);
 
-        Vector3 GetOriginShift() => overridesBounds ?
-            overrideCenter : rend.localBounds.center;
+        Vector3 GetOriginShift() => _overridesBounds ?
+            _overrideCenter : _rend.localBounds.center;
 
         public bool IsIntersecting() => IsIntersecting(DefaultIntersectionMask);
 
@@ -97,7 +97,7 @@ namespace Recounter.Items
 
             var intersects = Physics.CheckBox(position, scaledExtents, rotation, mask);
 
-            if (intersects && isCylindrical)
+            if (intersects && _isCylindrical)
             {
                 var radius = Mathf.Max(scaledExtents.x, scaledExtents.z);
                 intersects = Physics.CheckCapsule(position - Vector3.up * scaledExtents.y, position + Vector3.up * scaledExtents.y, radius, mask);
@@ -111,7 +111,7 @@ namespace Recounter.Items
             var scaledExtents = GetScaledExtents();
             var originShift = Vector3.Dot(localDirection, GetOriginShift());
 
-            if (isCylindrical)
+            if (_isCylindrical)
             {
                 var radialComponent = new Vector2(localDirection.x, localDirection.z).magnitude;
                 return originShift + Mathf.Max(scaledExtents.x, scaledExtents.z) * radialComponent + scaledExtents.y * Mathf.Abs(localDirection.y);
@@ -136,8 +136,8 @@ namespace Recounter.Items
         {
             EnableColliders(false);
 
-            if (rb)
-                rb.isKinematic = true;
+            if (_rb)
+                _rb.isKinematic = true;
         }
 
         protected override void OnRelease()
@@ -146,22 +146,22 @@ namespace Recounter.Items
 
             EnableColliders(true);
 
-            if (rb)
+            if (_rb)
             {
-                rb.isKinematic = false;
-                rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                _rb.isKinematic = false;
+                _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
             }
         }
 
         void OnCollisionEnter(Collision collision)
         {
             if (_justReleased)
-                rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+                _rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
         }
 
         void EnableColliders(bool enable)
         {
-            foreach (var col in colliders)
+            foreach (var col in _colliders)
             {
                 col.enabled = enable;
             }
