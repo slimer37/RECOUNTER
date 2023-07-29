@@ -129,7 +129,10 @@ namespace Recounter.Items
             slot.Clear();
 
             if (ActiveSlot == slot)
+            {
                 _placer.StopHoldingItem();
+                ItemPutAway?.Invoke(item);
+            }
         }
 
         void SetActiveSlot(int index, bool canResetPosition = true, bool force = false)
