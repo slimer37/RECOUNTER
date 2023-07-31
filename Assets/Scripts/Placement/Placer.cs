@@ -309,8 +309,6 @@ namespace Recounter
         {
             EndPlace();
 
-            _hand.Clear();
-
             var temp = _active;
 
             _active = null;

@@ -25,8 +25,11 @@ namespace Recounter.Items
 
         public bool IsActiveSlotFull => ActiveSlot.Item;
 
-        public event Action<Item, bool> ItemBecameActive;
-        public event Action<Item> ItemPutAway;
+        public event ItemActiveHandler ItemBecameActive;
+        public event ItemPutAwayHandler ItemPutAway;
+
+        public delegate void ItemPutAwayHandler(Item item, bool wasItemKept);
+        public delegate void ItemActiveHandler(Item item, bool fromInventory);
 
         void Awake()
         {
@@ -131,7 +134,7 @@ namespace Recounter.Items
             if (ActiveSlot == slot)
             {
                 _placer.StopHoldingItem();
-                ItemPutAway?.Invoke(item);
+                ItemPutAway?.Invoke(item, false);
             }
         }
 
@@ -148,7 +151,7 @@ namespace Recounter.Items
                 if (previouslyActiveSlot.Item)
                 {
                     _placer.StopHoldingItem();
-                    ItemPutAway?.Invoke(previouslyActiveSlot.Item);
+                    ItemPutAway?.Invoke(previouslyActiveSlot.Item, true);
                 }
             }
 

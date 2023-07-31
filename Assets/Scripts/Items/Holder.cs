@@ -35,11 +35,14 @@ namespace Recounter.Items
             item.transform.SetPositionAndRotation(_body.position, _body.rotation);
         }
 
-        void PutAway(Item item)
+        void PutAway(Item item, bool wasItemKept)
         {
             if (!item) return;
 
-            item.gameObject.SetActive(false);
+            if (wasItemKept)
+            {
+                item.gameObject.SetActive(false);
+            }
 
             _hand.Clear();
         }
