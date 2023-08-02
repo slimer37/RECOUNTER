@@ -1,9 +1,54 @@
+using Recounter.Store;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Recounter.UI
 {
     public class NewSaveMenu : MonoBehaviour
     {
+        [SerializeField] TMP_InputField _nameField;
+        [SerializeField] Button _createButton;
+        [SerializeField] TMP_Text _createButtonText;
 
+        [Header("Warning")]
+        [SerializeField] TMP_Text _validNameWarning;
+        [SerializeField] GameObject _warningPanel;
+        [SerializeField] string _warningFormat;
+
+        void Awake()
+        {
+            _nameField.onValueChanged.AddListener(CheckName);
+
+            _createButton.onClick.AddListener(CreateSave);
+
+            _warningPanel.SetActive(false);
+        }
+
+        void CreateSave()
+        {
+            var name = _nameField.text;
+            StoreData.CreateWithFile(name);
+        }
+
+        void CheckName(string name)
+        {
+            var exists = StoreSerializer.AlreadyExists(name);
+
+            _createButtonText.text = exists ? "File already exists" : "Create";
+
+            _createButton.interactable = !exists;
+
+            var validatedName = StoreSerializer.ToValidFileName(name);
+
+            if (validatedName == name)
+            {
+                _warningPanel.SetActive(false);
+                return;
+            }
+
+            _warningPanel.SetActive(true);
+            _validNameWarning.text = string.Format(_warningFormat, validatedName);
+        }
     }
 }

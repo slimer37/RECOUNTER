@@ -1,19 +1,22 @@
+using Newtonsoft.Json;
 using System;
-using UnityEngine;
 
 namespace Recounter.Store
 {
+    [Serializable]
     public class StoreData
     {
         public static StoreData Current { get; private set; }
 
-        public readonly string fileName;
-        public readonly string name;
-        public readonly DateTime creationTime;
+        public string fileName;
+        public string name;
+        public DateTime creationTime;
 
-        public string ToJson() => JsonUtility.ToJson(this);
+        public string ToJson() => JsonConvert.SerializeObject(this);
+        
+        public static StoreData FromJson(string json) => JsonConvert.DeserializeObject<StoreData>(json);
 
-        public static StoreData FromJson(string json) => JsonUtility.FromJson<StoreData>(json);
+        StoreData() { }
 
         StoreData(string name, string fileName)
         {

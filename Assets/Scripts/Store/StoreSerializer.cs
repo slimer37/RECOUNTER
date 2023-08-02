@@ -35,15 +35,18 @@ namespace Recounter.Store
 
         public static string GetSavePath(string saveFileName) => Path.Combine(GetSaveDirectory(), saveFileName + SaveFileEnding);
 
-        public static bool TryLoadSavedStore(string saveFileName, out StoreData storeData)
+        public static bool TryLoadSavedStore(string saveFilePath, out StoreData storeData)
         {
             storeData = null;
 
-            var path = GetSavePath(saveFileName);
+            if (!Path.IsPathRooted(saveFilePath))
+            {
+                saveFilePath = GetSavePath(saveFilePath);
+            }
 
-            if (!File.Exists(path)) return false;
+            if (!File.Exists(saveFilePath)) return false;
 
-            storeData = StoreData.FromJson(File.ReadAllText(path));
+            storeData = StoreData.FromJson(File.ReadAllText(saveFilePath));
 
             return true;
         }

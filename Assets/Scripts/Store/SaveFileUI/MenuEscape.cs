@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -34,6 +35,9 @@ namespace Recounter.UI
         static InputAction _esc;
 
         static readonly MenuStack<MenuEscape> _menus = new();
+
+        public event Action Opened;
+        public event Action Closed;
 
         [RuntimeInitializeOnLoadMethod]
         static void Init()
@@ -80,10 +84,12 @@ namespace Recounter.UI
                 if (_isOpen)
                 {
                     _menus.Push(this);
+                    Opened?.Invoke();
                 }
                 else
                 {
                     _menus.Remove(this);
+                    Closed?.Invoke();
                 }
             }
         }

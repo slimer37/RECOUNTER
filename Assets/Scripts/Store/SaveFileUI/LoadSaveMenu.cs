@@ -7,8 +7,14 @@ namespace Recounter.UI
     {
         [SerializeField] Transform _parent;
         [SerializeField] SaveListItem _listItemPrefab;
+        [SerializeField] MenuEscape _menuEscape;
 
         void Awake()
+        {
+            _menuEscape.Opened += LoadSaves;
+        }
+
+        void LoadSaves()
         {
             _listItemPrefab.gameObject.SetActive(true);
 
