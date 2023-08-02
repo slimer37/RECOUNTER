@@ -35,14 +35,7 @@ namespace Recounter.Store
             return data;
         }
 
-        public static bool TryLoad(string fileName)
-        {
-            var success = StoreSerializer.TryLoadSavedStore(fileName, out var storeData);
-
-            if (success) Current = storeData;
-
-            return success;
-        }
+        public static void SetCurrentStore(StoreData data) => Current = data;
 
         public bool Save() => StoreSerializer.TrySaveStore(this);
     }
