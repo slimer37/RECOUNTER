@@ -32,8 +32,6 @@ namespace Recounter.UI
 
         Canvas _canvas;
 
-        static InputAction _esc;
-
         static readonly MenuStack<MenuEscape> _menus = new();
 
         public event Action Opened;
@@ -42,9 +40,7 @@ namespace Recounter.UI
         [RuntimeInitializeOnLoadMethod]
         static void Init()
         {
-            _esc = new Controls().Menu.Exit;
-            _esc.performed += _ => EscapeTopMenu();
-            _esc.Enable();
+            InputLayer.Menu.Exit.performed += _ => EscapeTopMenu();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
