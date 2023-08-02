@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Recounter.StoreData
+namespace Recounter.Store
 {
     public class StoreData
     {
