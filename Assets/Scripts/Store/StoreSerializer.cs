@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Recounter.StoreData
@@ -19,9 +20,7 @@ namespace Recounter.StoreData
             return fileName;
         }
 
-        public static bool AlreadyExists(string querySaveFile) => File.Exists(GetSavePath(querySaveFile));
-
-        public static string GetSavePath(string saveFileName)
+        public static string GetSaveDirectory()
         {
             var saveDirectory = Path.Combine(Application.persistentDataPath, SaveFolderName);
 
@@ -30,8 +29,12 @@ namespace Recounter.StoreData
                 Directory.CreateDirectory(saveDirectory);
             }
 
-            return Path.Combine(saveDirectory, saveFileName + SaveFileEnding);
+            return saveDirectory;
         }
+
+        public static bool AlreadyExists(string querySaveFile) => File.Exists(GetSavePath(querySaveFile));
+
+        public static string GetSavePath(string saveFileName) => Path.Combine(GetSaveDirectory(), saveFileName + SaveFileEnding);
 
         public static bool TryLoadSavedStore(string saveFileName, out StoreData storeData)
         {
@@ -59,5 +62,7 @@ namespace Recounter.StoreData
                 return false;
             }
         }
+
+        public static string[] AllSaveFiles() => Directory.GetFiles(GetSaveDirectory(), $"*{SaveFileEnding}");
     }
 }
