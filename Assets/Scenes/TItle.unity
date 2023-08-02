@@ -700,7 +700,7 @@ GameObject:
   - component: {fileID: 289268226}
   - component: {fileID: 289268229}
   m_Layer: 5
-  m_Name: play
+  m_Name: demo zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3732,7 +3732,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Play
+  m_text: Demo Zone
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9be53b0b801d6da41a0571a5b9386530, type: 2}
   m_sharedMaterial: {fileID: -2710046639757206294, guid: 9be53b0b801d6da41a0571a5b9386530,
