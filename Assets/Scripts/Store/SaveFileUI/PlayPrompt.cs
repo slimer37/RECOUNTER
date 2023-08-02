@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Recounter
@@ -13,8 +12,6 @@ namespace Recounter
         [SerializeField] Button _newButton;
         [SerializeField] Button _loadButton;
 
-        InputAction _esc;
-
         void Awake()
         {
             HidePrompt();
@@ -23,25 +20,9 @@ namespace Recounter
 
             _newButton.onClick.AddListener(ShowNewSaveMenu);
             _loadButton.onClick.AddListener(ShowLoadMenu);
-
-            _esc = new Controls().Menu.Exit;
-            _esc.performed += _ => Exit();
-            _esc.Enable();
-        }
-
-        void OnDestroy()
-        {
-            _esc.Dispose();
         }
 
         void ShowPrompt() => _promptCanvas.enabled = true;
-
-        void Exit()
-        {
-            if (_newCanvas.enabled || _loadCanvas.enabled) return;
-
-            HidePrompt();
-        }
 
         void HidePrompt() => _promptCanvas.enabled = false;
 
