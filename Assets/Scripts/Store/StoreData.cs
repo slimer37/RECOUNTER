@@ -27,7 +27,7 @@ namespace Recounter.Store
 
         public static StoreData CreateWithFile(string name)
         {
-            var fileName = StoreSerializer.ToValidFileName(name);
+            StoreSerializer.ValidateFileName(name, out var fileName);
 
             if (StoreSerializer.AlreadyExists(fileName)) throw new InvalidOperationException($"\"{fileName}\" already exists.");
 

@@ -9,14 +9,16 @@ namespace Recounter.Store
         const string SaveFolderName = "saves";
         const string SaveFileEnding = ".store";
 
-        public static string ToValidFileName(string fileName)
+        public static bool ValidateFileName(string fileName, out string validFileName)
         {
+            validFileName = fileName;
+
             foreach (var c in Path.GetInvalidFileNameChars())
             {
-                fileName = fileName.Replace(c, '_');
+                validFileName = validFileName.Replace(c, '_');
             }
 
-            return fileName;
+            return validFileName == fileName;
         }
 
         public static string GetSaveDirectory()

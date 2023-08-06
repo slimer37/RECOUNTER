@@ -33,22 +33,21 @@ namespace Recounter.UI
 
         void CheckName(string name)
         {
-            var exists = StoreSerializer.AlreadyExists(name);
+            if (StoreSerializer.ValidateFileName(name, out var validFileName))
+            {
+                _warningPanel.SetActive(false);
+            }
+            else
+            {
+                _warningPanel.SetActive(true);
+                _validNameWarning.text = string.Format(_warningFormat, validFileName);
+            }
+
+            var exists = StoreSerializer.AlreadyExists(validFileName);
 
             _createButtonText.text = exists ? "File already exists" : "Create";
 
             _createButton.interactable = !exists;
-
-            var validatedName = StoreSerializer.ToValidFileName(name);
-
-            if (validatedName == name)
-            {
-                _warningPanel.SetActive(false);
-                return;
-            }
-
-            _warningPanel.SetActive(true);
-            _validNameWarning.text = string.Format(_warningFormat, validatedName);
         }
     }
 }
