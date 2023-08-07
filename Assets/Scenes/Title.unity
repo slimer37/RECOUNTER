@@ -3656,7 +3656,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 125625}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &740853024
@@ -3946,8 +3946,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 764778906}
   m_HandleRect: {fileID: 764778905}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.5
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6163,7 +6163,7 @@ GameObject:
   - component: {fileID: 1372381940}
   - component: {fileID: 1372381939}
   m_Layer: 5
-  m_Name: date
+  m_Name: fileinfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6208,7 +6208,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1/1/2001 1:00 AM
+  m_text: 'file.store
+
+    1/1/2001 1:00 AM'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9be53b0b801d6da41a0571a5b9386530, type: 2}
   m_sharedMaterial: {fileID: -2710046639757206294, guid: 9be53b0b801d6da41a0571a5b9386530,
@@ -6376,7 +6378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: {fileID: 1241543093}
-  _date: {fileID: 1372381939}
+  _fileInfo: {fileID: 1372381939}
   _button: {fileID: 1423951465}
   _menu: {fileID: 1856406409}
 --- !u!114 &1423951465

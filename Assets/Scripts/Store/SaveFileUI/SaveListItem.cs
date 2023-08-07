@@ -8,7 +8,7 @@ namespace Recounter.UI
     public class SaveListItem : MonoBehaviour
     {
         [SerializeField] TMP_Text _name;
-        [SerializeField] TMP_Text _date;
+        [SerializeField] TMP_Text _fileInfo;
         [SerializeField] Button _button;
         [SerializeField] LoadSaveMenu _menu;
 
@@ -24,7 +24,7 @@ namespace Recounter.UI
             Data = storeData;
 
             _name.text = Data.name;
-            _date.text = Data.creationTime.ToString("g");
+            _fileInfo.text = $"[{Data.fileName}]\n{Data.creationTime:g}";
         }
     }
 }
