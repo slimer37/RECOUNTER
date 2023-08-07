@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Recounter
+namespace Recounter.UI
 {
     public class PlayPrompt : MonoBehaviour
     {
