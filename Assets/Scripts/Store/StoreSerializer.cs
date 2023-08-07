@@ -48,7 +48,7 @@ namespace Recounter.Store
 
             if (!File.Exists(saveFilePath)) return false;
 
-            storeData = StoreData.FromJson(File.ReadAllText(saveFilePath));
+            storeData = StoreData.FromJson(File.ReadAllText(saveFilePath), saveFilePath);
 
             return true;
         }

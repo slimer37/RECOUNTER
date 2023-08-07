@@ -1,28 +1,37 @@
 using Newtonsoft.Json;
 using System;
+using System.IO;
 
 namespace Recounter.Store
 {
-    [Serializable]
+    [Serializable, JsonObject(memberSerialization: MemberSerialization.OptIn)]
     public class StoreData
     {
         public static StoreData Current { get; private set; }
 
-        public string fileName;
-        public string name;
-        public DateTime creationTime;
+        [JsonProperty] public string name;
+        [JsonProperty] public readonly DateTime creationTime;
+
+        public readonly string fileName;
 
         public string ToJson() => JsonConvert.SerializeObject(this);
-        
-        public static StoreData FromJson(string json) => JsonConvert.DeserializeObject<StoreData>(json);
 
-        StoreData() { }
+        public static StoreData FromJson(string json, string accessPath)
+        {
+            var data = new StoreData(accessPath);
+            JsonConvert.PopulateObject(json, data);
+            return data;
+        }
 
-        StoreData(string name, string fileName)
+        StoreData(string name, string accessPath) : this(accessPath)
         {
             this.name = name;
-            this.fileName = fileName;
             creationTime = DateTime.Now;
+        }
+
+        StoreData(string accessPath)
+        {
+            fileName = Path.GetFileName(accessPath);
         }
 
         public static StoreData CreateWithFile(string name)
