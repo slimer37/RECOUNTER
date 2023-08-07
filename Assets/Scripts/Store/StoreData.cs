@@ -14,7 +14,7 @@ namespace Recounter.Store
 
         public readonly string fileName;
 
-        public string ToJson() => JsonConvert.SerializeObject(this);
+        public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
 
         public static StoreData FromJson(string json, string accessPath)
         {
