@@ -11,6 +11,9 @@ namespace Recounter.UI
         [SerializeField] Button _enter;
         [SerializeField] Button _delete;
         [SerializeField] CanvasGroup _group;
+        [SerializeField, TextArea] string _format;
+        
+        string _emptyText;
 
         StoreData _focusedSave;
 
@@ -18,18 +21,22 @@ namespace Recounter.UI
         {
             _group.interactable = false;
             _focusedSave = null;
+            _text.text = _emptyText;
         }
 
         void Awake()
         {
             _enter.onClick.AddListener(EnterStore);
             _delete.onClick.AddListener(Delete);
+
+            _emptyText = _text.text;
         }
 
         public void Focus(StoreData data)
         {
             _group.interactable = true;
             _focusedSave = data;
+            _text.text = string.Format(_format, data.name, data.creationTime.ToString("f"), data.FullFileName);
         }
 
         void EnterStore() => StoreData.SetCurrentStore(_focusedSave);
