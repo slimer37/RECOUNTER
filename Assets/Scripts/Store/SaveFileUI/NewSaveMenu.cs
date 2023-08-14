@@ -28,7 +28,8 @@ namespace Recounter.UI
         void CreateSave()
         {
             var name = _nameField.text;
-            StoreData.CreateWithFile(name);
+            var data = StoreData.CreateWithFile(name);
+            StoreData.SetCurrentStore(data);
         }
 
         void CheckName(string name)
