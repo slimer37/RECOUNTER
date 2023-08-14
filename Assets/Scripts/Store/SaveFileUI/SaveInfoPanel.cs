@@ -41,6 +41,10 @@ namespace Recounter.UI
 
         void EnterStore() => StoreData.SetCurrentStore(_focusedSave);
 
-        void Delete() => StoreSerializer.Delete(_focusedSave);
+        void Delete()
+        {
+            _focusedSave.Delete();
+            ResetFocus();
+        }
     }
 }

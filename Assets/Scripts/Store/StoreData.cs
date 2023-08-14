@@ -14,6 +14,10 @@ namespace Recounter.Store
 
         public readonly string baseFileName;
 
+        public bool FileExists { get; private set; } = true;
+
+        public event Action Deleted;
+
         public string FullFileName => baseFileName + StoreSerializer.SaveFileEnding;
 
         public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
@@ -52,5 +56,12 @@ namespace Recounter.Store
         public static void SetCurrentStore(StoreData data) => Current = data;
 
         public bool Save() => StoreSerializer.TrySaveStore(this);
+
+        public void Delete()
+        {
+            File.Delete(StoreSerializer.GetSavePath(baseFileName));
+            FileExists = false;
+            Deleted?.Invoke();
+        }
     }
 }

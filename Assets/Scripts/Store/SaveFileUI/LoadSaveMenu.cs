@@ -44,6 +44,8 @@ namespace Recounter.UI
                 clone.Populate(storeData);
 
                 _listItems.Add(clone);
+
+                clone.Removed += () => _listItems.Remove(clone);
             }
 
             _listItemPrefab.gameObject.SetActive(false);
@@ -55,7 +57,8 @@ namespace Recounter.UI
 
             listItem.Select();
 
-            _selectedListItem?.Deselect();
+            if (_selectedListItem)
+                _selectedListItem.Deselect();
 
             _selectedListItem = listItem;
 

@@ -1,4 +1,5 @@
 using Recounter.Store;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,18 +19,35 @@ namespace Recounter.UI
 
         public StoreData Data { get; private set; }
 
+        public event Action Removed;
+
         void Awake()
         {
             _button.onClick.AddListener(() => _menu.SelectSave(this));
             _deselectedColor = _background.color;
         }
 
+        void OnDestroy()
+        {
+            if (Data == null) return;
+
+            Data.Deleted -= OnDeleted;
+        }
+
         public void Populate(StoreData storeData)
         {
             Data = storeData;
 
+            Data.Deleted += OnDeleted;
+
             _name.text = Data.name;
             _fileInfo.text = $"[{Data.FullFileName}]\n{Data.creationTime:g}";
+        }
+
+        void OnDeleted()
+        {
+            Removed?.Invoke();
+            Destroy(gameObject);
         }
 
         public void Select() => _background.color = _selectedColor;
