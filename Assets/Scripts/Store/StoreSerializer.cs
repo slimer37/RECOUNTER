@@ -11,6 +11,11 @@ namespace Recounter.Store
 
         public static bool ValidateFileName(string fileName, out string validFileName)
         {
+            if (fileName.EndsWith(SaveFileEnding))
+            {
+                fileName.Remove(fileName.Length - SaveFileEnding.Length);
+            }
+
             validFileName = fileName;
 
             foreach (var c in Path.GetInvalidFileNameChars())
@@ -35,7 +40,13 @@ namespace Recounter.Store
 
         public static bool AlreadyExists(string querySaveFile) => File.Exists(GetSavePath(querySaveFile));
 
-        public static string GetSavePath(string saveFileName) => Path.Combine(GetSaveDirectory(), saveFileName + SaveFileEnding);
+        public static string GetSavePath(string saveFileName)
+        {
+            if (!saveFileName.EndsWith(SaveFileEnding))
+                saveFileName += SaveFileEnding;
+
+            return Path.Combine(GetSaveDirectory(), saveFileName);
+        }
 
         public static bool TryLoadSavedStore(string saveFilePath, out StoreData storeData)
         {
