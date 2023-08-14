@@ -9,8 +9,11 @@ namespace Recounter.UI
         [SerializeField] Transform _parent;
         [SerializeField] SaveListItem _listItemPrefab;
         [SerializeField] MenuEscape _menuEscape;
+        [SerializeField] SaveInfoPanel _infoPanel;
 
         readonly List<SaveListItem> _listItems = new();
+
+        SaveListItem _selectedListItem;
 
         void Awake()
         {
@@ -19,6 +22,10 @@ namespace Recounter.UI
 
         void LoadSaves()
         {
+            _selectedListItem = null;
+
+            _infoPanel.ResetFocus();
+
             foreach (var item in _listItems)
             {
                 Destroy(item.gameObject);
@@ -42,9 +49,17 @@ namespace Recounter.UI
             _listItemPrefab.gameObject.SetActive(false);
         }
 
-        public void SelectSave(StoreData save)
+        public void SelectSave(SaveListItem listItem)
         {
-            StoreData.SetCurrentStore(save);
+            if (_selectedListItem == listItem) return;
+
+            listItem.Select();
+
+            _selectedListItem?.Deselect();
+
+            _selectedListItem = listItem;
+
+            _infoPanel.Focus(listItem.Data);
         }
     }
 }

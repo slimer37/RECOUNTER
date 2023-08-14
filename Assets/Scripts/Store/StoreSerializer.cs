@@ -68,5 +68,7 @@ namespace Recounter.Store
         }
 
         public static string[] AllSaveFiles() => Directory.GetFiles(GetSaveDirectory(), $"*{SaveFileEnding}");
+
+        public static void Delete(StoreData storeData) => File.Delete(GetSavePath(storeData.fileName));
     }
 }
