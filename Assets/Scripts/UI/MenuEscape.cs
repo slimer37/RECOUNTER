@@ -50,7 +50,7 @@ namespace Recounter.UI
 
         static void EscapeTopMenu()
         {
-            if (!_menus.TryPop(out var menu)) return;
+            if (Dialog.Main.IsOpen || !_menus.TryPop(out var menu)) return;
 
             if (!menu._isOpen)
             {

@@ -42,6 +42,8 @@ namespace Recounter.UI
 
         List<GameObject> _buttonInstances = new();
 
+        public bool IsOpen { get; private set; }
+
         public static Dialog Main
         {
             get
@@ -71,6 +73,8 @@ namespace Recounter.UI
 
         void Fade(bool fadeIn, bool instant = false)
         {
+            IsOpen = fadeIn;
+
             _canvasGroup.blocksRaycasts = _canvasGroup.interactable = fadeIn;
 
             if (instant)
