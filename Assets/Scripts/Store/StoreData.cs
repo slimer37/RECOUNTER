@@ -12,7 +12,9 @@ namespace Recounter.Store
         [JsonProperty] public string name;
         [JsonProperty] public readonly DateTime creationTime;
 
-        public readonly string fileName;
+        public readonly string baseFileName;
+
+        public string FullFileName => baseFileName + StoreSerializer.SaveFileEnding;
 
         public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
 
@@ -31,7 +33,7 @@ namespace Recounter.Store
 
         StoreData(string accessPath)
         {
-            fileName = Path.GetFileName(accessPath);
+            baseFileName = Path.GetFileNameWithoutExtension(accessPath);
         }
 
         public static StoreData CreateWithFile(string name)

@@ -6,17 +6,20 @@ namespace Recounter.Store
 {
     public static class StoreSerializer
     {
-        const string SaveFolderName = "saves";
-        const string SaveFileEnding = ".store";
+        public const string SaveFolderName = "saves";
+        public const string SaveFileEnding = ".store";
 
         public static bool ValidateFileName(string fileName, out string validFileName)
         {
+            validFileName = fileName;
+
+            // Replace ending ".store" with "_store"
             if (fileName.EndsWith(SaveFileEnding))
             {
-                fileName.Remove(fileName.Length - SaveFileEnding.Length);
+                var index = fileName.Length - SaveFileEnding.Length;
+                validFileName = validFileName.Remove(index, 1);
+                validFileName = validFileName.Insert(index, "_");
             }
-
-            validFileName = fileName;
 
             foreach (var c in Path.GetInvalidFileNameChars())
             {
@@ -68,7 +71,7 @@ namespace Recounter.Store
         {
             try
             {
-                File.WriteAllText(GetSavePath(storeData.fileName), storeData.ToJson());
+                File.WriteAllText(GetSavePath(storeData.baseFileName), storeData.ToJson());
                 return true;
             }
             catch (Exception e)
@@ -80,6 +83,6 @@ namespace Recounter.Store
 
         public static string[] AllSaveFiles() => Directory.GetFiles(GetSaveDirectory(), $"*{SaveFileEnding}");
 
-        public static void Delete(StoreData storeData) => File.Delete(GetSavePath(storeData.fileName));
+        public static void Delete(StoreData storeData) => File.Delete(GetSavePath(storeData.baseFileName));
     }
 }

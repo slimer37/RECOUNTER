@@ -29,7 +29,7 @@ namespace Recounter.UI
             Data = storeData;
 
             _name.text = Data.name;
-            _fileInfo.text = $"[{Data.fileName}]\n{Data.creationTime:g}";
+            _fileInfo.text = $"[{Data.FullFileName}]\n{Data.creationTime:g}";
         }
 
         public void Select() => _background.color = _selectedColor;
