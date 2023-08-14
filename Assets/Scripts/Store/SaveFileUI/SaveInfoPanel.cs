@@ -27,7 +27,7 @@ namespace Recounter.UI
         void Awake()
         {
             _enter.onClick.AddListener(EnterStore);
-            _delete.onClick.AddListener(Delete);
+            _delete.onClick.AddListener(PromptDeletion);
 
             _emptyText = _text.text;
         }
@@ -40,6 +40,11 @@ namespace Recounter.UI
         }
 
         void EnterStore() => StoreData.SetCurrentStore(_focusedSave);
+
+        void PromptDeletion()
+        {
+            Dialog.Main.Confirm(Delete, "Delete", $"Are you sure you want to delete \"{_focusedSave.name}\"");
+        }
 
         void Delete()
         {
