@@ -15,7 +15,7 @@ Eiliv Aceron, Elvira Syamsir, James Day, Joel Vodell, Joshua Bartell, Nick Nice
 Abril Fatface * Amatic SC * Anton * Chango * Oswald * Pacifico * Roboto * Secular One
 
 ### SFX from freesound.org
-kyles, InspectorJ, Nox_Sound, Joe DeShon, kev_durr
+Fewes, InspectorJ, Joe DeShon (joedeshon), Nox_Sound, contadordehistoriascast, kev_durr, kyles, marco_luzi, soundadvices
 
 ## Third-party
 
