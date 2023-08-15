@@ -12,14 +12,14 @@ namespace Recounter.Store.Editor
 {
     public class EditorSaveBrowser : EditorWindow
     {
-        StoreData viewedSave;
+        StoreData _viewedSave;
 
-        bool showFileList = true;
-        bool showProperties = true;
-        bool showSaveCreator = true;
+        bool _showFileList = true;
+        bool _showProperties = true;
+        bool _showSaveCreator = true;
 
-        string newSaveName;
-        string newSavePlayerName;
+        string _newSaveName;
+        string _newSavePlayerName;
 
         [MenuItem("Tools/Editor Save Browser")]
         static void ShowWindow() => GetWindow<EditorSaveBrowser>("Editor Save Browser").Show();
@@ -44,7 +44,7 @@ namespace Recounter.Store.Editor
                 var value = valueRetriever(info);
                 var isString = value is string;
 
-                var type = $"<b>[{typeRetriever(info)}]</b> ";
+                var type = typeRetriever(info).Name;
 
                 var displayValue =
                     value == null
@@ -52,8 +52,8 @@ namespace Recounter.Store.Editor
                     : (isString ? $"\"{value}\"" : value.ToString());
 
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label(info.Name + ':', style, GUILayout.Width(125));
-                GUILayout.Label(type, style, GUILayout.Width(125));
+                GUILayout.Label(type, style, GUILayout.Width(100));
+                GUILayout.Label($"<b>{info.Name}</b>", style, GUILayout.Width(125));
                 GUILayout.Label(displayValue, style);
                 EditorGUILayout.EndHorizontal();
             }
@@ -61,7 +61,7 @@ namespace Recounter.Store.Editor
 
         bool VerifyFileName(out string modifiedName)
         {
-            if (string.IsNullOrWhiteSpace(newSaveName))
+            if (string.IsNullOrWhiteSpace(_newSaveName))
             {
                 EditorGUILayout.HelpBox(
                     "Cannot use empty or whitespace file name.",
@@ -71,7 +71,7 @@ namespace Recounter.Store.Editor
                 return false;
             }
 
-            if (StoreSerializer.ValidateFileName(newSaveName, out modifiedName)) return true;
+            if (StoreSerializer.ValidateFileName(_newSaveName, out modifiedName)) return true;
 
             EditorGUILayout.HelpBox(
                 $"Save name contains invalid file characters. It will be saved as '{modifiedName + StoreSerializer.SaveFileEnding}'",
@@ -92,31 +92,28 @@ namespace Recounter.Store.Editor
             }
 
             EditorStyles.label.wordWrap = true;
-            showSaveCreator = EditorGUILayout.BeginFoldoutHeaderGroup(showSaveCreator, "Save Creator");
+            _showSaveCreator = EditorGUILayout.BeginFoldoutHeaderGroup(_showSaveCreator, "Save Creator");
             
-            if (showSaveCreator)
+            if (_showSaveCreator)
             {
                 EditorGUILayout.BeginHorizontal();
-                newSaveName = EditorGUILayout.TextField("File Name", newSaveName);
+                _newSaveName = EditorGUILayout.TextField("File Name", _newSaveName);
                 EditorGUILayout.LabelField(StoreSerializer.SaveFileEnding, GUILayout.Width(40));
                 EditorGUILayout.EndHorizontal();
 
-                newSavePlayerName = EditorGUILayout.TextField("Player Name", newSavePlayerName);
+                _newSavePlayerName = EditorGUILayout.TextField("Player Name", _newSavePlayerName);
 
                 if (VerifyFileName(out var willSaveAs))
                 {
                     if (GUILayout.Button(StoreSerializer.AlreadyExists(willSaveAs) ? "Format Save" : "Create New Save"))
-                        StoreData.CreateWithFile(newSavePlayerName);
+                        StoreData.CreateWithFile(_newSavePlayerName);
                 }
-
-                if (viewedSave != null && willSaveAs == viewedSave.baseFileName)
-                    StoreSerializer.LoadStore(viewedSave.FullFileName, out viewedSave);
             }
 
             EditorGUILayout.EndFoldoutHeaderGroup();
 
-            showFileList = EditorGUILayout.BeginFoldoutHeaderGroup(showFileList, "Save Files On Disk");
-            if (showFileList)
+            _showFileList = EditorGUILayout.BeginFoldoutHeaderGroup(_showFileList, "Save Files On Disk");
+            if (_showFileList)
             {
                 var folderContents = StoreSerializer.AllSaveFiles();
 
@@ -131,18 +128,18 @@ namespace Recounter.Store.Editor
 
                     EditorGUILayout.LabelField(fileName);
 
-                    var isFocused = viewedSave != null && viewedSave.baseFileName == fileName;
+                    var isFocused = _viewedSave != null && _viewedSave.baseFileName == fileName;
 
                     if (isFocused)
                         EditorGUILayout.LabelField("Focused", EditorStyles.boldLabel, GUILayout.Width(52));
                     else if (GUILayout.Button("Focus", GUILayout.ExpandWidth(false)))
-                        StoreSerializer.LoadStore(fileName, out viewedSave);
+                        StoreSerializer.LoadStore(fileName, out _viewedSave);
 
                     if (GUILayout.Button("Delete", GUILayout.ExpandWidth(false)))
                     {
                         File.Delete(filePath);
                         if (isFocused)
-                            viewedSave = null;
+                            _viewedSave = null;
                     }
 
                     EditorGUI.EndDisabledGroup();
@@ -154,18 +151,26 @@ namespace Recounter.Store.Editor
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
 
-            if (viewedSave != null)
+            if (_viewedSave != null)
             {
-                showProperties = EditorGUILayout.BeginFoldoutHeaderGroup(showProperties, "Properties");
-                if (showProperties)
+                _showProperties = EditorGUILayout.BeginFoldoutHeaderGroup(_showProperties, "Properties");
+                if (_showProperties)
                 {
-                    ListAllInfo(viewedSave);
+                    ListAllInfo(_viewedSave);
 
                     if (GUILayout.Button("Refresh"))
-                        StoreSerializer.LoadStore(viewedSave.FullFileName, out viewedSave);
+                        StoreSerializer.LoadStore(_viewedSave.FullFileName, out _viewedSave);
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }
+        }
+
+        // https://forum.unity.com/threads/horizontal-line-in-editor-window.520812/
+        static void GUILine(int height = 1)
+        {
+            Rect rect = EditorGUILayout.GetControlRect(false, height);
+            rect.height = height;
+            EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 1));
         }
 
         static void ListAllInfo(StoreData data)
@@ -174,10 +179,24 @@ namespace Recounter.Store.Editor
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("Security: " + (data.WasAltered()
+            style.alignment = TextAnchor.MiddleCenter;
+
+            EditorGUILayout.LabelField(data.WasAltered()
                 ? "<color=red>Alteration detected.</color>"
-                : "<color=green>No alteration detected.</color>"),
+                : "<color=green>No alteration detected.</color>",
                 style);
+
+            EditorGUILayout.Space();
+
+            style.alignment = TextAnchor.MiddleLeft;
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Type", style, GUILayout.Width(100));
+            GUILayout.Label("Name", style, GUILayout.Width(125));
+            GUILayout.Label("Value", style);
+            EditorGUILayout.EndHorizontal();
+
+            GUILine();
 
             var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
