@@ -2,7 +2,9 @@ using Recounter.Store.Security;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,7 +24,8 @@ namespace Recounter.Store.Editor
         [MenuItem("Tools/Editor Save Browser")]
         static void ShowWindow() => GetWindow<EditorSaveBrowser>("Editor Save Browser").Show();
 
-        static void ListInfo<TInfo>(string label, TInfo[] infoSet, Func<TInfo, object> valueRetriever)
+        static void ListInfo<TInfo>(string label, TInfo[] infoSet, Func<TInfo, object> valueRetriever,
+            Func<TInfo, Type> typeRetriever)
             where TInfo : MemberInfo
         {
             EditorGUILayout.Space();
@@ -34,19 +37,25 @@ namespace Recounter.Store.Editor
                 return;
             }
 
-            var style = new GUIStyle(EditorStyles.label) { richText = true, stretchHeight = true };
+            var style = new GUIStyle(EditorStyles.label) { richText = true };
 
             foreach (var info in infoSet)
             {
                 var value = valueRetriever(info);
                 var isString = value is string;
 
+                var type = $"<b>[{typeRetriever(info)}]</b> ";
+
                 var displayValue =
                     value == null
                     ? "<color=red>Null</color>"
                     : (isString ? $"\"{value}\"" : value.ToString());
 
-                EditorGUILayout.LabelField(info.Name + ':', displayValue, style);
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(info.Name + ':', style, GUILayout.Width(125));
+                GUILayout.Label(type, style, GUILayout.Width(125));
+                GUILayout.Label(displayValue, style);
+                EditorGUILayout.EndHorizontal();
             }
         }
 
@@ -162,18 +171,27 @@ namespace Recounter.Store.Editor
         static void ListAllInfo(StoreData data)
         {
             var style = new GUIStyle(EditorStyles.label) { richText = true, fontStyle = FontStyle.Bold };
-            EditorGUILayout.LabelField(data.WasAltered()
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.LabelField("Security: " + (data.WasAltered()
                 ? "<color=red>Alteration detected.</color>"
-                : "<color=green>No alteration detected.</color>",
+                : "<color=green>No alteration detected.</color>"),
                 style);
 
             var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
             ListInfo("Properties", typeof(StoreData).GetProperties(flags),
-                info => info.GetValue(data));
+                info => info.GetValue(data),
+                info => info.PropertyType);
 
-            ListInfo("Fields", typeof(StoreData).GetFields(flags),
-                info => info.GetValue(data));
+            ListInfo("Fields", typeof(StoreData).GetFields(flags)
+                .Where(f => !f.IsDefined(typeof(CompilerGeneratedAttribute), false))
+                .ToArray(),
+                info => info.GetValue(data),
+                info => info.FieldType);
+
+            EditorGUILayout.Space();
         }
     }
 }
