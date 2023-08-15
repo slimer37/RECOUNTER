@@ -1,5 +1,6 @@
 using Recounter.Store;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace Recounter.UI
@@ -14,6 +15,11 @@ namespace Recounter.UI
         readonly List<SaveListItem> _listItems = new();
 
         SaveListItem _selectedListItem;
+
+        public void OpenInExplorer()
+        {
+            Process.Start(StoreSerializer.GetSaveDirectory());
+        }
 
         void Awake()
         {
