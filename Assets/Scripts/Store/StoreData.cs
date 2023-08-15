@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Recounter.Store.Security;
 using System;
 using System.IO;
 
@@ -11,6 +12,7 @@ namespace Recounter.Store
 
         [JsonProperty] public string name;
         [JsonProperty] public readonly DateTime creationTime;
+        [JsonProperty] public string protection;
 
         public readonly string baseFileName;
 
@@ -55,7 +57,11 @@ namespace Recounter.Store
 
         public static void SetCurrentStore(StoreData data) => Current = data;
 
-        public bool Save() => StoreSerializer.TrySaveStore(this);
+        public bool Save()
+        {
+            protection = SaveGuard.GetShaHash(this);
+            return StoreSerializer.TrySaveStore(this);
+        }
 
         public void Delete()
         {
