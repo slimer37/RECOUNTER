@@ -51,7 +51,7 @@ namespace Recounter.Store
             return Path.Combine(GetSaveDirectory(), saveFileName);
         }
 
-        public static bool TryLoadSavedStore(string saveFilePath, out StoreData storeData)
+        public static void LoadStore(string saveFilePath, out StoreData storeData)
         {
             storeData = null;
 
@@ -60,24 +60,21 @@ namespace Recounter.Store
                 saveFilePath = GetSavePath(saveFilePath);
             }
 
-            if (!File.Exists(saveFilePath)) return false;
+            if (!File.Exists(saveFilePath))
+                throw new FileNotFoundException($"Save file \"{saveFilePath}\" was not found.");
 
             storeData = StoreData.FromJson(File.ReadAllText(saveFilePath), saveFilePath);
-
-            return true;
         }
 
-        public static bool TrySaveStore(StoreData storeData)
+        public static void SaveStore(StoreData storeData)
         {
             try
             {
                 File.WriteAllText(GetSavePath(storeData.baseFileName), storeData.ToJson());
-                return true;
             }
             catch (Exception e)
             {
-                Debug.LogError($"Error while saving file: {e}");
-                return false;
+                throw new InvalidOperationException("Error while saving file", e);
             }
         }
 

@@ -57,10 +57,10 @@ namespace Recounter.Store
 
         public static void SetCurrentStore(StoreData data) => Current = data;
 
-        public bool Save()
+        public void Save()
         {
             protection = SaveGuard.GetShaHash(this);
-            return StoreSerializer.TrySaveStore(this);
+            StoreSerializer.SaveStore(this);
         }
 
         public void Delete()

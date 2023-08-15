@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
+using Debug = UnityEngine.Debug;
+
 namespace Recounter.UI
 {
     public class LoadSaveMenu : MonoBehaviour
@@ -43,7 +45,17 @@ namespace Recounter.UI
 
             foreach (var fileName in StoreSerializer.AllSaveFiles())
             {
-                if (!StoreSerializer.TryLoadSavedStore(fileName, out var storeData)) continue;
+                StoreData storeData;
+
+                try
+                {
+                    StoreSerializer.LoadStore(fileName, out storeData);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError(e.Message, this);
+                    continue;
+                }
 
                 var clone = Instantiate(_listItemPrefab, _parent);
 
