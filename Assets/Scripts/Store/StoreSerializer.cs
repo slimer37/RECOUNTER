@@ -11,6 +11,11 @@ namespace Recounter.Store
 
         public static bool ValidateFileName(string fileName, out string validFileName)
         {
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName), "File name cannot be null or whitespace.");
+            }
+
             validFileName = fileName;
 
             // Replace ending ".store" with "_store"
