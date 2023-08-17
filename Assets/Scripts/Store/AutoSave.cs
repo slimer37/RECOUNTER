@@ -39,6 +39,9 @@ namespace Recounter
         void Save()
         {
             GameManager.StoreData.Save();
+
+            Debug.Log("Auto saved.", this);
+
             _animation.Restart();
         }
     }
