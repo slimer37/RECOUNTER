@@ -7522,6 +7522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a279ea701ff36a34a97d15652c861af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  withBase: 0
   scenes:
   - m_AssetGUID: 99c9720ab356a0642a771bea13969a05
     m_SubObjectName: 

@@ -4,13 +4,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using System;
 
 namespace SceneLoading
 {
     public class SceneLoader : MonoBehaviour
     {
         [SerializeField] LoadingScreen loadingScreen;
+
+        const string BaseSceneKey = "Base Scene";
 
         public static SceneLoader Current { get; private set; }
 
@@ -23,32 +24,42 @@ namespace SceneLoading
             Current = instance.GetComponent<SceneLoader>();
         }
 
-        public void Load(int mainIndex = 0, params AssetReference[] scenes) =>
-            StartCoroutine(LoadScenes(mainIndex, scenes));
+        public void Load(bool withBase, params object[] sceneKeys) =>
+            StartCoroutine(LoadScenes(withBase, sceneKeys));
 
-        IEnumerator LoadScenes(int mainIndex, params AssetReference[] scenes)
+        IEnumerator LoadScenes(bool withBase, params object[] sceneKeys)
         {
-            if (mainIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(mainIndex), "Value cannot be negative.");
-            }
+            var mainIndex = withBase ? 1 : 0;
 
             Time.timeScale = 1;
 
             // Wait for loading screen to show.
             yield return loadingScreen.WaitToShow();
 
-            var operations = new AsyncOperationHandle[scenes.Length];
-
-            for (var i = 0; i < scenes.Length; i++)
+            if (withBase)
             {
-                operations[i] =
-                    scenes[i].LoadSceneAsync(i > 0 ? LoadSceneMode.Additive : LoadSceneMode.Single);
+                var copy = new object[sceneKeys.Length + 1];
+
+                copy[0] = BaseSceneKey;
+
+                sceneKeys.CopyTo(copy, 1);
+
+                sceneKeys = copy;
             }
 
-            if (mainIndex > 0)
+            var operations = new AsyncOperationHandle[sceneKeys.Length];
+
+            for (var i = 0; i < sceneKeys.Length; i++)
             {
-                operations[mainIndex].Completed +=
+                object key = sceneKeys[i];
+                var mode = i > 0 ? LoadSceneMode.Additive : LoadSceneMode.Single;
+
+                operations[i] = Addressables.LoadSceneAsync(key, mode);
+            }
+
+            if (withBase)
+            {
+                operations[1].Completed +=
                     r => SceneManager.SetActiveScene(((SceneInstance)r.Result).Scene);
             }
 

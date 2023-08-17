@@ -1898,12 +1898,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a279ea701ff36a34a97d15652c861af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainIndex: 1
+  withBase: 1
   scenes:
-  - m_AssetGUID: 4440bc49b9c8bc74eabe0dc7b1416a6c
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
   - m_AssetGUID: 0e5c2dbe150dd484aabcf94c858f9eee
     m_SubObjectName: 
     m_SubObjectType: 
@@ -4890,7 +4886,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 38625}
+  m_AnchoredPosition: {x: 0, y: 49875}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &740853024

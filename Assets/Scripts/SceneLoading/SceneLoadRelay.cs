@@ -5,12 +5,12 @@ namespace SceneLoading
 {
     public class SceneLoadRelay : MonoBehaviour
     {
-        [SerializeField] int mainIndex;
+        [SerializeField] bool withBase;
         [SerializeField] AssetReference[] scenes;
 
         public void Load()
         {
-            SceneLoader.Current.Load(mainIndex, scenes);
+            SceneLoader.Current.Load(withBase, scenes);
         }
     }
 }
