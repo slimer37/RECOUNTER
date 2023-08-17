@@ -6,9 +6,23 @@ namespace Recounter
 {
     public class GameManager : MonoBehaviour
     {
-        public static StoreData StoreData { get; private set; }
+        public static StoreData StoreData
+        {
+            get
+            {
+                if (s_storeData == null)
+                {
+                    Debug.LogWarning("No store data is loaded. Loading temporary data.");
+                    s_storeData = StoreData.CreateTemporary();
+                }
+
+                return s_storeData;
+            }
+        }
 
         public static GameManager Singleton { get; private set; }
+
+        static StoreData s_storeData;
 
         const string StoreSceneKey = "Store";
 
@@ -29,7 +43,7 @@ namespace Recounter
 
         public static void StartGame(StoreData source)
         {
-            StoreData = source;
+            s_storeData = source;
 
             LoadGameScene();
         }

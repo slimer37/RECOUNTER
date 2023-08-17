@@ -8,8 +8,6 @@ namespace Recounter.Store
     [Serializable, JsonObject(memberSerialization: MemberSerialization.OptIn)]
     public class StoreData
     {
-        public static StoreData Current { get; private set; }
-
         [JsonProperty] public string name;
         [JsonProperty] public readonly DateTime creationTime;
         [JsonProperty] public string protection;
@@ -41,6 +39,8 @@ namespace Recounter.Store
         {
             baseFileName = Path.GetFileNameWithoutExtension(accessPath);
         }
+
+        public static StoreData CreateTemporary() => new("Temporary", "temporary save");
 
         public static StoreData CreateWithFile(string name)
         {
