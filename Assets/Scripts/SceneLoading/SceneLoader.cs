@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using System.Linq;
 
 namespace SceneLoading
 {
@@ -57,13 +58,16 @@ namespace SceneLoading
                 operations[i] = Addressables.LoadSceneAsync(key, mode);
             }
 
-            if (withBase)
-            {
-                operations[1].Completed +=
-                    r => SceneManager.SetActiveScene(((SceneInstance)r.Result).Scene);
-            }
-
             loadingScreen.Activate(operations);
+
+            if (!withBase) yield break;
+
+            // Wait for base scene and primary scene to be loaded in.
+            yield return new WaitUntil(() => operations[0].IsDone && operations[1].IsDone);
+
+            var primaryScene = ((SceneInstance)operations[1].Result).Scene;
+
+            SceneManager.SetActiveScene(primaryScene);
         }
     }
 }
