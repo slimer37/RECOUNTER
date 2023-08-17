@@ -6,7 +6,7 @@ namespace Recounter
 {
     public class GameManager : MonoBehaviour
     {
-        public static StoreData Current { get; private set; }
+        public static StoreData StoreData { get; private set; }
 
         public static GameManager Singleton { get; private set; }
 
@@ -29,7 +29,7 @@ namespace Recounter
 
         public static void StartGame(StoreData source)
         {
-            Current = source;
+            StoreData = source;
 
             LoadGameScene();
         }
