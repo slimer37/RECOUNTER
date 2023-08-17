@@ -29,7 +29,7 @@ namespace Recounter.UI
         {
             var name = _nameField.text;
             var data = StoreData.CreateWithFile(name);
-            StoreData.SetCurrentStore(data);
+            GameManager.StartGame(data);
         }
 
         void CheckName(string name)

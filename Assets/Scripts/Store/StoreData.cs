@@ -55,8 +55,6 @@ namespace Recounter.Store
             return data;
         }
 
-        public static void SetCurrentStore(StoreData data) => Current = data;
-
         public void Save()
         {
             protection = SaveGuard.GetShaHash(this);

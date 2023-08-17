@@ -39,7 +39,7 @@ namespace Recounter.UI
             _text.text = string.Format(_format, data.name, data.creationTime.ToString("f"), data.FullFileName);
         }
 
-        void EnterStore() => StoreData.SetCurrentStore(_focusedSave);
+        void EnterStore() => GameManager.StartGame(_focusedSave);
 
         void PromptDeletion()
         {
