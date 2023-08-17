@@ -44,6 +44,8 @@ namespace Recounter.UI
 
         public bool IsOpen { get; private set; }
 
+        public static bool ExistsAndIsOpen => s_main && s_main.IsOpen;
+
         public static Dialog Main
         {
             get
