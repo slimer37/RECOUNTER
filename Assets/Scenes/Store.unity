@@ -402,6 +402,7 @@ GameObject:
   - component: {fileID: 1036806903}
   - component: {fileID: 1036806905}
   - component: {fileID: 1036806904}
+  - component: {fileID: 1036806906}
   m_Layer: 0
   m_Name: save file
   m_TagString: Untagged
@@ -450,7 +451,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Your save file:
 
-    name'
+    {0}'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 29df37081451a9e45bf2c6760e5fb6a7, type: 2}
   m_sharedMaterial: {fileID: 5020729215865481464, guid: 29df37081451a9e45bf2c6760e5fb6a7,
@@ -565,6 +566,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1036806906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036806902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5898c4f7fb696274cba55dccd03896fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1304892941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -3350874374598743252, guid: 68e8dc0809ceb6048906f3367c65259f,
