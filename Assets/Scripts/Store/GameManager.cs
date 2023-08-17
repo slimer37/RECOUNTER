@@ -13,7 +13,7 @@ namespace Recounter
                 if (s_storeData == null)
                 {
                     Debug.LogWarning("No store data is loaded. Loading temporary data.");
-                    s_storeData = StoreData.CreateTemporary();
+                    s_storeData = StoreData.Temporary;
                 }
 
                 return s_storeData;

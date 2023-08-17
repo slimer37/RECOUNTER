@@ -22,7 +22,21 @@ namespace Recounter.Store
 
         public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
 
-        const string TempSavePath = "TEMPORARY SAVE";
+        static StoreData s_temporaryData;
+
+        public static StoreData Temporary
+        {
+            get
+            {
+                if (s_temporaryData == null)
+                {
+                    s_temporaryData = new("Temporary", "TEMPORARY SAVE");
+                    UnityEngine.Debug.Log($"Created temporary {nameof(StoreData)}.");
+                }
+
+                return s_temporaryData;
+            }
+        }
 
         public static StoreData FromJson(string json, string accessPath)
         {
@@ -42,8 +56,6 @@ namespace Recounter.Store
             baseFileName = Path.GetFileNameWithoutExtension(accessPath);
         }
 
-        public static StoreData CreateTemporary() => new("Temporary", TempSavePath);
-
         public static StoreData CreateWithFile(string name)
         {
             StoreSerializer.ValidateFileName(name, out var fileName);
@@ -59,7 +71,7 @@ namespace Recounter.Store
 
         public void Save()
         {
-            if (baseFileName == TempSavePath)
+            if (this == s_temporaryData)
             {
                 UnityEngine.Debug.LogWarning($"Will not save temporary {nameof(StoreData)}.");
                 return;
