@@ -549,6 +549,7 @@
     "m_SGVersion": 1,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalTarget",
     "m_ObjectId": "71f9cc8f7c3f494f99f358b437904d78",
+    "m_Datas": [],
     "m_ActiveSubTarget": {
         "m_Id": "ecf3335cc288494d9bcd2d53276db71b"
     },
@@ -561,6 +562,7 @@
     "m_AlphaClip": true,
     "m_CastShadows": true,
     "m_ReceiveShadows": true,
+    "m_SupportsLODCrossFade": false,
     "m_CustomEditorGUI": "",
     "m_SupportVFX": false
 }
@@ -838,7 +840,7 @@
 }
 
 {
-    "m_SGVersion": 1,
+    "m_SGVersion": 2,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalUnlitSubTarget",
     "m_ObjectId": "ecf3335cc288494d9bcd2d53276db71b"
 }
