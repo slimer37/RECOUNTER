@@ -32,8 +32,6 @@ namespace Recounter.Tutorial
             gameObject.SetActive(false);
 
             _camera = Camera.main;
-
-            Begin(transform.position);
         }
 
         float GetOffset() => Mathf.Abs(Mathf.Sin(Mathf.PI / 2 * Time.time * _bounceSpeed));
