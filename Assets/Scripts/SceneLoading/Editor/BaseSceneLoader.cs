@@ -16,9 +16,7 @@ namespace Recounter.SceneLoading.Editor
         {
             if (scene.name != "Demo" && scene.name != "Store") return;
 
-            var baseScene = EditorSceneManager.OpenScene("Assets/Scenes/Base.unity", OpenSceneMode.Additive);
-            
-            EditorSceneManager.MoveSceneBefore(baseScene, scene);
+            EditorSceneManager.OpenScene("Assets/Scenes/Base.unity", OpenSceneMode.Additive);
         }
     }
 }
