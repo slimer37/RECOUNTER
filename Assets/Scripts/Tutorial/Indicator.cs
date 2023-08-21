@@ -85,32 +85,38 @@ namespace Recounter.Tutorial
                     screenPos *= -1;
                 }
 
-                var arrowPos = screenPos;
-
-                arrowPos = (arrowPos - Vector3.one / 2) * 2;
-
-                var max = Mathf.Max(Mathf.Abs(arrowPos.x), Mathf.Abs(arrowPos.y));
-
-                arrowPos = arrowPos / (max * 2) + Vector3.one / 2;
-
-                var toTarget = screenPos - arrowPos;
-
-                var angle = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg + 90;
+                ArrowTransformFromViewportPoint(screenPos, _margin, out var arrowPos, out var angle);
 
                 _uiArrow.transform.localEulerAngles = angle * Vector3.forward;
-
-                var screenDimensions = new Vector3(Screen.width, Screen.height);
-
-                var center = screenDimensions / 2;
-
-                arrowPos = Vector3.Scale(arrowPos, screenDimensions);
-
-                var extent = arrowPos - center;
-
-                arrowPos = center + extent * (1 - _margin);
 
                 _uiArrow.transform.position = arrowPos + _arrowBounce * GetOffset() * _uiArrow.transform.up;
             }
         }
+
+        static void ArrowTransformFromViewportPoint(Vector3 screenPos, float margin, out Vector3 arrowPos, out float angle)
+        {
+            arrowPos = screenPos;
+
+            arrowPos = (arrowPos - Vector3.one / 2) * 2;
+
+            var max = Mathf.Max(Mathf.Abs(arrowPos.x), Mathf.Abs(arrowPos.y));
+
+            arrowPos = arrowPos / (max * 2) + Vector3.one / 2;
+
+            var toTarget = screenPos - arrowPos;
+
+            angle = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg + 90;
+
+            var screenDimensions = new Vector3(Screen.width, Screen.height);
+
+            var center = screenDimensions / 2;
+
+            arrowPos = Vector3.Scale(arrowPos, screenDimensions);
+
+            var extent = arrowPos - center;
+
+            arrowPos = center + extent * (1 - margin);
+        }
+
     }
 }
