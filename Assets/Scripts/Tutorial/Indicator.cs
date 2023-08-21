@@ -5,8 +5,10 @@ namespace Recounter.Tutorial
 {
     public class Indicator : MonoBehaviour
     {
+        [SerializeField] float _rotateSpeed = 90;
         [SerializeField] float _bounceSpeed;
-        [SerializeField] float _offset;
+        [SerializeField] float _3dArrowBounce;
+        [SerializeField] float _base3dArrowOffset;
         [SerializeField] Renderer _renderer;
 
         [Header("Screen Arrow")]
@@ -14,7 +16,7 @@ namespace Recounter.Tutorial
         [SerializeField] float _arrowBounce;
         [SerializeField] float _margin;
 
-        static Indicator s_instance;
+        public static Indicator Main { get; private set; }
 
         Vector3 _target;
 
@@ -24,10 +26,10 @@ namespace Recounter.Tutorial
 
         void Awake()
         {
-            if (s_instance)
+            if (Main)
                 throw new System.Exception("Indicator instance already exists!");
 
-            s_instance = this;
+            Main = this;
 
             _camera = Camera.main;
 
@@ -36,17 +38,7 @@ namespace Recounter.Tutorial
 
         float GetOffset() => Mathf.Abs(Mathf.Sin(Mathf.PI / 2 * Time.time * _bounceSpeed));
 
-        public static void BeginIndicate(Vector3 target)
-        {
-            s_instance.Begin(target);
-        }
-
-        public static void EndIndicate()
-        {
-            s_instance.Clear();
-        }
-
-        void Begin(Vector3 target)
+        public void Indicate(Vector3 target)
         {
             _active = true;
 
@@ -55,7 +47,7 @@ namespace Recounter.Tutorial
             gameObject.SetActive(true);
         }
 
-        void Clear()
+        public void Clear()
         {
             _active = false;
 
@@ -68,8 +60,9 @@ namespace Recounter.Tutorial
         {
             if (!_active) return;
 
-            transform.Rotate(Time.deltaTime * 90 * Vector3.up);
-            transform.position = _target + Vector3.up * GetOffset();
+            transform.Rotate(Time.deltaTime * _rotateSpeed * Vector3.up);
+
+            transform.position = _target + (_base3dArrowOffset + _3dArrowBounce * GetOffset()) * Vector3.up;
 
             var screenPos = _camera.WorldToViewportPoint(_target);
 
@@ -108,7 +101,7 @@ namespace Recounter.Tutorial
 
                 arrowPos = center + extent * (1 - _margin);
 
-                _uiArrow.transform.position = arrowPos + _uiArrow.transform.up * GetOffset() * _arrowBounce;
+                _uiArrow.transform.position = arrowPos + _arrowBounce * GetOffset() * _uiArrow.transform.up;
             }
         }
     }

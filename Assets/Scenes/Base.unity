@@ -7936,8 +7936,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66aa734a044ec3349bedd9966a7dc6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rotateSpeed: 45
   _bounceSpeed: 2
-  _offset: 0.1
+  _3dArrowBounce: 0.2
+  _base3dArrowOffset: 0.25
   _renderer: {fileID: 880242331}
   _uiArrow: {fileID: 67579085}
   _arrowBounce: 50
