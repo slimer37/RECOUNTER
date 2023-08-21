@@ -11,6 +11,8 @@ namespace Recounter.Tutorial
         [SerializeField] float _base3dArrowOffset;
         [SerializeField] Renderer _renderer;
 
+        [SerializeField] bool _followPlayer;
+
         [Header("Screen Arrow")]
         [SerializeField] Image _uiArrow;
         [SerializeField] float _arrowBounce;
@@ -60,7 +62,13 @@ namespace Recounter.Tutorial
         {
             if (!_active) return;
 
-            transform.Rotate(Time.deltaTime * _rotateSpeed * Vector3.up);
+            if (_followPlayer)
+            {
+                var toPlayer = transform.position - _camera.transform.position;
+                transform.eulerAngles = Mathf.Atan2(toPlayer.x, toPlayer.z) * Mathf.Rad2Deg * Vector3.up;
+            }
+            else
+                transform.Rotate(Time.deltaTime * _rotateSpeed * Vector3.up);
 
             transform.position = _target + (_base3dArrowOffset + _3dArrowBounce * GetOffset()) * Vector3.up;
 
