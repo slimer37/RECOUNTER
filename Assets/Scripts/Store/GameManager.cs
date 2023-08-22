@@ -1,5 +1,5 @@
-using slimer37.SceneLoading;
-using slimer37.Serialization;
+using Slimer37.SceneLoading;
+using Slimer37.Serialization;
 using UnityEngine;
 
 namespace Recounter

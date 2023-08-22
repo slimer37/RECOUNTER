@@ -1,4 +1,4 @@
-using slimer37.Serialization;
+using Slimer37.Serialization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

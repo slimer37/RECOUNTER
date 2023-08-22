@@ -1,4 +1,4 @@
-using slimer37.Serialization;
+using Slimer37.Serialization;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
