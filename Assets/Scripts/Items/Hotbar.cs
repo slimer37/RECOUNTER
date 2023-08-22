@@ -90,7 +90,7 @@ namespace Recounter.Items
 
             _items.Add(item);
 
-            SetActiveSlot(_activeIndex, false, true);
+            SetActiveSlot(_activeIndex, true, true);
 
             item.PostPickUp(this);
 
@@ -139,7 +139,7 @@ namespace Recounter.Items
             }
         }
 
-        void SetActiveSlot(int index, bool itemIsNew = true, bool force = false)
+        void SetActiveSlot(int index, bool itemIsNew = false, bool force = false)
         {
             if (!force && (_activeIndex == index || Pause.IsPaused)) return;
 
