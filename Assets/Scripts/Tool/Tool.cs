@@ -28,7 +28,7 @@ namespace Recounter
 
         void Update()
         {
-            if (!IsHeld) return;
+            if (!IsHeld || IsInteractionInProgress) return;
 
             _hoverRaycaster.Raycast();
         }
