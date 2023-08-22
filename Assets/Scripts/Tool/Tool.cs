@@ -1,23 +1,69 @@
-using Recounter.Items;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Recounter
 {
-    public abstract class Tool<T> : Item, IHoverHandler<T> where T : class
+    public abstract class Tool : MonoBehaviour
+    {
+        protected InputAction UseAction { get; private set; }
+
+        protected virtual void Awake()
+        {
+            UseAction = InputLayer.Interaction.Interact;
+        }
+
+        public bool IsEquipped { get; private set; }
+
+        bool _justEquipped;
+
+        public void Equip()
+        {
+            _justEquipped = true;
+
+            OnEquip();
+        }
+
+        public void Unequip()
+        {
+            IsEquipped = false;
+
+            OnUnequip();
+        }
+
+        protected virtual void Update()
+        {
+            // Delay one frame before running EquippedUpdate.
+
+            if (_justEquipped)
+            {
+                _justEquipped = false;
+                IsEquipped = true;
+                return;
+            }
+
+            if (!IsEquipped) return;
+
+            EquippedUpdate();
+        }
+
+        protected virtual void OnEquip() { }
+        protected virtual void OnUnequip() { }
+
+        /// <summary>
+        /// Runs every frame after this tool has been equipped.
+        /// </summary>
+        protected virtual void EquippedUpdate() { }
+    }
+
+    public abstract class Tool<T> : Tool, IHoverHandler<T> where T : class
     {
         [SerializeField] LayerMask _toolableMask;
         [SerializeField] LayerMask _allMask;
-        [SerializeField] LayerMask _dropMask;
         [SerializeField] float _range;
-        [SerializeField] Rigidbody _rb;
-        [SerializeField] BoxCollider _collider;
 
         static Camera s_camera;
 
         HoverRaycaster<T> _hoverRaycaster;
-
-        InputAction _use;
 
         void Start()
         {
@@ -25,48 +71,18 @@ namespace Recounter
                 s_camera = Camera.main;
 
             _hoverRaycaster = new(s_camera, _range, _allMask, _toolableMask, GetComponentType.InParent, this);
-
-            _use = InputLayer.Interaction.Interact;
         }
 
-        void OnThrow(InputAction.CallbackContext obj)
+        protected override void EquippedUpdate()
         {
-            var toItem = transform.position - s_camera.transform.position;
-            if (Physics.CheckBox(transform.TransformPoint(_collider.center), _collider.size / 2, transform.rotation, _dropMask)
-                || Physics.Raycast(s_camera.transform.position, toItem, toItem.magnitude, _dropMask))
-                return;
-
-            Release();
-        }
-
-        void Update()
-        {
-            if (!IsHeld || IsInteractionInProgress) return;
-
             _hoverRaycaster.Raycast();
-        }
-
-        protected override void OnPickUp()
-        {
-            InputLayer.Placement.Throw.performed += OnThrow;
-
-            if (!_rb) return;
-            _rb.isKinematic = true;
-        }
-
-        protected override void OnRelease()
-        {
-            InputLayer.Placement.Throw.performed -= OnThrow;
-
-            if (!_rb) return;
-            _rb.isKinematic = false;
         }
 
         public void HoverEnter(T obj) { }
 
         public void HoverStay(T obj)
         {
-            if (_use.WasPressedThisFrame())
+            if (UseAction.WasPressedThisFrame())
             {
                 UseOn(obj);
             }

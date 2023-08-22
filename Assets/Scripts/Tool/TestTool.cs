@@ -8,20 +8,19 @@ namespace Recounter
         [SerializeField] LineRenderer _line;
         [SerializeField] EventReference _beep;
 
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _line.enabled = false;
         }
 
-        protected override void OnPickUp()
+        protected override void OnEquip()
         {
-            base.OnPickUp();
             _line.enabled = true;
         }
 
-        public override void Release()
+        protected override void OnUnequip()
         {
-            base.Release();
             _line.enabled = false;
         }
 
