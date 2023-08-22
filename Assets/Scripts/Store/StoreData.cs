@@ -25,8 +25,7 @@ namespace Recounter.Store
 
         public string FullFileName => baseFileName + StoreSerializer.SaveFileEnding;
 
-        public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented,
-            new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
+        public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
 
         static StoreData s_temporaryData;
 
