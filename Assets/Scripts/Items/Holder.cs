@@ -16,8 +16,10 @@ namespace Recounter.Items
             _hotbar.ItemPutAway += PutAway;
         }
 
-        void Hold(Item item, bool canResetPosition)
+        void Hold(object sender, ItemActiveEventArgs e)
         {
+            var item = e.Item;
+
             var adjustedHoldRot = item.OverrideHoldRotation ?? Quaternion.Euler(_defaultHoldRotation);
             var adjustedHoldPos = _baseHoldPosition + item.HoldPosShift;
 
@@ -30,18 +32,18 @@ namespace Recounter.Items
                 _hand.SetHandViewmodel(item.ViewmodelPose);
             }
 
-            if (!canResetPosition) return;
+            if (e.ItemIsNew) return;
 
             item.transform.SetPositionAndRotation(_body.position, _body.rotation);
         }
 
-        void PutAway(Item item, bool wasItemKept)
+        void PutAway(object sender, PutAwayEventArgs e)
         {
-            if (!item) return;
+            if (!e.Item) return;
 
-            if (wasItemKept)
+            if (!e.ItemDropped)
             {
-                item.gameObject.SetActive(false);
+                e.Item.gameObject.SetActive(false);
             }
 
             _hand.Clear();

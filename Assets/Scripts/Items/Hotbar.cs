@@ -24,11 +24,11 @@ namespace Recounter.Items
 
         public bool IsActiveSlotFull => ActiveSlot.Item;
 
-        public event ItemActiveHandler ItemBecameActive;
-        public event ItemPutAwayHandler ItemPutAway;
+        public event EventHandler<ItemActiveEventArgs> ItemBecameActive;
+        public event EventHandler<PutAwayEventArgs> ItemPutAway;
 
-        public delegate void ItemPutAwayHandler(Item item, bool wasItemKept);
-        public delegate void ItemActiveHandler(Item item, bool fromInventory);
+        void OnItemBecameActive(ItemActiveEventArgs e) => ItemBecameActive?.Invoke(this, e);
+        void OnItemPutAway(PutAwayEventArgs e) => ItemPutAway?.Invoke(this, e);
 
         void Awake()
         {
@@ -132,11 +132,11 @@ namespace Recounter.Items
 
             if (ActiveSlot == slot)
             {
-                ItemPutAway?.Invoke(item, false);
+                OnItemPutAway(new() { Item = item, ItemDropped = true });
             }
         }
 
-        void SetActiveSlot(int index, bool canResetPosition = true, bool force = false)
+        void SetActiveSlot(int index, bool itemIsNew = true, bool force = false)
         {
             if (!force && (_activeIndex == index || Pause.IsPaused)) return;
 
@@ -148,7 +148,7 @@ namespace Recounter.Items
 
                 if (previouslyActiveSlot.Item)
                 {
-                    ItemPutAway?.Invoke(previouslyActiveSlot.Item, true);
+                    OnItemPutAway(new() { Item = previouslyActiveSlot.Item, ItemDropped = false });
                 }
             }
 
@@ -160,8 +160,29 @@ namespace Recounter.Items
 
             if (activeItem)
             {
-                ItemBecameActive?.Invoke(activeItem, canResetPosition);
+                OnItemBecameActive(new() { Item = activeItem, ItemIsNew = itemIsNew });
             }
         }
+    }
+
+    public abstract class HotbarEventArgs : EventArgs
+    {
+        public Item Item { get; set; }
+    }
+
+    public class PutAwayEventArgs : HotbarEventArgs
+    {
+        /// <summary>
+        /// Did the player drop this item?
+        /// </summary>
+        public bool ItemDropped { get; set; }
+    }
+
+    public class ItemActiveEventArgs : HotbarEventArgs
+    {
+        /// <summary>
+        /// Did the player just receive this item?
+        /// </summary>
+        public bool ItemIsNew { get; set; }
     }
 }

@@ -131,7 +131,7 @@ namespace Recounter
             };
         }
 
-        void OnItemPutAway(Item item, bool wasItemKept)
+        void OnItemPutAway(object sender, PutAwayEventArgs e)
         {
             if (!_active) return;
 
@@ -140,9 +140,9 @@ namespace Recounter
             _active = null;
         }
 
-        void OnItemBecameActive(Item item, bool fromInventory)
+        void OnItemBecameActive(object sender, ItemActiveEventArgs e)
         {
-            if (item is not Placeable placeable) return;
+            if (e.Item is not Placeable placeable) return;
 
             _isCharging = false;
 
@@ -151,7 +151,7 @@ namespace Recounter
             _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
             _adjustedHoldPos = _holdPos + _active.HoldPosShift;
 
-            _ghost.CopyMesh(item);
+            _ghost.CopyMesh(placeable);
         }
 
         void OnPause(bool pause) => enabled = !pause;
