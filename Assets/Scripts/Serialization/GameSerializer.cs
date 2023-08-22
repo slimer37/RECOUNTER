@@ -6,8 +6,32 @@ namespace slimer37.Serialization
 {
     public static class GameSerializer
     {
-        public const string SaveFolderName = "saves";
-        public const string SaveFileEnding = ".store";
+        static readonly SaveDataOptions s_saveDataOptions;
+
+        public static string SaveFileEnding => s_saveDataOptions.SaveFileEnding;
+        public static string SaveFolderName => s_saveDataOptions.SaveFolderName;
+        public static bool DebugEnabled => s_saveDataOptions.EnableDebugMessages;
+
+        const string ResourcesSaveDataOptionsPath = "SaveDataOptions";
+
+        static void PrintDebug(string text)
+        {
+            if (!DebugEnabled) return;
+
+            Debug.Log(text);
+        }
+
+        static GameSerializer()
+        {
+            s_saveDataOptions = Resources.Load<SaveDataOptions>(ResourcesSaveDataOptionsPath);
+
+            if (!s_saveDataOptions)
+            {
+                throw new FileNotFoundException($"Resources path \"{ResourcesSaveDataOptionsPath}\" was not found.");
+            }
+
+            PrintDebug("Initialized save system.");
+        }
 
         public static string[] AllSaveFiles() => Directory.GetFiles(GetSaveDirectory(), $"*{SaveFileEnding}");
 
