@@ -1,0 +1,16 @@
+{
+    "name": "slimer37.Serialization.Editor",
+    "rootNamespace": "slimer37.Serialization.Editor",
+    "references": [
+        "GUID:3901707192a23714285849541c4db6bf"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

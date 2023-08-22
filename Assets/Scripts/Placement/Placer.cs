@@ -7,6 +7,8 @@ namespace Recounter
 {
     public class Placer : MonoBehaviour, IHoverHandler<PlacementMethod>
     {
+        [SerializeField] Hotbar _hotbar;
+
         [Header("Hand")]
         [SerializeField] Hand _hand;
 
@@ -104,6 +106,10 @@ namespace Recounter
 
         void Awake()
         {
+            _hotbar.ItemBecameActive += OnItemBecameActive;
+            _hotbar.ItemPutAway += OnItemPutAway;
+            _hotbar.SlotSwitched += OnSwitchSlot;
+
             _placementControls = InputLayer.Placement;
 
             _placementControls.Place.performed += OnStartPlace;
@@ -126,19 +132,37 @@ namespace Recounter
             };
         }
 
-        void OnPause(bool pause) => enabled = !pause;
-
-        void OnDestroy() => Pause.Paused -= OnPause;
-
-        public void SetItem(Placeable item)
+        void OnSwitchSlot(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _active = item;
+            if (_isPlacing) e.Cancel = true;
+        }
+
+        void OnItemPutAway(object sender, PutAwayEventArgs e)
+        {
+            if (!_active) return;
+
+            EndPlace(true);
+
+            _active = null;
+        }
+
+        void OnItemBecameActive(object sender, ItemActiveEventArgs e)
+        {
+            if (e.Item is not Placeable placeable) return;
+
+            _isCharging = false;
+
+            _active = placeable;
 
             _adjustedHoldRot = _active.OverrideHoldRotation ?? Quaternion.Euler(_holdRot);
             _adjustedHoldPos = _holdPos + _active.HoldPosShift;
 
-            _ghost.CopyMesh(item);
+            _ghost.CopyMesh(placeable);
         }
+
+        void OnPause(bool pause) => enabled = !pause;
+
+        void OnDestroy() => Pause.Paused -= OnPause;
 
         void OnStartPlace(InputAction.CallbackContext ctx)
         {
@@ -289,7 +313,7 @@ namespace Recounter
             InputLayer.Movement.Crouch.Enable();
         }
 
-        void EndPlace()
+        void EndPlace(bool cleanupOnly = false)
         {
             _playerInteraction.Suspend(false);
             InputLayer.Movement.Enable();
@@ -298,11 +322,13 @@ namespace Recounter
 
             _ghost.Hide();
 
+            ModifyCursor(PlacementCursor.None);
+
+            if (cleanupOnly) return;
+
             _hand.SetCarryStates(Hand.CarryStates.None);
 
             KeepItemInHand();
-
-            ModifyCursor(PlacementCursor.None);
         }
 
         Placeable PreReleaseItem()
@@ -322,7 +348,6 @@ namespace Recounter
             {
                 EndPlace();
                 return;
-
             }
 
             var pos = _placementMethod.PlacePosition;
@@ -361,15 +386,6 @@ namespace Recounter
             var ghostRot = _placementMethod.PlaceRotation;
             var ghostMat = _initialPlaceObstructed ? _obstructedMat : _freeMat;
             _ghost.ShowAt(_placementMethod.PlacePosition, ghostRot, ghostMat, _placementMethod.ShouldForceGhost());
-        }
-
-        public void StopHoldingItem()
-        {
-            if (!_active) return;
-
-            EndPlace();
-
-            _active = null;
         }
 
         public void HoverEnter(PlacementMethod obj)

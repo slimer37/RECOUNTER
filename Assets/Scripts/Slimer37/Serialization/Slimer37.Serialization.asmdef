@@ -1,0 +1,14 @@
+{
+    "name": "Slimer37.Serialization",
+    "rootNamespace": "Slimer37.Serialization",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

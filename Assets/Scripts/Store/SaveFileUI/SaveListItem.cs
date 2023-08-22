@@ -1,4 +1,4 @@
-using Recounter.Store;
+using Slimer37.Serialization;
 using System;
 using TMPro;
 using UnityEngine;
@@ -17,7 +17,7 @@ namespace Recounter.UI
 
         Color _deselectedColor;
 
-        public StoreData Data { get; private set; }
+        public SaveData Data { get; private set; }
 
         public event Action Removed;
 
@@ -34,7 +34,7 @@ namespace Recounter.UI
             Data.Deleted -= OnDeleted;
         }
 
-        public void Populate(StoreData storeData)
+        public void Populate(SaveData storeData)
         {
             Data = storeData;
 

@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Recounter.Thumbnails
 {
@@ -8,15 +6,11 @@ namespace Recounter.Thumbnails
     {
         static ThumbnailCreatorSettings settings;
 
-        static AsyncOperationHandle<ThumbnailCreatorSettings> settingsHandle;
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void InitSettings()
         {
-            settings = null;
+            settings = Resources.Load<ThumbnailCreatorSettings>("ThumbnailCreatorSettings");
 
-            settingsHandle = Addressables.LoadAssetAsync<ThumbnailCreatorSettings>("ThumbnailCreatorSettings");
-            settings = settingsHandle.WaitForCompletion();
             ConfigurePreviewGenerator();
         }
 

@@ -1,4 +1,5 @@
 using FMODUnity;
+using Recounter.Inventory;
 using Recounter.Service;
 using System.Collections;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace Recounter
 
             if (other.TryGetComponent(out ProductIdentifier identifier))
             {
-                EnterProduct(Library.Products[identifier.id]);
+                EnterProduct(ProductLibrary.Default.Products[identifier.id]);
 
                 StopAllCoroutines();
                 StartCoroutine(Blink());

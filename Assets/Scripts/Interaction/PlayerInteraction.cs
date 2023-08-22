@@ -18,8 +18,12 @@ public class PlayerInteraction : MonoBehaviour, IHoverHandler<Interactable>
 
     HoverRaycaster<Interactable> _raycaster;
 
+    public static float InteractionRange;
+
     void Awake()
     {
+        InteractionRange = _range;
+
         var interactAction = InputLayer.Interaction.Interact;
         interactAction.performed += OnInteract;
         interactAction.canceled += OnInteractCancel;

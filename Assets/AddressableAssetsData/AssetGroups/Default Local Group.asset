@@ -17,13 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: eb136935a10d3b94a9ab6a4fe4256552
   m_SerializeEntries:
-  - m_GUID: a3c75a83de90faa4991db58d1d315693
-    m_Address: SceneLoader
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0e5c2dbe150dd484aabcf94c858f9eee
-    m_Address: Assets/Scenes/Demo.unity
+    m_Address: Demo
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -42,13 +37,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d7e7917419c8b234b830ac643627b749
-    m_Address: InteractableIconSettings
+  - m_GUID: 4440bc49b9c8bc74eabe0dc7b1416a6c
+    m_Address: Base Scene
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0916e2dae1fb69d4d93c03fd27eb6c85
-    m_Address: ThumbnailCreatorSettings
+  - m_GUID: cab095f223313254ca16bfd6d140f20f
+    m_Address: Store
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -1,4 +1,4 @@
-using Recounter.Store;
+using Slimer37.Serialization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +15,7 @@ namespace Recounter.UI
         
         string _emptyText;
 
-        StoreData _focusedSave;
+        SaveData _focusedSave;
 
         public void ResetFocus()
         {
@@ -32,14 +32,14 @@ namespace Recounter.UI
             _emptyText = _text.text;
         }
 
-        public void Focus(StoreData data)
+        public void Focus(SaveData data)
         {
             _group.interactable = true;
             _focusedSave = data;
             _text.text = string.Format(_format, data.name, data.creationTime.ToString("f"), data.FullFileName);
         }
 
-        void EnterStore() => StoreData.SetCurrentStore(_focusedSave);
+        void EnterStore() => GameManager.StartGame(_focusedSave);
 
         void PromptDeletion()
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +9,6 @@ namespace Recounter.Items
     public class Hotbar : MonoBehaviour
     {
         [SerializeField] int _capacity;
-        [SerializeField] Placer _placer;
         [SerializeField] HotbarSlot _slotPrefab;
         [SerializeField] Transform _slotParent;
 
@@ -25,11 +25,13 @@ namespace Recounter.Items
 
         public bool IsActiveSlotFull => ActiveSlot.Item;
 
-        public event ItemActiveHandler ItemBecameActive;
-        public event ItemPutAwayHandler ItemPutAway;
+        public event EventHandler<ItemActiveEventArgs> ItemBecameActive;
+        public event EventHandler<PutAwayEventArgs> ItemPutAway;
+        public event EventHandler<CancelEventArgs> SlotSwitched;
 
-        public delegate void ItemPutAwayHandler(Item item, bool wasItemKept);
-        public delegate void ItemActiveHandler(Item item, bool fromInventory);
+        void OnSwitchSlot(CancelEventArgs e) => SlotSwitched?.Invoke(this, e);
+        void OnItemBecameActive(ItemActiveEventArgs e) => ItemBecameActive?.Invoke(this, e);
+        void OnItemPutAway(PutAwayEventArgs e) => ItemPutAway?.Invoke(this, e);
 
         void Awake()
         {
@@ -88,7 +90,7 @@ namespace Recounter.Items
 
             _items.Add(item);
 
-            SetActiveSlot(_activeIndex, false, true);
+            SetActiveSlot(_activeIndex, true, true);
 
             item.PostPickUp(this);
 
@@ -133,14 +135,19 @@ namespace Recounter.Items
 
             if (ActiveSlot == slot)
             {
-                _placer.StopHoldingItem();
-                ItemPutAway?.Invoke(item, false);
+                OnItemPutAway(new() { Item = item, ItemDropped = true });
             }
         }
 
-        void SetActiveSlot(int index, bool canResetPosition = true, bool force = false)
+        void SetActiveSlot(int index, bool itemIsNew = false, bool force = false)
         {
-            if (!force && (_activeIndex == index || _placer.IsPlacing || Pause.IsPaused)) return;
+            if (!force && (_activeIndex == index || Pause.IsPaused)) return;
+
+            var cancel = new CancelEventArgs();
+
+            OnSwitchSlot(cancel);
+
+            if (cancel.Cancel) return;
 
             if (_activeIndex != index)
             {
@@ -150,8 +157,7 @@ namespace Recounter.Items
 
                 if (previouslyActiveSlot.Item)
                 {
-                    _placer.StopHoldingItem();
-                    ItemPutAway?.Invoke(previouslyActiveSlot.Item, true);
+                    OnItemPutAway(new() { Item = previouslyActiveSlot.Item, ItemDropped = false });
                 }
             }
 
@@ -163,13 +169,29 @@ namespace Recounter.Items
 
             if (activeItem)
             {
-                ItemBecameActive?.Invoke(activeItem, canResetPosition);
-
-                if (activeItem is Placeable placeable)
-                {
-                    _placer.SetItem(placeable);
-                }
+                OnItemBecameActive(new() { Item = activeItem, ItemIsNew = itemIsNew });
             }
         }
+    }
+
+    public abstract class HotbarEventArgs : EventArgs
+    {
+        public Item Item { get; set; }
+    }
+
+    public class PutAwayEventArgs : HotbarEventArgs
+    {
+        /// <summary>
+        /// Did the player drop this item?
+        /// </summary>
+        public bool ItemDropped { get; set; }
+    }
+
+    public class ItemActiveEventArgs : HotbarEventArgs
+    {
+        /// <summary>
+        /// Did the player just receive this item?
+        /// </summary>
+        public bool ItemIsNew { get; set; }
     }
 }

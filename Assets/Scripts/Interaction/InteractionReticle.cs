@@ -23,7 +23,8 @@ namespace Recounter
         [Header("Icons")]
         [SerializeField] Image _fillBar;
         [SerializeField] Image _iconImage;
-        [SerializeField] InteractableIconSettings _iconSettings;
+
+        InteractableIconSettings _iconSettings;
 
         Tween _punch;
 
@@ -33,6 +34,8 @@ namespace Recounter
 
         void Awake()
         {
+            _iconSettings = Resources.Load<InteractableIconSettings>("InteractableIconSettings");
+
             _punch = _iconImage.rectTransform.DOPunchScale(Vector3.one * _punchAmount, _punchDuration)
                 .Pause().SetAutoKill(false);
 
