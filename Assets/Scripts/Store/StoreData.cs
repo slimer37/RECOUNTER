@@ -17,6 +17,7 @@ namespace Recounter.Store
         public bool FileExists { get; private set; } = true;
 
         public event Action Deleted;
+        public event Action Saved;
 
         public string FullFileName => baseFileName + StoreSerializer.SaveFileEnding;
 
@@ -44,6 +45,8 @@ namespace Recounter.Store
             JsonConvert.PopulateObject(json, data);
             return data;
         }
+
+        public T GetKey<T>(string key) => (T)_data[key];
 
         StoreData(string name, string accessPath) : this(accessPath)
         {
