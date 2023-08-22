@@ -8,7 +8,6 @@ namespace Recounter.Items
     public class Hotbar : MonoBehaviour
     {
         [SerializeField] int _capacity;
-        [SerializeField] Placer _placer;
         [SerializeField] HotbarSlot _slotPrefab;
         [SerializeField] Transform _slotParent;
 
@@ -133,14 +132,13 @@ namespace Recounter.Items
 
             if (ActiveSlot == slot)
             {
-                _placer.StopHoldingItem();
                 ItemPutAway?.Invoke(item, false);
             }
         }
 
         void SetActiveSlot(int index, bool canResetPosition = true, bool force = false)
         {
-            if (!force && (_activeIndex == index || _placer.IsPlacing || Pause.IsPaused)) return;
+            if (!force && (_activeIndex == index || Pause.IsPaused)) return;
 
             if (_activeIndex != index)
             {
@@ -150,7 +148,6 @@ namespace Recounter.Items
 
                 if (previouslyActiveSlot.Item)
                 {
-                    _placer.StopHoldingItem();
                     ItemPutAway?.Invoke(previouslyActiveSlot.Item, true);
                 }
             }
@@ -164,11 +161,6 @@ namespace Recounter.Items
             if (activeItem)
             {
                 ItemBecameActive?.Invoke(activeItem, canResetPosition);
-
-                if (activeItem is Placeable placeable)
-                {
-                    _placer.SetItem(placeable);
-                }
             }
         }
     }

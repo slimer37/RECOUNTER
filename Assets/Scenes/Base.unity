@@ -1498,6 +1498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52bba4d117361c4780ea5c571152556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hotbar: {fileID: 1496458287}
   _hand: {fileID: 157413189}
   _ghost: {fileID: 1233657121}
   _freeMat: {fileID: 2100000, guid: 0e27b5a3fe491174cb762e6c13aec700, type: 2}
@@ -5263,7 +5264,6 @@ MonoBehaviour:
   _punchDuration: 0.15
   _fillBar: {fileID: 1974026323}
   _iconImage: {fileID: 1200812864}
-  _iconSettings: {fileID: 11400000, guid: d7e7917419c8b234b830ac643627b749, type: 2}
 --- !u!1 &971982990
 GameObject:
   m_ObjectHideFlags: 0
@@ -9080,7 +9080,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _capacity: 5
-  _placer: {fileID: 317501403}
   _slotPrefab: {fileID: 1353271330}
   _slotParent: {fileID: 1496458286}
 --- !u!114 &1496458288
@@ -9718,7 +9717,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boxPrefab: {fileID: 8504262504139958394, guid: 48c21ce795af9f248bb4ebd27e825f70,
     type: 3}
-  _spawn: {fileID: 0}
 --- !u!1 &1604801296
 GameObject:
   m_ObjectHideFlags: 0
