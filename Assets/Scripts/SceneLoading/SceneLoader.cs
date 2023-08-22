@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using System.Linq;
 
 namespace SceneLoading
 {
@@ -19,9 +18,12 @@ namespace SceneLoading
         [RuntimeInitializeOnLoadMethod]
         static void Init()
         {
-            var prefab = Addressables.LoadAssetAsync<GameObject>("SceneLoader").WaitForCompletion();
+            var prefab = Resources.Load<GameObject>("SceneLoader");
+
             var instance = Instantiate(prefab);
+
             DontDestroyOnLoad(instance);
+
             Current = instance.GetComponent<SceneLoader>();
         }
 

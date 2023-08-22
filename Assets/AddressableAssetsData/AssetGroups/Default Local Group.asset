@@ -17,11 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: eb136935a10d3b94a9ab6a4fe4256552
   m_SerializeEntries:
-  - m_GUID: a3c75a83de90faa4991db58d1d315693
-    m_Address: SceneLoader
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0e5c2dbe150dd484aabcf94c858f9eee
     m_Address: Demo
     m_ReadOnly: 0
@@ -39,16 +34,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7591ef2b598416d41a3651d43e10eb74
     m_Address: Wire
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d7e7917419c8b234b830ac643627b749
-    m_Address: InteractableIconSettings
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0916e2dae1fb69d4d93c03fd27eb6c85
-    m_Address: ThumbnailCreatorSettings
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
