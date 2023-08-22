@@ -706,6 +706,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7285c87d99d245b43a2c96c10892407a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 74117f645ca87544896e430b75e9a316, type: 2}
     - target: {fileID: 919132149155446097, guid: 7285c87d99d245b43a2c96c10892407a,
         type: 3}
       propertyPath: m_Name
@@ -896,6 +901,13 @@ MonoBehaviour:
     m_Bits: 1153
   _range: 5
   _line: {fileID: 1992723906}
+  _beep:
+    Guid:
+      Data1: 342130352
+      Data2: 1097238038
+      Data3: 1049417378
+      Data4: -1255970596
+    Path: event:/Scan Beep
 --- !u!65 &1693761862
 BoxCollider:
   m_ObjectHideFlags: 0
