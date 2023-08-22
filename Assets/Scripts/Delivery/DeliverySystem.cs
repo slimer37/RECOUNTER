@@ -8,11 +8,10 @@ namespace Recounter.Delivery
     public class DeliverySystem : MonoBehaviour
     {
         [SerializeField] GameObject _boxPrefab;
-        [SerializeField] Transform _spawn;
 
         public void Deliver(Shipment shipment)
         {
-            var box = Instantiate(_boxPrefab, _spawn.position, Quaternion.identity).GetComponentInChildren<Box>();
+            var box = Instantiate(_boxPrefab, Vector3.up * 5, Quaternion.identity).GetComponentInChildren<Box>();
 
             var items = new List<Placeable>();
 
