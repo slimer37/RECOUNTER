@@ -1,4 +1,4 @@
-using Recounter.Store;
+using slimer37.Serialization;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace Recounter.UI
 
         public void OpenInExplorer()
         {
-            Process.Start(StoreSerializer.GetSaveDirectory());
+            Process.Start(GameSerializer.GetSaveDirectory());
         }
 
         void Awake()
@@ -43,13 +43,13 @@ namespace Recounter.UI
 
             _listItemPrefab.gameObject.SetActive(true);
 
-            foreach (var fileName in StoreSerializer.AllSaveFiles())
+            foreach (var fileName in GameSerializer.AllSaveFiles())
             {
-                StoreData storeData;
+                SaveData storeData;
 
                 try
                 {
-                    StoreSerializer.LoadStore(fileName, out storeData);
+                    GameSerializer.LoadStore(fileName, out storeData);
                 }
                 catch (System.Exception e)
                 {

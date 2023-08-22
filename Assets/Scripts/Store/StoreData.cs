@@ -1,13 +1,12 @@
 using Newtonsoft.Json;
-using Recounter.Store.Security;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Recounter.Store
+namespace slimer37.Serialization
 {
     [Serializable, JsonObject(memberSerialization: MemberSerialization.OptIn)]
-    public class StoreData
+    public class SaveData
     {
         [JsonProperty] public string name;
         [JsonProperty] public readonly DateTime creationTime;
@@ -23,31 +22,31 @@ namespace Recounter.Store
         public event Action Saved;
         public event Action PreSave;
 
-        public string FullFileName => baseFileName + StoreSerializer.SaveFileEnding;
+        public string FullFileName => baseFileName + GameSerializer.SaveFileEnding;
 
         public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
 
-        static StoreData s_temporaryData;
+        static SaveData s_temporaryData;
 
         public bool IsTemporary => this == s_temporaryData;
 
-        public static StoreData Temporary
+        public static SaveData Temporary
         {
             get
             {
                 if (s_temporaryData == null)
                 {
                     s_temporaryData = new("Temporary", "TEMPORARY SAVE");
-                    UnityEngine.Debug.Log($"Created temporary {nameof(StoreData)}.");
+                    UnityEngine.Debug.Log($"Created temporary {nameof(SaveData)}.");
                 }
 
                 return s_temporaryData;
             }
         }
 
-        public static StoreData FromJson(string json, string accessPath)
+        public static SaveData FromJson(string json, string accessPath)
         {
-            var data = new StoreData(accessPath);
+            var data = new SaveData(accessPath);
             JsonConvert.PopulateObject(json, data);
             return data;
         }
@@ -72,24 +71,24 @@ namespace Recounter.Store
             return false;
         }
 
-        StoreData(string name, string accessPath) : this(accessPath)
+        SaveData(string name, string accessPath) : this(accessPath)
         {
             this.name = name;
             creationTime = DateTime.Now;
         }
 
-        StoreData(string accessPath)
+        SaveData(string accessPath)
         {
             baseFileName = Path.GetFileNameWithoutExtension(accessPath);
         }
 
-        public static StoreData CreateWithFile(string name)
+        public static SaveData CreateWithFile(string name)
         {
-            StoreSerializer.ValidateFileName(name, out var fileName);
+            GameSerializer.ValidateFileName(name, out var fileName);
 
-            if (StoreSerializer.AlreadyExists(fileName)) throw new InvalidOperationException($"\"{fileName}\" already exists.");
+            if (GameSerializer.AlreadyExists(fileName)) throw new InvalidOperationException($"\"{fileName}\" already exists.");
 
-            var data = new StoreData(name, fileName);
+            var data = new SaveData(name, fileName);
 
             data.Save();
 
@@ -100,14 +99,14 @@ namespace Recounter.Store
         {
             if (IsTemporary)
             {
-                UnityEngine.Debug.LogWarning($"Will not save temporary {nameof(StoreData)}.");
+                UnityEngine.Debug.LogWarning($"Will not save temporary {nameof(SaveData)}.");
                 return;
             }
 
             PreSave?.Invoke();
 
             protection = SaveGuard.GetShaHash(this);
-            StoreSerializer.SaveStore(this);
+            GameSerializer.SaveStore(this);
 
             UnityEngine.Debug.Log($"Just saved \"{name}\"");
 
@@ -116,7 +115,7 @@ namespace Recounter.Store
 
         public void Delete()
         {
-            File.Delete(StoreSerializer.GetSavePath(baseFileName));
+            File.Delete(GameSerializer.GetSavePath(baseFileName));
             FileExists = false;
             Deleted?.Invoke();
         }

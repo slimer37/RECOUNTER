@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using UnityEngine;
 
-namespace Recounter.Store
+namespace slimer37.Serialization
 {
-    public static class StoreSerializer
+    public static class GameSerializer
     {
         public const string SaveFolderName = "saves";
         public const string SaveFileEnding = ".store";
@@ -56,7 +56,7 @@ namespace Recounter.Store
             return Path.Combine(GetSaveDirectory(), saveFileName);
         }
 
-        public static void LoadStore(string saveFilePath, out StoreData storeData)
+        public static void LoadStore(string saveFilePath, out SaveData storeData)
         {
             storeData = null;
 
@@ -68,10 +68,10 @@ namespace Recounter.Store
             if (!File.Exists(saveFilePath))
                 throw new FileNotFoundException($"Save file \"{saveFilePath}\" was not found.");
 
-            storeData = StoreData.FromJson(File.ReadAllText(saveFilePath), saveFilePath);
+            storeData = SaveData.FromJson(File.ReadAllText(saveFilePath), saveFilePath);
         }
 
-        public static void SaveStore(StoreData storeData)
+        public static void SaveStore(SaveData storeData)
         {
             try
             {

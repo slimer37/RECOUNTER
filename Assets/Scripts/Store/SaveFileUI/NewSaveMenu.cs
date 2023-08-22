@@ -1,4 +1,4 @@
-using Recounter.Store;
+using slimer37.Serialization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,13 +28,13 @@ namespace Recounter.UI
         void CreateSave()
         {
             var name = _nameField.text;
-            var data = StoreData.CreateWithFile(name);
+            var data = SaveData.CreateWithFile(name);
             GameManager.StartGame(data);
         }
 
         void CheckName(string name)
         {
-            if (StoreSerializer.ValidateFileName(name, out var validFileName))
+            if (GameSerializer.ValidateFileName(name, out var validFileName))
             {
                 _warningPanel.SetActive(false);
             }
@@ -44,7 +44,7 @@ namespace Recounter.UI
                 _validNameWarning.text = string.Format(_warningFormat, validFileName);
             }
 
-            var exists = StoreSerializer.AlreadyExists(validFileName);
+            var exists = GameSerializer.AlreadyExists(validFileName);
 
             _createButtonText.text = exists ? "File already exists" : "Create";
 

@@ -1,4 +1,4 @@
-using Recounter.Store;
+using slimer37.Serialization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +15,7 @@ namespace Recounter.UI
         
         string _emptyText;
 
-        StoreData _focusedSave;
+        SaveData _focusedSave;
 
         public void ResetFocus()
         {
@@ -32,7 +32,7 @@ namespace Recounter.UI
             _emptyText = _text.text;
         }
 
-        public void Focus(StoreData data)
+        public void Focus(SaveData data)
         {
             _group.interactable = true;
             _focusedSave = data;

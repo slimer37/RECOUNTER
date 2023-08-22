@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Recounter.Store.Security
+namespace slimer37.Serialization
 {
     public static class SaveGuard
     {
@@ -11,7 +11,7 @@ namespace Recounter.Store.Security
         static readonly JsonSerializerSettings s_serializerSettings = new()
         { NullValueHandling = NullValueHandling.Ignore };
 
-        public static string GetShaHash(StoreData data)
+        public static string GetShaHash(SaveData data)
         {
             using var sha = SHA256.Create();
             var sb = new StringBuilder();
@@ -35,7 +35,7 @@ namespace Recounter.Store.Security
             return sb.ToString();
         }
 
-        public static bool WasAltered(this StoreData data)
+        public static bool WasAltered(this SaveData data)
             => data.protection != GetShaHash(data);
     }
 }

@@ -1,4 +1,3 @@
-using Recounter.Store.Security;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -8,11 +7,11 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 
-namespace Recounter.Store.Editor
+namespace slimer37.Serialization.Editor
 {
     public class EditorSaveBrowser : EditorWindow
     {
-        StoreData _viewedSave;
+        SaveData _viewedSave;
 
         bool _showFileList = true;
         bool _showProperties = true;
@@ -49,7 +48,7 @@ namespace Recounter.Store.Editor
                 var displayValue =
                     value == null
                     ? "<color=red>Null</color>"
-                    : (isString ? $"\"{value}\"" : value.ToString());
+                    : isString ? $"\"{value}\"" : value.ToString();
 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(type, style, GUILayout.Width(100));
@@ -71,42 +70,42 @@ namespace Recounter.Store.Editor
                 return false;
             }
 
-            if (StoreSerializer.ValidateFileName(_newSaveName, out modifiedName)) return true;
+            if (GameSerializer.ValidateFileName(_newSaveName, out modifiedName)) return true;
 
             EditorGUILayout.HelpBox(
-                $"Save name contains invalid file characters. It will be saved as '{modifiedName + StoreSerializer.SaveFileEnding}'",
+                $"Save name contains invalid file characters. It will be saved as '{modifiedName + GameSerializer.SaveFileEnding}'",
                 MessageType.Warning);
             return true;
         }
 
         void OnGUI()
         {
-            if (!Directory.Exists(StoreSerializer.GetSaveDirectory()))
+            if (!Directory.Exists(GameSerializer.GetSaveDirectory()))
             {
                 EditorGUILayout.HelpBox("Save folder does not exist.", MessageType.Info);
 
                 if (GUILayout.Button("Create"))
-                    Directory.CreateDirectory(StoreSerializer.GetSaveDirectory());
+                    Directory.CreateDirectory(GameSerializer.GetSaveDirectory());
 
                 return;
             }
 
             EditorStyles.label.wordWrap = true;
             _showSaveCreator = EditorGUILayout.BeginFoldoutHeaderGroup(_showSaveCreator, "Save Creator");
-            
+
             if (_showSaveCreator)
             {
                 EditorGUILayout.BeginHorizontal();
                 _newSaveName = EditorGUILayout.TextField("File Name", _newSaveName);
-                EditorGUILayout.LabelField(StoreSerializer.SaveFileEnding, GUILayout.Width(40));
+                EditorGUILayout.LabelField(GameSerializer.SaveFileEnding, GUILayout.Width(40));
                 EditorGUILayout.EndHorizontal();
 
                 _newSavePlayerName = EditorGUILayout.TextField("Player Name", _newSavePlayerName);
 
                 if (VerifyFileName(out var willSaveAs))
                 {
-                    if (GUILayout.Button(StoreSerializer.AlreadyExists(willSaveAs) ? "Format Save" : "Create New Save"))
-                        StoreData.CreateWithFile(_newSavePlayerName);
+                    if (GUILayout.Button(GameSerializer.AlreadyExists(willSaveAs) ? "Format Save" : "Create New Save"))
+                        SaveData.CreateWithFile(_newSavePlayerName);
                 }
             }
 
@@ -115,7 +114,7 @@ namespace Recounter.Store.Editor
             _showFileList = EditorGUILayout.BeginFoldoutHeaderGroup(_showFileList, "Save Files On Disk");
             if (_showFileList)
             {
-                var folderContents = StoreSerializer.AllSaveFiles();
+                var folderContents = GameSerializer.AllSaveFiles();
 
                 if (folderContents.Length == 0)
                     EditorGUILayout.LabelField("Save folder empty.");
@@ -133,7 +132,7 @@ namespace Recounter.Store.Editor
                     if (isFocused)
                         EditorGUILayout.LabelField("Focused", EditorStyles.boldLabel, GUILayout.Width(52));
                     else if (GUILayout.Button("Focus", GUILayout.ExpandWidth(false)))
-                        StoreSerializer.LoadStore(fileName, out _viewedSave);
+                        GameSerializer.LoadStore(fileName, out _viewedSave);
 
                     if (GUILayout.Button("Delete", GUILayout.ExpandWidth(false)))
                     {
@@ -147,7 +146,7 @@ namespace Recounter.Store.Editor
                 }
 
                 if (GUILayout.Button("Open In Explorer"))
-                    Process.Start(StoreSerializer.GetSaveDirectory());
+                    Process.Start(GameSerializer.GetSaveDirectory());
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
 
@@ -159,7 +158,7 @@ namespace Recounter.Store.Editor
                     ListAllInfo(_viewedSave);
 
                     if (GUILayout.Button("Refresh"))
-                        StoreSerializer.LoadStore(_viewedSave.FullFileName, out _viewedSave);
+                        GameSerializer.LoadStore(_viewedSave.FullFileName, out _viewedSave);
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }
@@ -173,7 +172,7 @@ namespace Recounter.Store.Editor
             EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 1));
         }
 
-        static void ListAllInfo(StoreData data)
+        static void ListAllInfo(SaveData data)
         {
             var style = new GUIStyle(EditorStyles.label) { richText = true, fontStyle = FontStyle.Bold };
 
@@ -200,11 +199,11 @@ namespace Recounter.Store.Editor
 
             var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-            ListInfo("Properties", typeof(StoreData).GetProperties(flags),
+            ListInfo("Properties", typeof(SaveData).GetProperties(flags),
                 info => info.GetValue(data),
                 info => info.PropertyType);
 
-            ListInfo("Fields", typeof(StoreData).GetFields(flags)
+            ListInfo("Fields", typeof(SaveData).GetFields(flags)
                 .Where(f => !f.IsDefined(typeof(CompilerGeneratedAttribute), false))
                 .ToArray(),
                 info => info.GetValue(data),

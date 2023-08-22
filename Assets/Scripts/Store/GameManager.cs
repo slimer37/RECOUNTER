@@ -1,19 +1,19 @@
-using Recounter.Store;
 using SceneLoading;
+using slimer37.Serialization;
 using UnityEngine;
 
 namespace Recounter
 {
     public class GameManager : MonoBehaviour
     {
-        public static StoreData StoreData
+        public static SaveData StoreData
         {
             get
             {
                 if (s_storeData == null)
                 {
                     Debug.LogWarning("No store data is loaded. Loading temporary data.");
-                    s_storeData = StoreData.Temporary;
+                    s_storeData = SaveData.Temporary;
                 }
 
                 return s_storeData;
@@ -22,7 +22,7 @@ namespace Recounter
 
         public static GameManager Singleton { get; private set; }
 
-        static StoreData s_storeData;
+        static SaveData s_storeData;
 
         const string StoreSceneKey = "Store";
 
@@ -41,7 +41,7 @@ namespace Recounter
 
         static void LoadGameScene() => SceneLoader.Current.Load(true, StoreSceneKey);
 
-        public static void StartGame(StoreData source)
+        public static void StartGame(SaveData source)
         {
             s_storeData = source;
 
