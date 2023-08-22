@@ -24,16 +24,34 @@ namespace Recounter
                 .SetLoops(_loops * 2, LoopType.Yoyo)
                 .SetEase(Ease.OutSine)
                 .SetAutoKill(false)
-                .Pause();
+                .Pause()
+                .SetUpdate(true);
+
+            GameManager.StoreData.Saved += OnSaved;
         }
 
-        IEnumerator Start()
+        void OnDestroy()
         {
-            while (true)
-            {
-                yield return new WaitForSeconds(_autoSaveIntervalMinutes * 60);
-                Save();
-            }
+            GameManager.StoreData.Saved -= OnSaved;
+        }
+
+        void OnSaved()
+        {
+            _animation.Restart();
+
+            StopAllCoroutines();
+            StartCoroutine(SaveAfterInterval());
+        }
+
+        void Start()
+        {
+            StartCoroutine(SaveAfterInterval());
+        }
+
+        IEnumerator SaveAfterInterval()
+        {
+            yield return new WaitForSeconds(_autoSaveIntervalMinutes * 60);
+            Save();
         }
 
         void Save()
@@ -41,8 +59,6 @@ namespace Recounter
             GameManager.StoreData.Save();
 
             Debug.Log("Auto saved.", this);
-
-            _animation.Restart();
         }
     }
 }
