@@ -8,7 +8,10 @@ namespace Recounter
     {
         [SerializeField] LayerMask _toolableMask;
         [SerializeField] LayerMask _allMask;
+        [SerializeField] LayerMask _dropMask;
         [SerializeField] float _range;
+        [SerializeField] Rigidbody _rb;
+        [SerializeField] BoxCollider _collider;
 
         static Camera s_camera;
 
@@ -26,11 +29,37 @@ namespace Recounter
             _use = InputLayer.Interaction.Interact;
         }
 
+        void OnThrow(InputAction.CallbackContext obj)
+        {
+            var toItem = transform.position - s_camera.transform.position;
+            if (Physics.CheckBox(transform.TransformPoint(_collider.center), _collider.size / 2, transform.rotation, _dropMask)
+                || Physics.Raycast(s_camera.transform.position, toItem, toItem.magnitude, _dropMask))
+                return;
+
+            Release();
+        }
+
         void Update()
         {
             if (!IsHeld || IsInteractionInProgress) return;
 
             _hoverRaycaster.Raycast();
+        }
+
+        protected override void OnPickUp()
+        {
+            InputLayer.Placement.Throw.performed += OnThrow;
+
+            if (!_rb) return;
+            _rb.isKinematic = true;
+        }
+
+        protected override void OnRelease()
+        {
+            InputLayer.Placement.Throw.performed -= OnThrow;
+
+            if (!_rb) return;
+            _rb.isKinematic = false;
         }
 
         public void HoverEnter(T obj) { }

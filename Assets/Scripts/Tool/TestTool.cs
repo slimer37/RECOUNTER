@@ -15,7 +15,14 @@ namespace Recounter
 
         protected override void OnPickUp()
         {
+            base.OnPickUp();
             _line.enabled = true;
+        }
+
+        public override void Release()
+        {
+            base.Release();
+            _line.enabled = false;
         }
 
         protected override void UseOn(Transform obj)
