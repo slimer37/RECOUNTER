@@ -12,6 +12,14 @@ namespace Recounter.Inventory
         [SerializeField] Product[] _products;
 
         public Product[] Products => _products;
+
+        public static ProductLibrary Default { get; private set; }
+
+        [RuntimeInitializeOnLoadMethod]
+        static void Init()
+        {
+            Default = Resources.Load<ProductLibrary>("Default Products");
+        }
     }
 
     [Serializable]
