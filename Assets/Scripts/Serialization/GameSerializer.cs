@@ -9,6 +9,8 @@ namespace slimer37.Serialization
         public const string SaveFolderName = "saves";
         public const string SaveFileEnding = ".store";
 
+        public static string[] AllSaveFiles() => Directory.GetFiles(GetSaveDirectory(), $"*{SaveFileEnding}");
+
         public static bool ValidateFileName(string fileName, out string validFileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
@@ -48,15 +50,7 @@ namespace slimer37.Serialization
 
         public static bool AlreadyExists(string querySaveFile) => File.Exists(GetSavePath(querySaveFile));
 
-        public static string GetSavePath(string saveFileName)
-        {
-            if (!saveFileName.EndsWith(SaveFileEnding))
-                saveFileName += SaveFileEnding;
-
-            return Path.Combine(GetSaveDirectory(), saveFileName);
-        }
-
-        public static void LoadStore(string saveFilePath, out SaveData storeData)
+        public static void LoadSave(string saveFilePath, out SaveData storeData)
         {
             storeData = null;
 
@@ -71,7 +65,7 @@ namespace slimer37.Serialization
             storeData = SaveData.FromJson(File.ReadAllText(saveFilePath), saveFilePath);
         }
 
-        public static void SaveStore(SaveData storeData)
+        internal static void WriteSave(SaveData storeData)
         {
             try
             {
@@ -83,6 +77,12 @@ namespace slimer37.Serialization
             }
         }
 
-        public static string[] AllSaveFiles() => Directory.GetFiles(GetSaveDirectory(), $"*{SaveFileEnding}");
+        internal static string GetSavePath(string saveFileName)
+        {
+            if (!saveFileName.EndsWith(SaveFileEnding))
+                saveFileName += SaveFileEnding;
+
+            return Path.Combine(GetSaveDirectory(), saveFileName);
+        }
     }
 }

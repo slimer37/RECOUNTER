@@ -44,13 +44,6 @@ namespace slimer37.Serialization
             }
         }
 
-        public static SaveData FromJson(string json, string accessPath)
-        {
-            var data = new SaveData(accessPath);
-            JsonConvert.PopulateObject(json, data);
-            return data;
-        }
-
         public void SetKey<T>(string key, T value)
         {
             _data[key] = value;
@@ -69,6 +62,13 @@ namespace slimer37.Serialization
 
             value = default;
             return false;
+        }
+
+        internal static SaveData FromJson(string json, string accessPath)
+        {
+            var data = new SaveData(accessPath);
+            JsonConvert.PopulateObject(json, data);
+            return data;
         }
 
         SaveData(string name, string accessPath) : this(accessPath)
@@ -106,7 +106,7 @@ namespace slimer37.Serialization
             PreSave?.Invoke();
 
             protection = SaveGuard.GetShaHash(this);
-            GameSerializer.SaveStore(this);
+            GameSerializer.WriteSave(this);
 
             UnityEngine.Debug.Log($"Just saved \"{name}\"");
 

@@ -132,7 +132,7 @@ namespace slimer37.Serialization.Editor
                     if (isFocused)
                         EditorGUILayout.LabelField("Focused", EditorStyles.boldLabel, GUILayout.Width(52));
                     else if (GUILayout.Button("Focus", GUILayout.ExpandWidth(false)))
-                        GameSerializer.LoadStore(fileName, out _viewedSave);
+                        GameSerializer.LoadSave(fileName, out _viewedSave);
 
                     if (GUILayout.Button("Delete", GUILayout.ExpandWidth(false)))
                     {
@@ -158,7 +158,7 @@ namespace slimer37.Serialization.Editor
                     ListAllInfo(_viewedSave);
 
                     if (GUILayout.Button("Refresh"))
-                        GameSerializer.LoadStore(_viewedSave.FullFileName, out _viewedSave);
+                        GameSerializer.LoadSave(_viewedSave.FullFileName, out _viewedSave);
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }

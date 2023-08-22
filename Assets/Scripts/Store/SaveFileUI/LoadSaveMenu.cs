@@ -49,7 +49,7 @@ namespace Recounter.UI
 
                 try
                 {
-                    GameSerializer.LoadStore(fileName, out storeData);
+                    GameSerializer.LoadSave(fileName, out storeData);
                 }
                 catch (System.Exception e)
                 {
