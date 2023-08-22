@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
-namespace SceneLoading
+namespace slimer37.SceneLoading
 {
     internal class LoadingScreen : MonoBehaviour
     {
@@ -28,7 +28,7 @@ namespace SceneLoading
         IEnumerator DisplayProgress(AsyncOperationHandle[] operations)
         {
             var total = operations.Length;
-            
+
             while (operations.Any(op => !op.IsDone))
             {
                 var progress = operations.Sum(op => op.PercentComplete) / total;
@@ -55,7 +55,7 @@ namespace SceneLoading
         IEnumerator Fade(float to)
         {
             var start = group.alpha;
-            
+
             float t = 0;
             while (t < 1)
             {

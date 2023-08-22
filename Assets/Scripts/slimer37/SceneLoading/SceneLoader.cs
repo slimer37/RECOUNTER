@@ -1,11 +1,11 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 
-namespace SceneLoading
+namespace slimer37.SceneLoading
 {
     public class SceneLoader : MonoBehaviour
     {
@@ -54,7 +54,7 @@ namespace SceneLoading
 
             for (var i = 0; i < sceneKeys.Length; i++)
             {
-                object key = sceneKeys[i];
+                var key = sceneKeys[i];
                 var mode = i > 0 ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
                 operations[i] = Addressables.LoadSceneAsync(key, mode);

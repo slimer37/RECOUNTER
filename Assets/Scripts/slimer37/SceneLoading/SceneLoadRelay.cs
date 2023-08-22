@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace SceneLoading
+namespace slimer37.SceneLoading
 {
     public class SceneLoadRelay : MonoBehaviour
     {
