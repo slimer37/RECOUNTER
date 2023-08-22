@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,7 +27,9 @@ namespace Recounter.Items
 
         public event EventHandler<ItemActiveEventArgs> ItemBecameActive;
         public event EventHandler<PutAwayEventArgs> ItemPutAway;
+        public event EventHandler<CancelEventArgs> SlotSwitched;
 
+        void OnSwitchSlot(CancelEventArgs e) => SlotSwitched?.Invoke(this, e);
         void OnItemBecameActive(ItemActiveEventArgs e) => ItemBecameActive?.Invoke(this, e);
         void OnItemPutAway(PutAwayEventArgs e) => ItemPutAway?.Invoke(this, e);
 
@@ -139,6 +142,12 @@ namespace Recounter.Items
         void SetActiveSlot(int index, bool itemIsNew = true, bool force = false)
         {
             if (!force && (_activeIndex == index || Pause.IsPaused)) return;
+
+            var cancel = new CancelEventArgs();
+
+            OnSwitchSlot(cancel);
+
+            if (cancel.Cancel) return;
 
             if (_activeIndex != index)
             {

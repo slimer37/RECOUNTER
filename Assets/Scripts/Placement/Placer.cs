@@ -108,6 +108,7 @@ namespace Recounter
         {
             _hotbar.ItemBecameActive += OnItemBecameActive;
             _hotbar.ItemPutAway += OnItemPutAway;
+            _hotbar.SlotSwitched += OnSwitchSlot;
 
             _placementControls = InputLayer.Placement;
 
@@ -129,6 +130,11 @@ namespace Recounter
             {
                 TriggerInteraction = QueryTriggerInteraction.Collide
             };
+        }
+
+        void OnSwitchSlot(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_isPlacing) e.Cancel = true;
         }
 
         void OnItemPutAway(object sender, PutAwayEventArgs e)
