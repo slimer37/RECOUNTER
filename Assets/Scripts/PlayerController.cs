@@ -2,6 +2,7 @@ using Cinemachine;
 using FMODUnity;
 using NaughtyAttributes;
 using Recounter;
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -73,6 +74,8 @@ public class PlayerController : MonoBehaviour
     bool isCrouching;
 
     Controls.MovementActions movementInput;
+
+    public bool IsMoving => controller.velocity.sqrMagnitude > 0;
 
     public bool ImpulseFootstep()
     {
