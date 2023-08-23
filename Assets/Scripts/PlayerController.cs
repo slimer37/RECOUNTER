@@ -77,6 +77,8 @@ public class PlayerController : MonoBehaviour
 
     public bool IsMoving => controller.velocity.sqrMagnitude > 0;
 
+    public Vector3 CameraRotation => camRot;
+
     public bool ImpulseFootstep()
     {
         if (isSuspended || !controller.isGrounded || !BobbingEnabled) return false;
@@ -125,6 +127,12 @@ public class PlayerController : MonoBehaviour
         camTarget.localPosition = Vector3.up * camHeight;
 
         animator.SetBool(crouchedParam, isCrouching);
+    }
+
+    public void SetCameraRotation(Vector2 euler)
+    {
+        camRot.x = euler.x;
+        camRot.y = euler.y;
     }
 
     void HandleLooking()
