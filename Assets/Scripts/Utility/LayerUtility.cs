@@ -20,11 +20,23 @@ public static class LayerUtility
 		}
     }
 
-    public static bool HierarchyLayersAreSet(this GameObject gameObject) => _originalLayers.ContainsKey(gameObject);
+    static void ThrowIfNull(GameObject go)
+    {
+        if (!go) throw new NullReferenceException($"GameObject is null.");
+    }
+
+    public static bool HierarchyLayersAreSet(this GameObject gameObject)
+    {
+        ThrowIfNull(gameObject);
+
+        return _originalLayers.ContainsKey(gameObject);
+    }
 
     public static void SetHierarchyLayers(this GameObject gameObject, int layer)
-	{
-		if (gameObject.HierarchyLayersAreSet())
+    {
+        ThrowIfNull(gameObject);
+
+        if (gameObject.HierarchyLayersAreSet())
 			throw new InvalidOperationException($"Cannot set layers for {gameObject.name}. Restore its layers before setting again.");
 
 		var hierarchy = gameObject.GetComponentsInChildren<Transform>();
@@ -41,8 +53,10 @@ public static class LayerUtility
 	}
 
 	public static void RestoreHierarchyLayers(this GameObject gameObject)
-	{
-		if (!_originalLayers.TryGetValue(gameObject, out var recordedLayers))
+    {
+        ThrowIfNull(gameObject);
+
+        if (!_originalLayers.TryGetValue(gameObject, out var recordedLayers))
 			throw new KeyNotFoundException($"The original layers were not found for the hierarchy of {gameObject.name}.");
 
         var hierarchy = gameObject.GetComponentsInChildren<Transform>();
