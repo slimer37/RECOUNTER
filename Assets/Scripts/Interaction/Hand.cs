@@ -28,7 +28,7 @@ public class Hand : MonoBehaviour
 
     [ShowNonSerializedField] CarryStates _carryStates = CarryStates.None;
 
-    public bool IsFull => HeldObject;
+    public bool IsFull => HeldObject || _handTarget;
 
     public Vector3 HoldPosition { get; set; }
     public Quaternion HoldRot { get; set; }
