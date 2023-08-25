@@ -110,10 +110,7 @@ namespace Recounter
 
             _rigidbody.velocity = velocity;
 
-            if (input.y != 0)
-            {
-                LastInteractor.Controller.CameraRotation += _rigidbody.angularVelocity.y * Mathf.Rad2Deg * Time.deltaTime * Vector2.up;
-            }
+            LastInteractor.Controller.CameraRotation += _rigidbody.angularVelocity.y * Mathf.Rad2Deg * Time.deltaTime * Vector2.up;
 
             var playerPos = LastInteractor.transform.position;
 
