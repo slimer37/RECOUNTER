@@ -90,7 +90,7 @@ namespace Recounter
 
             if (input.y != 0)
             {
-                _rigidbody.MoveRotation(Quaternion.Euler(_rigidbody.rotation.eulerAngles + Time.fixedDeltaTime * _turnSpeed * input.x * Vector3.up));
+                _rigidbody.AddTorque(Mathf.Deg2Rad * _turnSpeed * input.x * Vector3.up, ForceMode.VelocityChange);
             }
         }
 
