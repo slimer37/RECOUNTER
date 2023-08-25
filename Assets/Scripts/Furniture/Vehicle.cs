@@ -13,11 +13,13 @@ namespace Recounter
         [Header("Control")]
         [SerializeField] float _speed;
         [SerializeField] float _turnSpeed;
-        [SerializeField] CharacterController _controller;
+        [SerializeField] Rigidbody _rigidbody;
 
         bool _isBeingPushed;
 
         InputAction _movementAction;
+
+        Vector2 input;
 
         void Awake()
         {
@@ -64,7 +66,7 @@ namespace Recounter
 
             rot.y = angleY;
 
-            e.Controller.SetCameraRotation(rot);
+            e.Controller.CameraRotation = rot;
         }
 
         void StopBeingPushed()
@@ -82,15 +84,36 @@ namespace Recounter
             _tool.Unequip();
         }
 
+        void FixedUpdate()
+        {
+            if (!_isBeingPushed) return;
+
+            if (input.y != 0)
+            {
+                _rigidbody.MoveRotation(Quaternion.Euler(_rigidbody.rotation.eulerAngles + Time.fixedDeltaTime * _turnSpeed * input.x * Vector3.up));
+            }
+        }
+
         void Update()
         {
             if (!_isBeingPushed) return;
 
-            var input = _movementAction.ReadValue<Vector2>();
+            input = _movementAction.ReadValue<Vector2>();
 
-            _controller.SimpleMove(_speed * input.y * transform.forward);
+            var forward = transform.forward;
 
-            transform.Rotate(Time.deltaTime * _turnSpeed * input.x * Vector3.up);
+            forward.y = 0;
+
+            var velocity = _speed * input.y * forward;
+
+            velocity.y = _rigidbody.velocity.y;
+
+            _rigidbody.velocity = velocity;
+
+            if (input.y != 0)
+            {
+                LastInteractor.Controller.CameraRotation += Time.deltaTime * input.x * _turnSpeed * Vector2.up;
+            }
 
             var playerPos = LastInteractor.transform.position;
 
