@@ -88,7 +88,7 @@ namespace Recounter
 
         void FixedUpdate()
         {
-            if (!_isBeingPushed) return;
+            if (!_isBeingPushed || Locked) return;
 
             if (input.y != 0)
             {
@@ -98,7 +98,7 @@ namespace Recounter
 
         void Update()
         {
-            if (!_isBeingPushed) return;
+            if (!_isBeingPushed || Locked) return;
 
             input = _movementAction.ReadValue<Vector2>();
 

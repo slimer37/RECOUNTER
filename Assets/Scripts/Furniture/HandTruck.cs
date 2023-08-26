@@ -15,6 +15,10 @@ namespace Recounter
 
         float _raisedAngle;
 
+        Furniture _load;
+
+        Furniture _target;
+
         Tween _tween;
 
         protected override void Awake()
@@ -40,7 +44,66 @@ namespace Recounter
             _vehicle.Locked = true;
         }
 
-        protected override void OnEquip() => Raise();
-        protected override void OnUnequip() => Drop();
+        protected override void OnEquip()
+        {
+            Raise();
+
+            _target?.Highlight();
+        }
+
+        protected override void OnUnequip()
+        {
+            Drop();
+
+            _target?.RemoveHighlight();
+        }
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (_load || !other.CompareTag("Furniture")) return;
+
+            _target?.RemoveHighlight();
+            _target = other.GetComponent<Furniture>();
+            _target.Highlight();
+        }
+
+        void OnTriggerExit(Collider other)
+        {
+            if (_load || !other.CompareTag("Furniture")) return;
+
+            if (_target == other.GetComponent<Furniture>())
+            {
+                _target.RemoveHighlight();
+                _target = null;
+            }
+        }
+
+        public void LoadFurniture()
+        {
+            _load = _target;
+
+            _target.RemoveHighlight();
+
+            _load.transform.SetParent(_layPoint);
+
+            _load.transform.rotation = _layPoint.rotation;
+
+            _load.transform.localPosition = Vector3.Scale(_load.Extents, new Vector3(0, 1, 1));
+
+            _target = null;
+        }
+
+        protected override void EquippedUpdate()
+        {
+            if (!_target) return;
+
+            if (InputLayer.Placement.Place.WasPressedThisFrame())
+            {
+                if (!_load)
+                {
+                    LoadFurniture();
+                }
+            }
+        }
     }
 }
