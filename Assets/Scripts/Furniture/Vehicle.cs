@@ -9,9 +9,9 @@ namespace Recounter
         [SerializeField] Hand.ViewmodelPose _rightHandPose;
         [SerializeField] float _distance;
 
-        [Header("Control")]
-        [SerializeField] float _speed;
-        [SerializeField] float _turnSpeed;
+        [field: Header("Control")]
+        [field: SerializeField] public float Speed { get; private set; }
+        [field: SerializeField] public float TurnSpeed { get; private set; }
         [SerializeField] Rigidbody _rigidbody;
 
         bool _isBeingPushed;
@@ -95,7 +95,7 @@ namespace Recounter
 
             if (input.y != 0)
             {
-                _rigidbody.AddTorque(Mathf.Deg2Rad * _turnSpeed * input.x * Vector3.up, ForceMode.VelocityChange);
+                _rigidbody.AddTorque(Mathf.Deg2Rad * TurnSpeed * input.x * Vector3.up, ForceMode.VelocityChange);
             }
         }
 
@@ -109,7 +109,7 @@ namespace Recounter
 
             forward.y = 0;
 
-            var velocity = _speed * input.y * forward;
+            var velocity = Speed * input.y * forward;
 
             velocity.y = _rigidbody.velocity.y;
 

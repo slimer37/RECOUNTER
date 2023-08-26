@@ -1569,8 +1569,8 @@ MonoBehaviour:
     handClosedness: 0.8
     thumbCurl: 0.6
   _distance: 1
-  _speed: 3
-  _turnSpeed: 45
+  <Speed>k__BackingField: 2.5
+  <TurnSpeed>k__BackingField: 45
   _rigidbody: {fileID: 1800707772}
   _layPoint: {fileID: 2094648415}
   _ghost: {fileID: 0}
