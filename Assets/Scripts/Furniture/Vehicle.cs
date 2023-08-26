@@ -21,6 +21,8 @@ namespace Recounter
 
         Vector2 input;
 
+        public bool Locked { get; set; }
+
         void Awake()
         {
             InputLayer.Placement.Throw.performed += Interact;
@@ -33,7 +35,7 @@ namespace Recounter
             StopBeingPushed();
         }
 
-        protected override bool CanInteract(Employee e) => !_isBeingPushed && e.HandsAreFree;
+        protected override bool CanInteract(Employee e) => !Locked && !_isBeingPushed && e.HandsAreFree;
 
         protected override void OnInteract(Employee e) => StartBeingPushed(e);
 
