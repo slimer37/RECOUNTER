@@ -10,8 +10,8 @@ namespace Recounter
         [SerializeField] float _distance;
 
         [field: Header("Control")]
-        [field: SerializeField] public float Speed { get; private set; }
-        [field: SerializeField] public float TurnSpeed { get; private set; }
+        [field: SerializeField] protected float _defaultSpeed;
+        [field: SerializeField] protected float _turnSpeed;
         [SerializeField] Rigidbody _rigidbody;
 
         bool _isBeingPushed;
@@ -19,6 +19,9 @@ namespace Recounter
         InputAction _movementAction;
 
         Vector2 input;
+
+        protected virtual float Speed => _defaultSpeed;
+        protected virtual float TurnSpeed => _turnSpeed;
 
         protected bool Locked { get; set; }
 

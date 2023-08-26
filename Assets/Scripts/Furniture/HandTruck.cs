@@ -8,6 +8,7 @@ namespace Recounter
         [Header("Hand Truck")]
         [SerializeField] Transform _layPoint;
         [SerializeField] Ghost _ghost;
+        [SerializeField] float _filledSpeed;
 
         [Header("Animation")]
         [SerializeField] float _dropSpeed;
@@ -23,6 +24,8 @@ namespace Recounter
         Furniture _target;
 
         Tween _tween;
+
+        protected override float Speed => _load ? _filledSpeed : _defaultSpeed;
 
         protected override void Awake()
         {
