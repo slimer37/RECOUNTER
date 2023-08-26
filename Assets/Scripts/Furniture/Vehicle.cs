@@ -7,7 +7,6 @@ namespace Recounter
     {
         [SerializeField] Hand.ViewmodelPose _leftHandPose;
         [SerializeField] Hand.ViewmodelPose _rightHandPose;
-        [SerializeField] Tool _tool;
         [SerializeField] float _distance;
 
         [Header("Control")]
@@ -21,9 +20,9 @@ namespace Recounter
 
         Vector2 input;
 
-        public bool Locked { get; set; }
+        protected bool Locked { get; set; }
 
-        void Awake()
+        protected virtual void Awake()
         {
             InputLayer.Placement.Throw.performed += Interact;
         }
@@ -52,10 +51,12 @@ namespace Recounter
             e.LeftHand.SetHandViewmodel(_leftHandPose);
             e.RightHand.SetHandViewmodel(_rightHandPose);
 
-            _tool.Equip();
-
             SetRotation(e);
+
+            OnStartedBeingPushed();
         }
+
+        protected virtual void OnStartedBeingPushed() { }
 
         void SetRotation(Employee e)
         {
@@ -83,8 +84,10 @@ namespace Recounter
             LastInteractor.LeftHand.ResetHandViewmodel();
             LastInteractor.RightHand.ResetHandViewmodel();
 
-            _tool.Unequip();
+            OnStoppedBeingPushed();
         }
+
+        protected virtual void OnStoppedBeingPushed() { }
 
         void FixedUpdate()
         {
@@ -121,6 +124,10 @@ namespace Recounter
             pos.y = playerPos.y;
 
             LastInteractor.transform.position = pos;
+
+            PushingUpdate();
         }
+
+        protected virtual void PushingUpdate() { }
     }
 }

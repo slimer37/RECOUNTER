@@ -1539,7 +1539,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1800707771}
-  - component: {fileID: 1800707770}
   - component: {fileID: 1800707768}
   - component: {fileID: 1800707772}
   m_Layer: 7
@@ -1561,25 +1560,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9acc4b0a820ab1f479a007aa4cec161d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _layPoint: {fileID: 2094648415}
-  _dropSpeed: 30
-  _dropEase: 30
-  _raiseSpeed: 90
-  _raiseEase: 6
-  _visual: {fileID: 1086044919}
-  _vehicle: {fileID: 1800707770}
---- !u!114 &1800707770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1800707767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dbe2e124386a594db65c3b864aa4e45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   _leftHandPose:
     target: {fileID: 1078407569}
     handClosedness: 0.8
@@ -1588,11 +1568,17 @@ MonoBehaviour:
     target: {fileID: 1658754266}
     handClosedness: 0.8
     thumbCurl: 0.6
-  _tool: {fileID: 1800707768}
   _distance: 1
   _speed: 3
   _turnSpeed: 45
   _rigidbody: {fileID: 1800707772}
+  _layPoint: {fileID: 2094648415}
+  _ghost: {fileID: 0}
+  _dropSpeed: 30
+  _dropEase: 30
+  _raiseSpeed: 90
+  _raiseEase: 6
+  _visual: {fileID: 1086044919}
 --- !u!4 &1800707771
 Transform:
   m_ObjectHideFlags: 0
@@ -1620,7 +1606,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1800707767}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 10
   m_CenterOfMass: {x: 0, y: 0, z: 0}

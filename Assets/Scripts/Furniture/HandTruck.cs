@@ -3,15 +3,18 @@ using UnityEngine;
 
 namespace Recounter
 {
-    public class HandTruck : Tool
+    public class HandTruck : Vehicle
     {
+        [Header("Hand Truck")]
         [SerializeField] Transform _layPoint;
+        [SerializeField] Ghost _ghost;
+
+        [Header("Animation")]
         [SerializeField] float _dropSpeed;
         [SerializeField] Ease _dropEase;
         [SerializeField] float _raiseSpeed;
         [SerializeField] Ease _raiseEase;
         [SerializeField] Transform _visual;
-        [SerializeField] Vehicle _vehicle;
 
         float _raisedAngle;
 
@@ -39,19 +42,19 @@ namespace Recounter
         void Drop()
         {
             _tween?.Kill();
-            _tween = _visual.DOLocalRotate(Vector3.zero, _dropSpeed).SetEase(_dropEase).SetSpeedBased().OnKill(() => _vehicle.Locked = false);
+            _tween = _visual.DOLocalRotate(Vector3.zero, _dropSpeed).SetEase(_dropEase).SetSpeedBased().OnKill(() => Locked = false);
 
-            _vehicle.Locked = true;
+            Locked = true;
         }
 
-        protected override void OnEquip()
+        protected override void OnStartedBeingPushed()
         {
             Raise();
 
             _target?.Highlight();
         }
 
-        protected override void OnUnequip()
+        protected override void OnStoppedBeingPushed()
         {
             Drop();
 
@@ -93,7 +96,7 @@ namespace Recounter
             _target = null;
         }
 
-        protected override void EquippedUpdate()
+        protected override void PushingUpdate()
         {
             if (!_target) return;
 

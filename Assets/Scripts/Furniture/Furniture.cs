@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Recounter
 {
-    public class Furniture : MonoBehaviour
+    public class Furniture : Interactable
     {
         [SerializeField] Material _highlight;
 
