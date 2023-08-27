@@ -30,8 +30,6 @@ namespace Recounter
 
         public void Activate(Employee e, Furniture furniture, Action completedCallback)
         {
-            print("Activated!");
-
             IsActivated = true;
             _employee = e;
             e.Interaction.Suspend(true);
