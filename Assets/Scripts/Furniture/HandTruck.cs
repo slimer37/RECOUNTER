@@ -87,18 +87,18 @@ namespace Recounter
 
         void OnTriggerEnter(Collider other)
         {
-            if (_load || !other.CompareTag("Furniture")) return;
+            if (!IsBeingPushed || _load || !other.CompareTag("Furniture")) return;
 
             _target?.RemoveHighlight();
-            _target = other.GetComponent<Furniture>();
+            _target = other.GetComponentInParent<Furniture>();
             _target.Highlight();
         }
 
         void OnTriggerExit(Collider other)
         {
-            if (_load || !other.CompareTag("Furniture")) return;
+            if (!IsBeingPushed || _load || !other.CompareTag("Furniture")) return;
 
-            if (_target == other.GetComponent<Furniture>())
+            if (_target == other.GetComponentInParent<Furniture>())
             {
                 _target.RemoveHighlight();
                 _target = null;

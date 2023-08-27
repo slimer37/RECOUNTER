@@ -14,7 +14,7 @@ namespace Recounter
         [field: SerializeField] protected float _turnSpeed;
         [SerializeField] Rigidbody _rigidbody;
 
-        bool _isBeingPushed;
+        protected bool IsBeingPushed { get; private set; }
 
         InputAction _movementAction;
 
@@ -32,18 +32,18 @@ namespace Recounter
 
         void Interact(InputAction.CallbackContext obj)
         {
-            if (!_isBeingPushed) return;
+            if (!IsBeingPushed) return;
 
             StopBeingPushed();
         }
 
-        protected override bool CanInteract(Employee e) => !Locked && !_isBeingPushed && e.HandsAreFree;
+        protected override bool CanInteract(Employee e) => !Locked && !IsBeingPushed && e.HandsAreFree;
 
         protected override void OnInteract(Employee e) => StartBeingPushed(e);
 
         void StartBeingPushed(Employee e)
         {
-            _isBeingPushed = true;
+            IsBeingPushed = true;
 
             e.Interaction.Suspend(true);
             InputLayer.Movement.Move.Disable();
@@ -77,7 +77,7 @@ namespace Recounter
 
         void StopBeingPushed()
         {
-            _isBeingPushed = false;
+            IsBeingPushed = false;
 
             LastInteractor.Interaction.Suspend(false);
             InputLayer.Movement.Move.Enable();
@@ -94,7 +94,7 @@ namespace Recounter
 
         void FixedUpdate()
         {
-            if (!_isBeingPushed || Locked) return;
+            if (!IsBeingPushed || Locked) return;
 
             if (input.y != 0)
             {
@@ -104,7 +104,7 @@ namespace Recounter
 
         void Update()
         {
-            if (!_isBeingPushed || Locked) return;
+            if (!IsBeingPushed || Locked) return;
 
             input = _movementAction.ReadValue<Vector2>();
 

@@ -6,45 +6,82 @@ namespace Recounter
     public class Furniture : MonoBehaviour
     {
         [SerializeField] Material _highlight;
+        [SerializeField] Renderer _mainRenderer;
 
         public Vector3 Extents { get; private set; }
         public Vector3 CenterOffset { get; private set; }
 
-        Renderer _renderer;
+        Renderer[] _renderers;
 
-        List<Material> _materials = new();
-
-        void OnDrawGizmosSelected()
-        {
-            var renderer = GetComponent<Renderer>();
-            Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(renderer.localBounds.center, 0.025f);
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(renderer.localBounds.center, renderer.localBounds.size);
-        }
+        bool _highlighted;
 
         void Awake()
         {
-            _renderer = GetComponent<Renderer>();
+            _renderers = GetComponentsInChildren<Renderer>();
 
-            Extents = Vector3.Scale(_renderer.localBounds.extents, transform.lossyScale);
+            Extents = Vector3.Scale(_mainRenderer.localBounds.extents, transform.lossyScale);
 
-            CenterOffset = _renderer.localBounds.center;
+            CenterOffset = _mainRenderer.localBounds.center;
 
-            _renderer.GetMaterials(_materials);
+            if (!CheckFurnitureTag())
+                Debug.LogWarning("This furniture is not tagged.", this);
+        }
+
+        bool CheckFurnitureTag()
+        {
+            foreach (Transform child in transform)
+            {
+                if (child.gameObject.CompareTag("Furniture"))
+                    return true;
+            }
+
+            return false;
         }
 
         public void Highlight()
         {
-            _materials.Add(_highlight);
-            _renderer.SetMaterials(_materials);
+            if (_highlighted)
+            {
+                Debug.LogWarning("Furniture is already highlighted.", this);
+                return;
+            }
+
+            List<Material> materials = new();
+
+            foreach (var renderer in _renderers)
+            {
+                materials.Clear();
+                renderer.GetSharedMaterials(materials);
+                materials.Add(_highlight);
+                renderer.SetSharedMaterials(materials);
+            }
+
+            _highlighted = true;
+
+            Debug.Log("Highlight", this);
         }
 
         public void RemoveHighlight()
         {
-            _materials.Remove(_highlight);
-            _renderer.SetMaterials(_materials);
+            if (!_highlighted)
+            {
+                Debug.LogWarning("Furniture is not highlighted.", this);
+                return;
+            }
+
+            List<Material> materials = new();
+
+            foreach (var renderer in _renderers)
+            {
+                materials.Clear();
+                renderer.GetSharedMaterials(materials);
+                materials.RemoveAll(m => m == _highlight);
+                renderer.SetSharedMaterials(materials);
+            }
+
+            _highlighted = false;
+
+            Debug.Log("Remove Highlight", this);
         }
 
         Vector3 PositionFromGroundPoint(Vector3 groundPoint) => groundPoint + Vector3.up * (Extents.y + 0.01f) - CenterOffset;
