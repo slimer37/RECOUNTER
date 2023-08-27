@@ -48,7 +48,7 @@ namespace Slimer37.Serialization
         {
             _data[key] = value;
 
-            UnityEngine.Debug.Log(_data[key]);
+            UnityEngine.Debug.Log($"Saved value of \"{key}\" as: {_data[key]}");
         }
 
         public bool TryGetKey<T>(string key, out T value)
