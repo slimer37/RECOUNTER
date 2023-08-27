@@ -1,3 +1,4 @@
+using Recounter.Store;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace Recounter
     {
         [SerializeField] Material _highlight;
         [SerializeField] Renderer _mainRenderer;
+        [SerializeField] SavableTransform _savableTransform;
 
         public Vector3 Extents { get; private set; }
         public Vector3 CenterOffset { get; private set; }
@@ -85,6 +87,7 @@ namespace Recounter
         public void PlaceAt(Vector3 groundPoint, Quaternion rotation)
         {
             transform.SetPositionAndRotation(PositionFromGroundPoint(groundPoint), rotation);
+            _savableTransform.Save();
         }
 
         public bool FitsAt(Vector3 groundPoint, Quaternion rotation, out Vector3 point)

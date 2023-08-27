@@ -979,6 +979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _highlight: {fileID: 2100000, guid: 857bef2c4af357e4a8371dc03845db3c, type: 2}
   _mainRenderer: {fileID: 9060086518183735736}
+  _savableTransform: {fileID: 919132148129466381}
 --- !u!65 &1122710883
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1485,6 +1486,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _position: 1
   _rotation: 1
+  _writeOnPreSave: 1
 --- !u!1001 &1742862131
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2144,6 +2146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _position: 1
   _rotation: 1
+  _writeOnPreSave: 0
 --- !u!4 &1139080587453931404
 Transform:
   m_ObjectHideFlags: 0
