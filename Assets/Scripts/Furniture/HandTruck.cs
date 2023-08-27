@@ -7,8 +7,8 @@ namespace Recounter
     {
         [Header("Hand Truck")]
         [SerializeField] Transform _layPoint;
-        [SerializeField] Ghost _ghost;
         [SerializeField] float _filledSpeed;
+        [SerializeField] FurniturePlacement _placement;
 
         [Header("Animation")]
         [SerializeField] float _dropSpeed;
@@ -24,6 +24,8 @@ namespace Recounter
         Furniture _target;
 
         Tween _tween;
+
+        bool IsFull => _load;
 
         protected override float Speed => _load ? _filledSpeed : _defaultSpeed;
 
@@ -48,6 +50,25 @@ namespace Recounter
             _tween = _visual.DOLocalRotate(Vector3.zero, _dropSpeed).SetEase(_dropEase).SetSpeedBased().OnKill(() => Locked = false);
 
             Locked = true;
+        }
+
+        protected override bool CanInteract(Employee e) => IsFull ? !_placement.IsActivated : base.CanInteract(e);
+
+        protected override void OnInteract(Employee e)
+        {
+            if (IsFull)
+            {
+                _placement.Activate(e, _load, () =>
+                {
+                    _load.transform.SetParent(null);
+                    _load.gameObject.RestoreHierarchyLayers();
+                    _load = null;
+                });
+            }
+            else
+            {
+                base.OnInteract(e);
+            }
         }
 
         protected override void OnStartedBeingPushed()
@@ -92,9 +113,11 @@ namespace Recounter
 
             _load.transform.SetParent(_layPoint);
 
+            _load.gameObject.SetHierarchyLayers(LayerMask.NameToLayer("Interactable"));
+
             _load.transform.rotation = _layPoint.rotation;
 
-            _load.transform.localPosition = Vector3.Scale(_load.Extents, new Vector3(0, 1, 1));
+            _load.transform.localPosition = Vector3.Scale(_load.Extents - _load.CenterOffset, new Vector3(0, 1, 1));
 
             _target = null;
         }

@@ -8,6 +8,7 @@ namespace Recounter
         public void HoverEnter(T obj);
         public void HoverStay(T obj);
         public void HoverExit(T obj);
+        public void OnRaycastHit(RaycastHit hit) { }
     }
 
     /// <summary>
@@ -69,6 +70,8 @@ namespace Recounter
                 if (_interactableMask == (_interactableMask | (1 << hit.transform.gameObject.layer)))
                 {
                     currentHover = hit.collider.transform;
+
+                    _handler.OnRaycastHit(hit);
                 }
             }
 
