@@ -57,8 +57,6 @@ namespace Recounter
             }
 
             _highlighted = true;
-
-            Debug.Log("Highlight", this);
         }
 
         public void RemoveHighlight()
@@ -80,8 +78,6 @@ namespace Recounter
             }
 
             _highlighted = false;
-
-            Debug.Log("Remove Highlight", this);
         }
 
         Vector3 PositionFromGroundPoint(Vector3 groundPoint) => groundPoint + Vector3.up * (Extents.y + 0.01f) - CenterOffset;
