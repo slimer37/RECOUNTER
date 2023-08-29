@@ -52,6 +52,18 @@ namespace Recounter
             Locked = true;
         }
 
+        protected override HudInfo FormHud(Employee e) => IsFull
+            ? new()
+            {
+                text = "Remove furniture",
+                icon = Icon.Hand
+            }
+            : new()
+            {
+                text = "Drive",
+                icon = Icon.Push
+            };
+
         protected override bool CanInteract(Employee e) => IsFull ? !_placement.IsActivated : base.CanInteract(e);
 
         protected override void OnInteract(Employee e)
