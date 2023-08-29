@@ -42,16 +42,19 @@ public class Employee : MonoBehaviour
     /// Shows a message to this player.
     /// </summary>
     /// <param name="message"></param>
-    /// <param name="duration">How long the message stays. Set to a negative number to make it permanent.</param>
+    /// <param name="duration">How long the message stays.</param>
     public void ShowMessage(string message, float duration = 3)
+    {
+        SetMessage(message);
+        TweenFadeOut().SetDelay(duration);
+    }
+
+    public void ShowPermanentMessage(string message) => SetMessage(message);
+
+    void SetMessage(string message)
     {
         _message.text = message;
         _message.alpha = 1;
-
-        if (duration > 0)
-        {
-            TweenFadeOut().SetDelay(duration);
-        }
     }
 
     /// <summary>

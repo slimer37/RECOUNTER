@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Recounter
 {
@@ -42,6 +43,8 @@ namespace Recounter
             _completedCallback = completedCallback;
 
             _validPoint = false;
+
+            e.ShowPermanentMessage($"{InputLayer.Placement.Place.GetBindingDisplayString()} to place on ground.");
         }
 
         public void HoverEnter(Transform obj) { }
@@ -79,7 +82,7 @@ namespace Recounter
             _ghost.Hide();
         }
 
-        void Place(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        void Place(InputAction.CallbackContext obj)
         {
             if (!IsActivated) return;
 
@@ -91,6 +94,8 @@ namespace Recounter
 
             _ghost.Hide();
             InputLayer.Movement.Enable();
+
+            _employee.HideMessage();
 
             _completedCallback();
         }
