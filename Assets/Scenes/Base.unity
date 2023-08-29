@@ -1595,7 +1595,6 @@ MonoBehaviour:
   _controller: {fileID: 273294031}
   _interaction: {fileID: 273294029}
   _messageExpiry: 3
-  _messageFadeTime: 0.5
   _handsFullMessage: You need two free hands to use the tablet.
   _physicalTablet: {fileID: 311280850}
   _raiseTime: 0.5
@@ -4502,6 +4501,7 @@ MonoBehaviour:
   _hudCanvas: {fileID: 1070106081}
   _hudCanvasGroup: {fileID: 1070106083}
   _hudFadeTime: 0.2
+  _messageFadeTime: 0.5
   _message: {fileID: 1860973869}
 --- !u!1 &849296146
 GameObject:

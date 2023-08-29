@@ -16,7 +16,6 @@ namespace Recounter.Tablet
 
         [Header("Hands Full Check")]
         [SerializeField] float _messageExpiry;
-        [SerializeField] float _messageFadeTime;
         [SerializeField] string _handsFullMessage;
 
         [Header("Physical Tablet")]
@@ -55,7 +54,7 @@ namespace Recounter.Tablet
 
             if (!_employee.HandsAreFree)
             {
-                _employee.ShowMessage(_handsFullMessage, _messageExpiry, _messageFadeTime);
+                _employee.ShowMessage(_handsFullMessage, _messageExpiry);
                 return;
             }
 
