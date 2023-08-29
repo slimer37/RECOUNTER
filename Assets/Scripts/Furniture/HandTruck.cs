@@ -61,7 +61,7 @@ namespace Recounter
             : new()
             {
                 text = "Drive",
-                icon = Icon.Push
+                icon = Icon.HandTruck
             };
 
         protected override bool CanInteract(Employee e) => IsFull ? !_placement.IsActivated : base.CanInteract(e);
