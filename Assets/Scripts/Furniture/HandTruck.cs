@@ -58,17 +58,22 @@ namespace Recounter
         {
             if (IsFull)
             {
-                _placement.Activate(e, _load, () =>
-                {
-                    _load.transform.SetParent(null);
-                    _load.gameObject.RestoreHierarchyLayers();
-                    _load = null;
-                });
+                BeginFurniturePlacement(e);
             }
             else
             {
                 base.OnInteract(e);
             }
+        }
+
+        void BeginFurniturePlacement(Employee e)
+        {
+            _placement.Activate(e, _load, () =>
+            {
+                _load.transform.SetParent(null);
+                _load.gameObject.RestoreHierarchyLayers();
+                _load = null;
+            });
         }
 
         protected override void OnStartedBeingPushed()
