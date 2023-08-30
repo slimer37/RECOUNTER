@@ -20,7 +20,7 @@ namespace Recounter
 
         protected override void OnPickUp()
         {
-            _tool.Equip();
+            _tool?.Equip();
             InputLayer.Placement.Throw.performed += OnThrow;
 
             if (!_rb) return;
@@ -29,7 +29,7 @@ namespace Recounter
 
         protected override void OnRelease()
         {
-            _tool.Unequip();
+            _tool?.Unequip();
             InputLayer.Placement.Throw.performed -= OnThrow;
 
             if (!_rb) return;

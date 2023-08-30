@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Hanger
   - Furniture
+  - Shelf Tool
   layers:
   - Default
   - TransparentFX
