@@ -1701,6 +1701,7 @@ GameObject:
   - component: {fileID: 1800707768}
   - component: {fileID: 1800707773}
   - component: {fileID: 1800707772}
+  - component: {fileID: 1800707774}
   m_Layer: 7
   m_Name: vehicle
   m_TagString: Untagged
@@ -1811,6 +1812,21 @@ MonoBehaviour:
   _badMat: {fileID: 2100000, guid: 6c14ab0bcbcbfbd498b96a56e51ebd2b, type: 2}
   _range: 4
   _rotateSensitivity: 0.5
+--- !u!114 &1800707774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800707767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36479c457cc4e6f4e836bf36f05d42ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _position: 1
+  _rotation: 1
+  _writeOnPreSave: 1
 --- !u!1 &1802454798
 GameObject:
   m_ObjectHideFlags: 0
