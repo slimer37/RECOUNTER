@@ -26,6 +26,14 @@ namespace Recounter
 
         const string StoreSceneKey = "Store";
 
+#if UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod]
+        static void Init()
+        {
+            s_storeData = null;
+        }
+#endif
+
         void Awake()
         {
             if (Singleton)
