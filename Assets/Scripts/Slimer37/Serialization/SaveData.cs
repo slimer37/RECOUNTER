@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 
 namespace Slimer37.Serialization
 {
@@ -29,6 +30,14 @@ namespace Slimer37.Serialization
         static SaveData s_temporaryData;
 
         public bool IsTemporary => this == s_temporaryData;
+
+#if UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod]
+        static void Init()
+        {
+            s_temporaryData = null;
+        }
+#endif
 
         public static SaveData Temporary
         {
