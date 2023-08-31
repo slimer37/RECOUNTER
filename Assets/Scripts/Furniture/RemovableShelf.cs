@@ -49,6 +49,8 @@ namespace Recounter
         }
 
         protected override bool CanInteract(Employee e) =>
-            e.RightHand.IsFull && e.RightHand.HeldObject.CompareTag("Shelf Tool");
+            !e.LeftHand.IsFull
+            && e.RightHand.IsFull
+            && e.RightHand.HeldObject.CompareTag("Shelf Tool");
     }
 }
