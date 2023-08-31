@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Recounter
@@ -8,6 +6,23 @@ namespace Recounter
     {
         [SerializeField] Vector3 _holdPos;
         [SerializeField] Vector3 _holdRot;
+        [SerializeField] RemovedShelfTool _removedShelfTool;
+        [SerializeField] BoxCollider _collider;
+
+        Collider[] _colliders;
+
+        void Awake()
+        {
+            _colliders = GetComponentsInChildren<Collider>();
+        }
+
+        void SetColliders(bool enabled)
+        {
+            foreach (var col in _colliders)
+            {
+                col.enabled = enabled;
+            }
+        }
 
         protected override HudInfo FormHud(Employee e) => new()
         {
@@ -18,6 +33,20 @@ namespace Recounter
         protected override void OnInteract(Employee e)
         {
             LastInteractor.LeftHand.Hold(this, _holdPos, Quaternion.Euler(_holdRot));
+            _removedShelfTool.Equip(e);
+            SetColliders(false);
+        }
+
+        public bool Intersects()
+        {
+            return Physics.CheckBox(transform.TransformPoint(_collider.center), _collider.size / 2, transform.rotation);
+        }
+
+        public void AttachToShelf(AdjustableShelfBase shelfBase, Vector3 position)
+        {
+            _removedShelfTool.Unequip();
+            transform.position = shelfBase.GetAlignment(position);
+            SetColliders(true);
         }
 
         protected override bool CanInteract(Employee e) =>

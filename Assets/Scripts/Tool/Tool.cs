@@ -69,6 +69,8 @@ namespace Recounter
 
         HoverRaycaster<T> _hoverRaycaster;
 
+        protected T CurrentHover => _hoverRaycaster.HoverTarget;
+
         void Start()
         {
             if (s_camera == null)

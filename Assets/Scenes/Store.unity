@@ -2359,6 +2359,7 @@ GameObject:
   - component: {fileID: 9060086518183735736}
   - component: {fileID: 1122710884}
   - component: {fileID: 1122710883}
+  - component: {fileID: 9060086518183735737}
   m_Layer: 0
   m_Name: shelf base
   m_TagString: Furniture
@@ -2652,6 +2653,7 @@ GameObject:
   - component: {fileID: 7071420063054734368}
   - component: {fileID: 1122710885}
   - component: {fileID: 8059955248735343299}
+  - component: {fileID: 8059955248735343300}
   m_Layer: 7
   m_Name: shelf
   m_TagString: Untagged
@@ -2673,6 +2675,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _holdPos: {x: -0.8, y: -0.2, z: 0.6}
   _holdRot: {x: 0, y: 45, z: 0}
+  _removedShelfTool: {fileID: 8059955248735343300}
+  _collider: {fileID: 1122710885}
+--- !u!114 &8059955248735343300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8059955248735343298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5340641384a311418a5d9f5de7ebfd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _toolableMask:
+    serializedVersion: 2
+    m_Bits: 1
+  _allMask:
+    serializedVersion: 2
+    m_Bits: 1
+  _range: 5
+  _shelf: {fileID: 8059955248735343299}
 --- !u!1 &8178879578334224726
 GameObject:
   m_ObjectHideFlags: 0
@@ -2801,6 +2825,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &9060086518183735737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2173393391824310393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04567f7247eb41e448ef2fe1dd12eb4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minHeight: 0.38
+  _maxHeight: 1.78
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
