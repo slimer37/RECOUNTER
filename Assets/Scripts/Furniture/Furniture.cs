@@ -87,7 +87,7 @@ namespace Recounter
         public void PlaceAt(Vector3 groundPoint, Quaternion rotation)
         {
             transform.SetPositionAndRotation(PositionFromGroundPoint(groundPoint), rotation);
-            _savableTransform.Save();
+            _savableTransform.Save(true, true);
         }
 
         public bool FitsAt(Vector3 groundPoint, Quaternion rotation, out Vector3 point)

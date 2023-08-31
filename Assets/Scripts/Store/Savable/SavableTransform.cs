@@ -1,12 +1,13 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Recounter.Store
 {
     public class SavableTransform : MonoBehaviour
     {
-        [SerializeField] bool _position;
-        [SerializeField] bool _rotation;
-        [SerializeField] bool _writeOnPreSave = true;
+        [SerializeField] bool _auto = true;
+        [SerializeField, ShowIf(nameof(_auto))] bool _position;
+        [SerializeField, ShowIf(nameof(_auto))] bool _rotation;
 
         void Awake()
         {
@@ -20,12 +21,12 @@ namespace Recounter.Store
 
         void OnSave()
         {
-            if (!_writeOnPreSave) return;
+            if (!_auto) return;
 
-            Save();
+            Save(_position, _rotation);
         }
 
-        public void Save()
+        public void Save(bool position, bool rotation)
         {
             if (_position) GameManager.StoreData.SetKey(name + " pos", transform.position);
             if (_rotation) GameManager.StoreData.SetKey(name + " rot", transform.eulerAngles);
