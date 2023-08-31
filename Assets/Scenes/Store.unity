@@ -244,8 +244,8 @@ GameObject:
   m_Component:
   - component: {fileID: 80027489}
   - component: {fileID: 80027490}
-  m_Layer: 7
-  m_Name: collider
+  m_Layer: 0
+  m_Name: driver collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -283,7 +283,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.4
   m_Height: 2
@@ -1731,6 +1731,7 @@ MonoBehaviour:
   _distance: 1
   _defaultSpeed: 2
   _turnSpeed: 45
+  _driverCollider: {fileID: 80027490}
   _rigidbody: {fileID: 1800707772}
   _layPoint: {fileID: 2094648415}
   _filledSpeed: 1.8

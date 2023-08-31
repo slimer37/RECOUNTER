@@ -9,9 +9,10 @@ namespace Recounter
         [SerializeField] Hand.ViewmodelPose _rightHandPose;
         [SerializeField] float _distance;
 
-        [field: Header("Control")]
-        [field: SerializeField] protected float _defaultSpeed;
-        [field: SerializeField] protected float _turnSpeed;
+        [Header("Control")]
+        [SerializeField] protected float _defaultSpeed;
+        [SerializeField] protected float _turnSpeed;
+        [SerializeField] Collider _driverCollider;
         [SerializeField] Rigidbody _rigidbody;
 
         protected bool IsBeingPushed { get; private set; }
@@ -28,6 +29,7 @@ namespace Recounter
         protected virtual void Awake()
         {
             InputLayer.Placement.Throw.performed += Interact;
+            _driverCollider.enabled = false;
         }
 
         void Interact(InputAction.CallbackContext obj)
@@ -53,6 +55,8 @@ namespace Recounter
 
             e.LeftHand.SetHandViewmodel(_leftHandPose);
             e.RightHand.SetHandViewmodel(_rightHandPose);
+
+            _driverCollider.enabled = true;
 
             SetRotation(e);
 
@@ -86,6 +90,8 @@ namespace Recounter
 
             LastInteractor.LeftHand.ResetHandViewmodel();
             LastInteractor.RightHand.ResetHandViewmodel();
+
+            _driverCollider.enabled = false;
 
             OnStoppedBeingPushed();
         }
