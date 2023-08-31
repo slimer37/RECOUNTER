@@ -14,7 +14,7 @@ namespace Recounter
             // Why???
             if (!IsEquipped) return;
 
-            if (hit.normal != CurrentHover.transform.forward)
+            if (hit.normal != CurrentHover.transform.forward || !CurrentHover.CheckAlignment(hit.point, out var position))
             {
                 Finish();
                 return;
@@ -22,9 +22,9 @@ namespace Recounter
 
             Begin();
 
-            _position = hit.point;
+            _position = position;
 
-            _shelf.transform.position = CurrentHover.GetAlignment(hit.point) + hit.normal * 0.1f;
+            _shelf.transform.position = position + hit.normal * 0.2f;
             _shelf.transform.rotation = Quaternion.LookRotation(CurrentHover.transform.forward, Vector3.up);
         }
 
@@ -39,7 +39,9 @@ namespace Recounter
         {
             if (_shelf.Intersects()) return;
 
-            _shelf.AttachToShelf(CurrentHover, _position);
+            _shelf.transform.position = _position;
+            _shelf.transform.SetParent(CurrentHover.transform);
+            _shelf.AttachToShelf();
         }
 
         void Begin()

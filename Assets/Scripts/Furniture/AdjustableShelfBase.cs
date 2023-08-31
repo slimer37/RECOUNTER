@@ -5,24 +5,42 @@ namespace Recounter
     public class AdjustableShelfBase : MonoBehaviour
     {
         [SerializeField] float _minHeight;
-        [SerializeField] float _maxHeight;
+        [SerializeField] float _step;
+        [SerializeField] float _forwardOffset;
+        [SerializeField] int _maxShelves;
 
         void OnDrawGizmosSelected()
         {
             Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.color = Color.yellow;
-            var size = Vector3.up * (_maxHeight - _minHeight);
-            var center = Vector3.up * _minHeight + size / 2;
-            size += new Vector3(0.1f, 0f, 0.1f);
-            Gizmos.DrawCube(center, size);
+
+            var basePoint = Vector3.up * _minHeight;
+            var size = new Vector3(0.5f, 0.01f, 0.3f);
+
+            for (int i = 0; i < _maxShelves; i++)
+            {
+                Gizmos.DrawCube(basePoint + _step * i * Vector3.up, size);
+            }
         }
 
-        public Vector3 GetAlignment(Vector3 position)
+        public bool CheckAlignment(Vector3 position, out Vector3 aligned)
         {
+            aligned = new Vector3();
+
             var localPosition = transform.InverseTransformPoint(position);
             localPosition.x = 0;
-            localPosition.y = Mathf.Clamp(localPosition.y, _minHeight, _maxHeight);
-            return transform.TransformPoint(localPosition);
+
+            var closestShelfIndex = Mathf.RoundToInt((localPosition.y - _minHeight) / _step);
+
+            if (closestShelfIndex < 0 || closestShelfIndex >= _maxShelves) return false;
+
+            localPosition.y = _minHeight + closestShelfIndex * _step;
+
+            localPosition.z = _forwardOffset;
+
+            aligned = transform.TransformPoint(localPosition);
+
+            return true;
         }
     }
 }

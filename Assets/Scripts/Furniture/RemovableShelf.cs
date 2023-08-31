@@ -42,10 +42,9 @@ namespace Recounter
             return Physics.CheckBox(transform.TransformPoint(_collider.center), _collider.size / 2, transform.rotation);
         }
 
-        public void AttachToShelf(AdjustableShelfBase shelfBase, Vector3 position)
+        public void AttachToShelf()
         {
             _removedShelfTool.Unequip();
-            transform.position = shelfBase.GetAlignment(position);
             SetColliders(true);
         }
 
