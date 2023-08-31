@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Recounter
@@ -20,6 +21,17 @@ namespace Recounter
             for (int i = 0; i < _maxShelves; i++)
             {
                 Gizmos.DrawCube(basePoint + _step * i * Vector3.up, size);
+            }
+        }
+
+        [Button("Align")]
+        void AlignShelves()
+        {
+            foreach (Transform shelf in transform)
+            {
+                if (!CheckAlignment(shelf.position, out var pos)) continue;
+
+                shelf.transform.position = pos;
             }
         }
 
