@@ -33,6 +33,15 @@ namespace Recounter.Store
 
         void Restore()
         {
+            var rigidbody = GetComponentInParent<Rigidbody>();
+            RigidbodyInterpolation temp = default;
+
+            if (rigidbody)
+            {
+                temp = rigidbody.interpolation;
+                rigidbody.interpolation = RigidbodyInterpolation.None;
+            }
+
             if (_position)
             {
                 if (GameManager.StoreData.TryGetKey(name + " pos", out Vector3 pos))
@@ -43,6 +52,11 @@ namespace Recounter.Store
             {
                 if (GameManager.StoreData.TryGetKey(name + " rot", out Vector3 rot))
                     transform.eulerAngles = rot;
+            }
+
+            if (rigidbody)
+            {
+                rigidbody.interpolation = temp;
             }
         }
 
