@@ -37,11 +37,11 @@ namespace Recounter
 
         protected override void UseOn(AdjustableShelfBase obj)
         {
-            if (_shelf.Intersects()) return;
+            if (_shelf.Intersects() || !CurrentHover.TryAttach(_shelf)) return;
 
+            transform.SetParent(CurrentHover.transform);
             _shelf.transform.position = _position;
-            _shelf.transform.SetParent(CurrentHover.transform);
-            _shelf.AttachToShelf();
+            _shelf.AttachToShelf(CurrentHover);
         }
 
         void Begin()

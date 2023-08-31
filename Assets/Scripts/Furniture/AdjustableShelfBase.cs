@@ -10,6 +10,8 @@ namespace Recounter
         [SerializeField] float _forwardOffset;
         [SerializeField] int _maxShelves;
 
+        RemovableShelf[] _shelves;
+
         void OnDrawGizmosSelected()
         {
             Gizmos.matrix = transform.localToWorldMatrix;
@@ -25,14 +27,37 @@ namespace Recounter
         }
 
         [Button("Align")]
-        void AlignShelves()
+        void AlignShelves() => AlignShelves(false);
+
+        void AlignShelves(bool assignIndices)
         {
             foreach (Transform shelf in transform)
             {
                 if (!CheckAlignment(shelf.position, out var pos)) continue;
 
                 shelf.transform.position = pos;
+
+                if (!assignIndices) continue;
+
+                var localPosition = transform.InverseTransformPoint(shelf.position);
+
+                if (!MatchLocalPositionToShelfIndex(localPosition, out var index)) continue;
+
+                _shelves[index] = shelf.GetComponent<RemovableShelf>();
             }
+        }
+
+        void Awake()
+        {
+            _shelves = new RemovableShelf[_maxShelves];
+
+            AlignShelves(true);
+        }
+
+        bool MatchLocalPositionToShelfIndex(Vector3 localPosition, out int index)
+        {
+            index = Mathf.RoundToInt((localPosition.y - _minHeight) / _step);
+            return index > 0 && index < _maxShelves && _shelves[index] == null;
         }
 
         public bool CheckAlignment(Vector3 position, out Vector3 aligned)
@@ -42,15 +67,25 @@ namespace Recounter
             var localPosition = transform.InverseTransformPoint(position);
             localPosition.x = 0;
 
-            var closestShelfIndex = Mathf.RoundToInt((localPosition.y - _minHeight) / _step);
-
-            if (closestShelfIndex < 0 || closestShelfIndex >= _maxShelves) return false;
+            if (!MatchLocalPositionToShelfIndex(localPosition, out var closestShelfIndex))
+                return false;
 
             localPosition.y = _minHeight + closestShelfIndex * _step;
 
             localPosition.z = _forwardOffset;
 
             aligned = transform.TransformPoint(localPosition);
+
+            return true;
+        }
+
+        public bool TryAttach(RemovableShelf shelf)
+        {
+            var localPosition = transform.InverseTransformPoint(shelf.transform.position);
+
+            if (!MatchLocalPositionToShelfIndex(localPosition, out var index)) return false;
+
+            _shelves[index] = shelf;
 
             return true;
         }
