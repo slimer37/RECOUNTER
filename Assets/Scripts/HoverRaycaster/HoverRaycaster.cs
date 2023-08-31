@@ -70,8 +70,6 @@ namespace Recounter
                 if (_interactableMask == (_interactableMask | (1 << hit.transform.gameObject.layer)))
                 {
                     currentHover = hit.collider.transform;
-
-                    _handler.OnRaycastHit(hit);
                 }
             }
 
@@ -80,6 +78,8 @@ namespace Recounter
             if (_hoverTarget != null)
             {
                 _handler.HoverStay(_hoverTarget);
+
+                _handler.OnRaycastHit(hit);
             }
         }
 
@@ -103,11 +103,7 @@ namespace Recounter
             {
                 _hoverTarget = _filter(currentHover);
 
-                if (_hoverTarget == null)
-                {
-                    Debug.LogError($"Couldn't find a component of type \"{typeof(T).Name}\" for the hovered object.");
-                    return;
-                }
+                if (_hoverTarget == null) return;
 
                 _handler.HoverEnter(_hoverTarget);
             }
