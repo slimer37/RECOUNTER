@@ -6,6 +6,7 @@ namespace Recounter.Store
     {
         [SerializeField] bool _position;
         [SerializeField] bool _rotation;
+        [SerializeField] bool _writeOnPreSave = true;
 
         void Awake()
         {
@@ -19,11 +20,18 @@ namespace Recounter.Store
 
         void OnSave()
         {
+            if (!_writeOnPreSave) return;
+
+            Save();
+        }
+
+        public void Save()
+        {
             if (_position) GameManager.StoreData.SetKey(name + " pos", transform.position);
             if (_rotation) GameManager.StoreData.SetKey(name + " rot", transform.eulerAngles);
         }
 
-        void Start()
+        void Restore()
         {
             if (_position)
             {
@@ -37,5 +45,7 @@ namespace Recounter.Store
                     transform.eulerAngles = rot;
             }
         }
+
+        void Start() => Restore();
     }
 }

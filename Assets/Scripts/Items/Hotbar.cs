@@ -23,7 +23,9 @@ namespace Recounter.Items
 
         HotbarSlot ActiveSlot => _slots[_activeIndex];
 
-        public bool IsActiveSlotFull => ActiveSlot.Item;
+        public Item ActiveItem => ActiveSlot.Item;
+
+        public bool IsActiveSlotFull => ActiveItem;
 
         public event EventHandler<ItemActiveEventArgs> ItemBecameActive;
         public event EventHandler<PutAwayEventArgs> ItemPutAway;

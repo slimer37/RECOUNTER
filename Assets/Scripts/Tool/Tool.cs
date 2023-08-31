@@ -16,9 +16,13 @@ namespace Recounter
 
         bool _justEquipped;
 
-        public void Equip()
+        public Employee Owner { get; private set; }
+
+        public void Equip(Employee e)
         {
             _justEquipped = true;
+
+            Owner = e;
 
             OnEquip();
         }
@@ -65,6 +69,8 @@ namespace Recounter
 
         HoverRaycaster<T> _hoverRaycaster;
 
+        protected T CurrentHover => _hoverRaycaster.HoverTarget;
+
         void Start()
         {
             if (s_camera == null)
@@ -78,7 +84,7 @@ namespace Recounter
             _hoverRaycaster.Raycast();
         }
 
-        public void HoverEnter(T obj) { }
+        public virtual void HoverEnter(T obj) { }
 
         public void HoverStay(T obj)
         {
@@ -88,7 +94,9 @@ namespace Recounter
             }
         }
 
-        public void HoverExit(T obj) { }
+        public virtual void OnRaycastHit(RaycastHit hit) { }
+
+        public virtual void HoverExit(T obj) { }
 
         protected abstract void UseOn(T obj);
     }

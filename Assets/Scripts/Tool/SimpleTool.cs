@@ -20,7 +20,8 @@ namespace Recounter
 
         protected override void OnPickUp()
         {
-            _tool.Equip();
+            _tool?.Equip(LastInteractor);
+
             InputLayer.Placement.Throw.performed += OnThrow;
 
             if (!_rb) return;
@@ -29,7 +30,8 @@ namespace Recounter
 
         protected override void OnRelease()
         {
-            _tool.Unequip();
+            _tool?.Unequip();
+
             InputLayer.Placement.Throw.performed -= OnThrow;
 
             if (!_rb) return;
@@ -38,6 +40,8 @@ namespace Recounter
 
         void OnThrow(InputAction.CallbackContext obj)
         {
+            if (!IsActive) return;
+
             var toItem = transform.position - _camera.transform.position;
             if (Physics.CheckBox(transform.TransformPoint(_collider.center), _collider.size / 2, transform.rotation, _dropMask)
                 || Physics.Raycast(_camera.transform.position, toItem, toItem.magnitude, _dropMask))

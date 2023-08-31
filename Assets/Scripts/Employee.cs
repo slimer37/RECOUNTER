@@ -15,6 +15,7 @@ public class Employee : MonoBehaviour
     [SerializeField] Canvas _hudCanvas;
     [SerializeField] CanvasGroup _hudCanvasGroup;
     [SerializeField] float _hudFadeTime;
+    [SerializeField] float _messageFadeTime;
     [SerializeField] TextMeshProUGUI _message;
 
     void Awake()
@@ -37,13 +38,34 @@ public class Employee : MonoBehaviour
         tween.OnComplete(() => _hudCanvas.enabled = false);
     }
     
-    public void ShowMessage(string message, float duration = 3, float fadeTime = 0.5f)
+    /// <summary>
+    /// Shows a message to this player.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="duration">How long the message stays.</param>
+    public void ShowMessage(string message, float duration = 3)
+    {
+        SetMessage(message);
+        TweenFadeOut().SetDelay(duration);
+    }
+
+    public void ShowPermanentMessage(string message) => SetMessage(message);
+
+    void SetMessage(string message)
     {
         _message.text = message;
         _message.alpha = 1;
+    }
 
+    /// <summary>
+    /// Immediately hides the shown message.
+    /// </summary>
+    public void HideMessage() => TweenFadeOut();
+
+    Tween TweenFadeOut()
+    {
         _message.DOKill();
-        _message.DOFade(0, fadeTime).SetDelay(duration);
+        return _message.DOFade(0, _messageFadeTime);
     }
 
     public void ClearMessage()

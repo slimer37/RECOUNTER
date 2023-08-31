@@ -23,12 +23,13 @@ internal class Ghost : MonoBehaviour
         TryGetComponent(out _filter);
     }
 
-    void OnEnable() => _toggleVisibilityAction.Enable();
-    void OnDisable() => _toggleVisibilityAction.Disable();
+    void OnEnable() => _toggleVisibilityAction?.Enable();
+    void OnDisable() => _toggleVisibilityAction?.Disable();
 
     void Awake()
     {
-        _toggleVisibilityAction.performed += ToggleVisibility;
+        if (_toggleVisibilityAction != null)
+            _toggleVisibilityAction.performed += ToggleVisibility;
 
         Hide();
     }
@@ -75,7 +76,7 @@ internal class Ghost : MonoBehaviour
     {
         _canToggleVisibility = false;
 
-        _instructionCanvas.enabled = false;
+        if (_instructionCanvas) _instructionCanvas.enabled = false;
 
         _rend.enabled = false;
     }
@@ -84,7 +85,7 @@ internal class Ghost : MonoBehaviour
     {
         _canToggleVisibility = !forceVisible;
 
-        _instructionCanvas.enabled = _canToggleVisibility;
+        if (_instructionCanvas) _instructionCanvas.enabled = _canToggleVisibility;
 
         _rend.enabled = _visibilityToggle || forceVisible;
     }

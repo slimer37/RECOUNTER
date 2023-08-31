@@ -10,14 +10,25 @@ namespace Recounter.Items
         [SerializeField] Vector3 _baseHoldPosition;
         [SerializeField] Transform _body;
 
+        bool _isHoldingItem;
+
         void Awake()
         {
+            _hotbar.SlotSwitched += OnSlotSwitch;
             _hotbar.ItemBecameActive += Hold;
             _hotbar.ItemPutAway += PutAway;
         }
 
+        void OnSlotSwitch(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Prevent slot switch if hand is full.
+            if (!_isHoldingItem && _hand.IsFull) e.Cancel = true;
+        }
+
         void Hold(object sender, ItemActiveEventArgs e)
         {
+            _isHoldingItem = true;
+
             var item = e.Item;
 
             var adjustedHoldRot = item.OverrideHoldRotation ?? Quaternion.Euler(_defaultHoldRotation);
@@ -47,6 +58,8 @@ namespace Recounter.Items
             }
 
             _hand.Clear();
+
+            _isHoldingItem = false;
         }
     }
 }

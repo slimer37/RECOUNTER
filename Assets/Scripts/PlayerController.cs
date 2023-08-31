@@ -77,6 +77,12 @@ public class PlayerController : MonoBehaviour
 
     public bool IsMoving => controller.velocity.sqrMagnitude > 0;
 
+    public Vector2 CameraRotation
+    {
+        get => camRot;
+        set => camRot = value;
+    }
+
     public bool ImpulseFootstep()
     {
         if (isSuspended || !controller.isGrounded || !BobbingEnabled) return false;
