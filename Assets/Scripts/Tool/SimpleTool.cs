@@ -40,6 +40,8 @@ namespace Recounter
 
         void OnThrow(InputAction.CallbackContext obj)
         {
+            if (!IsActive) return;
+
             var toItem = transform.position - _camera.transform.position;
             if (Physics.CheckBox(transform.TransformPoint(_collider.center), _collider.size / 2, transform.rotation, _dropMask)
                 || Physics.Raycast(_camera.transform.position, toItem, toItem.magnitude, _dropMask))

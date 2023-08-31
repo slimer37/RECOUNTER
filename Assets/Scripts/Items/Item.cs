@@ -22,6 +22,8 @@ namespace Recounter.Items
 
         public bool IsHeld => _containerHotbar;
 
+        public bool IsActive => _containerHotbar.ActiveItem == this;
+
         Texture2D _thumbnail;
 
         Hotbar _containerHotbar;
