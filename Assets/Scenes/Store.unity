@@ -1529,7 +1529,7 @@ MonoBehaviour:
   _holdRot: {x: 0, y: 0, z: 0}
   _dropMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1153
   _rb: {fileID: 2010314907}
   _collider: {fileID: 2010314906}
   _tool: {fileID: 0}
