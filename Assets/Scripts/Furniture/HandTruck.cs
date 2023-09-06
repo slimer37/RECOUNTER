@@ -25,8 +25,6 @@ namespace Recounter
 
         Tween _tween;
 
-        bool IsFull => _load;
-
         protected override float Speed => _load ? _filledSpeed : _defaultSpeed;
 
         protected override void Awake()
@@ -52,38 +50,17 @@ namespace Recounter
             Locked = true;
         }
 
-        protected override HudInfo FormHud(Employee e) => IsFull
-            ? new()
-            {
-                text = "Remove furniture",
-                icon = Icon.Hand
-            }
-            : new()
-            {
-                text = "Drive",
-                icon = Icon.HandTruck
-            };
-
-        protected override bool CanInteract(Employee e) => IsFull ? !_placement.IsActivated : base.CanInteract(e);
-
-        protected override void OnInteract(Employee e)
+        protected override HudInfo FormHud(Employee e) => new()
         {
-            if (IsFull)
-            {
-                BeginFurniturePlacement(e);
-            }
-            else
-            {
-                base.OnInteract(e);
-            }
-        }
+            text = "Push",
+            icon = Icon.HandTruck
+        };
 
-        void BeginFurniturePlacement(Employee e)
+        public void BeginFurniturePlacement(Employee e)
         {
             _placement.Activate(e, _load, () =>
             {
                 _load.transform.SetParent(null);
-                _load.gameObject.RestoreHierarchyLayers();
                 _load = null;
             });
         }
@@ -126,11 +103,11 @@ namespace Recounter
         {
             _load = _target;
 
+            _load.LoadToMover(this);
+
             _target.RemoveHighlight();
 
             _load.transform.SetParent(_layPoint);
-
-            _load.gameObject.SetHierarchyLayers(LayerMask.NameToLayer("Interactable"));
 
             _load.transform.rotation = _layPoint.rotation;
 

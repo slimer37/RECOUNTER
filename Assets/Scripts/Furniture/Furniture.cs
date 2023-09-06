@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Recounter
 {
-    public class Furniture : MonoBehaviour
+    public class Furniture : Interactable
     {
         [SerializeField] Material _highlight;
         [SerializeField] Renderer _mainRenderer;
@@ -16,6 +16,17 @@ namespace Recounter
         Renderer[] _renderers;
 
         bool _highlighted;
+        bool _isPlaced = true;
+
+        HandTruck _mover;
+
+        protected override bool CanInteract(Employee e) => !_isPlaced;
+
+        protected override HudInfo FormHud(Employee e) => new()
+        {
+            icon = Icon.Hand,
+            text = "Move furniture"
+        };
 
         void Awake()
         {
@@ -84,10 +95,19 @@ namespace Recounter
 
         Vector3 PositionFromGroundPoint(Vector3 groundPoint) => groundPoint + Vector3.up * (Extents.y + 0.01f) - CenterOffset;
 
+        public void LoadToMover(HandTruck mover)
+        {
+            _mover = mover;
+            _isPlaced = false;
+        }
+
+        protected override void OnInteract(Employee e) => _mover.BeginFurniturePlacement(e);
+
         public void PlaceAt(Vector3 groundPoint, Quaternion rotation)
         {
             transform.SetPositionAndRotation(PositionFromGroundPoint(groundPoint), rotation);
             _savableTransform.Save(true, true);
+            _isPlaced = true;
         }
 
         public bool FitsAt(Vector3 groundPoint, Quaternion rotation, out Vector3 point)
