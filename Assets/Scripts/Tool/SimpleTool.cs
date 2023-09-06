@@ -18,6 +18,8 @@ namespace Recounter
             _camera = Camera.main;
         }
 
+        protected override bool CanInteract(Employee e) => !e.RightHand.IsFull;
+
         protected override void OnPickUp()
         {
             _tool?.Equip(LastInteractor);
