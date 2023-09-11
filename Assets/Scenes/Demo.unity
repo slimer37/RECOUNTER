@@ -7180,11 +7180,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3881d6392516924c8d4fa0f2d1a4beb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pullPointDistance: 1
-  _pullStrength: -360
+  _pullStrength: 5
   _rotator: {fileID: 760947120}
   _pullDirection: {x: 0, y: 0, z: 1}
-  _deceleration: 1
   _closeAngle: 135
   _closingForce: 1
   _door: {fileID: 326492565}
@@ -7238,7 +7236,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
