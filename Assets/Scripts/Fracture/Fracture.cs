@@ -14,7 +14,7 @@ namespace Recounter.Fracture
 
         static Dictionary<string, ObjectPool<FracturedObject>> Pools;
 
-        Rigidbody _rb;
+        bool _alreadyFractured;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Init()
@@ -31,8 +31,6 @@ namespace Recounter.Fracture
 
         void Awake()
         {
-            _rb = GetComponent<Rigidbody>();
-            
             if (!Pools.ContainsKey(_id))
                 Pools[_id] = new ObjectPool<FracturedObject>(
                     () => Instantiate(_fracturedPrefab).GetComponent<FracturedObject>(),
@@ -41,6 +39,8 @@ namespace Recounter.Fracture
 
         void OnCollisionEnter(Collision other)
         {
+            if (_alreadyFractured) return;
+            
             if (other.relativeVelocity.magnitude > _fractureVelocity)
             {
                 SpawnFractured(other.GetContact(0).point, -other.relativeVelocity);
@@ -49,6 +49,8 @@ namespace Recounter.Fracture
 
         void SpawnFractured(Vector3 contact, Vector3 velocity)
         {
+            _alreadyFractured = true;
+            
             var clone = Pools[_id].Get();
             clone.transform.SetPositionAndRotation(transform.position, transform.rotation);
             clone.Explode(Pools[_id].Release, contact, velocity);
