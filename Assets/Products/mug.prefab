@@ -267,3 +267,10 @@ MonoBehaviour:
   _fractureVelocity: 5
   _fracturedPrefab: {fileID: 645342139219815323, guid: 8cfff8c92d272444abb2c7da69d75696,
     type: 3}
+  _fractureSfx:
+    Guid:
+      Data1: -1135119528
+      Data2: 1228850847
+      Data3: -2095157319
+      Data4: -1154887415
+    Path: event:/Mug Break

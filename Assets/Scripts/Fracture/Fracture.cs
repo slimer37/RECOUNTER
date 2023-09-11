@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -9,6 +10,7 @@ namespace Recounter.Fracture
         [SerializeField] string _id;
         [SerializeField] float _fractureVelocity;
         [SerializeField] GameObject _fracturedPrefab;
+        [SerializeField] EventReference _fractureSfx;
 
         static Dictionary<string, ObjectPool<FracturedObject>> Pools;
 
@@ -50,6 +52,7 @@ namespace Recounter.Fracture
             var clone = Pools[_id].Get();
             clone.transform.SetPositionAndRotation(transform.position, transform.rotation);
             clone.Explode(Pools[_id].Release, contact, velocity);
+            RuntimeManager.PlayOneShotAttached(_fractureSfx, gameObject);
             Destroy(gameObject);
         }
     }

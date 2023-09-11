@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{8faeb128-f85c-4785-b86b-c8f6916eb2ba}">
+		<property name="assetPath">
+			<value>Destruction/68665__mikaelfernstrom__ceramiccupsbreak.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>3.5294331065759637</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{315c966c-6aa8-4863-87c9-7fce57395eb9}</destination>
+		</relationship>
+	</object>
+</objects>

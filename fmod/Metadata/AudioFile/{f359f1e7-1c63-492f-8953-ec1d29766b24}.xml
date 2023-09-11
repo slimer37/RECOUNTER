@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{f359f1e7-1c63-492f-8953-ec1d29766b24}">
+		<property name="assetPath">
+			<value>Destruction/ceramicbreak-02.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.0310657596371882</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{315c966c-6aa8-4863-87c9-7fce57395eb9}</destination>
+		</relationship>
+	</object>
+</objects>
