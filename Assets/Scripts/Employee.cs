@@ -11,6 +11,8 @@ public class Employee : MonoBehaviour
     [field: SerializeField] public Hand LeftHand { get; private set; }
     [field: SerializeField] public Hand RightHand { get; private set; }
 
+    [field: SerializeField] public Camera Camera { get; private set; }
+
     [Header("HUD")]
     [SerializeField] Canvas _hudCanvas;
     [SerializeField] CanvasGroup _hudCanvasGroup;

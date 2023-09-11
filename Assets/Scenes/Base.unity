@@ -4498,6 +4498,7 @@ MonoBehaviour:
   <Interaction>k__BackingField: {fileID: 273294029}
   <LeftHand>k__BackingField: {fileID: 1095714737}
   <RightHand>k__BackingField: {fileID: 157413189}
+  <Camera>k__BackingField: {fileID: 1065023558}
   _hudCanvas: {fileID: 1070106081}
   _hudCanvasGroup: {fileID: 1070106083}
   _hudFadeTime: 0.2
