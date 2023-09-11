@@ -26,6 +26,9 @@ namespace Recounter.Items
 
         bool _justReleased;
 
+        Vector3 _lastPos;
+        Vector3 _velocity;
+
         public static LayerMask DefaultIntersectionMask;
 
         void OnDrawGizmosSelected()
@@ -70,9 +73,21 @@ namespace Recounter.Items
             _colliders = GetComponentsInChildren<Collider>();
         }
 
-        public void Throw(Vector3 force)
+        void FixedUpdate()
+        {
+            if (!IsHeld) return;
+            
+            var position = transform.position;
+            
+            _velocity = (position - _lastPos) / Time.fixedDeltaTime;
+            
+            _lastPos = position;
+        }
+
+        public void Throw(Vector3 force, float whipStrength)
         {
             Release();
+            _rb.velocity = _velocity * whipStrength;
             _rb.AddForce(force, ForceMode.Impulse);
         }
 

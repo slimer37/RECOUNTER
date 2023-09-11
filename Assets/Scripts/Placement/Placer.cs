@@ -218,7 +218,7 @@ namespace Recounter
             if (IsLineOfSightBlocked(_active.transform.position) || _active.IsIntersecting())
                 return;
 
-            PreReleaseItem().Throw(_chargeTime * _throwForce * _camera.transform.TransformDirection(_throwDirection));
+            PreReleaseItem().Throw(_chargeTime * _throwForce * _camera.transform.TransformDirection(_throwDirection), _chargeTime * 0.5f);
         }
 
         void HandleThrowCharge()
