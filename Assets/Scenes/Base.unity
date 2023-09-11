@@ -2190,7 +2190,7 @@ GameObject:
   - component: {fileID: 467412453}
   - component: {fileID: 467412452}
   m_Layer: 0
-  m_Name: Turntable Light
+  m_Name: Preview Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2204,12 +2204,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 467412450}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.2345697, z: 0.10938164, w: 0.87542605}
-  m_LocalPosition: {x: 0, y: 23, z: 0}
+  m_LocalRotation: {x: 0.4082179, y: -0.23456971, z: 0.109381646, w: 0.8754261}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1662272380}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &467412452
 MonoBehaviour:
@@ -2283,7 +2283,7 @@ Light:
   m_RenderMode: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 4194560
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -10283,7 +10283,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 467412451}
   - {fileID: 263020617}
   - {fileID: 1777989190}
   m_Father: {fileID: 0}
@@ -13653,3 +13652,4 @@ SceneRoots:
   - {fileID: 608664689}
   - {fileID: 1921788994}
   - {fileID: 880242330}
+  - {fileID: 467412451}
