@@ -19,6 +19,8 @@ public class Door : Interactable
     Vector3 _startPullPoint;
     float _pullPointDistance;
 
+    bool _pushingPlayer;
+
     protected override bool CanInteract(Employee e) => !IsInteractionInProgress;
 
     protected override HudInfo FormHud(Employee e) => new()
@@ -56,7 +58,7 @@ public class Door : Interactable
         _door.Raycast(new Ray(camTransform.position, camTransform.forward), out var hit, 100);
         _startPullPoint = transform.InverseTransformPoint(hit.point);
         _hinge.useMotor = false;
-        _pullPointDistance = hit.distance;
+        _pullPointDistance = Mathf.Max(1, hit.distance);
     }
 
     void FixedUpdate()
@@ -69,13 +71,13 @@ public class Door : Interactable
             var moment = Vector3.Cross(_startPullPoint, force);
             var pull = Vector3.Dot(moment, _hinge.axis) * _pullStrength;
 
-            _rb.AddRelativeTorque(_hinge.axis * pull, ForceMode.Force);
+            _rb.angularVelocity = _hinge.axis * pull;
         }
         else if (Mathf.Abs(_hinge.angle) < _closeAngle)
         {
-            var rotationVelocity = _closingForce * Mathf.Sign(_closeAngle - Mathf.Abs(_hinge.angle));
+            var rotationVelocity = _closingForce * _closeAngle - Mathf.Abs(_hinge.angle);
 
-            _rb.AddRelativeTorque(_hinge.axis * rotationVelocity, ForceMode.Force);
+            _rb.angularVelocity = _hinge.axis * (rotationVelocity * Mathf.Deg2Rad);
         }
     }
 

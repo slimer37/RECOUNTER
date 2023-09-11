@@ -7180,7 +7180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3881d6392516924c8d4fa0f2d1a4beb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pullStrength: 5
+  _pullStrength: 10
   _rotator: {fileID: 760947120}
   _pullDirection: {x: 0, y: 0, z: 1}
   _closeAngle: 135
@@ -7236,7 +7236,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 5
+  m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -7252,7 +7252,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!4 &780027656 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5976115583834781077, guid: 2cf04be2e19745c49a3a9bc1c7aeaf5c,
