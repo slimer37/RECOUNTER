@@ -306,6 +306,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3881d6392516924c8d4fa0f2d1a4beb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hud:
+    icon: 4
+    text: Swing
   _pullStrength: 100
   _rotator: {fileID: 219408418}
   _pullDirection: {x: 0, y: 0, z: 1}
