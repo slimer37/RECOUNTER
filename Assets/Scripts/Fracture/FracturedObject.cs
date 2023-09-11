@@ -7,7 +7,7 @@ namespace Recounter.Fracture
     public class FracturedObject : MonoBehaviour
     {
         [SerializeField] Rigidbody[] _rigidbodies;
-        [SerializeField] ParticleSystem _particles;
+        [SerializeField] ParticleSystem[] _particleSystems;
         [SerializeField] float _lifetime = 5;
         [SerializeField] float _explosionForce = 150;
 
@@ -46,8 +46,12 @@ namespace Recounter.Fracture
                 rb.AddForce(velocity, ForceMode.VelocityChange);
                 rb.AddExplosionForce(_explosionForce, contact, 0);
             }
-        
-            if (_particles) _particles.Play();
+
+            foreach (var particle in _particleSystems)
+            {
+                particle.Play();
+            }
+            
             StartCoroutine(DelayedOut(disableCallback));
         }
 

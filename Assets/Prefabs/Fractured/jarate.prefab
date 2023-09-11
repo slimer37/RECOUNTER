@@ -1950,7 +1950,8 @@ MonoBehaviour:
   - {fileID: 5156305907531229629}
   - {fileID: 5989525574845501077}
   - {fileID: 7477441672661702342}
-  _particles: {fileID: 2929233730067322748}
+  _particleSystems:
+  - {fileID: 2929233730067322748}
   _lifetime: 10
   _explosionForce: 5
 --- !u!1 &7636584973286780579

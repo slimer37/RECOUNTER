@@ -213,7 +213,8 @@ MonoBehaviour:
   - {fileID: 7451394241019833796}
   - {fileID: 7197513402497171504}
   - {fileID: 772399098912421154}
-  _particles: {fileID: 9143665726741417979}
+  _particleSystems:
+  - {fileID: 9143665726741417979}
   _lifetime: 10
   _explosionForce: 5
 --- !u!1 &865562229978477617
