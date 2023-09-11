@@ -31,7 +31,7 @@ public class SimpleDoor : Interactable
     protected override HudInfo FormHud(Employee e) => new()
     {
         icon = Icon.Hand,
-        text = $"Open {label}",
+        text = $"{(isOpen ? "Close" : "Open")} {label}",
     };
 
     void Awake()
