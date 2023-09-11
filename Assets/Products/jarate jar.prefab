@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 3406438883161681509}
   - component: {fileID: 3406438883161681508}
   - component: {fileID: 7637148731121530333}
+  - component: {fileID: 7822314815371787147}
   m_Layer: 7
   m_Name: jarate jar
   m_TagString: Untagged
@@ -249,3 +250,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 4
+--- !u!114 &7822314815371787147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754483279163226282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0fea56e559ce624cba6c8082f712f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: jarate
+  _fractureVelocity: 5
+  _fracturedPrefab: {fileID: 7330269370946221874, guid: 753c618101b04b94b89325bb224ad369,
+    type: 3}
+  _fractureSfx:
+    Guid:
+      Data1: -1135119528
+      Data2: 1228850847
+      Data3: -2095157319
+      Data4: -1154887415
+    Path: event:/Mug Break
