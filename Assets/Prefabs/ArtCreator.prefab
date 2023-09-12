@@ -3088,7 +3088,6 @@ MonoBehaviour:
   colorPicker: {fileID: 7537720827363874377}
   radiusSlider: {fileID: 7537720827687719709}
   radiusDisplay: {fileID: 7537720826663239102}
-  canvas: {fileID: 7537720827412601577}
   changeBrushSize:
     m_Name: Change Brush Size
     m_Type: 0
