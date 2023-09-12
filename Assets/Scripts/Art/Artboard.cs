@@ -14,7 +14,7 @@ namespace Recounter.Art
         [SerializeField] FilterMode mode;
 
         [Header("Brush")]
-        [SerializeField] ComputeShaderBrush brush;
+        [SerializeField] ComputeShaderBrush defaultBrush;
 
         [Header("Undo/Redo")]
         [SerializeField] InputAction undo;
@@ -38,9 +38,9 @@ namespace Recounter.Art
         bool isDrawing;
 
         public Vector2Int Resolution => resolution;
-        public ComputeShaderBrush CurrentBrush => brush;
+        public IBrush CurrentBrush { get; private set; }
 
-        public event Action<ComputeShaderBrush> BrushSelected;
+        public event Action<IBrush> BrushSelected;
 
         public void Complete()
         {
@@ -77,7 +77,7 @@ namespace Recounter.Art
 
             image.texture = texture;
 
-            SetBrush(brush);
+            SetBrush(defaultBrush);
 
             InitializeUndo();
 
@@ -98,14 +98,18 @@ namespace Recounter.Art
             redo.Enable();
         }
 
+        public void SetBrush(IBrush newBrush)
+        {
+            CurrentBrush?.Deactivate();
+
+            CurrentBrush = newBrush;
+            CurrentBrush.Activate(Painting.Texture);
+            BrushSelected?.Invoke(CurrentBrush);
+        }
+
         public void SetBrush(ComputeShaderBrush newBrush)
         {
-            if (brush != null)
-                brush.Deactivate();
-
-            brush = newBrush;
-            brush.Activate(Painting.Texture);
-            BrushSelected?.Invoke(brush);
+            SetBrush(newBrush as IBrush);
         }
 
         void SetColor(Color c) => clearCs.SetFloats("Color", c.r, c.g, c.b, c.a);
@@ -144,7 +148,7 @@ namespace Recounter.Art
             RecordDraw();
         }
 
-        void Draw(Vector2 point) => brush.Draw(point.x, point.y);
+        void Draw(Vector2 point) => CurrentBrush.Draw(point.x, point.y);
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -152,7 +156,7 @@ namespace Recounter.Art
             DrawContinuousLine(p);
         }
 
-        void DrawContinuousLine(Vector2 next) => brush.DrawContinuousLine(next.x, next.y);
+        void DrawContinuousLine(Vector2 next) => CurrentBrush.DrawContinuousLine(next.x, next.y);
 
         Vector2 GetBrushPosition(Vector2 mousePosition)
         {
