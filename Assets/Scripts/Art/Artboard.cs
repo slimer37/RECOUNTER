@@ -38,9 +38,11 @@ namespace Recounter.Art
         bool isDrawing;
 
         public Vector2Int Resolution => resolution;
+        public ITool CurrentTool { get; private set; }
         public IBrush CurrentBrush { get; private set; }
 
         public event Action<IBrush> BrushSelected;
+        public event Action<ITool> ToolSelected;
 
         public void Complete()
         {
@@ -98,19 +100,22 @@ namespace Recounter.Art
             redo.Enable();
         }
 
-        public void SetBrush(IBrush newBrush)
+        public void SetTool(ITool newBrush)
         {
-            CurrentBrush?.Deactivate();
+            CurrentTool?.Deactivate();
 
-            CurrentBrush = newBrush;
-            CurrentBrush.Activate(Painting.Texture);
-            BrushSelected?.Invoke(CurrentBrush);
+            CurrentTool = newBrush;
+            
+            CurrentTool.Activate(Painting.Texture);
+
+            if (CurrentTool is IBrush brush)
+            {
+                CurrentBrush = brush;
+                BrushSelected?.Invoke(brush);
+            }
         }
 
-        public void SetBrush(ComputeShaderBrush newBrush)
-        {
-            SetBrush(newBrush as IBrush);
-        }
+        public void SetBrush(ComputeShaderBrush newBrush) => SetTool(newBrush);
 
         void SetColor(Color c) => clearCs.SetFloats("Color", c.r, c.g, c.b, c.a);
 
@@ -148,7 +153,7 @@ namespace Recounter.Art
             RecordDraw();
         }
 
-        void Draw(Vector2 point) => CurrentBrush.Draw(point.x, point.y);
+        void Draw(Vector2 point) => CurrentTool.Draw(point.x, point.y);
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -156,7 +161,7 @@ namespace Recounter.Art
             DrawContinuousLine(p);
         }
 
-        void DrawContinuousLine(Vector2 next) => CurrentBrush.DrawContinuousLine(next.x, next.y);
+        void DrawContinuousLine(Vector2 next) => CurrentBrush?.DrawContinuousLine(next.x, next.y);
 
         Vector2 GetBrushPosition(Vector2 mousePosition)
         {
