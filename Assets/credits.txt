@@ -29,3 +29,7 @@ NaughtyAttributes by Denis Risov
 ObiRope by Virtual Method
 Runtime Preview Generator by yasirkula
 Steamworks.NET by Riley Labrecque
+
+### Some code sourced outside:
+
+[GitHub] Bunny83/Utilities - Flood fill algorithm under MIT License (see LICENSE.txt)
