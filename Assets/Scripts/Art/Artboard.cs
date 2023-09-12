@@ -100,13 +100,16 @@ namespace Recounter.Art
             redo.Enable();
         }
 
-        public void SetTool(ITool newBrush)
+        public void SetTool(ITool newTool)
         {
             CurrentTool?.Deactivate();
 
-            CurrentTool = newBrush;
+            CurrentTool = newTool;
+            ToolSelected?.Invoke(newTool);
             
             CurrentTool.Activate(Painting.Texture);
+
+            CurrentBrush = null;
 
             if (CurrentTool is IBrush brush)
             {
@@ -116,6 +119,7 @@ namespace Recounter.Art
         }
 
         public void SetBrush(ComputeShaderBrush newBrush) => SetTool(newBrush);
+        public void SetTool(ToolBehaviour tool) => SetTool(tool as ITool);
 
         void SetColor(Color c) => clearCs.SetFloats("Color", c.r, c.g, c.b, c.a);
 

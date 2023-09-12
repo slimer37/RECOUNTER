@@ -1,23 +1,13 @@
-using System;
 using UnityEngine;
 
 namespace Recounter.Art
 {
-    public interface ITool
+    public abstract class ToolBehaviour : MonoBehaviour, ITool
     {
-        public void Draw(float x, float y);
-        public void Activate(Texture texture);
-        public void Deactivate();
-    }
+        public abstract void Draw(float x, float y);
 
-    public interface IBrush : ITool
-    {
-        public event Action<float> RadiusChanged;
-        public event Action<Color> ColorChanged;
-        
-        public void DrawContinuousLine(float x, float y);
-        
-        public float Radius { get; }
-        public Color Color { get; }
+        public abstract void Activate(Texture texture);
+
+        public abstract void Deactivate();
     }
 }

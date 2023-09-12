@@ -10,6 +10,7 @@ namespace Recounter.Art
         [SerializeField] Image preview;
         [SerializeField] RectTransform previewTransform;
         [SerializeField] Outline outline;
+        [SerializeField] float toolRadius = 5;
 
         IBrush lastBrush;
         Vector2 scaleRatio;
@@ -17,6 +18,7 @@ namespace Recounter.Art
         void Awake()
         {
             artboard.BrushSelected += OnBrushSelected;
+            artboard.ToolSelected += OnToolSelected;
 
             var dimensions = artboard.Resolution;
             var actual = (artboard.transform as RectTransform).rect.size;
@@ -25,8 +27,18 @@ namespace Recounter.Art
             OnBrushSelected(artboard.CurrentBrush);
         }
 
+        void OnToolSelected(ITool tool)
+        {
+            if (tool == null) return;
+            
+            UpdateRadius(toolRadius);
+            UpdateColor(Color.black);
+        }
+        
         void OnBrushSelected(IBrush brush)
         {
+            if (brush == null) return;
+            
             if (lastBrush != null)
             {
                 lastBrush.RadiusChanged -= UpdateRadius;
