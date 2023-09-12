@@ -10,7 +10,9 @@ namespace Recounter.Editor
         [PostProcessBuild]
         public static void OnPostprocessBuild(BuildTarget target, string pathToBuildFile)
         {
-            File.Copy(Path.Combine(Application.dataPath, "LICENSE.txt"), Path.Combine(pathToBuildFile, "LICENSE.txt"));
+            File.Copy(Path.Combine(Application.dataPath, "LICENSE.txt"),
+                Path.Combine(Path.GetDirectoryName(pathToBuildFile), "LICENSE.txt"),
+                true);
         }
     }
 }
