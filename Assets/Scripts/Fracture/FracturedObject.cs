@@ -16,13 +16,12 @@ namespace Recounter.Fracture
 
         void OnValidate()
         {
-            foreach (Transform child in transform)
+            foreach (var rb in _rigidbodies)
             {
-                if (child.gameObject.layer != LayerMask.NameToLayer("Fracture Piece"))
-                {
-                    Debug.LogWarning($"All children of {name} must be on the Fracture Piece layer.");
-                    return;
-                }
+                if (rb.gameObject.layer == LayerMask.NameToLayer("Fracture Piece")) continue;
+                
+                Debug.LogWarning($"All fractured pieces of {name} must be on the Fracture Piece layer.");
+                return;
             }
         }
 
