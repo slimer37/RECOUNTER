@@ -1,87 +1,90 @@
 ﻿using System;
 
-public class ConstrainedUndoRedo<T> where T : class
+namespace Recounter.Art
 {
-    public delegate T TransferState(T src, T dest);
-
-    readonly TransferState _record;
-    readonly TransferState _restore;
-
-    readonly int _capacity;
-
-    readonly T[] _stateCache;
-
-    int _index;
-    int _availableRedos;
-    int _availableUndos;
-
-    public bool CanUndo => _availableUndos > 0;
-    public bool CanRedo => _availableRedos > 0;
-
-    public ConstrainedUndoRedo(int capacity, T[] emptyStates, T initialState, TransferState record, TransferState restore)
+    public class ConstrainedUndoRedo<T> where T : class
     {
-        if (emptyStates.Length != capacity)
-            throw new ArgumentException("Wrong number of states.", nameof(emptyStates));
+        public delegate T TransferState(T src, T dest);
 
-        _capacity = capacity;
-        _stateCache = emptyStates;
+        readonly TransferState _record;
+        readonly TransferState _restore;
 
-        _record = record;
-        _restore = restore;
+        readonly int _capacity;
 
-        _stateCache[0] = _record(initialState, _stateCache[_index]);
-    }
+        readonly T[] _stateCache;
 
-    public ConstrainedUndoRedo(int capacity, T[] emptyStates, T initialState, TransferState transferState)
-        : this(capacity, emptyStates, initialState, transferState, transferState) { }
+        int _index;
+        int _availableRedos;
+        int _availableUndos;
 
-    public void RecordState(T item)
-    {
-        _index = (_index + 1) % _capacity;
+        public bool CanUndo => _availableUndos > 0;
+        public bool CanRedo => _availableRedos > 0;
 
-        _stateCache[_index] = _record(item, _stateCache[_index]);
+        public ConstrainedUndoRedo(int capacity, T[] emptyStates, T initialState, TransferState record, TransferState restore)
+        {
+            if (emptyStates.Length != capacity)
+                throw new ArgumentException("Wrong number of states.", nameof(emptyStates));
 
-        if (_availableUndos < _capacity - 1)
+            _capacity = capacity;
+            _stateCache = emptyStates;
+
+            _record = record;
+            _restore = restore;
+
+            _stateCache[0] = _record(initialState, _stateCache[_index]);
+        }
+
+        public ConstrainedUndoRedo(int capacity, T[] emptyStates, T initialState, TransferState transferState)
+            : this(capacity, emptyStates, initialState, transferState, transferState) { }
+
+        public void RecordState(T item)
+        {
+            _index = (_index + 1) % _capacity;
+
+            _stateCache[_index] = _record(item, _stateCache[_index]);
+
+            if (_availableUndos < _capacity - 1)
+                _availableUndos++;
+
+            _availableRedos = 0;
+        }
+
+        public bool Undo(T input, out T result)
+        {
+            result = default;
+
+            if (!CanUndo) return false;
+
+            _index--;
+
+            if (_index < 0)
+                _index += _capacity;
+
+            result = _restore(_stateCache[_index], input);
+
+            _availableRedos++;
+            _availableUndos--;
+
+            return true;
+        }
+
+        public bool Redo(T input, out T result)
+        {
+            result = default;
+
+            if (!CanRedo) return false;
+
+            _index++;
+
+            if (_index > _capacity - 1)
+                _index -= _capacity;
+
+            result = _restore(_stateCache[_index], input);
+
+            _availableRedos--;
             _availableUndos++;
 
-        _availableRedos = 0;
-    }
-
-    public bool Undo(T input, out T result)
-    {
-        result = default;
-
-        if (!CanUndo) return false;
-
-        _index--;
-
-        if (_index < 0)
-            _index += _capacity;
-
-        result = _restore(_stateCache[_index], input);
-
-        _availableRedos++;
-        _availableUndos--;
-
-        return true;
-    }
-
-    public bool Redo(T input, out T result)
-    {
-        result = default;
-
-        if (!CanRedo) return false;
-
-        _index++;
-
-        if (_index > _capacity - 1)
-            _index -= _capacity;
-
-        result = _restore(_stateCache[_index], input);
-
-        _availableRedos--;
-        _availableUndos++;
-
-        return true;
+            return true;
+        }
     }
 }

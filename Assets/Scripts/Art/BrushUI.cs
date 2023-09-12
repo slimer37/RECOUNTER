@@ -3,65 +3,68 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class BrushUI : Brush
+namespace Recounter.Art
 {
-    [Header("Settings")]
-    [SerializeField] ColorPicker colorPicker;
-    [SerializeField] Slider radiusSlider;
-    [SerializeField] TextMeshProUGUI radiusDisplay;
-
-    [Header("Shortcuts")]
-    [SerializeField] RectTransform canvas;
-    [SerializeField] InputAction changeBrushSize;
-    [SerializeField] int radiusIncrement;
-
-    protected override void Awake()
+    public class BrushUI : Brush
     {
-        base.Awake();
-        UpdateUIState();
+        [Header("Settings")]
+        [SerializeField] ColorPicker colorPicker;
+        [SerializeField] Slider radiusSlider;
+        [SerializeField] TextMeshProUGUI radiusDisplay;
 
-        UpdateRadius(radiusSlider.value);
-        radiusSlider.onValueChanged.AddListener(UpdateRadius);
+        [Header("Shortcuts")]
+        [SerializeField] RectTransform canvas;
+        [SerializeField] InputAction changeBrushSize;
+        [SerializeField] int radiusIncrement;
 
-        UpdateColor(colorPicker.Color);
-        colorPicker.onColorChanged.AddListener(UpdateColor);
+        protected override void Awake()
+        {
+            base.Awake();
+            UpdateUIState();
 
-        changeBrushSize.performed += ChangeBrushSize;
-        changeBrushSize.Enable();
-    }
+            UpdateRadius(radiusSlider.value);
+            radiusSlider.onValueChanged.AddListener(UpdateRadius);
 
-    public override void Activate(Texture texture)
-    {
-        base.Activate(texture);
-        UpdateUIState();
-    }
+            UpdateColor(colorPicker.Color);
+            colorPicker.onColorChanged.AddListener(UpdateColor);
 
-    public override void Deactivate()
-    {
-        base.Deactivate();
-        UpdateUIState();
-    }
+            changeBrushSize.performed += ChangeBrushSize;
+            changeBrushSize.Enable();
+        }
 
-    void UpdateUIState()
-    {
-        colorPicker.Interactable = Active;
-    }
+        public override void Activate(Texture texture)
+        {
+            base.Activate(texture);
+            UpdateUIState();
+        }
 
-    void UpdateRadius(float newRadius)
-    {
-        Radius = newRadius;
+        public override void Deactivate()
+        {
+            base.Deactivate();
+            UpdateUIState();
+        }
 
-        radiusDisplay.text = Radius.ToString();
-    }
+        void UpdateUIState()
+        {
+            colorPicker.Interactable = Active;
+        }
 
-    void UpdateColor(Color newColor)
-    {
-        Color = newColor;
-    }
+        void UpdateRadius(float newRadius)
+        {
+            Radius = newRadius;
 
-    void ChangeBrushSize(InputAction.CallbackContext ctx)
-    {
-        var scroll = ctx.ReadValue<float>() > 0 ? 1 : -1;
-        radiusSlider.value += scroll * radiusIncrement;
+            radiusDisplay.text = Radius.ToString();
+        }
+
+        void UpdateColor(Color newColor)
+        {
+            Color = newColor;
+        }
+
+        void ChangeBrushSize(InputAction.CallbackContext ctx)
+        {
+            var scroll = ctx.ReadValue<float>() > 0 ? 1 : -1;
+            radiusSlider.value += scroll * radiusIncrement;
+        }
     }
 }

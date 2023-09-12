@@ -2,57 +2,60 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BrushPreview : MonoBehaviour, IPointerEnterHandler, IPointerMoveHandler, IPointerExitHandler
+namespace Recounter.Art
 {
-    [SerializeField] Artboard artboard;
-    [SerializeField] Image preview;
-    [SerializeField] RectTransform previewTransform;
-    [SerializeField] Outline outline;
-
-    Brush lastBrush;
-    Vector2 scaleRatio;
-
-    void Awake()
+    public class BrushPreview : MonoBehaviour, IPointerEnterHandler, IPointerMoveHandler, IPointerExitHandler
     {
-        artboard.BrushSelected += OnBrushSelected;
+        [SerializeField] Artboard artboard;
+        [SerializeField] Image preview;
+        [SerializeField] RectTransform previewTransform;
+        [SerializeField] Outline outline;
 
-        var dimensions = artboard.Resolution;
-        var actual = (artboard.transform as RectTransform).rect.size;
-        scaleRatio = new Vector2(actual.x / dimensions.x, actual.y / dimensions.y);
+        Brush lastBrush;
+        Vector2 scaleRatio;
 
-        OnBrushSelected(artboard.CurrentBrush);
-    }
-
-    void OnBrushSelected(Brush brush)
-    {
-        if (lastBrush)
+        void Awake()
         {
-            lastBrush.RadiusChanged -= UpdateRadius;
-            lastBrush.ColorChanged -= UpdateColor;
+            artboard.BrushSelected += OnBrushSelected;
+
+            var dimensions = artboard.Resolution;
+            var actual = (artboard.transform as RectTransform).rect.size;
+            scaleRatio = new Vector2(actual.x / dimensions.x, actual.y / dimensions.y);
+
+            OnBrushSelected(artboard.CurrentBrush);
         }
 
-        brush.RadiusChanged += UpdateRadius;
-        brush.ColorChanged += UpdateColor;
+        void OnBrushSelected(Brush brush)
+        {
+            if (lastBrush)
+            {
+                lastBrush.RadiusChanged -= UpdateRadius;
+                lastBrush.ColorChanged -= UpdateColor;
+            }
 
-        UpdateRadius(brush.Radius);
-        UpdateColor(brush.Color);
+            brush.RadiusChanged += UpdateRadius;
+            brush.ColorChanged += UpdateColor;
 
-        lastBrush = brush;
+            UpdateRadius(brush.Radius);
+            UpdateColor(brush.Color);
+
+            lastBrush = brush;
+        }
+
+        void UpdateRadius(float radius) => previewTransform.sizeDelta = radius * 2 * scaleRatio;
+
+        void UpdateColor(Color color)
+        {
+            // Invert outline value based on current color
+            preview.color = color;
+            Color.RGBToHSV(color, out _, out _, out float v);
+            outline.effectColor = Color.HSVToRGB(0, 0, 1 - v);
+        }
+
+        public void OnPointerMove(PointerEventData eventData) => previewTransform.position = eventData.position;
+
+        public void OnPointerEnter(PointerEventData eventData) => preview.enabled = true;
+
+        public void OnPointerExit(PointerEventData eventData) => preview.enabled = false;
     }
-
-    void UpdateRadius(float radius) => previewTransform.sizeDelta = radius * 2 * scaleRatio;
-
-    void UpdateColor(Color color)
-    {
-        // Invert outline value based on current color
-        preview.color = color;
-        Color.RGBToHSV(color, out _, out _, out float v);
-        outline.effectColor = Color.HSVToRGB(0, 0, 1 - v);
-    }
-
-    public void OnPointerMove(PointerEventData eventData) => previewTransform.position = eventData.position;
-
-    public void OnPointerEnter(PointerEventData eventData) => preview.enabled = true;
-
-    public void OnPointerExit(PointerEventData eventData) => preview.enabled = false;
 }

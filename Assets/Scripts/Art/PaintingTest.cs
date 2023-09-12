@@ -1,32 +1,34 @@
-using Recounter;
 using UnityEngine;
 
-public class PaintingTest : Interactable
+namespace Recounter.Art
 {
-    [SerializeField] Renderer rend;
-
-    Texture currentPainting;
-
-    protected override HudInfo FormHud(Employee e) => new()
+    public class PaintingTest : Interactable
     {
-        icon = Icon.Hand,
-        text = "Start Painting"
-    };
+        [SerializeField] Renderer rend;
 
-    protected override bool CanInteract(Employee e) => !ArtCreator.SessionInProgress;
+        Texture currentPainting;
 
-    protected override void OnInteract(Employee e)
-    {
-        ArtCreator.BeginSession(currentPainting).Completed += OnCompleteSession;
+        protected override HudInfo FormHud(Employee e) => new()
+        {
+            icon = Icon.Hand,
+            text = "Start Painting"
+        };
 
-        InputLayer.Suspend(true, true);
-    }
+        protected override bool CanInteract(Employee e) => !ArtCreator.SessionInProgress;
 
-    void OnCompleteSession(Texture result)
-    {
-        currentPainting = result;
-        rend.material.mainTexture = result;
+        protected override void OnInteract(Employee e)
+        {
+            ArtCreator.BeginSession(currentPainting).Completed += OnCompleteSession;
 
-        InputLayer.Suspend(false);
+            InputLayer.Suspend(true, true);
+        }
+
+        void OnCompleteSession(Texture result)
+        {
+            currentPainting = result;
+            rend.material.mainTexture = result;
+
+            InputLayer.Suspend(false);
+        }
     }
 }

@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 
-public class Eraser : Brush
+namespace Recounter.Art
 {
-    [SerializeField] Artboard artboard;
-    [SerializeField] float startingRadius;
-
-    new public float Radius
+    public class Eraser : Brush
     {
-        get => base.Radius;
-        set => base.Radius = value;
-    }
+        [SerializeField] Artboard artboard;
+        [SerializeField] float startingRadius;
 
-    void Start()
-    {
-        Radius = startingRadius;
-        Color = artboard.Painting.BackgroundColor;
+        new public float Radius
+        {
+            get => base.Radius;
+            set => base.Radius = value;
+        }
+
+        void Start()
+        {
+            Radius = startingRadius;
+            Color = artboard.Painting.BackgroundColor;
+        }
     }
 }

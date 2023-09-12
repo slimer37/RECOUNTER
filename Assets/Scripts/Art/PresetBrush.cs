@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 
-public class PresetBrush : Brush
+namespace Recounter.Art
 {
-    [SerializeField] Color color;
-
-    new public float Radius
+    public class PresetBrush : Brush
     {
-        get => base.Radius;
-        set => base.Radius = value;
-    }
+        [SerializeField] Color color;
 
-    protected override void Awake()
-    {
-        base.Awake();
+        new public float Radius
+        {
+            get => base.Radius;
+            set => base.Radius = value;
+        }
 
-        Color = color;
+        protected override void Awake()
+        {
+            base.Awake();
+
+            Color = color;
+        }
     }
 }
