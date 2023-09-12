@@ -2,7 +2,7 @@
 
 namespace Recounter.Art
 {
-    public class Eraser : Brush
+    public class Eraser : ComputeShaderBrush
     {
         [SerializeField] Artboard artboard;
         [SerializeField] float startingRadius;

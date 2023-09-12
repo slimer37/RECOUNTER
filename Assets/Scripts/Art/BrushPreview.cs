@@ -11,7 +11,7 @@ namespace Recounter.Art
         [SerializeField] RectTransform previewTransform;
         [SerializeField] Outline outline;
 
-        Brush lastBrush;
+        IBrush lastBrush;
         Vector2 scaleRatio;
 
         void Awake()
@@ -25,9 +25,9 @@ namespace Recounter.Art
             OnBrushSelected(artboard.CurrentBrush);
         }
 
-        void OnBrushSelected(Brush brush)
+        void OnBrushSelected(IBrush brush)
         {
-            if (lastBrush)
+            if (lastBrush != null)
             {
                 lastBrush.RadiusChanged -= UpdateRadius;
                 lastBrush.ColorChanged -= UpdateColor;

@@ -14,7 +14,7 @@ namespace Recounter.Art
         [SerializeField] FilterMode mode;
 
         [Header("Brush")]
-        [SerializeField] Brush brush;
+        [SerializeField] ComputeShaderBrush brush;
 
         [Header("Undo/Redo")]
         [SerializeField] InputAction undo;
@@ -38,9 +38,9 @@ namespace Recounter.Art
         bool isDrawing;
 
         public Vector2Int Resolution => resolution;
-        public Brush CurrentBrush => brush;
+        public ComputeShaderBrush CurrentBrush => brush;
 
-        public event Action<Brush> BrushSelected;
+        public event Action<ComputeShaderBrush> BrushSelected;
 
         public void Complete()
         {
@@ -98,7 +98,7 @@ namespace Recounter.Art
             redo.Enable();
         }
 
-        public void SetBrush(Brush newBrush)
+        public void SetBrush(ComputeShaderBrush newBrush)
         {
             if (brush != null)
                 brush.Deactivate();

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Recounter.Art
 {
-    public class BrushUI : Brush
+    public class BrushUI : ComputeShaderBrush
     {
         [Header("Settings")]
         [SerializeField] ColorPicker colorPicker;

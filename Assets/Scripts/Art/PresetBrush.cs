@@ -2,7 +2,7 @@
 
 namespace Recounter.Art
 {
-    public class PresetBrush : Brush
+    public class PresetBrush : ComputeShaderBrush
     {
         [SerializeField] Color color;
 

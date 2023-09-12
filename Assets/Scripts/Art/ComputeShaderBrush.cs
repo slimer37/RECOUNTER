@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Recounter.Art
 {
-    public abstract class Brush : MonoBehaviour
+    public abstract class ComputeShaderBrush : MonoBehaviour, IBrush
     {
         [SerializeField] ComputeShader _computeShader;
 
