@@ -7,28 +7,11 @@ namespace Recounter.Art
     public class BucketTool : ToolBehaviour
     {
         [SerializeField] ColorPicker _picker;
-        [SerializeField] float _tolerance;
-        
-        struct Node
-        {
-            public ushort x1, x2, y, dy;
-
-            public Node(int x1, int x2, int y, int dy)
-            {
-                this.x1 = (ushort)x1;
-                this.x2 = (ushort)x2;
-                this.y = (ushort)y;
-                this.dy = (ushort)dy;
-            }
-        }
         
         Texture2D _activeTexture2d;
         Texture _activeTexture;
-        Color[] _colors;
 
         bool _active;
-
-        Queue<Node> _nodes;
         
         public override void Draw(float x, float y)
         {
@@ -36,97 +19,13 @@ namespace Recounter.Art
             
             print($"Bucket fill at {x}, {y}");
 
-            _colors = _activeTexture2d.GetPixels();
-
             var n = Vector2Int.RoundToInt(new Vector2(x, y));
+
+            FloodFillArea(_activeTexture2d, n.x, n.y, _picker.Color);
             
-            FloodFill(n, _picker.Color);
-            
-            _activeTexture2d.SetPixels(_colors);
             _activeTexture2d.Apply();
             
             Graphics.CopyTexture(_activeTexture2d, _activeTexture);
-        }
-
-        bool IsInside(int x, int y, Color color)
-        {
-            if (x < 1 || x > _activeTexture.width || y < 1 || y > _activeTexture.height) return false;
-            
-            var other = GetNode(x, y);
-
-            if (!Approximately(other.r, color.r)) return false;
-            if (!Approximately(other.g, color.g)) return false;
-            if (!Approximately(other.b, color.b)) return false;
-            if (!Approximately(other.a, color.a)) return false;
-
-            return true;
-        }
-
-        bool Approximately(float a, float b) => Mathf.Abs(a - b) < _tolerance;
-
-        Color GetNode(int x, int y) => _colors[(y - 1) * _activeTexture.width + x - 1];
-
-        void SetNode(int x, int y, Color color)
-        {
-            _colors[(y - 1) * _activeTexture.width + x - 1] = color;
-        }
-
-        void FloodFill(Vector2Int source, Color color)
-        {
-            var x = source.x;
-            var y = source.y;
-            
-            _nodes = new Queue<Node>();
-            
-            _nodes.Enqueue(new Node(x, x, y, 1));
-            _nodes.Enqueue(new Node(x, x, y - 1, -1));
-
-            var matchColor = GetNode(x, y);
-
-            if (IsInside(x, y, color)) return;
-
-            while (_nodes.Count > 0)
-            {
-                var node = _nodes.Dequeue();
-
-                x = node.x1;
-
-                if (IsInside(x, y, matchColor))
-                {
-                    while (IsInside(x - 1, y, matchColor))
-                    {
-                        SetNode(x - 1, y, color);
-                        x--;
-                    }
-
-                    if (x < node.x1)
-                    {
-                        _nodes.Enqueue(new Node(x, node.x1 - 1, node.y - node.dy, -node.dy));
-                    }
-                }
-
-                while (node.x1 <= node.x2)
-                {
-                    while (IsInside(node.x1, node.y, matchColor))
-                    {
-                        SetNode(node.x1, node.y, color);
-                        node.x1++;
-                    }
-                    
-                    if (node.x1 > x) _nodes.Enqueue(new Node(x, node.x1 - 1, node.y + node.dy, node.dy));
-                    
-                    if (node.x1 - 1 > node.x2) _nodes.Enqueue(new Node(node.x2 + 1, node.x1 - 1, node.y - node.dy, -node.dy));
-                    
-                    node.x1++;
-                    
-                    while (node.x1 < node.x2 && !IsInside(node.x1, node.y, matchColor))
-                    {
-                        node.x1++;
-                    }
-
-                    x = node.x1;
-                }
-            }
         }
 
         public override void Activate(Texture texture)
@@ -154,6 +53,69 @@ namespace Recounter.Art
         public override void Deactivate()
         {
             _active = false;
+        }
+        
+        // https://web.archive.org/web/20180122054652/http://wiki.unity3d.com/index.php?title=TextureFloodFill
+        // via https://discussions.unity.com/t/flood-fill-algorithm-for-colour-fill-paint-bucket-tool/37555/2
+        struct Point
+        {
+            public short x;
+            public short y;
+            public Point(short aX, short aY) { x = aX; y = aY; }
+            public Point(int aX, int aY) : this((short)aX, (short)aY) { }
+        }
+ 
+        static void FloodFillArea(Texture2D aTex, int aX, int aY, Color aFillColor)
+        {
+            int w = aTex.width;
+            int h = aTex.height;
+            Color[] colors = aTex.GetPixels();
+            Color refCol = colors[aX + aY * w];
+            Queue<Point> nodes = new Queue<Point>();
+            nodes.Enqueue(new Point(aX, aY));
+            while (nodes.Count > 0)
+            {
+                Point current = nodes.Dequeue();
+                for (int i = current.x; i < w; i++)
+                {
+                    Color C = colors[i + current.y * w];
+                    if (C != refCol || C == aFillColor)
+                        break;
+                    colors[i + current.y * w] = aFillColor;
+                    if (current.y + 1 < h)
+                    {
+                        C = colors[i + current.y * w + w];
+                        if (C == refCol && C != aFillColor)
+                            nodes.Enqueue(new Point(i, current.y + 1));
+                    }
+                    if (current.y - 1 >= 0)
+                    {
+                        C = colors[i + current.y * w - w];
+                        if (C == refCol && C != aFillColor)
+                            nodes.Enqueue(new Point(i, current.y - 1));
+                    }
+                }
+                for (int i = current.x - 1; i >= 0; i--)
+                {
+                    Color C = colors[i + current.y * w];
+                    if (C != refCol || C == aFillColor)
+                        break;
+                    colors[i + current.y * w] = aFillColor;
+                    if (current.y + 1 < h)
+                    {
+                        C = colors[i + current.y * w + w];
+                        if (C == refCol && C != aFillColor)
+                            nodes.Enqueue(new Point(i, current.y + 1));
+                    }
+                    if (current.y - 1 >= 0)
+                    {
+                        C = colors[i + current.y * w - w];
+                        if (C == refCol && C != aFillColor)
+                            nodes.Enqueue(new Point(i, current.y - 1));
+                    }
+                }
+            }
+            aTex.SetPixels(colors);
         }
     }
 }
