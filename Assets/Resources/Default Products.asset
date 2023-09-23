@@ -53,3 +53,8 @@ MonoBehaviour:
     _description: A large white mug.
     _prefab: {fileID: 7976342567089669907, guid: 567bc5db8e8ee20419e759f59fd6efdc,
       type: 3}
+  - _displayName: KILLIN' IT Soda
+    _price: 5
+    _description: KILLIN' IT energy for the DAILY GRIND! GET SOUPED UP NOW!
+    _prefab: {fileID: 7761793130966269765, guid: 3d7833488c96601408ea786b65ee264b,
+      type: 3}
