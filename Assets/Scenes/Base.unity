@@ -1322,37 +1322,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626ebd925ebf54f4c8690eb73261098f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 69736183}
-  xSpeedParam: X Speed
-  ySpeedParam: Y Speed
-  crouchedParam: Crouching
+  _animator: {fileID: 69736183}
+  _xSpeedParam: X Speed
+  _ySpeedParam: Y Speed
+  _crouchedParam: Crouching
   <CanMove>k__BackingField: 1
-  walkSpeed: 1.4
-  sprintSpeed: 4
-  inputSmoothing: 0.1
-  body: {fileID: 840553857}
-  controller: {fileID: 840553853}
+  _walkSpeed: 1.4
+  _sprintSpeed: 4
+  _inputSmoothing: 0.1
+  _body: {fileID: 840553857}
+  _controller: {fileID: 840553853}
   <BobbingEnabled>k__BackingField: 1
-  walkImpulse: {fileID: 1095713310}
-  sprintImpulse: {fileID: 240787178}
+  _walkImpulse: {fileID: 1095713310}
+  _sprintImpulse: {fileID: 240787178}
   <CanJump>k__BackingField: 0
-  jumpForce: 4
-  gravity: 10
-  lowJumpMultiplier: 4
+  _jumpForce: 4
+  _gravity: 10
+  _lowJumpMultiplier: 4
   <CanLookAround>k__BackingField: 1
   <Sensitivity>k__BackingField: 2
-  camTarget: {fileID: 2136512939}
-  clamp: 85
+  _camTarget: {fileID: 2136512939}
+  _clamp: 85
   <CanCrouch>k__BackingField: 1
-  crouchedHeight: 1
-  crouchedCamHeight: 1
-  crouchSpeed: 0.4
-  camHeightSmoothing: 0.1
-  vcam: {fileID: 409238788}
-  walkFov: 50
-  sprintFov: 55
-  fovChangeSpeed: 10
-  jumpSfx:
+  _crouchedHeight: 1
+  _crouchedCamHeight: 1
+  _crouchSpeed: 0.4
+  _camHeightSmoothing: 0.1
+  _vcam: {fileID: 409238788}
+  _walkFov: 50
+  _sprintFov: 55
+  _fovChangeSpeed: 10
+  _jumpSfx:
     Guid:
       Data1: 291430401
       Data2: 1218254001

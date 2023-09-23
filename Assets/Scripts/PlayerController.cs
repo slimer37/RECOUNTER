@@ -1,246 +1,247 @@
 using Cinemachine;
 using FMODUnity;
 using NaughtyAttributes;
-using Recounter;
-using System;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+namespace Recounter
 {
-    [Header("Animation")]
-    [SerializeField] Animator animator;
-    [SerializeField, AnimatorParam(nameof(animator))] string xSpeedParam;
-    [SerializeField, AnimatorParam(nameof(animator))] string ySpeedParam;
-    [SerializeField, AnimatorParam(nameof(animator))] string crouchedParam;
-
-    [field: Header("Moving")]
-    [field: SerializeField] public bool CanMove { get; set; } = true;
-    [SerializeField] float walkSpeed;
-    [SerializeField] float sprintSpeed;
-    [SerializeField] float inputSmoothing;
-    [SerializeField] Transform body;
-    [SerializeField] CharacterController controller;
-
-    [field: Header("Footsteps/Bobbing")]
-    [field: SerializeField] public bool BobbingEnabled { get; set; } = true;
-    [SerializeField] CinemachineImpulseSource walkImpulse;
-    [SerializeField] CinemachineImpulseSource sprintImpulse;
-
-    [field: Header("Jumping")]
-    [field: SerializeField] public bool CanJump { get; set; } = true;
-    [SerializeField] float jumpForce;
-    [SerializeField] float gravity;
-    [SerializeField] float lowJumpMultiplier;
-
-    [field: Header("Looking")]
-    [field: SerializeField] public bool CanLookAround { get; set; } = true;
-    [field: SerializeField] public float Sensitivity { get; set; }
-    [SerializeField] Transform camTarget;
-    [SerializeField] float clamp;
-
-    [field: Header("Crouching")]
-    [field: SerializeField] public bool CanCrouch { get; set; } = true;
-    [SerializeField] float crouchedHeight;
-    [SerializeField] float crouchedCamHeight;
-    [SerializeField] float crouchSpeed;
-    [SerializeField] float camHeightSmoothing;
-
-    [Header("FOV")]
-    [SerializeField] CinemachineVirtualCamera vcam;
-    [SerializeField] float walkFov;
-    [SerializeField] float sprintFov;
-    [SerializeField] float fovChangeSpeed;
-
-    [Header("SFX")]
-    [SerializeField] EventReference jumpSfx;
-
-    Vector2 camRot;
-    float fov;
-    float yVelocity;
-
-    bool isSuspended;
-
-    Vector2 smoothInput;
-    Vector2 smoothInputVelocity;
-
-    float defaultHeight;
-    float defaultCamHeight;
-    float camHeightVelocity;
-
-    int xSpeedId;
-    int ySpeedId;
-
-    bool isSprinting;
-    bool isCrouching;
-
-    Controls.MovementActions movementInput;
-
-    public bool IsMoving => controller.velocity.sqrMagnitude > 0;
-
-    public Vector2 CameraRotation
+    public class PlayerController : MonoBehaviour
     {
-        get => camRot;
-        set => camRot = value;
-    }
+        [Header("Animation")]
+        [SerializeField] Animator _animator;
+        [SerializeField, AnimatorParam(nameof(_animator))] string _xSpeedParam;
+        [SerializeField, AnimatorParam(nameof(_animator))] string _ySpeedParam;
+        [SerializeField, AnimatorParam(nameof(_animator))] string _crouchedParam;
 
-    public bool ImpulseFootstep()
-    {
-        if (isSuspended || !controller.isGrounded || !BobbingEnabled) return false;
+        [field: Header("Moving")]
+        [field: SerializeField] public bool CanMove { get; set; } = true;
+        [SerializeField] float _walkSpeed;
+        [SerializeField] float _sprintSpeed;
+        [SerializeField] float _inputSmoothing;
+        [SerializeField] Transform _body;
+        [SerializeField] CharacterController _controller;
 
-        var impulse = isSprinting ? sprintImpulse : walkImpulse;
+        [field: Header("Footsteps/Bobbing")]
+        [field: SerializeField] public bool BobbingEnabled { get; set; } = true;
+        [SerializeField] CinemachineImpulseSource _walkImpulse;
+        [SerializeField] CinemachineImpulseSource _sprintImpulse;
 
-        impulse.GenerateImpulse();
+        [field: Header("Jumping")]
+        [field: SerializeField] public bool CanJump { get; set; } = true;
+        [SerializeField] float _jumpForce;
+        [SerializeField] float _gravity;
+        [SerializeField] float _lowJumpMultiplier;
 
-        return true;
-    }
+        [field: Header("Looking")]
+        [field: SerializeField] public bool CanLookAround { get; set; } = true;
+        [field: SerializeField] public float Sensitivity { get; set; }
+        [SerializeField] Transform _camTarget;
+        [SerializeField] float _clamp;
 
-    void PlaySound(EventReference eventRef) => RuntimeManager.PlayOneShot(eventRef, body.position);
+        [field: Header("Crouching")]
+        [field: SerializeField] public bool CanCrouch { get; set; } = true;
+        [SerializeField] float _crouchedHeight;
+        [SerializeField] float _crouchedCamHeight;
+        [SerializeField] float _crouchSpeed;
+        [SerializeField] float _camHeightSmoothing;
+        
+        [Header("FOV")]
+        [SerializeField] CinemachineVirtualCamera _vcam;
+        [SerializeField] float _walkFov;
+        [SerializeField] float _sprintFov;
+        [SerializeField] float _fovChangeSpeed;
+        
+        [Header("SFX")]
+        [SerializeField] EventReference _jumpSfx;
 
-    void Update()
-    {
-        if (Pause.IsPaused) return;
+        Vector2 _camRot;
+        float _fov;
+        float _yVelocity;
 
-        ApplyGravity();
+        bool _isSuspended;
 
-        HandleJump();
+        Vector2 _smoothInput;
+        Vector2 _smoothInputVelocity;
 
-        HandleCrouching();
+        float _defaultHeight;
+        float _defaultCamHeight;
+        float _camHeightVelocity;
 
-        HandleMovement();
+        int _xSpeedId;
+        int _ySpeedId;
 
-        HandleLooking();
-    }
+        bool _isSprinting;
+        bool _isCrouching;
 
-    void HandleCrouching()
-    {
-        if (CanCrouch && !isSuspended)
+        Controls.MovementActions _movementInput;
+
+        public bool IsMoving => _controller.velocity.sqrMagnitude > 0;
+
+        public Vector2 CameraRotation
         {
-            isCrouching = movementInput.Crouch.IsPressed();
+            get => _camRot;
+            set => _camRot = value;
         }
 
-        var height = isCrouching ? crouchedHeight : defaultHeight;
-        var goalCamHeight = isCrouching ? crouchedCamHeight : defaultCamHeight;
-        var camHeight = Mathf.SmoothDamp(
-            camTarget.localPosition.y,
-            goalCamHeight,
-            ref camHeightVelocity,
-            camHeightSmoothing);
-
-        controller.height = height;
-        controller.center = Vector3.up * height / 2;
-        camTarget.localPosition = Vector3.up * camHeight;
-
-        animator.SetBool(crouchedParam, isCrouching);
-    }
-
-    void HandleLooking()
-    {
-        if (!CanLookAround || isSuspended) return;
-
-        var look = movementInput.Look.ReadValue<Vector2>() * Sensitivity;
-
-        camRot.y += look.x;
-        camRot.x -= look.y;
-        camRot.x = Mathf.Clamp(camRot.x, -clamp, clamp);
-
-        body.eulerAngles = camRot.y * Vector3.up;
-        camTarget.localEulerAngles = camRot.x * Vector3.right;
-    }
-
-    void AnimateFov(bool isSprinting)
-    {
-        var targetFov = isSprinting ? sprintFov : walkFov;
-        fov = Mathf.Lerp(fov, targetFov, fovChangeSpeed * Time.deltaTime);
-        vcam.m_Lens.FieldOfView = fov;
-    }
-
-    void HandleJump()
-    {
-        if (!CanJump || !controller.isGrounded) return;
-
-        if (movementInput.Jump.WasPressedThisFrame())
+        public bool ImpulseFootstep()
         {
-            yVelocity = jumpForce;
-            PlaySound(jumpSfx);
-        }
-    }
+            if (_isSuspended || !_controller.isGrounded || !BobbingEnabled) return false;
 
-    void ApplyGravity()
-    {
-        if (controller.isGrounded)
-        {
-            yVelocity = -gravity * Time.deltaTime;
-            return;
+            var impulse = _isSprinting ? _sprintImpulse : _walkImpulse;
+
+            impulse.GenerateImpulse();
+
+            return true;
         }
 
-        var velocityChange = gravity * Time.deltaTime;
+        void PlaySound(EventReference eventRef) => RuntimeManager.PlayOneShot(eventRef, _body.position);
 
-        if (CanJump)
+        void Update()
         {
-            var holdingJump = movementInput.Jump.IsPressed();
+            if (Pause.IsPaused) return;
 
-            if (yVelocity > 0 && !holdingJump)
-                velocityChange *= lowJumpMultiplier;
+            ApplyGravity();
+
+            HandleJump();
+
+            HandleCrouching();
+
+            HandleMovement();
+
+            HandleLooking();
         }
 
-        yVelocity -= velocityChange;
-    }
-
-    void HandleMovement()
-    {
-        var localControllerVelocity = transform.InverseTransformDirection(controller.velocity);
-        animator.SetFloat(xSpeedId, localControllerVelocity.x);
-        animator.SetFloat(ySpeedId, localControllerVelocity.z);
-
-        var input = movementInput.Move.ReadValue<Vector2>();
-
-        // Sprinting only allowed when moving forward
-        isSprinting = !isCrouching && movementInput.Sprint.IsPressed() && input.y > 0;
-
-        AnimateFov(isSprinting);
-
-        if (!CanMove) return;
-
-        var speed = isCrouching switch
+        void HandleCrouching()
         {
-            true => crouchSpeed,
-            false when isSprinting => sprintSpeed,
-            false => walkSpeed
-        };
+            if (CanCrouch && !_isSuspended)
+            {
+                _isCrouching = _movementInput.Crouch.IsPressed();
+            }
 
-        smoothInput = Vector2.SmoothDamp(smoothInput, input * speed, ref smoothInputVelocity, inputSmoothing);
-        var velocity = body.TransformDirection(smoothInput.x, 0, smoothInput.y) + Vector3.up * yVelocity;
+            var height = _isCrouching ? _crouchedHeight : _defaultHeight;
+            var goalCamHeight = _isCrouching ? _crouchedCamHeight : _defaultCamHeight;
+            var camHeight = Mathf.SmoothDamp(
+                _camTarget.localPosition.y,
+                goalCamHeight,
+                ref _camHeightVelocity,
+                _camHeightSmoothing);
 
-        controller.Move(velocity * Time.deltaTime);
-    }
+            _controller.height = height;
+            _controller.center = Vector3.up * height / 2;
+            _camTarget.localPosition = Vector3.up * camHeight;
 
-    void Awake()
-    {
-        InputLayer.SetCursor(false);
+            _animator.SetBool(_crouchedParam, _isCrouching);
+        }
 
-        fov = walkFov;
+        void HandleLooking()
+        {
+            if (!CanLookAround || _isSuspended) return;
 
-        movementInput = InputLayer.Movement;
+            var look = _movementInput.Look.ReadValue<Vector2>() * Sensitivity;
 
-        RecordCameraAngles();
+            _camRot.y += look.x;
+            _camRot.x -= look.y;
+            _camRot.x = Mathf.Clamp(_camRot.x, -_clamp, _clamp);
 
-        xSpeedId = Animator.StringToHash(xSpeedParam);
-        ySpeedId = Animator.StringToHash(ySpeedParam);
+            _body.eulerAngles = _camRot.y * Vector3.up;
+            _camTarget.localEulerAngles = _camRot.x * Vector3.right;
+        }
 
-        defaultHeight = controller.height;
-        defaultCamHeight = camTarget.localPosition.y;
-    }
+        void AnimateFov(bool isSprinting)
+        {
+            var targetFov = isSprinting ? _sprintFov : _walkFov;
+            _fov = Mathf.Lerp(_fov, targetFov, _fovChangeSpeed * Time.deltaTime);
+            _vcam.m_Lens.FieldOfView = _fov;
+        }
 
-    void OnDestroy() => InputLayer.SetCursor(true);
+        void HandleJump()
+        {
+            if (!CanJump || !_controller.isGrounded) return;
 
-    void RecordCameraAngles()
-    {
-        camRot.y = body.eulerAngles.y;
-        camRot.x = camTarget.localEulerAngles.x;
+            if (_movementInput.Jump.WasPressedThisFrame())
+            {
+                _yVelocity = _jumpForce;
+                PlaySound(_jumpSfx);
+            }
+        }
 
-        if (camRot.x > 90)
-            camRot.x -= 360;
-        else if (camRot.x < -90)
-            camRot.x += 360;
+        void ApplyGravity()
+        {
+            if (_controller.isGrounded)
+            {
+                _yVelocity = -_gravity * Time.deltaTime;
+                return;
+            }
+
+            var velocityChange = _gravity * Time.deltaTime;
+
+            if (CanJump)
+            {
+                var holdingJump = _movementInput.Jump.IsPressed();
+
+                if (_yVelocity > 0 && !holdingJump)
+                    velocityChange *= _lowJumpMultiplier;
+            }
+
+            _yVelocity -= velocityChange;
+        }
+
+        void HandleMovement()
+        {
+            var localControllerVelocity = transform.InverseTransformDirection(_controller.velocity);
+            _animator.SetFloat(_xSpeedId, localControllerVelocity.x);
+            _animator.SetFloat(_ySpeedId, localControllerVelocity.z);
+
+            var input = _movementInput.Move.ReadValue<Vector2>();
+
+            // Sprinting only allowed when moving forward
+            _isSprinting = !_isCrouching && _movementInput.Sprint.IsPressed() && input.y > 0;
+
+            AnimateFov(_isSprinting);
+
+            if (!CanMove) return;
+
+            var speed = _isCrouching switch
+            {
+                true => _crouchSpeed,
+                false when _isSprinting => _sprintSpeed,
+                false => _walkSpeed
+            };
+
+            _smoothInput = Vector2.SmoothDamp(_smoothInput, input * speed, ref _smoothInputVelocity, _inputSmoothing);
+            var velocity = _body.TransformDirection(_smoothInput.x, 0, _smoothInput.y) + Vector3.up * _yVelocity;
+
+            _controller.Move(velocity * Time.deltaTime);
+        }
+
+        void Awake()
+        {
+            InputLayer.SetCursor(false);
+
+            _fov = _walkFov;
+
+            _movementInput = InputLayer.Movement;
+
+            RecordCameraAngles();
+
+            _xSpeedId = Animator.StringToHash(_xSpeedParam);
+            _ySpeedId = Animator.StringToHash(_ySpeedParam);
+
+            _defaultHeight = _controller.height;
+            _defaultCamHeight = _camTarget.localPosition.y;
+        }
+
+        void OnDestroy() => InputLayer.SetCursor(true);
+
+        void RecordCameraAngles()
+        {
+            _camRot.y = _body.eulerAngles.y;
+            _camRot.x = _camTarget.localEulerAngles.x;
+
+            if (_camRot.x > 90)
+                _camRot.x -= 360;
+            else if (_camRot.x < -90)
+                _camRot.x += 360;
+        }
     }
 }
