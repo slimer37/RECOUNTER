@@ -24,7 +24,9 @@ namespace Recounter
         [field: Header("Footsteps/Bobbing")]
         [field: SerializeField] public bool BobbingEnabled { get; set; } = true;
         [SerializeField] CinemachineImpulseSource _walkImpulse;
+        [SerializeField] float _walkImpulseInterval;
         [SerializeField] CinemachineImpulseSource _sprintImpulse;
+        [SerializeField] float _sprintImpulseInterval;
 
         [field: Header("Jumping")]
         [field: SerializeField] public bool CanJump { get; set; } = true;
@@ -53,6 +55,7 @@ namespace Recounter
         
         [Header("SFX")]
         [SerializeField] EventReference _jumpSfx;
+        [SerializeField] EventReference _footstepSfx;
 
         Vector2 _camRot;
         float _fov;
@@ -73,6 +76,8 @@ namespace Recounter
         bool _isSprinting;
         bool _isCrouching;
 
+        float _bobbingTime;
+
         Controls.MovementActions _movementInput;
 
         public bool IsMoving => _controller.velocity.sqrMagnitude > 0;
@@ -82,16 +87,14 @@ namespace Recounter
             get => _camRot;
             set => _camRot = value;
         }
-
-        public bool ImpulseFootstep()
+        
+        void ImpulseFootstep(CinemachineImpulseSource impulseSource)
         {
-            if (_isSuspended || !_controller.isGrounded || !BobbingEnabled) return false;
-
-            var impulse = _isSprinting ? _sprintImpulse : _walkImpulse;
-
-            impulse.GenerateImpulse();
-
-            return true;
+            RuntimeManager.PlayOneShot(_footstepSfx, transform.position);
+            
+            if (!BobbingEnabled) return;
+            
+            impulseSource.GenerateImpulse();
         }
 
         void PlaySound(EventReference eventRef) => RuntimeManager.PlayOneShot(eventRef, _body.position);
@@ -109,6 +112,8 @@ namespace Recounter
             HandleMovement();
 
             HandleLooking();
+
+            HandleBobbing();
         }
 
         void HandleCrouching()
@@ -212,6 +217,29 @@ namespace Recounter
             var velocity = _body.TransformDirection(_smoothInput.x, 0, _smoothInput.y) + Vector3.up * _yVelocity;
 
             _controller.Move(velocity * Time.deltaTime);
+        }
+
+        void HandleBobbing()
+        {
+            if (_isSuspended || !_controller.isGrounded) return;
+            
+            if (_controller.velocity.sqrMagnitude > _walkSpeed)
+            {
+                var impulse = _isSprinting ? _sprintImpulse : _walkImpulse;
+
+                _bobbingTime += Time.deltaTime;
+
+                var impulseInterval = _isSprinting ? _sprintImpulseInterval : _walkImpulseInterval;
+
+                if (_bobbingTime < impulseInterval) return;
+                
+                ImpulseFootstep(impulse);
+                _bobbingTime = 0;
+            }
+            else
+            {
+                _bobbingTime = 0;
+            }
         }
 
         void Awake()

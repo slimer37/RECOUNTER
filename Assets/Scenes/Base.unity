@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -484,10 +484,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 69736183}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4547298ef4b2da8468f303d05a1f7cfe,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 69736185}
   m_SourcePrefab: {fileID: 100100000, guid: 4547298ef4b2da8468f303d05a1f7cfe, type: 3}
 --- !u!1 &69736181 stripped
 GameObject:
@@ -522,26 +518,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &69736185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 69736181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f55c1e1f3c6f6a428010e40bc3c82ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  footstepSfx:
-    Guid:
-      Data1: 1986808085
-      Data2: 1155371784
-      Data3: 605664952
-      Data4: -299844080
-    Path: event:/Footstep
-  controller: {fileID: 273294031}
 --- !u!4 &75637180 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b3eeb1e24c75f1441a45bbf15d8d825d,
@@ -1334,7 +1310,9 @@ MonoBehaviour:
   _controller: {fileID: 840553853}
   <BobbingEnabled>k__BackingField: 1
   _walkImpulse: {fileID: 1095713310}
+  _walkImpulseInterval: 0.6
   _sprintImpulse: {fileID: 240787178}
+  _sprintImpulseInterval: 0.34
   <CanJump>k__BackingField: 0
   _jumpForce: 4
   _gravity: 10
@@ -1359,6 +1337,13 @@ MonoBehaviour:
       Data3: -355129681
       Data4: 1618548372
     Path: event:/Jump
+  _footstepSfx:
+    Guid:
+      Data1: 1986808085
+      Data2: 1155371784
+      Data3: 605664952
+      Data4: -299844080
+    Path: event:/Footstep
 --- !u!114 &273294032
 MonoBehaviour:
   m_ObjectHideFlags: 0
