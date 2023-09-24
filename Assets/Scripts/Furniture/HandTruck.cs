@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Recounter
 {
@@ -73,6 +74,8 @@ namespace Recounter
         protected override void OnStartedBeingPushed()
         {
             Raise();
+            
+            Interactor.ShowPermanentMessage($"{InputLayer.Interaction.Interact.GetBindingDisplayString()} to load furniture.");
 
             _target?.Highlight();
         }
@@ -80,6 +83,8 @@ namespace Recounter
         protected override void OnStoppedBeingPushed()
         {
             Drop();
+            
+            LastInteractor.HideMessage();
 
             _target?.RemoveHighlight();
         }
@@ -125,7 +130,7 @@ namespace Recounter
         {
             if (!_target) return;
 
-            if (InputLayer.Placement.Place.WasPressedThisFrame())
+            if (InputLayer.Interaction.Interact.WasPressedThisFrame())
             {
                 if (!_load)
                 {
