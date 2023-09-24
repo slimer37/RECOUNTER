@@ -11,6 +11,8 @@ namespace Recounter
 
         Collider[] _colliders;
 
+        AdjustableShelfBase _shelfBase;
+
         void Awake()
         {
             _colliders = GetComponentsInChildren<Collider>();
@@ -33,6 +35,7 @@ namespace Recounter
         protected override void OnInteract(Employee e)
         {
             LastInteractor.LeftHand.Hold(this, _holdPos, Quaternion.Euler(_holdRot));
+            _shelfBase?.Detach(this);
             _removedShelfTool.Equip(e);
             SetColliders(false);
         }
@@ -42,8 +45,11 @@ namespace Recounter
             return Physics.CheckBox(transform.TransformPoint(_collider.center), _collider.size / 2, transform.rotation);
         }
 
+        public void InitializeToShelf(AdjustableShelfBase shelfBase) => _shelfBase = shelfBase;
+
         public void AttachToShelf(AdjustableShelfBase shelfBase)
         {
+            _shelfBase = shelfBase;
             _removedShelfTool.Unequip();
             SetColliders(true);
         }

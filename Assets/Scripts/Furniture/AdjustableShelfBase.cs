@@ -1,3 +1,4 @@
+using System;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -44,7 +45,23 @@ namespace Recounter
                 if (!MatchLocalPositionToShelfIndex(localPosition, out var index)) continue;
 
                 _shelves[index] = shelf.GetComponent<RemovableShelf>();
+                _shelves[index].InitializeToShelf(this);
             }
+        }
+
+        public void Detach(RemovableShelf shelfToRemove)
+        {
+            for (var i = 0; i < _shelves.Length; i++)
+            {
+                var shelf = _shelves[i];
+
+                if (shelf != shelfToRemove) continue;
+                
+                _shelves[i] = null;
+                return;
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(shelfToRemove), "Shelf was not found on this shelf base.");
         }
 
         void Awake()
