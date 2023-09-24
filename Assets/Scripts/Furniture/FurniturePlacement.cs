@@ -44,7 +44,10 @@ namespace Recounter
 
             _validPoint = false;
 
-            e.ShowPermanentMessage($"{InputLayer.Placement.Place.GetBindingDisplayString()} to place on ground.");
+            e.ShowPermanentMessage($"{InputLayer.Placement.Place.GetBindingDisplayString()} to confirm. " +
+                                   $"{InputLayer.Placement.HoldRotate.GetBindingDisplayString()} to rotate.");
+            
+            _furniture.SetColliders(false);
         }
 
         public void HoverEnter(Transform obj) { }

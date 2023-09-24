@@ -105,9 +105,19 @@ namespace Recounter
 
         public void PlaceAt(Vector3 groundPoint, Quaternion rotation)
         {
+            SetColliders(true);
+            
             transform.SetPositionAndRotation(PositionFromGroundPoint(groundPoint), rotation);
             _savableTransform.Save(true, true);
             _isPlaced = true;
+        }
+
+        public void SetColliders(bool enabled)
+        {
+            foreach (var col in GetComponentsInChildren<Collider>())
+            {
+                col.enabled = enabled;
+            }
         }
 
         public bool FitsAt(Vector3 groundPoint, Quaternion rotation, out Vector3 point)

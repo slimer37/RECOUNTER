@@ -1549,6 +1549,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1693761869}
   m_SourcePrefab: {fileID: 100100000, guid: 7285c87d99d245b43a2c96c10892407a, type: 3}
+--- !u!65 &1188482881 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 8721270900292783975, guid: 0e32cdc6445cb2b4da202a8df206f24e,
+    type: 3}
+  m_PrefabInstance: {fileID: 3079701445745234728}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1304892941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -3350874374598743252, guid: 68e8dc0809ceb6048906f3367c65259f,
@@ -2002,6 +2008,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592196438380756269, guid: ec94afbe92d7fb64f80af2c194fea290,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7592196438380756269, guid: ec94afbe92d7fb64f80af2c194fea290,
         type: 3}
@@ -3245,6 +3256,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7693953039399134677, guid: 0e32cdc6445cb2b4da202a8df206f24e,
+        type: 3}
+      propertyPath: _trigger
+      value: 
+      objectReference: {fileID: 1188482881}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
