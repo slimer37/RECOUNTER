@@ -105,19 +105,19 @@ namespace Recounter
             _completedCallback();
         }
 
-        void HoldRotate_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        void HoldRotate_canceled(InputAction.CallbackContext obj)
         {
             if (!IsActivated) return;
             InputLayer.Movement.Enable();
         }
 
-        void HoldRotate_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        void HoldRotate_performed(InputAction.CallbackContext obj)
         {
             if (!IsActivated) return;
             InputLayer.Movement.Disable();
         }
 
-        void MoveLateral(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        void MoveLateral(InputAction.CallbackContext obj)
         {
             if (!IsActivated) return;
 
