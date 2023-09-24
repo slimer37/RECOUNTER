@@ -55,6 +55,8 @@ namespace Recounter
 
         public void OnRaycastHit(RaycastHit hit)
         {
+            if (hit.normal != Vector3.up) return;
+            
             var rot = Quaternion.Euler(Vector3.up * _rotation);
             _validPoint = _furniture.FitsAt(hit.point, rot, out Vector3 point);
 
