@@ -9,6 +9,7 @@ namespace Recounter
         [SerializeField] Transform _layPoint;
         [SerializeField] float _filledSpeed;
         [SerializeField] FurniturePlacement _placement;
+        [SerializeField] Collider _trigger;
 
         [Header("Animation")]
         [SerializeField] float _dropSpeed;
@@ -38,12 +39,16 @@ namespace Recounter
 
         void Raise()
         {
+            _trigger.enabled = true;
+            
             _tween?.Kill();
             _tween = _visual.DOLocalRotate(Vector3.right * _raisedAngle, _raiseSpeed).SetEase(_raiseEase).SetSpeedBased();
         }
 
         void Drop()
         {
+            _trigger.enabled = false;
+            
             _tween?.Kill();
             _tween = _visual.DOLocalRotate(Vector3.zero, _dropSpeed).SetEase(_dropEase).SetSpeedBased().OnKill(() => Locked = false);
 
