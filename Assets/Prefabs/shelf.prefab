@@ -220,10 +220,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _toolableMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   _allMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   _range: 5
   _shelf: {fileID: 7893115935568273773}
 --- !u!1 &5886181225299219432
@@ -511,10 +511,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _toolableMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   _allMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   _range: 5
   _shelf: {fileID: 7728939863877181283}
 --- !u!1 &7058454676182395057
@@ -654,10 +654,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _toolableMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   _allMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   _range: 5
   _shelf: {fileID: 4503276044871725226}
 --- !u!1 &7068183412670722400
@@ -862,9 +862,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _toolableMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   _allMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   _range: 5
   _shelf: {fileID: 2209951389534301234}

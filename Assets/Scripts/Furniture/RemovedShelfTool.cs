@@ -29,7 +29,7 @@ namespace Recounter
         }
 
         protected override void OnEquip() =>
-            Owner.LeftHand.SetCarryStates(Hand.CarryStates.InWorld | Hand.CarryStates.FreePositionAndRotation);
+            Owner.LeftHand.SetCarryStates(Hand.CarryStates.NoViewmodel);
 
         protected override void OnUnequip() => Owner.LeftHand.Clear();
 
